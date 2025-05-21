@@ -1,0 +1,50 @@
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme-mix-ratio-light: 30%;
+    --theme-mix-ratio-dark: 30%;
+    --theme-mix-ratio-active: 10%;
+
+    /* Utility colors */
+    --theme-color-surface: #1e293b;
+    --theme-color-foreground: #e2e8f0;
+    --theme-color-inverse: #e2e8f0;
+    --theme-color-background: #121212;
+    --theme-color-border: #334155;
+
+    /* Brand colors */
+    --theme-color-primary: #1e3a8a;
+    --theme-color-secondary: #5b21b6;
+    --theme-color-accent: #1d7872;
+    --theme-color-neutral: #2d3748;
+
+    /* Semantic colors */
+    --theme-color-success: #15803d;
+    --theme-color-danger: #b91c1c;
+    --theme-color-warning: #d97706;
+    --theme-color-info: #0369a1;
+  }
+}
+
+[data-theme="dark"] {
+  --theme-mix-ratio-light: 30%;
+  --theme-mix-ratio-dark: 30%;
+  --theme-mix-ratio-active: 10%;
+
+  --theme-color-surface: #1e293b;
+  --theme-color-foreground: #e2e8f0;
+  --theme-color-inverse: #e2e8f0;
+  --theme-color-background: #121212;
+  --theme-color-border: #334155;
+
+  /* Brand colors */
+  --theme-color-primary: #1e3a8a;
+  --theme-color-secondary: #5b21b6;
+  --theme-color-accent: #1d7872;
+  --theme-color-neutral: #2d3748;
+
+  /* Semantic colors */
+  --theme-color-success: #15803d;
+  --theme-color-danger: #b91c1c;
+  --theme-color-warning: #d97706;
+  --theme-color-info: #0369a1;
+}

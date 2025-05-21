@@ -1,0 +1,24 @@
+[data-theme="monokai"] {
+  --theme-mix-ratio-light: 30%;
+  --theme-mix-ratio-dark: 30%;
+  --theme-mix-ratio-active: 20%;
+
+  /* Utility colors */
+  --theme-color-surface: #1f201a;
+  --theme-color-foreground: #e6e6dc;
+  --theme-color-inverse: #e6e6dc;
+  --theme-color-background: #181818;
+  --theme-color-border: #2e2d26;
+
+  /* Brand colors */
+  --theme-color-primary: #3a8fa3;
+  --theme-color-secondary: #8e44ad;
+  --theme-color-accent: #744dbf;
+  --theme-color-neutral: #464533;
+
+  /* Semantic colors */
+  --theme-color-success: #6e9f1b;
+  --theme-color-danger: #a3164b;
+  --theme-color-warning: #fd971f;
+  --theme-color-info: #3a8fa3;
+}

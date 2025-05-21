@@ -1,0 +1,170 @@
+@import "./themes/light.css";
+@import "./themes/dark.css";
+@import "./themes/bootstrap.css";
+@import "./themes/monokai.css";
+
+@theme inline {
+  --mix-ratio-light: var(--theme-mix-ratio-light);
+  --mix-ratio-dark: var(--theme-mix-ratio-dark);
+  --mix-ratio-active: var(--theme-mix-ratio-active);
+
+  --color-static-foreground: var(--theme-color-static-foreground);
+  --color-static-background: var(--theme-color-static-background);
+  --color-static-text: var(--theme-color-static-text);
+  --color-static-surface: var(--theme-color-static-surface);
+
+  /* Utility colors */
+  --color-surface: var(--theme-color-surface);
+  --color-foreground: var(--theme-color-foreground);
+  --color-inverse: var(--theme-color-inverse);
+  --color-background: var(--theme-color-background);
+  --color-border: var(--theme-color-border);
+
+  /* Brand colors */
+  --color-primary: var(--theme-color-primary);
+  --color-secondary: var(--theme-color-secondary);
+  --color-accent: var(--theme-color-accent);
+  --color-neutral: var(--theme-color-neutral);
+
+  /* Semantic colors */
+  --color-success: var(--theme-color-success);
+  --color-danger: var(--theme-color-danger);
+  --color-warning: var(--theme-color-warning);
+  --color-info: var(--theme-color-info);
+
+  /* Primary Colors */
+  --color-primary-light: color-mix(
+    in srgb,
+    var(--theme-color-primary),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-primary-dark: color-mix(
+    in srgb,
+    var(--theme-color-primary),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-primary-active: color-mix(
+    in srgb,
+    var(--theme-color-primary),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Secondary Colors */
+  --color-secondary-light: color-mix(
+    in srgb,
+    var(--theme-color-secondary),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-secondary-dark: color-mix(
+    in srgb,
+    var(--theme-color-secondary),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-secondary-active: color-mix(
+    in srgb,
+    var(--theme-color-secondary),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Accent Colors */
+  --color-accent-light: color-mix(
+    in srgb,
+    var(--theme-color-accent),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-accent-dark: color-mix(
+    in srgb,
+    var(--theme-color-accent),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-accent-active: color-mix(
+    in srgb,
+    var(--theme-color-accent),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Neutral Colors */
+  --color-neutral-light: color-mix(
+    in srgb,
+    var(--theme-color-neutral),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-neutral-dark: color-mix(
+    in srgb,
+    var(--theme-color-neutral),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-neutral-active: color-mix(
+    in srgb,
+    var(--theme-color-neutral),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Success Colors */
+  --color-success-light: color-mix(
+    in srgb,
+    var(--theme-color-success),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-success-dark: color-mix(
+    in srgb,
+    var(--theme-color-success),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-success-active: color-mix(
+    in srgb,
+    var(--theme-color-success),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Danger Colors */
+  --color-danger-light: color-mix(
+    in srgb,
+    var(--theme-color-danger),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-danger-dark: color-mix(
+    in srgb,
+    var(--theme-color-danger),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-danger-active: color-mix(
+    in srgb,
+    var(--theme-color-danger),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Warning Colors */
+  --color-warning-light: color-mix(
+    in srgb,
+    var(--theme-color-warning),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-warning-dark: color-mix(
+    in srgb,
+    var(--theme-color-warning),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-warning-active: color-mix(
+    in srgb,
+    var(--theme-color-warning),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+
+  /* Info Colors */
+  --color-info-light: color-mix(
+    in srgb,
+    var(--theme-color-info),
+    #ffffff var(--theme-mix-ratio-light)
+  );
+  --color-info-dark: color-mix(
+    in srgb,
+    var(--theme-color-info),
+    #000000 var(--theme-mix-ratio-dark)
+  );
+  --color-info-active: color-mix(
+    in srgb,
+    var(--theme-color-info),
+    #ffffff var(--theme-mix-ratio-active)
+  );
+}

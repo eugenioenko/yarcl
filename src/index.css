@@ -1,44 +1,10 @@
 @import "tailwindcss";
+@import "./styles/theme.css";
 
 @theme {
   --font-sans: "Fira Sans", "ui-sans-serif", "system-ui", sans-serif;
-  /* Utility colors */
-  --color-surface: #f8fafc;
-  --color-inverse: #ffffff;
-  --color-background: #f1f5f9;
-  --color-border: #cbd5e1;
+}
 
-  /* Brand colors */
-  --color-primary: #2d4bb8;
-  --color-primary-light: #5c7be0;
-  --color-primary-dark: #1a2e6a;
-
-  --color-secondary: #8240b3;
-  --color-secondary-light: #b88ae0;
-  --color-secondary-dark: #4e256a;
-
-  --color-accent: #36cfc9;
-  --color-accent-light: #a2f5f2;
-  --color-accent-dark: #16807c;
-
-  --color-neutral: #4a5568;
-  --color-neutral-light: #b0b7c3;
-  --color-neutral-dark: #23272f;
-
-  /* Semantic colors */
-  --color-success: #16a34a;
-  --color-success-light: #4ade80;
-  --color-success-dark: #166534;
-
-  --color-danger: #dc2626;
-  --color-danger-light: #f87171;
-  --color-danger-dark: #991b1b;
-
-  --color-warning: #f59e42;
-  --color-warning-light: #fde68a;
-  --color-warning-dark: #b45309;
-
-  --color-info: #0ea5e9;
-  --color-info-light: #7dd3fc;
-  --color-info-dark: #0369a1;
+body {
+  @apply bg-background text-foreground;
 }

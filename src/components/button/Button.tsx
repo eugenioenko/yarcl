@@ -53,14 +53,14 @@ const button = tv({
   },
   compoundVariants: [
     // Solid
-    { variant: 'solid', color: 'primary', class: 'bg-primary text-inverse hover:bg-primary-dark' },
-    { variant: 'solid', color: 'secondary', class: 'bg-secondary text-inverse hover:bg-secondary-dark' },
-    { variant: 'solid', color: 'success', class: 'bg-success text-inverse hover:bg-success-dark' },
-    { variant: 'solid', color: 'danger', class: 'bg-danger text-inverse hover:bg-danger-dark' },
-    { variant: 'solid', color: 'warning', class: 'bg-warning text-inverse hover:bg-warning-dark' },
-    { variant: 'solid', color: 'info', class: 'bg-info text-inverse hover:bg-info-dark' },
-    { variant: 'solid', color: 'accent', class: 'bg-accent text-inverse hover:bg-accent-dark' },
-    { variant: 'solid', color: 'neutral', class: 'bg-neutral text-inverse hover:bg-neutral-dark' },
+    { variant: 'solid', color: 'primary', class: 'bg-primary text-inverse hover:bg-primary-active' },
+    { variant: 'solid', color: 'secondary', class: 'bg-secondary text-inverse hover:bg-secondary-active' },
+    { variant: 'solid', color: 'success', class: 'bg-success text-inverse hover:bg-success-active' },
+    { variant: 'solid', color: 'danger', class: 'bg-danger text-inverse hover:bg-danger-active' },
+    { variant: 'solid', color: 'warning', class: 'bg-warning text-inverse hover:bg-warning-active' },
+    { variant: 'solid', color: 'info', class: 'bg-info text-inverse hover:bg-info-active' },
+    { variant: 'solid', color: 'accent', class: 'bg-accent text-inverse hover:bg-accent-active' },
+    { variant: 'solid', color: 'neutral', class: 'bg-neutral text-inverse hover:bg-neutral-active' },
     // Outlined
     { variant: 'outlined', color: 'primary', class: 'border border-primary text-primary bg-transparent hover:bg-primary hover:text-inverse' },
     { variant: 'outlined', color: 'secondary', class: 'border border-secondary text-secondary bg-transparent hover:bg-secondary hover:text-inverse' },
@@ -132,7 +132,6 @@ const button = tv({
     size: 'md',
     radius: 'md',
     disabled: false,
-    iconOnly: false,
   },
 });
 
@@ -140,16 +139,12 @@ export type ButtonVariant = 'solid' | 'outlined' | 'ghost' | 'link';
 export type ButtonColor = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'accent' | 'neutral';
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type ButtonRadius = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'none';
-export type ButtonIconPosition = 'left' | 'right';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   color?: ButtonColor;
   size?: ButtonSize;
   radius?: ButtonRadius;
-  icon?: ReactNode;
-  iconPosition?: ButtonIconPosition;
-  iconSize?: number | string;
 }
 
 export function ButtonBase({
@@ -158,36 +153,18 @@ export function ButtonBase({
   size,
   radius,
   disabled,
-  icon,
-  iconPosition = 'left',
-  iconSize,
   children,
   className = '',
   type = 'button',
   ...props
 }: ButtonProps) {
-  const isIconOnly = !!icon && !children;
-
-  // Accessibility: enforce aria-label for icon-only buttons
-  if (isIconOnly && !props['aria-label']) {
-    console.warn('Icon-only buttons must have an aria-label for accessibility.');
-  }
 
   // Merge className properly
   const mergedClassName = [
-    button({ variant, color, size, radius, disabled, iconOnly: isIconOnly }),
+    button({ variant, color, size, radius, disabled }),
     className,
   ].filter(Boolean).join(' ');
 
-  // Icon rendering helper
-  const renderIcon = () => (
-    <span
-      className={children ? (iconPosition === 'left' ? 'mr-2 flex items-center' : 'ml-2 flex items-center') : ''}
-      style={iconSize ? { fontSize: iconSize, width: iconSize, height: iconSize } : {}}
-    >
-      {icon}
-    </span>
-  );
 
   return (
     <button
@@ -197,9 +174,7 @@ export function ButtonBase({
       aria-disabled={disabled || undefined}
       {...props}
     >
-      {icon && iconPosition === 'left' && renderIcon()}
       {children}
-      {icon && iconPosition === 'right' && renderIcon()}
     </button>
   );
 }

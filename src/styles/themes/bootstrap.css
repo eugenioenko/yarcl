@@ -1,0 +1,24 @@
+[data-theme="bootstrap"] {
+  --theme-mix-ratio-light: 40%;
+  --theme-mix-ratio-dark: 20%;
+  --theme-mix-ratio-active: 15%;
+
+  /* Utility colors */
+  --theme-color-surface: #f8f9fa;
+  --theme-color-foreground: #212529;
+  --theme-color-inverse: #ffffff;
+  --theme-color-background: #ffffff;
+  --theme-color-border: #dee2e6;
+
+  /* Brand colors */
+  --theme-color-primary: #0d6efd;
+  --theme-color-secondary: #6c757d;
+  --theme-color-accent: #6610f2;
+  --theme-color-neutral: #adb5bd;
+
+  /* Semantic colors */
+  --theme-color-success: #198754;
+  --theme-color-danger: #dc3545;
+  --theme-color-warning: #ffc107;
+  --theme-color-info: #0dcaf0;
+}

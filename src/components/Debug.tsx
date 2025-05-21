@@ -1,4 +1,4 @@
-import { Button } from './Button';
+import { Button } from './button/Button';
 
 const variants = ['solid', 'outlined', 'ghost', 'link'] as const;
 const colors = ['primary', 'secondary', 'neutral', 'accent', 'success', 'danger', 'warning', 'info'] as const;
@@ -19,31 +19,9 @@ export default function Debug() {
                   {color}
                 </Button>
               ))}
-              {colors.map(color => (
-                <Button key={color + '-disabled'} variant={variant} color={color} disabled>
-                  {color} (disabled)
-                </Button>
-              ))}
             </div>
           </div>
         ))}
-      </div>
-
-      <h2 className="text-xl font-bold mt-8">Buttons with Icon & Text</h2>
-      <div className="flex flex-wrap gap-4">
-        {variants.map(variant =>
-          colors.map(color => (
-            <Button
-              key={variant + color + '-icon-text'}
-              variant={variant}
-              color={color}
-              icon={<span role="img" aria-label="star">⭐</span>}
-              iconPosition="left"
-            >
-              {color}
-            </Button>
-          ))
-        )}
       </div>
       <h2 className="text-xl font-bold mt-8">Button Sizes</h2>
       <div className="flex flex-wrap gap-4 items-end">
@@ -51,9 +29,6 @@ export default function Debug() {
           <Button key={size} size={size} color="primary">
             {size}
           </Button>
-        ))}
-        {sizes.map(size => (
-          <Button key={size + '-icon'} size={size} color="primary" icon={<span role="img" aria-label="star">⭐</span>} aria-label={size + ' icon'} />
         ))}
       </div>
       <h2 className="text-xl font-bold mt-8">Button Radius</h2>
@@ -63,9 +38,25 @@ export default function Debug() {
             {radius}
           </Button>
         ))}
-        {radii.map(radius => (
-          <Button key={radius + '-icon'} radius={radius} color="primary" icon={<span role="img" aria-label="star">⭐</span>} aria-label={radius + ' icon'} />
-        ))}
+      </div>
+      <h2 className="text-xl font-bold mt-8">Alerts</h2>
+      <div className="bg-primary text-inverse p-4 rounded-lg">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </div>
+      <div className="bg-primary-light text-static-foreground p-4 rounded-lg">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </div>
+      <div className="bg-primary-dark text-inverse p-4 rounded-lg">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </div>
+      <div className="bg-danger text-inverse p-4 rounded-lg">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </div>
+      <div className="bg-danger-light text-foreground p-4 rounded-lg">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </div>
+      <div className="bg-danger-dark text-inverse p-4 rounded-lg">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
       </div>
     </div>
   );
