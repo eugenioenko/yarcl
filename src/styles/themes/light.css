@@ -26,6 +26,7 @@
   --theme-color-danger: #dc2626;
   --theme-color-warning: #f59e42;
   --theme-color-info: #0ea5e9;
+  --theme-color-focus: #005fcc;
 }
 
 [data-theme="light"] {
@@ -56,4 +57,5 @@
   --theme-color-danger: #dc2626;
   --theme-color-warning: #f59e42;
   --theme-color-info: #0ea5e9;
+  --theme-color-focus: #005fcc;
 }

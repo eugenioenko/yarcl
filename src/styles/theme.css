@@ -31,6 +31,7 @@
   --color-danger: var(--theme-color-danger);
   --color-warning: var(--theme-color-warning);
   --color-info: var(--theme-color-info);
+  --color-focus: var(--theme-color-focus);
 
   /* Primary Colors */
   --color-primary-light: color-mix(

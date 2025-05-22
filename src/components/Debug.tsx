@@ -1,4 +1,4 @@
-import { Button } from './button/Button';
+import { Button } from './button/Button.component';
 
 const variants = ['solid', 'outlined', 'ghost', 'link'] as const;
 const colors = ['primary', 'secondary', 'neutral', 'accent', 'success', 'danger', 'warning', 'info'] as const;
