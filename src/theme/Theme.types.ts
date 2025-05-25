@@ -1,18 +1,30 @@
-import type {
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
-  ButtonRadius,
-  ButtonShadow,
-} from "../components/button/Button.types";
+import type { ButtonVariant } from "../components/button/Button.types";
+
+export type ThemeSize = "xs" | "sm" | "md" | "lg" | "xl";
+export type ThemeRadius = "xs" | "sm" | "md" | "lg" | "xl" | "full" | "none";
+export type ThemeShadow = "sm" | "md" | "lg" | "xl" | "none";
+export type ThemeColor =
+  | "primary"
+  | "secondary"
+  | "success"
+  | "danger"
+  | "warning"
+  | "info"
+  | "accent"
+  | "neutral";
 
 export type ThemeConfig = {
+  base: {
+    size: ThemeSize;
+    radius: ThemeRadius;
+    shadow: ThemeShadow;
+  };
   button: {
     variant: ButtonVariant;
-    color: ButtonColor;
-    size: ButtonSize;
-    radius: ButtonRadius;
-    shadow: ButtonShadow;
+    color: ThemeColor;
+    size: ThemeSize;
+    radius: ThemeRadius;
+    shadow: ThemeShadow;
   };
 };
 

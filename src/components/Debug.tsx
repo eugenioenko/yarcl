@@ -1,4 +1,5 @@
 import { Button } from './button/Button.component';
+import { Input } from './input/Input.component';
 
 const variants = ['solid', 'outlined', 'ghost', 'link'] as const;
 const colors = ['primary', 'secondary', 'neutral', 'accent', 'success', 'danger', 'warning', 'info'] as const;
@@ -8,6 +9,31 @@ const radii = ['none', 'xs', 'sm', 'md', 'lg', 'xl', 'full'] as const;
 export default function Debug() {
   return (
     <div className="space-y-8 p-4">
+      <Input prefix={<span>Prefix</span>} suffix={<span>Suffix</span>} placeholder={`Input with prefix and suffix`} />
+
+      <h2 className="text-xl font-bold mt-8">Input Sizes</h2>
+      <Input variant="outlined" placeholder={`Input outlined`} />
+      <Input variant="filled" placeholder={`Input filled`} />
+      <Input placeholder={`Input filled`} />
+      <div className="flex flex-wrap gap-4 items-end">
+        {colors.map(color => (
+          <Input key={color} color={color} placeholder={`Input color: ${color}`} />
+        ))}
+        <Input color="danger" error placeholder="Input color: danger (error)" />
+      </div>
+      <div className="flex flex-wrap gap-4 items-end">
+        {colors.map(color => (
+          <Input key={color} color={color} variant="filled" placeholder={`Input color: ${color}`} />
+        ))}
+        <Input color="danger" error placeholder="Input color: danger (error)" />
+      </div>
+      <h2 className="text-xl font-bold mt-8">Input Radius</h2>
+      <div className="flex flex-wrap gap-4 items-end">
+        {radii.map(radius => (
+          <Input key={radius} radius={radius} placeholder={`Input radius: ${radius}`} />
+        ))}
+      </div>
+
       <h2 className="text-xl font-bold">Button Variants & Colors</h2>
       <div className="space-y-6">
         {variants.map(variant => (
@@ -39,6 +65,8 @@ export default function Debug() {
           </Button>
         ))}
       </div>
+
+
       <h2 className="text-xl font-bold mt-8">Alerts</h2>
       <div className="bg-primary text-inverse p-4 rounded-lg">
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
