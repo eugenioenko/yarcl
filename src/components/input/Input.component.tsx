@@ -14,9 +14,7 @@ function InputBase(
     className = '',
     type = 'text',
     prefix,
-    prefixClassName = '',
     suffix,
-    suffixClassName = '',
     ...props
   }: InputProps,
   ref: React.ForwardedRef<HTMLInputElement>

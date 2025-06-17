@@ -1,5 +1,10 @@
 @import "tailwindcss";
-@import "./styles/theme.css";
+
+@import "./styles/themes/light.css";
+@import "./styles/themes/dark.css";
+@import "./styles/themes/bootstrap.css";
+@import "./styles/themes/monokai.css";
+@import "./styles/yarcl.css";
 
 @theme {
   --font-sans: "Fira Sans", "ui-sans-serif", "system-ui", sans-serif;

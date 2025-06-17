@@ -1,8 +1,3 @@
-@import "./themes/light.css";
-@import "./themes/dark.css";
-@import "./themes/bootstrap.css";
-@import "./themes/monokai.css";
-
 @theme inline {
   --mix-ratio-light: var(--theme-mix-ratio-light);
   --mix-ratio-dark: var(--theme-mix-ratio-dark);
