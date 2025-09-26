@@ -15,7 +15,7 @@ const themeConfig: ThemeOptions = {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider config={themeConfig}>
-      <div>First Addition 1</div>
+      <div>First Addition 12</div>
       <Debug />
     </ThemeProvider>
     <div>Second branch</div>
