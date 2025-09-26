@@ -18,5 +18,6 @@ createRoot(document.getElementById("root")!).render(
       <div>First Addition</div>
       <Debug />
     </ThemeProvider>
+    <div>Second branch</div>
   </StrictMode>
 );
