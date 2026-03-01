@@ -1,0 +1,20 @@
+/*
+  Utility color tokens — foreground, background, surface, border, inverse.
+  Brand/semantic colors (primary, danger, etc.) are injected by the
+  yarclPlugin virtual module from the consumer's yarcl.config.ts.
+*/
+:root {
+  --color-foreground: #1a1a1a;
+  --color-inverse:    #ffffff;
+  --color-background: #f1f5f9;
+  --color-surface:    #ffffff;
+  --color-border:     #d1d5db;
+}
+
+[data-theme="dark"] {
+  --color-foreground: #f1f5f9;
+  --color-inverse:    #1a1a1a;
+  --color-background: #0f172a;
+  --color-surface:    #1e293b;
+  --color-border:     #334155;
+}

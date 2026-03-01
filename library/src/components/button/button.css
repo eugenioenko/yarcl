@@ -1,0 +1,35 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: var(--btn-radius, 6px);
+  transition: background-color 150ms ease, color 150ms ease, opacity 150ms ease, border-color 150ms ease;
+
+  /* Size — set via --btn-h from component */
+  height: var(--btn-h, 40px);
+  padding: 0 calc(var(--btn-h, 40px) * 0.4);
+  font-size: calc(var(--btn-h, 40px) * 0.38);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Solid — --btn-color / --btn-color-active set by component based on color prop */
+.btn--solid {
+  background-color: var(--btn-color);
+  color: var(--color-inverse);
+}
+
+.btn--solid:hover {
+  background-color: var(--btn-color-active);
+}

@@ -1,0 +1,10 @@
+{
+  "name": "yarcl-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:library": "pnpm --filter library dev",
+    "dev:consumer": "pnpm --filter consumer dev"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

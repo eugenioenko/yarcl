@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@yarcl/config": ["./src/yarcl.config.ts"],
+      "@yarcl/flags":  ["./src/flags.config.ts"],
+      "@yarcl/i18n":   ["./src/i18n.config.ts"],
+      "@yarcl/env":    ["./src/env.config.ts"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
+}
