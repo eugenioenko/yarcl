@@ -1,0 +1,6 @@
+packages:
+  - library
+  - consumer
+
+allowBuilds:
+  esbuild: true

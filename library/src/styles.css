@@ -1,0 +1,46 @@
+.y-control {
+  box-sizing: border-box;
+  height: var(--y-h);
+  padding: 0 var(--y-px);
+  font: inherit;
+  font-size: var(--y-fs);
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: var(--y-r);
+  transition: background-color 120ms, border-color 120ms, box-shadow 120ms;
+}
+
+.y-control:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--y-c), transparent 70%);
+}
+
+.y-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  color: #fff;
+  background: var(--y-c);
+  border-color: var(--y-c);
+  cursor: pointer;
+}
+
+.y-button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--y-c), #000 12%);
+}
+
+.y-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.y-input {
+  color: inherit;
+  background: #fff;
+  border-color: #d0d5dd;
+}
+
+.y-input:focus-visible {
+  border-color: var(--y-c);
+}

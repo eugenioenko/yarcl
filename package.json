@@ -1,0 +1,13 @@
+{
+  "name": "yarcl-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm -C consumer dev",
+    "build": "pnpm -C consumer build",
+    "typecheck": "tsc -p library && tsc -p consumer"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  }
+}
