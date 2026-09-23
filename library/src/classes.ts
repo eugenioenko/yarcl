@@ -14,3 +14,4 @@ export const paddingClass = (padding: Spacing = config.defaults.padding) => `yar
 export const shadowClass = (shadow?: Shadow) => shadow && `yarcl-shadow-${shadow}`;
 export const typeClass = (style: TextStyle) => `yarcl-type-${style}`;
 export const densityClass = (density: Density = config.defaults.density) => `yarcl-density-${density}`;
+export const softVariantClass = (variant: Variant = config.defaults.softVariant) => `yarcl-variant-${variant}`;

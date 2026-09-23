@@ -152,6 +152,8 @@ export interface YarclShape {
     floatingShadow: string;
     /** Density for `Table`. A key of `density`. */
     density: string;
+    /** Variant for low-emphasis components such as `Badge` and `Alert`. A key of `variants`. */
+    softVariant: string;
   };
 }
 
@@ -194,6 +196,7 @@ type Checks<T extends YarclShape> = {
     padding: keyof T['spacing'];
     floatingShadow: keyof T['shadows'];
     density: keyof T['density'];
+    softVariant: keyof T['variants'];
   };
 };
 

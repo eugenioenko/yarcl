@@ -63,5 +63,6 @@ export default defineConfig({
     padding: 'normal',
     floatingShadow: 'md',
     density: 'regular',
+    softVariant: 'subtle',
   },
 });

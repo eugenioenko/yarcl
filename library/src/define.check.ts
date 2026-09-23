@@ -76,3 +76,9 @@ defineConfig({
   // @ts-expect-error
   defaults: { ...defaults.defaults, gap: 'tight' },
 });
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  defaults: { ...defaults.defaults, softVariant: 'subtle' },
+});

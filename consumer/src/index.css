@@ -37,3 +37,7 @@ body {
 .fields > * {
   width: 13rem;
 }
+
+.skeleton-card {
+  width: 20rem;
+}

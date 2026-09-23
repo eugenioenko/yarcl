@@ -22,6 +22,7 @@ A component library where the **consumer's config is the design system**. The li
 | Text & Heading | `Text` (`as`, `textStyle`, `color`, `muted`, `truncate`); `Heading` requires `level` (semantics) and takes `textStyle` (look) separately | Heading level follows document structure; visual size is a design decision |
 | Layout | `Stack` / `Inline` with `gap` from spacing, static `align` / `justify`; `Card` with `padding`, `radius`, `shadow`; `Divider` has no spacing prop — the parent's `gap` spaces it | Spacing lives in one place: the layout container |
 | Shadows | Plain strings; use `light-dark()` for the shadow color so it works in dark mode | Shadows need to be stronger on dark backgrounds |
+| Feedback | `Badge` and `Alert` use variant recipes with `defaults.softVariant`; `Badge` with `onRemove` is a removable tag; `Alert` has no live role unless `live` is set; `Spinner` inherits `currentColor` and the surrounding control's icon size; `Button`/`IconButton` `loading` disables, sets `aria-busy` and shows a Spinner; `Skeleton` uses `shape` (`text`/`control`/`circle`/`rect`) so it matches text styles and control heights | Loading placeholders line up with the content that replaces them |
 | Icon size | Part of each `sizes` entry (`iconSize`), not a separate group | Icons follow the control size automatically |
 | Text styles | Generated `.yarcl-type-{key}` classes; `family` references a `typography.families` key | Text styles usable before `Text` exists; group named `type` so the `Text` component can be `yarcl-text` |
 | Plugin runtime | Vite loads the plugin with Node's TS type stripping; relative imports in plugin code use `.ts` extensions. Publishing requires compiling the plugin (Node won't strip types inside `node_modules`) | Works from source in the workspace today |
@@ -88,7 +89,7 @@ export default defineConfig({
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
   defaults: {
     size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger',
-    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal', floatingShadow: 'md', density: 'compact',
+    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal', floatingShadow: 'md', density: 'compact', softVariant: 'subtle',
   },
 });
 ```
@@ -106,7 +107,7 @@ export default defineConfig({
 
 ### `defineConfig` checks
 
-- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`, `floatingShadow`, `density`)
+- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`, `floatingShadow`, `density`, `softVariant`)
 - [x] Every color has `light` and `dark`
 - [x] Keys contain no whitespace (other characters are escaped in CSS)
 - [x] `focusRing.color` is a color key; each text style's `family` is a family key
@@ -167,7 +168,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
 3. **Typography & layout** ✅ — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
 4. **Floating** ✅ — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
 5. **Overlays, navigation, data** ✅ — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
-6. **Feedback** — `Badge`, `Alert`, `Spinner`, `Skeleton`
+6. **Feedback** ✅ — `Badge`, `Alert`, `Spinner`, `Skeleton`
 7. **Showcase** — generated reference page from config; second consumer app with a different brand; docs site from JSDoc; decision record (alias vs augmentation vs codegen)
 
 ## Out of scope

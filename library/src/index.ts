@@ -54,6 +54,14 @@ export { Tabs } from './components/Tabs';
 export type { TabsProps, TabsListProps, TabsTriggerProps, TabsPanelProps } from './components/Tabs';
 export { Table } from './components/Table';
 export type { TableProps, TableHeaderCellProps, TableCellProps, CellAlign } from './components/Table';
+export { Badge } from './components/Badge';
+export type { BadgeProps } from './components/Badge';
+export { Alert } from './components/Alert';
+export type { AlertProps } from './components/Alert';
+export { Spinner } from './components/Spinner';
+export type { SpinnerProps } from './components/Spinner';
+export { Skeleton } from './components/Skeleton';
+export type { SkeletonProps } from './components/Skeleton';
 export type {
   Size,
   Radius,

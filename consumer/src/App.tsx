@@ -25,6 +25,7 @@ import {
   type TextStyle,
   type Variant,
 } from 'yarcl';
+import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
 import { OverlaysDemo } from './OverlaysDemo';
 import { PlusIcon, SearchIcon } from './icons';
@@ -186,6 +187,10 @@ export function App() {
 
       <Section title="Overlays, tabs, table">
         <OverlaysDemo />
+      </Section>
+
+      <Section title="Feedback">
+        <FeedbackDemo />
       </Section>
 
       <Section title="Typography">

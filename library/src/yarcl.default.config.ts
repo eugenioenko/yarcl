@@ -75,5 +75,6 @@ export default defineConfig({
     padding: 'lg',
     floatingShadow: 'md',
     density: 'comfortable',
+    softVariant: 'soft',
   },
 });

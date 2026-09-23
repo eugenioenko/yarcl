@@ -4,7 +4,11 @@ import {
   Checkbox,
   Divider,
   Field,
+  Alert,
+  Badge,
   Combobox,
+  Skeleton,
+  Spinner,
   Dialog,
   Drawer,
   Table,
@@ -70,6 +74,12 @@ export const contract = (
     <Tabs defaultValue="a" size="sm" color="success" />
     <Tabs value="a" onValueChange={() => {}} />
     <Table density="dense" striped interactive />
+    <Badge color="success" variant="outline" size="sm" radius="pill" onRemove={() => {}} />
+    <Alert color="warning" variant="solid" radius="round" live="polite" onDismiss={() => {}} />
+    <Spinner size="xl" color="danger" />
+    <Skeleton shape="control" size="lg" radius="soft" />
+    <Skeleton textStyle="display" lines={3} />
+    <Button loading />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
@@ -125,6 +135,16 @@ export const contract = (
     <Tabs value="a" defaultValue="b" />
     {/* @ts-expect-error */}
     <Table density="comfortable" />
+    {/* @ts-expect-error */}
+    <Badge variant="soft" />
+    {/* @ts-expect-error */}
+    <Alert live="rude" />
+    {/* @ts-expect-error */}
+    <Spinner size="huge" />
+    {/* @ts-expect-error */}
+    <Skeleton shape="triangle" />
+    {/* @ts-expect-error */}
+    <Skeleton textStyle="heading" />
   </>
 );
 
