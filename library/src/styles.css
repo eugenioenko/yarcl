@@ -1,11 +1,9 @@
 .yarcl-button,
-.yarcl-input {
+.yarcl-input,
+.yarcl-textarea {
   box-sizing: border-box;
-  height: var(--yarcl-h);
-  padding: 0 var(--yarcl-px);
   font: inherit;
   font-size: var(--yarcl-fs);
-  line-height: 1;
   border: var(--yarcl-border-width) solid transparent;
   border-radius: var(--yarcl-r);
   transition-property: background-color, border-color, color;
@@ -13,11 +11,24 @@
   transition-timing-function: var(--yarcl-motion-easing);
 }
 
+.yarcl-button,
+.yarcl-input {
+  height: var(--yarcl-h);
+  padding: 0 var(--yarcl-px);
+  line-height: 1;
+}
+
 .yarcl-button:focus-visible,
-.yarcl-input:focus-visible {
+.yarcl-input:focus-visible,
+.yarcl-textarea:focus-visible,
+.yarcl-checkbox-input:focus-visible,
+.yarcl-radio-input:focus-visible,
+.yarcl-switch-input:focus-visible {
   outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
 }
+
+/* Button */
 
 .yarcl-button {
   display: inline-flex;
@@ -25,18 +36,18 @@
   justify-content: center;
   gap: 0.5em;
   white-space: nowrap;
-  color: var(--yarcl-c-on);
-  background: var(--yarcl-c);
-  border-color: var(--yarcl-c);
+  color: var(--yarcl-v-fg);
+  background: var(--yarcl-v-bg);
+  border-color: var(--yarcl-v-border);
   cursor: pointer;
 }
 
 .yarcl-button:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--yarcl-c), var(--yarcl-c-on) 12%);
+  background: var(--yarcl-v-bg-hover);
 }
 
 .yarcl-button:active:not(:disabled) {
-  background: color-mix(in oklab, var(--yarcl-c), var(--yarcl-c-on) 20%);
+  background: var(--yarcl-v-bg-active);
 }
 
 .yarcl-button:disabled {
@@ -44,30 +55,225 @@
   cursor: not-allowed;
 }
 
-.yarcl-input {
+.yarcl-button svg {
+  flex-shrink: 0;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+
+.yarcl-icon-button {
+  width: var(--yarcl-h);
+  padding: 0;
+}
+
+/* Input & Textarea */
+
+.yarcl-input,
+.yarcl-textarea {
   color: var(--yarcl-neutral-text);
   background: var(--yarcl-neutral-surface);
   border-color: var(--yarcl-neutral-border);
 }
 
-.yarcl-input::placeholder {
+.yarcl-textarea {
+  display: block;
+  min-height: var(--yarcl-h);
+  padding: calc((var(--yarcl-h) - 1.5 * var(--yarcl-fs)) / 2 - var(--yarcl-border-width)) var(--yarcl-px);
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.yarcl-input::placeholder,
+.yarcl-textarea::placeholder {
   color: var(--yarcl-neutral-muted);
 }
 
-.yarcl-input:focus-visible {
+.yarcl-input:focus-visible,
+.yarcl-textarea:focus-visible {
   border-color: var(--yarcl-c);
   outline-color: var(--yarcl-c);
   outline-offset: 0;
 }
 
-.yarcl-input:disabled {
+.yarcl-input[aria-invalid='true'],
+.yarcl-textarea[aria-invalid='true'] {
+  border-color: var(--yarcl-error);
+  outline-color: var(--yarcl-error);
+}
+
+.yarcl-input:disabled,
+.yarcl-textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* Checkbox, Radio, Switch */
+
+.yarcl-checkbox,
+.yarcl-radio,
+.yarcl-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--yarcl-fs);
+  line-height: 1.25;
+  color: var(--yarcl-neutral-text);
+  cursor: pointer;
+}
+
+.yarcl-checkbox:has(:disabled),
+.yarcl-radio:has(:disabled),
+.yarcl-switch:has(:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.yarcl-checkbox-input,
+.yarcl-radio-input,
+.yarcl-switch-input {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: 0;
+  cursor: inherit;
+  transition-property: background-color, border-color;
+  transition-duration: var(--yarcl-motion-fast);
+  transition-timing-function: var(--yarcl-motion-easing);
+}
+
+.yarcl-checkbox-input,
+.yarcl-radio-input {
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+  background: var(--yarcl-neutral-surface);
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
+.yarcl-checkbox-input {
+  border-radius: 0.25em;
+}
+
+.yarcl-radio-input {
+  border-radius: 50%;
+}
+
+.yarcl-checkbox-input:checked,
+.yarcl-checkbox-input:indeterminate,
+.yarcl-radio-input:checked {
+  background: var(--yarcl-c);
+  border-color: var(--yarcl-c);
+}
+
+.yarcl-checkbox-input::before,
+.yarcl-radio-input::before {
+  content: '';
+  position: absolute;
+  inset: 15%;
+  background: var(--yarcl-c-on);
+  transform: scale(0);
+  transition: transform var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-checkbox-input::before {
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.yarcl-checkbox-input:indeterminate::before {
+  clip-path: inset(40% 5%);
+}
+
+.yarcl-radio-input::before {
+  inset: 25%;
+  border-radius: 50%;
+}
+
+.yarcl-checkbox-input:checked::before,
+.yarcl-checkbox-input:indeterminate::before,
+.yarcl-radio-input:checked::before {
+  transform: scale(1);
+}
+
+.yarcl-checkbox-input[aria-invalid='true'] {
+  border-color: var(--yarcl-error);
+}
+
+.yarcl-switch-input {
+  --yarcl-track-h: calc(var(--yarcl-icon) * 1.25);
+  --yarcl-thumb: calc(var(--yarcl-track-h) - 4px);
+  width: calc(var(--yarcl-track-h) * 1.8);
+  height: var(--yarcl-track-h);
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--yarcl-neutral-muted) 60%, var(--yarcl-neutral-bg));
+}
+
+.yarcl-switch-input::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: var(--yarcl-thumb);
+  height: var(--yarcl-thumb);
+  border-radius: 50%;
+  background: light-dark(#ffffff, var(--yarcl-neutral-text));
+  box-shadow: var(--yarcl-shadow-sm, none);
+  transition:
+    transform var(--yarcl-motion-fast) var(--yarcl-motion-easing),
+    background-color var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-switch-input:checked {
+  background: var(--yarcl-c);
+}
+
+.yarcl-switch-input:checked::before {
+  background: var(--yarcl-c-on);
+  transform: translateX(calc(var(--yarcl-track-h) * 1.8 - var(--yarcl-thumb) - 4px));
+}
+
+/* Field */
+
+.yarcl-field {
+  display: grid;
+  gap: 0.375rem;
+  color: var(--yarcl-neutral-text);
+}
+
+.yarcl-field-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.yarcl-field-required {
+  color: var(--yarcl-error);
+}
+
+.yarcl-field-description,
+.yarcl-field-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.yarcl-field-description {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-field-error {
+  color: var(--yarcl-error);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .yarcl-button,
-  .yarcl-input {
+  .yarcl-input,
+  .yarcl-textarea,
+  .yarcl-checkbox-input,
+  .yarcl-radio-input,
+  .yarcl-switch-input,
+  .yarcl-checkbox-input::before,
+  .yarcl-radio-input::before,
+  .yarcl-switch-input::before {
     transition: none;
   }
 }

@@ -1,5 +1,5 @@
 import { contrast, parseHex, readableOn } from './color.ts';
-import type { ColorPair, ColorToken, YarclShape } from './define.ts';
+import type { ColorPair, ColorToken, VariantToken, YarclShape } from './define.ts';
 
 const MIN_CONTRAST = 4.5;
 
@@ -38,6 +38,27 @@ function foreground(name: string, token: ColorToken, warn: (message: string) => 
 
   return pair({ light: resolved[0], dark: resolved[1] });
 }
+
+const tint = (percent: number) => `color-mix(in oklab, var(--yarcl-c) ${percent}%, transparent)`;
+const shade = (percent: number) => `color-mix(in oklab, var(--yarcl-c), var(--yarcl-c-on) ${percent}%)`;
+
+const backgrounds: Record<VariantToken['background'], [string, string, string]> = {
+  fill: ['var(--yarcl-c)', shade(12), shade(20)],
+  tint: [tint(14), tint(22), tint(30)],
+  none: ['transparent', tint(10), tint(18)],
+};
+
+const borders: Record<VariantToken['border'], string> = {
+  color: 'var(--yarcl-c)',
+  neutral: 'var(--yarcl-neutral-border)',
+  none: 'transparent',
+};
+
+const texts: Record<VariantToken['text'], string> = {
+  on: 'var(--yarcl-c-on)',
+  color: 'var(--yarcl-c)',
+  neutral: 'var(--yarcl-neutral-text)',
+};
 
 function rule(selector: string, declarations: [string, string | number][]): string {
   return `${selector} {\n${declarations.map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`;
@@ -84,6 +105,19 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     rules.push(rule(`.yarcl-radius-${k}`, [['--yarcl-r', `var(--yarcl-radius-${k})`]]));
   }
 
+  for (const [key, variant] of Object.entries(config.variants)) {
+    const [bg, hover, active] = backgrounds[variant.background];
+    rules.push(
+      rule(`.yarcl-variant-${ident(key)}`, [
+        ['--yarcl-v-bg', bg],
+        ['--yarcl-v-bg-hover', hover],
+        ['--yarcl-v-bg-active', active],
+        ['--yarcl-v-border', borders[variant.border]],
+        ['--yarcl-v-fg', texts[variant.text]],
+      ]),
+    );
+  }
+
   for (const [key, value] of Object.entries(config.spacing)) root.push([`--yarcl-space-${ident(key)}`, value]);
   for (const [key, value] of Object.entries(config.shadows)) root.push([`--yarcl-shadow-${ident(key)}`, value]);
   for (const [key, value] of Object.entries(config.typography.families)) root.push([`--yarcl-font-${ident(key)}`, value]);
@@ -108,6 +142,7 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     ['--yarcl-focus-width', config.focusRing.width],
     ['--yarcl-focus-offset', config.focusRing.offset],
     ['--yarcl-focus-color', `var(--yarcl-color-${ident(config.focusRing.color)})`],
+    ['--yarcl-error', `var(--yarcl-color-${ident(config.defaults.errorColor)})`],
   );
 
   return [rule(':root', root), ...rules].join('\n\n') + '\n';

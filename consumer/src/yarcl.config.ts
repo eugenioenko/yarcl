@@ -23,6 +23,12 @@ export default defineConfig({
     round: '0.75rem',
     pill: '9999px',
   },
+  variants: {
+    solid: { background: 'fill', border: 'color', text: 'on' },
+    subtle: { background: 'tint', border: 'none', text: 'color' },
+    outline: { background: 'none', border: 'color', text: 'color' },
+    quiet: { background: 'none', border: 'none', text: 'color' },
+  },
   spacing: {
     tight: '0.5rem',
     normal: '1rem',
@@ -40,5 +46,5 @@ export default defineConfig({
   },
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
-  defaults: { size: 'md', radius: 'soft', color: 'brand' },
+  defaults: { size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger' },
 });

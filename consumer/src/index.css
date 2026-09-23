@@ -6,7 +6,7 @@ body {
 }
 
 main {
-  max-width: 48rem;
+  max-width: 60rem;
   margin: 0 auto;
   padding: var(--yarcl-space-loose) var(--yarcl-space-normal);
 }
@@ -35,4 +35,10 @@ section {
 .label {
   width: 4.5rem;
   color: var(--yarcl-neutral-muted);
+}
+
+.form {
+  display: grid;
+  gap: var(--yarcl-space-normal);
+  max-width: 24rem;
 }

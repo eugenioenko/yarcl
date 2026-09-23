@@ -25,6 +25,12 @@ export default defineConfig({
     md: '0.5rem',
     full: '9999px',
   },
+  variants: {
+    solid: { background: 'fill', border: 'color', text: 'on' },
+    soft: { background: 'tint', border: 'none', text: 'color' },
+    outline: { background: 'none', border: 'color', text: 'color' },
+    ghost: { background: 'none', border: 'none', text: 'color' },
+  },
   spacing: {
     xs: '0.25rem',
     sm: '0.5rem',
@@ -53,5 +59,5 @@ export default defineConfig({
   motion: { fast: '120ms', base: '200ms', easing: 'cubic-bezier(0.2, 0, 0, 1)' },
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '2px', color: 'primary' },
-  defaults: { size: 'md', radius: 'md', color: 'primary' },
+  defaults: { size: 'md', radius: 'md', color: 'primary', variant: 'solid', errorColor: 'danger' },
 });

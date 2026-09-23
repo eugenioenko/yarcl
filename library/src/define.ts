@@ -30,6 +30,19 @@ export interface SizeToken {
   iconSize: string;
 }
 
+/**
+ * A style recipe applied on top of a semantic color.
+ * Shared by every component that takes a `variant` prop.
+ */
+export interface VariantToken {
+  /** `fill`: the color itself; `tint`: a translucent wash of the color; `none`: transparent. */
+  background: 'fill' | 'tint' | 'none';
+  /** `color`: the semantic color; `neutral`: the neutral border color; `none`: no visible border. */
+  border: 'color' | 'neutral' | 'none';
+  /** `on`: the color's foreground; `color`: the semantic color; `neutral`: the default text color. */
+  text: 'on' | 'color' | 'neutral';
+}
+
 /** A named text style. */
 export interface TextStyleToken {
   /** A key of `typography.families`. */
@@ -47,7 +60,7 @@ export interface TextStyleToken {
 /**
  * The structure every yarcl config must satisfy.
  *
- * Open groups (`colors`, `sizes`, `radii`, `spacing`, `shadows`, `typography`) take any keys;
+ * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `typography`) take any keys;
  * those keys become the valid prop values. Groups with required keys (`neutrals`, `zIndex`,
  * `motion`, `borders`) must include the keys the library depends on, and accept any extra
  * keys, which are emitted as CSS variables for the consumer's own styles.
@@ -72,6 +85,8 @@ export interface YarclShape {
   sizes: Record<string, SizeToken>;
   /** Border radii. Keys become the valid values of the `radius` prop. */
   radii: Record<string, string>;
+  /** Style recipes. Keys become the valid values of the `variant` prop. */
+  variants: Record<string, VariantToken>;
   /** Spacing scale, e.g. for `gap` and padding. */
   spacing: Record<string, string>;
   /** Box shadows. */
@@ -106,7 +121,14 @@ export interface YarclShape {
     color: string;
   };
   /** Values used when a component prop is omitted. Each must be a key of its group. */
-  defaults: { size: string; radius: string; color: string };
+  defaults: {
+    size: string;
+    radius: string;
+    color: string;
+    variant: string;
+    /** Color used for invalid fields. A key of `colors`. */
+    errorColor: string;
+  };
 }
 
 type Whitespace = ' ' | '\n' | '\t';
@@ -125,6 +147,7 @@ type Checks<T extends YarclShape> = {
   borders: KeyCheck<T['borders']>;
   sizes: KeyCheck<T['sizes']>;
   radii: KeyCheck<T['radii']>;
+  variants: KeyCheck<T['variants']>;
   spacing: KeyCheck<T['spacing']>;
   shadows: KeyCheck<T['shadows']>;
   typography: {
@@ -138,6 +161,8 @@ type Checks<T extends YarclShape> = {
     size: keyof T['sizes'];
     radius: keyof T['radii'];
     color: keyof T['colors'];
+    variant: keyof T['variants'];
+    errorColor: keyof T['colors'];
   };
 };
 

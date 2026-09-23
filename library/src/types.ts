@@ -8,6 +8,8 @@ export type Size = keyof Config['sizes'] & string;
 export type Radius = keyof Config['radii'] & string;
 /** A key of the consumer's `colors` config. */
 export type Color = keyof Config['colors'] & string;
+/** A key of the consumer's `variants` config. */
+export type Variant = keyof Config['variants'] & string;
 /** A key of the consumer's `spacing` config. */
 export type Spacing = keyof Config['spacing'] & string;
 /** A key of the consumer's `shadows` config. */
@@ -32,4 +34,13 @@ export interface TokenProps {
    * @default config.defaults.color
    */
   color?: Color;
+}
+
+/** The `variant` prop shared by components that apply a style recipe. */
+export interface VariantProps {
+  /**
+   * Style recipe, from the `variants` config.
+   * @default config.defaults.variant
+   */
+  variant?: Variant;
 }

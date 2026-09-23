@@ -47,3 +47,20 @@ defineConfig({
   // @ts-expect-error
   zIndex: { dropdown: 1000, tooltip: 1100, dialog: 1200 },
 });
+
+defineConfig({
+  ...defaults,
+  variants: { ...defaults.variants, link: { background: 'none', border: 'none', text: 'color' } },
+});
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  variants: { solid: { background: 'gradient', border: 'color', text: 'on' } },
+});
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  defaults: { ...defaults.defaults, errorColor: 'red' },
+});

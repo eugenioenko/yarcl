@@ -15,6 +15,10 @@ A component library where the **consumer's config is the design system**. The li
 | Reserved names | Token group names (`color`, `size`, `radius`, `type`, `variant`, …) can't be component names | Avoids `yarcl-size` component vs `yarcl-size-*` modifier collision |
 | Token groups | **Open** (`colors`, `sizes`, `radii`, `spacing`, `shadows`, `typography`): any keys. **Required + extras** (`neutrals`, `zIndex`, `motion`, `borders`): keys the library uses are required, any extra keys allowed and emitted as CSS variables | Consumer overrides every value and adds any key; the library can still rely on the names it needs |
 | Neutrals | Required `neutrals` group: `bg`, `surface`, `text`, `muted`, `border` | Components need background/text/border colors that aren't semantic `color` prop values |
+| Variants | Open `variants` group of recipes: `background` (`fill`/`tint`/`none`), `border` (`color`/`neutral`/`none`), `text` (`on`/`color`/`neutral`). Generated `.yarcl-variant-{k}` sets `--yarcl-v-*` variables, shared across components | Consumers invent variants without library code; one group serves Button, IconButton, later Badge/Alert |
+| Error color | `defaults.errorColor` (a color key) → `--yarcl-error`; controls with `aria-invalid="true"` use it | Color keys are the consumer's, so there's no guaranteed `danger` |
+| Field | `Field` provides `id`, `aria-describedby`, `aria-invalid`, `required` to its control via context (`useFieldProps`) | Accessible labelling without prop plumbing; works for Input, Textarea, Checkbox, Switch |
+| Selection controls | Native inputs with `appearance: none`; box size from the size's `iconSize`; Switch is `<input type="checkbox" role="switch">` | Native form behavior, keyboard and `checked`/`onChange` for free |
 | Icon size | Part of each `sizes` entry (`iconSize`), not a separate group | Icons follow the control size automatically |
 | Text styles | Generated `.yarcl-type-{key}` classes; `family` references a `typography.families` key | Text styles usable before `Text` exists; group named `type` so the `Text` component can be `yarcl-text` |
 | Plugin runtime | Vite loads the plugin with Node's TS type stripping; relative imports in plugin code use `.ts` extensions. Publishing requires compiling the plugin (Node won't strip types inside `node_modules`) | Works from source in the workspace today |
@@ -54,6 +58,10 @@ export default defineConfig({
     md: { height: '2.5rem', paddingX: '1rem', fontSize: '0.875rem', iconSize: '1rem' },
   },
   radii: { soft: '0.375rem', pill: '9999px' },
+  variants: {
+    solid:   { background: 'fill', border: 'color', text: 'on' },
+    outline: { background: 'none', border: 'color', text: 'color' },
+  },
   spacing: { tight: '0.5rem', normal: '1rem', loose: '2rem' },
   shadows: { sm: '…', md: '…' },
   typography: {
@@ -67,22 +75,24 @@ export default defineConfig({
   motion: { fast: '120ms', base: '200ms', easing: '…' /* + extras */ },
   borders: { width: '1px' /* + extras */ },
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
-  defaults: { size: 'md', radius: 'soft', color: 'brand' },
+  defaults: { size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger' },
 });
 ```
 
-Later phases add: `variants` (Phase 2), `density` (Phase 5).
+Later phases add: `density` (Phase 5).
 
 ### Generated CSS
 
 - `:root` variables: `--yarcl-color-{k}`, `--yarcl-color-{k}-on`, `--yarcl-neutral-{k}`, `--yarcl-size-{k}-{height|padding-x|font-size|icon-size}`, `--yarcl-radius-{k}`, `--yarcl-space-{k}`, `--yarcl-shadow-{k}`, `--yarcl-font-{k}`, `--yarcl-z-{k}`, `--yarcl-motion-{k}`, `--yarcl-border-{k}`, `--yarcl-focus-{width|offset|color}`
 - Modifier classes set component-level variables: `.yarcl-color-{k}` → `--yarcl-c`, `--yarcl-c-on`; `.yarcl-size-{k}` → `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon`; `.yarcl-radius-{k}` → `--yarcl-r`
+- `.yarcl-variant-{k}` → `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg`
 - `.yarcl-type-{k}` sets font properties directly
+- `--yarcl-error` from `defaults.errorColor`
 - Keys are CSS-escaped, so any non-whitespace key works
 
 ### `defineConfig` checks
 
-- [x] `defaults` entries are existing keys
+- [x] `defaults` entries are existing keys (including `variant`, `errorColor`)
 - [x] Every color has `light` and `dark`
 - [x] Keys contain no whitespace (other characters are escaped in CSS)
 - [x] `focusRing.color` is a color key; each text style's `family` is a family key
@@ -137,7 +147,8 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
    - New token groups: neutrals, typography, spacing, shadows, zIndex, motion, focusRing, borders (icon size folded into `sizes`)
    - `defineConfig` checks
    - Config merge: export library `defaults` so consumers can spread and extend
-2. **Controls** — `IconButton`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Field`, `variants`
+2. **Controls** ✅ — `IconButton`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Field`, `variants`
+   - Follow-up: `RadioGroup` (fieldset/legend) so radios work inside `Field`
 3. **Typography & layout** — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
 4. **Floating** — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
 5. **Overlays, navigation, data** — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
