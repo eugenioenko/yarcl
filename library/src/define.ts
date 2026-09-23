@@ -1,57 +1,171 @@
-/**
- * A single step of the shared control size scale.
- * Every sized control (Button, Input, …) reads the same entry,
- * so controls of the same size always share the same height.
- */
-export interface SizeToken {
-  /** Control height as a CSS length, e.g. `'2.5rem'`. */
-  height: string;
-  /** Horizontal padding as a CSS length, e.g. `'1rem'`. */
-  paddingX: string;
-  /** Font size as a CSS length, e.g. `'0.875rem'`. */
-  fontSize: string;
+/** A color with a value for each color scheme. Emitted as CSS `light-dark()`. */
+export interface ColorPair {
+  /** Value used when the color scheme is light. */
+  light: string;
+  /** Value used when the color scheme is dark. */
+  dark: string;
 }
 
-/** The structure every yarcl config must satisfy. */
+/** A semantic color: one value per color scheme, plus an optional foreground. */
+export interface ColorToken extends ColorPair {
+  /**
+   * Text color used on top of this color.
+   * Computed by contrast (black or white) per scheme when omitted; requires hex values.
+   */
+  on?: string | ColorPair;
+}
+
+/**
+ * A single step of the shared control size scale.
+ * Every sized control reads the same entry, so controls of the same size share the same height.
+ */
+export interface SizeToken {
+  /** Control height, e.g. `'2.5rem'`. */
+  height: string;
+  /** Horizontal padding, e.g. `'1rem'`. */
+  paddingX: string;
+  /** Font size, e.g. `'0.875rem'`. */
+  fontSize: string;
+  /** Size of icons inside controls of this size, e.g. `'1rem'`. */
+  iconSize: string;
+}
+
+/** A named text style. */
+export interface TextStyleToken {
+  /** A key of `typography.families`. */
+  family: string;
+  /** Font size, e.g. `'1rem'`. */
+  size: string;
+  /** Font weight, e.g. `400`. */
+  weight: number;
+  /** Unitless line height, e.g. `1.5`. */
+  lineHeight: number;
+  /** Letter spacing, e.g. `'-0.01em'`. */
+  letterSpacing?: string;
+}
+
+/**
+ * The structure every yarcl config must satisfy.
+ *
+ * Open groups (`colors`, `sizes`, `radii`, `spacing`, `shadows`, `typography`) take any keys;
+ * those keys become the valid prop values. Groups with required keys (`neutrals`, `zIndex`,
+ * `motion`, `borders`) must include the keys the library depends on, and accept any extra
+ * keys, which are emitted as CSS variables for the consumer's own styles.
+ */
 export interface YarclShape {
+  /** Semantic colors. Keys become the valid values of the `color` prop. */
+  colors: Record<string, ColorToken>;
+  /** Neutral colors for backgrounds, text and borders. Extra keys allowed. */
+  neutrals: Record<string, ColorPair> & {
+    /** Page background. */
+    bg: ColorPair;
+    /** Background of controls and raised surfaces. */
+    surface: ColorPair;
+    /** Default text. */
+    text: ColorPair;
+    /** Secondary text and placeholders. */
+    muted: ColorPair;
+    /** Default border. */
+    border: ColorPair;
+  };
   /** Control size scale. Keys become the valid values of the `size` prop. */
   sizes: Record<string, SizeToken>;
   /** Border radii. Keys become the valid values of the `radius` prop. */
   radii: Record<string, string>;
-  /** Semantic colors. Keys become the valid values of the `color` prop. */
-  colors: Record<string, string>;
+  /** Spacing scale, e.g. for `gap` and padding. */
+  spacing: Record<string, string>;
+  /** Box shadows. */
+  shadows: Record<string, string>;
+  /** Font families and named text styles. */
+  typography: {
+    /** Font stacks, e.g. `{ sans: 'Inter, system-ui, sans-serif' }`. */
+    families: Record<string, string>;
+    /** Named text styles. Keys become the valid text style names. */
+    styles: Record<string, TextStyleToken>;
+  };
+  /** Stacking order of floating layers. Extra keys allowed. */
+  zIndex: Record<string, number> & { dropdown: number; tooltip: number; dialog: number; toast: number };
+  /** Transition timing. Extra keys allowed. */
+  motion: Record<string, string> & {
+    /** Short transitions, e.g. hover. */
+    fast: string;
+    /** Standard transitions, e.g. opening a popover. */
+    base: string;
+    /** Easing function. */
+    easing: string;
+  };
+  /** Border widths. Extra keys allowed. */
+  borders: Record<string, string> & { width: string };
+  /** Keyboard focus indicator. */
+  focusRing: {
+    /** Outline width. */
+    width: string;
+    /** Outline offset. */
+    offset: string;
+    /** A key of `colors`. */
+    color: string;
+  };
   /** Values used when a component prop is omitted. Each must be a key of its group. */
   defaults: { size: string; radius: string; color: string };
 }
 
+type Whitespace = ' ' | '\n' | '\t';
+
+type KeyCheck<G> = {
+  [K in keyof G as K extends `${string}${Whitespace}${string}` ? K : never]: {
+    error: `Key "${K & string}" must not contain whitespace`;
+  };
+};
+
+type Checks<T extends YarclShape> = {
+  colors: KeyCheck<T['colors']>;
+  neutrals: KeyCheck<T['neutrals']>;
+  zIndex: KeyCheck<T['zIndex']>;
+  motion: KeyCheck<T['motion']>;
+  borders: KeyCheck<T['borders']>;
+  sizes: KeyCheck<T['sizes']>;
+  radii: KeyCheck<T['radii']>;
+  spacing: KeyCheck<T['spacing']>;
+  shadows: KeyCheck<T['shadows']>;
+  typography: {
+    families: KeyCheck<T['typography']['families']>;
+    styles: KeyCheck<T['typography']['styles']> & {
+      [K in keyof T['typography']['styles']]: { family: keyof T['typography']['families'] };
+    };
+  };
+  focusRing: { color: keyof T['colors'] };
+  defaults: {
+    size: keyof T['sizes'];
+    radius: keyof T['radii'];
+    color: keyof T['colors'];
+  };
+};
+
 /**
  * Declares a yarcl design system config.
  *
- * Validates the config's shape and that every `defaults` entry is an existing key.
- * Returns the config unchanged, with literal types preserved, so the library can
- * derive its prop types from it.
+ * Checks at compile time that:
+ * - every color has a `light` and `dark` value
+ * - `defaults`, `focusRing.color` and each text style's `family` reference existing keys
+ * - no key contains whitespace
+ *
+ * Returns the config unchanged with literal types preserved, so the library can derive
+ * its prop types from it. Spread `yarcl/defaults` to extend the library defaults instead
+ * of replacing them.
  *
  * @example
  * ```ts
  * // src/yarcl.config.ts
  * import { defineConfig } from 'yarcl/define';
+ * import defaults from 'yarcl/defaults';
  *
  * export default defineConfig({
- *   sizes: { md: { height: '2.5rem', paddingX: '1rem', fontSize: '0.875rem' } },
- *   radii: { soft: '0.375rem' },
- *   colors: { brand: '#2d4bb8' },
- *   defaults: { size: 'md', radius: 'soft', color: 'brand' },
+ *   ...defaults,
+ *   colors: { ...defaults.colors, brand: { light: '#2d4bb8', dark: '#8aa2ff' } },
+ *   defaults: { ...defaults.defaults, color: 'brand' },
  * });
  * ```
  */
-export function defineConfig<const T extends YarclShape>(
-  config: T & {
-    defaults: {
-      size: keyof T['sizes'];
-      radius: keyof T['radii'];
-      color: keyof T['colors'];
-    };
-  },
-): T {
+export function defineConfig<const T extends YarclShape>(config: T & Checks<T>): T {
   return config;
 }

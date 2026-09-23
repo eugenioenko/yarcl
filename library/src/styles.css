@@ -1,46 +1,73 @@
-.y-control {
+.yarcl-button,
+.yarcl-input {
   box-sizing: border-box;
-  height: var(--y-h);
-  padding: 0 var(--y-px);
+  height: var(--yarcl-h);
+  padding: 0 var(--yarcl-px);
   font: inherit;
-  font-size: var(--y-fs);
+  font-size: var(--yarcl-fs);
   line-height: 1;
-  border: 1px solid transparent;
-  border-radius: var(--y-r);
-  transition: background-color 120ms, border-color 120ms, box-shadow 120ms;
+  border: var(--yarcl-border-width) solid transparent;
+  border-radius: var(--yarcl-r);
+  transition-property: background-color, border-color, color;
+  transition-duration: var(--yarcl-motion-fast);
+  transition-timing-function: var(--yarcl-motion-easing);
 }
 
-.y-control:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--y-c), transparent 70%);
+.yarcl-button:focus-visible,
+.yarcl-input:focus-visible {
+  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
+  outline-offset: var(--yarcl-focus-offset);
 }
 
-.y-button {
+.yarcl-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  color: #fff;
-  background: var(--y-c);
-  border-color: var(--y-c);
+  white-space: nowrap;
+  color: var(--yarcl-c-on);
+  background: var(--yarcl-c);
+  border-color: var(--yarcl-c);
   cursor: pointer;
 }
 
-.y-button:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--y-c), #000 12%);
+.yarcl-button:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--yarcl-c), var(--yarcl-c-on) 12%);
 }
 
-.y-button:disabled {
+.yarcl-button:active:not(:disabled) {
+  background: color-mix(in oklab, var(--yarcl-c), var(--yarcl-c-on) 20%);
+}
+
+.yarcl-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.y-input {
-  color: inherit;
-  background: #fff;
-  border-color: #d0d5dd;
+.yarcl-input {
+  color: var(--yarcl-neutral-text);
+  background: var(--yarcl-neutral-surface);
+  border-color: var(--yarcl-neutral-border);
 }
 
-.y-input:focus-visible {
-  border-color: var(--y-c);
+.yarcl-input::placeholder {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-input:focus-visible {
+  border-color: var(--yarcl-c);
+  outline-color: var(--yarcl-c);
+  outline-offset: 0;
+}
+
+.yarcl-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yarcl-button,
+  .yarcl-input {
+    transition: none;
+  }
 }

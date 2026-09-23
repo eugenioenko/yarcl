@@ -1,7 +1,6 @@
 import type { InputHTMLAttributes } from 'react';
-import { tokenStyle } from '../tokens';
+import { cx, tokenClasses } from '../classes';
 import type { TokenProps } from '../types';
-import '../styles.css';
 
 /**
  * Props for {@link Input}. Accepts all native `<input>` attributes except
@@ -19,12 +18,6 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * <Input size="lg" color="danger" placeholder="Email" />
  * ```
  */
-export function Input({ size, radius, color, className, style, ...props }: InputProps) {
-  return (
-    <input
-      className={['y-control y-input', className].filter(Boolean).join(' ')}
-      style={{ ...tokenStyle({ size, radius, color }), ...style }}
-      {...props}
-    />
-  );
+export function Input({ size, radius, color, className, ...props }: InputProps) {
+  return <input className={cx('yarcl-input', tokenClasses({ size, radius, color }), className)} {...props} />;
 }

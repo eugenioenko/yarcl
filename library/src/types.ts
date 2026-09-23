@@ -3,11 +3,17 @@ import type config from '@yarcl/config';
 type Config = typeof config;
 
 /** A key of the consumer's `sizes` config. */
-export type Size = keyof Config['sizes'];
+export type Size = keyof Config['sizes'] & string;
 /** A key of the consumer's `radii` config. */
-export type Radius = keyof Config['radii'];
+export type Radius = keyof Config['radii'] & string;
 /** A key of the consumer's `colors` config. */
-export type Color = keyof Config['colors'];
+export type Color = keyof Config['colors'] & string;
+/** A key of the consumer's `spacing` config. */
+export type Spacing = keyof Config['spacing'] & string;
+/** A key of the consumer's `shadows` config. */
+export type Shadow = keyof Config['shadows'] & string;
+/** A key of the consumer's `typography.styles` config. */
+export type TextStyle = keyof Config['typography']['styles'] & string;
 
 /** Design token props shared by every sized, colored component. */
 export interface TokenProps {
