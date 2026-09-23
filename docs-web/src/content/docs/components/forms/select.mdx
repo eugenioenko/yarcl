@@ -1,0 +1,54 @@
+---
+title: "Select"
+description: "Picks one value from a list, like a native select but styled from your tokens."
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SelectDemo } from '@/demos/forms';
+
+```tsx
+import { Select } from 'yarcl';
+```
+
+<Preview>
+  <SelectDemo client:visible />
+</Preview>
+
+```tsx
+const plans = [
+  { value: 'free', label: 'Free' },
+  { value: 'pro', label: 'Pro' },
+  { value: 'enterprise', label: 'Enterprise', disabled: true },
+];
+
+<Field label="Plan">
+  <Select options={plans} value={plan} onValueChange={setPlan} placeholder="Choose a plan" />
+</Field>
+```
+
+Options are data, not children: the selected label is known even while the list is closed, and the value type is inferred from `options`. Pass `name` to submit the value with a form.
+
+## Keyboard
+
+| Key | Action |
+|---|---|
+| <kbd>Enter</kbd> <kbd>Space</kbd> <kbd>↓</kbd> | opens the list at the selected option |
+| <kbd>↑</kbd> <kbd>↓</kbd> | moves between options, skipping disabled ones |
+| typing | jumps to a matching option, even while closed |
+| <kbd>Enter</kbd> <kbd>Space</kbd> | chooses the focused option |
+| <kbd>Esc</kbd> | closes without changing the value |
+
+## Props
+
+### Select
+
+Accepts every native `<button>` attribute except `color`, `value`, `defaultValue` and `onChange`.
+
+<Props of="SelectProps" />
+
+### SelectOption
+
+<Props of="SelectOption" />

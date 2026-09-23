@@ -1,0 +1,51 @@
+---
+title: Variants
+description: Variant recipes shared by Button, IconButton, Badge, Alert and ToggleGroup.
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import { VariantGridDemo } from '@/demos/config';
+
+A variant is a recipe applied on top of any color. You define the recipes; the library knows how to render each ingredient.
+
+```ts
+variants: {
+  solid:   { background: 'fill', border: 'color',   text: 'on' },
+  soft:    { background: 'tint', border: 'none',    text: 'color' },
+  outline: { background: 'none', border: 'color',   text: 'color' },
+  ghost:   { background: 'none', border: 'none',    text: 'color' },
+},
+```
+
+<Preview column>
+  <VariantGridDemo />
+</Preview>
+
+## Ingredients
+
+| Field | Value | Result |
+|---|---|---|
+| `background` | `fill` | the color itself; hover and active mix in the foreground |
+| | `tint` | a translucent wash of the color |
+| | `none` | transparent; hover shows a light tint |
+| `border` | `color` | the color |
+| | `neutral` | the neutral border color |
+| | `none` | no visible border (the space is kept, so heights don't change) |
+| `text` | `on` | the color's foreground |
+| | `color` | the color itself |
+| | `neutral` | the default text color |
+
+Any combination works. A "link" style is `{ background: 'none', border: 'none', text: 'color' }`; a neutral outlined button is `{ background: 'none', border: 'neutral', text: 'neutral' }`.
+
+## Which components use variants
+
+`Button`, `IconButton`, `Badge`, `Alert` and `ToggleGroup` take a `variant` prop. They share the recipes, so a `soft` badge and a `soft` button look like they belong together.
+
+## Default variants
+
+- `defaults.variant`: the variant of buttons and of a selected `ToggleGroup` item.
+- `defaults.softVariant`: the variant of low-emphasis components: `Badge`, `Alert`, and unselected `ToggleGroup` items.
+
+Both must be keys of `variants`.

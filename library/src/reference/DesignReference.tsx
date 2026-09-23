@@ -28,10 +28,10 @@ const keys = <T extends string>(group: object) => Object.keys(group) as T[];
 
 function ratio(background: string, token: ColorToken, mode: keyof ColorPair): string {
   const bg = parseHex(background);
-  if (!bg) return '—';
+  if (!bg) return 'n/a';
   const onValue = typeof token.on === 'string' ? token.on : token.on?.[mode];
   const fg = parseHex(onValue ?? readableOn(bg));
-  return fg ? `${contrast(bg, fg).toFixed(1)}:1` : '—';
+  return fg ? `${contrast(bg, fg).toFixed(1)}:1` : 'n/a';
 }
 
 function Section({ title, description, children }: { title: string; description?: ReactNode; children: ReactNode }) {
@@ -268,7 +268,7 @@ export function DesignReference({ title = 'Design reference' }: DesignReferenceP
                   <Table.Cell>
                     <Code>{[face.src].flat().join(', ')}</Code>
                   </Table.Cell>
-                  <Table.Cell>{face.weight ?? '—'}</Table.Cell>
+                  <Table.Cell>{face.weight ?? 'n/a'}</Table.Cell>
                   <Table.Cell>{face.style ?? 'normal'}</Table.Cell>
                 </Table.Row>
               ))}

@@ -1,0 +1,32 @@
+---
+title: "Tooltip"
+description: "A short label shown on hover and keyboard focus."
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { TooltipDemo } from '@/demos/overlays';
+
+```tsx
+import { Tooltip } from 'yarcl';
+```
+
+<Preview>
+  <TooltipDemo client:visible />
+</Preview>
+
+```tsx
+<Tooltip content="Search">
+  <IconButton aria-label="Search"><SearchIcon /></IconButton>
+</Tooltip>
+```
+
+- Opens after `delay` (400 ms) on hover, immediately on keyboard focus; closes on <kbd>Esc</kbd>.
+- Sets `aria-describedby` on the trigger.
+- Keep the content short and plain. Tooltips can't contain interactive elements; use [HoverCard](/components/overlays/hover-card/) or [Popover](/components/overlays/popover/) for that.
+
+## Props
+
+<Props of="TooltipProps" />

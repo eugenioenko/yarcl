@@ -1,0 +1,47 @@
+---
+title: "Field"
+description: "Wraps a form control with a label, helper text and an error message."
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { FieldDemo } from '@/demos/forms';
+
+```tsx
+import { Field } from 'yarcl';
+```
+
+`Field` renders the label, helper text and error, and wires them to its control: the control gets an `id`, `aria-describedby`, `aria-invalid` and `required` automatically.
+
+<Preview>
+  <FieldDemo client:visible />
+</Preview>
+
+```tsx
+<Field label="Full name" description="As it appears on your ID." required>
+  <Input placeholder="Ada Lovelace" />
+</Field>
+
+<Field label="Email" error={errors.email}>
+  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+</Field>
+```
+
+Works with [Input](/components/forms/input/), [Textarea](/components/forms/textarea/), [Select](/components/forms/select/), [Combobox](/components/forms/combobox/), [Checkbox](/components/forms/checkbox/) and [Switch](/components/forms/switch/). For radios, use [RadioGroup](/components/forms/radio-group/).
+
+## Styling
+
+- The label uses `defaults.labelStyle`; helper and error text use `defaults.helperStyle`.
+- Errors, the invalid border and the required marker use `defaults.errorColor`.
+
+## Accessibility
+
+- The label is a real `<label>` connected with `htmlFor`.
+- Helper text and the error are announced as the control's description.
+- Don't set the control's `id` yourself; `Field` manages it.
+
+## Props
+
+<Props of="FieldProps" />

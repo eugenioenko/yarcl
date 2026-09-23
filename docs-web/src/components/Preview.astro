@@ -1,0 +1,10 @@
+---
+interface Props {
+  column?: boolean;
+}
+const { column = false } = Astro.props;
+---
+
+<div class:list={['preview', 'not-content', { 'preview-column': column }]}>
+  <slot />
+</div>

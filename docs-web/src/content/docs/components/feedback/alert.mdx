@@ -1,0 +1,40 @@
+---
+title: "Alert"
+description: "An inline message that stays on the page."
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { AlertDemo } from '@/demos/feedback';
+
+```tsx
+import { Alert } from 'yarcl';
+```
+
+<Preview>
+  <AlertDemo client:visible />
+</Preview>
+
+```tsx
+<Alert
+  color="warning"
+  title="Trial ends in 3 days"
+  icon={<InfoIcon />}
+  action={<Button size="sm" color="warning">Upgrade</Button>}
+  onDismiss={() => setOpen(false)}
+>
+  Add a payment method to keep your projects.
+</Alert>
+```
+
+For messages that come and go, use [Toast](/components/overlays/toast/).
+
+## Accessibility
+
+An alert that's on the page when it loads shouldn't interrupt screen readers, so it has no live role by default. When an alert appears in response to something, set `live`: `'polite'` (`role="status"`) or `'assertive'` (`role="alert"`).
+
+## Props
+
+<Props of="AlertProps" />

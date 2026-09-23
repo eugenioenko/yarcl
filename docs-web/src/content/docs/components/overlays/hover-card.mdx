@@ -1,0 +1,30 @@
+---
+title: "HoverCard"
+description: "A preview card shown on hover or focus."
+sidebar:
+  order: 5
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { HoverCardDemo } from '@/demos/overlays';
+
+```tsx
+import { HoverCard } from 'yarcl';
+```
+
+<Preview>
+  <HoverCardDemo client:visible />
+</Preview>
+
+```tsx
+<HoverCard content={<UserPreview id="ada" />}>
+  <Link href="/users/ada">@ada</Link>
+</HoverCard>
+```
+
+The pointer can move from the trigger into the card without closing it, so the card can contain links. Hover cards are supplementary: don't put anything in them that isn't reachable elsewhere.
+
+## Props
+
+<Props of="HoverCardProps" />

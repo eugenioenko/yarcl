@@ -1,0 +1,88 @@
+---
+title: yarcl
+description: A React component library where your config file is the design system.
+template: splash
+hero:
+  title: yarcl
+  tagline: A React component library where your config file is the design system. Every key you define becomes a typed prop value and a rendered style, with no codegen and no runtime theme.
+  actions:
+    - text: Get Started
+      link: /getting-started/introduction/
+      icon: right-arrow
+    - text: GitHub
+      link: https://github.com/eugenioenko/yarcl-ui
+      icon: github
+      variant: secondary
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import Preview from '@/components/Preview.astro';
+import { ConfigPlayground } from '@/demos/playground';
+
+## Try it: change the config, watch the app and the compiler
+
+<Preview>
+  <ConfigPlayground client:load />
+</Preview>
+
+The form on the right is built with yarcl components. The brand color is a value, so it's applied through the same CSS variables the build generates. Radius and size are keys, so they flow in exactly like `defaults.radius` and `defaults.size` do. Uncheck a size that the code still uses and you get the error TypeScript would report.
+
+## Why yarcl exists
+
+The same production bug keeps showing up under different names: a feature flag typo that silently disables a paywall, a translation key that renders a blank label, a component variant that was renamed in the design system but still referenced in code. Each one looks different. Structurally, they're identical: **code assumes a configuration key exists, and nothing enforces that it does.**
+
+Component libraries have the same problem in a quieter form. The library decides that buttons come in `sm`, `md` and `lg`, and your design system has to conform. Your options are all bad:
+
+- **Hardcoded unions** fit one team and nobody else.
+- **`string` props** accept `"meduim"` and `"gigantic"` without complaint.
+- **Generics** reflect whatever the caller passes instead of validating it.
+- **A hand-written list of types** next to the real values drifts the moment someone adds a size.
+
+The library can't know which values are valid. That's the consumer's decision. So yarcl moves the contract to where the decision is made: **your config defines the design system, and the library derives its API from it.**
+
+## The injection point
+
+Everything hangs on one import inside the library:
+
+```ts
+// inside yarcl
+import type config from '@yarcl/config';
+
+export type Size = keyof (typeof config)['sizes'];
+export type Color = keyof (typeof config)['colors'];
+```
+
+`@yarcl/config` isn't a real package. It's an injection point that two tools resolve to **your** file:
+
+```ts title="vite.config.ts"
+plugins: [yarcl({ config: 'src/yarcl.config.ts' })] // runtime values and generated CSS
+```
+
+```json title="tsconfig.json"
+"paths": { "@yarcl/config": ["./src/yarcl.config.ts"] } // types
+```
+
+It's dependency injection at the type level. The library is compiled against your config, so its props accept exactly your keys, its components render your values, and the build generates CSS for them. There's one source of truth, and if the wiring is missing you get a loud error, not silently wrong defaults. [Why an alias and not module augmentation or codegen?](/reference/architecture/)
+
+## What you get
+
+<CardGrid>
+  <Card title="Your config is the contract" icon="seti:config">
+    Keys become the only valid prop values. Rename a size and every stale usage is a compile error, including the defaults inside the config itself.
+  </Card>
+  <Card title="Styles generated at build time" icon="rocket">
+    CSS variables and one class per key. Components only set class names: no inline styles, no runtime theming, strict CSP and SSR friendly.
+  </Card>
+  <Card title="Light and dark from one file" icon="moon">
+    Every color is a `light-dark()` pair. Text colors are computed for contrast, and the build warns when a color fails WCAG AA.
+  </Card>
+  <Card title="Controls that line up" icon="setting">
+    Buttons, inputs, selects, checkboxes and tabs share one size scale, so controls of the same size always have the same height.
+  </Card>
+  <Card title="Opinions per component" icon="pencil">
+    `components: { Button: { radius: 'square' } }` makes every button sharp without touching a single call site.
+  </Card>
+  <Card title="Accessible and documented" icon="approve-check">
+    Native elements, keyboard support, focus management, and a `DesignReference` page generated from your config.
+  </Card>
+</CardGrid>

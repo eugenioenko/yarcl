@@ -1,0 +1,40 @@
+---
+title: API reference
+description: Package entry points and exports. Full generated API docs live at /api/.
+sidebar:
+  order: 1
+---
+
+The complete API reference, generated from the library's JSDoc with TypeDoc, is at **[/api/](/api/)**. Every prop table on the component pages is generated from the same source.
+
+## Entry points
+
+| Import | Contents |
+|---|---|
+| `yarcl` | components, `toast`, token types, the resolved `config` |
+| `yarcl/define` | `defineConfig` and the config types |
+| `yarcl/defaults` | the library's default config, for spreading |
+| `yarcl/plugin` | the Vite plugin |
+| `yarcl/reference` | `DesignReference` |
+
+## Components
+
+| Group | Exports |
+|---|---|
+| Buttons | `Button`, `IconButton`, `ButtonGroup`, `ToggleGroup` |
+| Forms | `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `Checkbox`, `Radio`, `RadioGroup`, `Switch` |
+| Typography | `Text`, `Heading`, `Link` |
+| Layout | `Stack`, `Inline`, `Card`, `Divider` |
+| Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `Toaster`, `toast` |
+| Data display | `Tabs`, `Table` |
+| Feedback | `Badge`, `Alert`, `Spinner`, `Skeleton` |
+
+## Types
+
+| Type | Meaning |
+|---|---|
+| `Size`, `Radius`, `Color`, `Variant` | keys of `sizes`, `radii`, `colors`, `variants` in your config |
+| `Spacing`, `Shadow`, `Density`, `TextStyle` | keys of `spacing`, `shadows`, `density`, `typography.styles` |
+| `TokenProps`, `VariantProps` | the shared `size` / `radius` / `color` and `variant` props |
+| `SelectOption` | `{ value, label, disabled? }` for `Select` and `Combobox` |
+| `YarclShape`, `ColorToken`, `SizeToken`, `VariantToken`, … | the config schema, from `yarcl/define` |

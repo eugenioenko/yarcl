@@ -1,0 +1,41 @@
+---
+title: "Badge"
+description: "A small label for status, counts or categories, or a removable tag."
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { BadgeDemo, TagDemo } from '@/demos/feedback';
+
+```tsx
+import { Badge } from 'yarcl';
+```
+
+<Preview>
+  <BadgeDemo />
+</Preview>
+
+```tsx
+<Badge color="success">Active</Badge>
+<Badge color="danger" variant="solid">Overdue</Badge>
+```
+
+Badges use the same [variant recipes](/configuration/variants/) as buttons. The default is `defaults.softVariant`.
+
+## Removable tags
+
+<Preview>
+  <TagDemo client:visible />
+</Preview>
+
+```tsx
+<Badge radius="rounded" color="neutral" onRemove={() => remove(tag)} removeLabel={`Remove ${tag}`}>
+  {tag}
+</Badge>
+```
+
+## Props
+
+<Props of="BadgeProps" />

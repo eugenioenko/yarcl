@@ -1,0 +1,25 @@
+---
+title: Design reference
+description: A living reference of your design system, rendered from your config.
+sidebar:
+  order: 12
+---
+
+import Preview from '@/components/Preview.astro';
+import { DesignReference } from 'yarcl/reference';
+
+`DesignReference` renders your whole design system from your config, using yarcl components: colors with their contrast ratios, the size scale with live controls, radii, variants, spacing, shadows, fonts, text styles, heading levels, density, the remaining tokens and every default.
+
+```tsx
+import { DesignReference } from 'yarcl/reference';
+
+<DesignReference title="Acme design system" />
+```
+
+Add it to an internal route, a Storybook page or your docs, and it stays accurate because it reads the same config your app uses.
+
+This is the reference for the config of this documentation site:
+
+<Preview column>
+  <DesignReference title="yarcl docs design system" />
+</Preview>

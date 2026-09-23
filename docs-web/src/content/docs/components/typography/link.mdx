@@ -1,0 +1,33 @@
+---
+title: "Link"
+description: "A text link that inherits the surrounding text style."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { LinkDemo } from '@/demos/typography';
+
+```tsx
+import { Link } from 'yarcl';
+```
+
+<Preview>
+  <LinkDemo />
+</Preview>
+
+```tsx
+<Link href="/docs">documentation</Link>
+<Link href="https://example.com" external>example.com</Link>
+<Link href="#" underline="hover" color="neutral">Underline on hover</Link>
+```
+
+- Keep `underline="always"` (the default) for links inside running text, so they're not identified by color alone.
+- `external` opens a new tab with `rel="noopener noreferrer"`.
+
+## Props
+
+Accepts every native `<a>` attribute except `color`.
+
+<Props of="LinkProps" />

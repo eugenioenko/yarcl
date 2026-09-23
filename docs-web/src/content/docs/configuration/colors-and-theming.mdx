@@ -1,0 +1,94 @@
+---
+title: Colors and theming
+description: Semantic colors, neutrals, light and dark mode, foreground colors and contrast warnings.
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import { ColorsDemo, SchemeDemo } from '@/demos/config';
+
+## Semantic colors
+
+`colors` is an open group. Each key becomes a valid value of the `color` prop on every component that has one.
+
+```ts
+colors: {
+  primary: { light: '#c21a5e', dark: '#e04f9a' },
+  success: { light: '#15803d', dark: '#4ade80' },
+  danger:  { light: '#dc2626', dark: '#f87171', on: '#ffffff' },
+},
+```
+
+<Preview>
+  <ColorsDemo />
+</Preview>
+
+Each color has a value per color scheme. Lighter, more saturated values usually work better on dark backgrounds.
+
+### Foreground (`on`)
+
+The text drawn on top of a color (a solid button's label, for example) is computed at build time: black or white, whichever has more contrast, separately for light and dark. Set `on` to choose it yourself, either as one value or per scheme:
+
+```ts
+warning: { light: '#b45309', dark: '#fbbf24', on: { light: '#ffffff', dark: '#1c1917' } },
+```
+
+Automatic foregrounds need hex values. For `oklch()`, `hsl()` or other formats, set `on` explicitly.
+
+### Contrast warnings
+
+The plugin checks every color's foreground against its background in both schemes. Anything below 4.5:1 (WCAG AA for normal text) is reported when you build or run the dev server:
+
+```
+[yarcl] colors.warning: light foreground contrast 3.12:1 is below 4.5:1
+```
+
+## Neutrals
+
+`neutrals` holds the colors that aren't a `color` prop value: page and surface backgrounds, text and borders. The library requires five keys and accepts any extra ones.
+
+| Key | Used for |
+|---|---|
+| `bg` | page background (for your own `body` styles) |
+| `surface` | inputs, cards, menus, dialogs |
+| `text` | default text |
+| `muted` | secondary text, placeholders, descriptions |
+| `border` | default borders and dividers |
+
+## Light and dark mode
+
+Every color is emitted as a CSS `light-dark()` pair, and the generated stylesheet sets `color-scheme: light dark` on `:root`. The page follows the operating system's setting with no JavaScript.
+
+To force a scheme, set `color-scheme` on any element. It applies to everything inside:
+
+<Preview column>
+  <SchemeDemo client:visible />
+</Preview>
+
+```tsx
+document.documentElement.style.colorScheme = 'dark'; // whole page
+<div style={{ colorScheme: 'light' }}>…</div>         // one region
+```
+
+## Error and focus colors
+
+Two settings reference a color key instead of defining one:
+
+- `defaults.errorColor`: invalid fields, error messages and the required marker.
+- `focusRing.color`: the keyboard focus outline.
+
+Your color keys are your own, so the library never assumes a `danger` or `primary` exists.
+
+## Using colors in your own CSS
+
+Every color is also a CSS variable:
+
+```css
+.highlight {
+  color: var(--yarcl-color-primary);
+  background: color-mix(in oklab, var(--yarcl-color-primary) 12%, transparent);
+}
+```
+
+See [generated CSS](/configuration/generated-css/) for the full list.

@@ -1,0 +1,38 @@
+---
+title: "Divider"
+description: "A thin separator line."
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { DividerDemo } from '@/demos/layout';
+
+```tsx
+import { Divider } from 'yarcl';
+```
+
+<Preview>
+  <DividerDemo />
+</Preview>
+
+```tsx
+<Stack>
+  <Text>Above</Text>
+  <Divider />
+  <Text>Below</Text>
+</Stack>
+
+<Inline gap="sm">
+  <Text>Left</Text>
+  <Divider orientation="vertical" />
+  <Text>Right</Text>
+</Inline>
+```
+
+A divider has no spacing of its own: the parent's `gap` spaces it. It's an `<hr>`, announced as a separator.
+
+## Props
+
+<Props of="DividerProps" />

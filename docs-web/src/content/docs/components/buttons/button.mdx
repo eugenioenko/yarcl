@@ -1,0 +1,96 @@
+---
+title: Button
+description: Triggers an action. Styled entirely from your config's sizes, colors, radii and variants.
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { ButtonColors, ButtonIcons, ButtonLoading, ButtonRadii, ButtonSizes, ButtonVariants } from '@/demos/buttons';
+
+```tsx
+import { Button } from 'yarcl';
+```
+
+## Variants
+
+`variant` accepts the keys of your config's [`variants`](/configuration/variants/). These examples use the library defaults: `solid`, `soft`, `outline` and `ghost`.
+
+<Preview>
+  <ButtonVariants />
+</Preview>
+
+```tsx
+<Button>Solid</Button>
+<Button variant="soft">Soft</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+```
+
+## Colors
+
+`color` accepts the keys of your config's [`colors`](/configuration/colors-and-theming/). The text color on each background is computed for contrast in light and dark mode.
+
+<Preview>
+  <ButtonColors />
+</Preview>
+
+```tsx
+<Button color="danger">Danger</Button>
+```
+
+## Sizes
+
+`size` accepts the keys of your config's [`sizes`](/configuration/sizes-and-radii/). A button and an [Input](/components/forms/input/) of the same size always have the same height.
+
+<Preview>
+  <ButtonSizes />
+</Preview>
+
+## Radius
+
+<Preview>
+  <ButtonRadii />
+</Preview>
+
+```tsx
+<Button radius="rounded">rounded</Button>
+```
+
+To make every button square without touching call sites, set a [component default](/configuration/component-defaults/):
+
+```ts
+components: { Button: { radius: 'square' } }
+```
+
+## With icons
+
+An `<svg>` inside a button is sized from the size's `iconSize`.
+
+<Preview>
+  <ButtonIcons client:load />
+</Preview>
+
+## Loading
+
+`loading` shows a [Spinner](/components/feedback/spinner/), disables the button and sets `aria-busy`. The button keeps its height.
+
+<Preview>
+  <ButtonLoading client:load />
+</Preview>
+
+```tsx
+<Button loading={saving} onClick={save}>Save changes</Button>
+```
+
+## Accessibility
+
+- Renders a native `<button>` with `type="button"` by default, so it never submits a form by accident. Pass `type="submit"` when it should.
+- Disabled buttons use the native `disabled` attribute.
+
+## Props
+
+Accepts every native `<button>` attribute except `color`.
+
+<Props of="ButtonProps" />

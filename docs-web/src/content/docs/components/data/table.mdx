@@ -1,0 +1,50 @@
+---
+title: "Table"
+description: "A data table with density from your config."
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { TableDemo } from '@/demos/data';
+
+```tsx
+import { Table } from 'yarcl';
+```
+
+<Preview>
+  <TableDemo client:visible />
+</Preview>
+
+```tsx
+<Table density="compact" striped interactive caption="Invoices">
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Customer</Table.HeaderCell>
+      <Table.HeaderCell align="end">Amount</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Ada Lovelace</Table.Cell>
+      <Table.Cell align="end">$1,200.00</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+- `density` accepts the keys of your [density](/configuration/spacing-shadows-density/#density) group.
+- `align="end"` also uses tabular numbers, so amounts line up.
+- `caption` is visible and names the table for screen readers.
+- The table scrolls horizontally when it doesn't fit.
+
+## Props
+
+### Table
+
+<Props of="TableProps" />
+
+### Table.Cell and Table.HeaderCell
+
+<Props of="TableCellProps" />

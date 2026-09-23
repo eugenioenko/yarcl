@@ -1,0 +1,30 @@
+---
+title: "Switch"
+description: "An on/off toggle."
+sidebar:
+  order: 8
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SwitchDemo } from '@/demos/forms';
+
+```tsx
+import { Switch } from 'yarcl';
+```
+
+<Preview>
+  <SwitchDemo client:visible />
+</Preview>
+
+```tsx
+<Switch checked={on} onChange={(e) => setOn(e.target.checked)}>Notifications</Switch>
+```
+
+A native checkbox with `role="switch"`, so screen readers announce it as on or off, and `checked`, `defaultChecked` and `onChange` work as usual. The track is sized from the size's `iconSize`.
+
+## Props
+
+Accepts every native `<input>` attribute except `type`, `color` and `size`.
+
+<Props of="SwitchProps" />

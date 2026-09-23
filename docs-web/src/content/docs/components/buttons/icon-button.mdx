@@ -1,0 +1,38 @@
+---
+title: "IconButton"
+description: "A square button containing only an icon."
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { IconButtonDemo } from '@/demos/buttons';
+
+```tsx
+import { IconButton } from 'yarcl';
+```
+
+An `IconButton` is as wide as it is tall, so it lines up with a [Button](/components/buttons/button/) or [Input](/components/forms/input/) of the same size.
+
+<Preview>
+  <IconButtonDemo client:visible />
+</Preview>
+
+```tsx
+<IconButton aria-label="Search" variant="outline">
+  <SearchIcon />
+</IconButton>
+```
+
+## Accessibility
+
+- `aria-label` is **required** by the types: without visible text, it's the button's only name.
+- Pair it with a [Tooltip](/components/overlays/tooltip/) so sighted users can see the label too.
+- `loading` swaps the icon for a [Spinner](/components/feedback/spinner/) and disables the button.
+
+## Props
+
+Accepts every native `<button>` attribute except `color`.
+
+<Props of="IconButtonProps" />

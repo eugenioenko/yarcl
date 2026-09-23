@@ -106,6 +106,7 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 | `library/` | the `yarcl` package: components, `defineConfig`, Vite plugin, CSS generator |
 | `consumer/` | demo app with one design system; every component, light and dark |
 | `consumer-b/` | "Maison Talla": the same library with a completely different config |
+| `docs-web/` | documentation site (Astro + Starlight) with live examples and a config playground |
 | `docs/decisions/` | architecture decision records |
 | `PLAN.md` | decisions, schema, phases |
 
@@ -115,6 +116,8 @@ pnpm dev          # consumer on :5173
 pnpm dev:b        # consumer-b on :5174
 pnpm typecheck    # library + both consumers, including @ts-expect-error contract checks
 pnpm test:e2e     # keyboard/mouse checks in Chrome, light and dark
+pnpm docs:dev     # documentation site on :4321
+pnpm docs:build   # static docs site → docs-web/dist
 pnpm docs:api     # API reference from JSDoc → docs/api
 ```
 

@@ -1,0 +1,31 @@
+---
+title: "Textarea"
+description: "A multi-line text input."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { TextareaDemo } from '@/demos/forms';
+
+```tsx
+import { Textarea } from 'yarcl';
+```
+
+<Preview>
+  <TextareaDemo client:visible />
+</Preview>
+
+```tsx
+<Textarea rows={1} placeholder="Say hello" />
+<Textarea rows={4} />
+```
+
+A one-row textarea is exactly as tall as an [Input](/components/forms/input/) of the same size: the vertical padding is computed from the control height and the line height. It grows from there and can be resized vertically.
+
+## Props
+
+Accepts every native `<textarea>` attribute except `color`.
+
+<Props of="TextareaProps" />

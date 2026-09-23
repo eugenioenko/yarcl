@@ -1,0 +1,111 @@
+---
+title: Installation
+description: Install yarcl, connect your config and set up TypeScript.
+sidebar:
+  order: 2
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="caution">
+yarcl is a prototype and isn't published to npm yet. In this repository it's consumed as a workspace package (`"yarcl": "workspace:*"`). The steps below are the same either way.
+</Aside>
+
+yarcl needs **React 18 or newer** and **Vite 5 or newer**.
+
+<Steps>
+
+1. Install the package.
+
+   <Tabs>
+     <TabItem label="pnpm">
+     ```sh
+     pnpm add yarcl
+     ```
+     </TabItem>
+     <TabItem label="npm">
+     ```sh
+     npm install yarcl
+     ```
+     </TabItem>
+     <TabItem label="yarn">
+     ```sh
+     yarn add yarcl
+     ```
+     </TabItem>
+   </Tabs>
+
+2. Add the Vite plugin. It points the library at your config and generates the CSS.
+
+   ```ts title="vite.config.ts"
+   import react from '@vitejs/plugin-react';
+   import { defineConfig } from 'vite';
+   import { yarcl } from 'yarcl/plugin';
+
+   export default defineConfig({
+     plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })],
+   });
+   ```
+
+3. Point TypeScript at the same file, so the prop types come from your config.
+
+   ```jsonc title="tsconfig.json"
+   {
+     "compilerOptions": {
+       "moduleResolution": "bundler",
+       "paths": {
+         "@yarcl/config": [
+           "./src/yarcl.config.ts",
+           "./node_modules/yarcl/src/yarcl.default.config.ts"
+         ]
+       }
+     }
+   }
+   ```
+
+   The second entry is a fallback: if your config file doesn't exist, the types come from the library defaults. The plugin falls back the same way at runtime.
+
+4. Create your config. Start from the library defaults and change what you need.
+
+   ```ts title="src/yarcl.config.ts"
+   import { defineConfig } from 'yarcl/define';
+   import defaults from 'yarcl/defaults';
+
+   export default defineConfig({
+     ...defaults,
+     colors: {
+       ...defaults.colors,
+       brand: { light: '#2d4bb8', dark: '#8aa2ff' },
+     },
+     defaults: { ...defaults.defaults, color: 'brand' },
+   });
+   ```
+
+5. Use the components. Importing from `yarcl` also loads the generated CSS.
+
+   ```tsx title="src/App.tsx"
+   import { Button } from 'yarcl';
+
+   export function App() {
+     return <Button color="brand">It works</Button>;
+   }
+   ```
+
+</Steps>
+
+## Page styles
+
+yarcl doesn't style `body`. Use the generated CSS variables to match the page to your config:
+
+```css title="src/index.css"
+body {
+  margin: 0;
+  font-family: var(--yarcl-font-sans);
+  color: var(--yarcl-neutral-text);
+  background: var(--yarcl-neutral-bg);
+}
+```
+
+## Keep both mappings in sync
+
+The Vite plugin and the `tsconfig.json` `paths` entry must point at the same file. If they don't, the types and the rendered styles come from different configs. See [the Vite plugin](/configuration/vite-plugin/) for details.

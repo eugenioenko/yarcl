@@ -1,0 +1,64 @@
+---
+title: Typography
+description: Font files, families, text styles, heading levels and label styles.
+sidebar:
+  order: 5
+---
+
+import Preview from '@/components/Preview.astro';
+import { TextStylesDemo } from '@/demos/config';
+
+```ts
+typography: {
+  fontFaces: [{ family: 'Fraunces', src: '/fonts/fraunces.woff2', weight: '100 900' }],
+  families: {
+    serif: 'Fraunces, Georgia, serif',
+    sans: 'system-ui, sans-serif',
+    mono: 'ui-monospace, Menlo, monospace',
+  },
+  styles: {
+    display: { family: 'serif', size: '2.75rem', weight: 500, lineHeight: 1.05, letterSpacing: '-0.02em' },
+    body:    { family: 'sans',  size: '1rem',    weight: 400, lineHeight: 1.5 },
+    label:   { family: 'sans',  size: '0.875rem', weight: 500, lineHeight: 1.4 },
+  },
+  headings: { h1: 'display', h2: 'title', h3: 'title', h4: 'label', h5: 'label', h6: 'label' },
+},
+```
+
+## Font files
+
+`fontFaces` becomes `@font-face` rules in the generated CSS. Put the files in your app's `public/` folder and reference them by URL.
+
+| Field | Example | Notes |
+|---|---|---|
+| `family` | `'Fraunces'` | the name to use in `families` |
+| `src` | `'/fonts/fraunces.woff2'` | a URL, a list of URLs, or `'local(Fraunces)'`; the format is inferred from the extension |
+| `weight` | `400` or `'100 900'` | a range for variable fonts |
+| `style` | `'normal'` or `'italic'` | |
+| `display` | `'swap'` | the default |
+
+## Families
+
+Font stacks, referenced by name from text styles. Each is also a CSS variable (`--yarcl-font-sans`), handy for `body`.
+
+## Text styles
+
+`styles` is an open group: its keys become the valid values of `textStyle` on [`Text`](/components/typography/text/) and [`Heading`](/components/typography/heading/). A style's `family` must be a key of `families`.
+
+<Preview column>
+  <TextStylesDemo />
+</Preview>
+
+Each style is also a class, `yarcl-type-{key}`, for use outside yarcl components.
+
+## Heading levels
+
+`headings` maps each level to a text style. `<Heading level={2}>` renders an `<h2>` with the `h2` style, so the document structure and the visual scale are defined once. `textStyle` overrides the look for a single heading without changing its level.
+
+All six levels are required, and each must be a key of `styles`.
+
+## Labels and helper text
+
+- `defaults.labelStyle`: `Field` labels and `RadioGroup` legends.
+- `defaults.helperStyle`: helper and error text below form controls.
+- `defaults.textStyle`: `Text` when `textStyle` is omitted.

@@ -1,0 +1,35 @@
+---
+title: "Card"
+description: "A bordered surface for grouping content."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { CardComposedDemo, CardDemo } from '@/demos/layout';
+
+```tsx
+import { Card } from 'yarcl';
+```
+
+<Preview>
+  <CardDemo />
+</Preview>
+
+```tsx
+<Card shadow="md">…</Card>
+<Card padding="sm" radius="lg">…</Card>
+```
+
+`padding` comes from your spacing (default `defaults.padding`), `radius` from your radii, `shadow` from your shadows. No shadow is applied unless you set one.
+
+## Composed
+
+<Preview>
+  <CardComposedDemo />
+</Preview>
+
+## Props
+
+<Props of="CardProps" />

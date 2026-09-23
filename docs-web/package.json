@@ -1,0 +1,29 @@
+{
+  "name": "docs-web",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "api": "pnpm -w exec typedoc --json docs-web/src/generated/api.json --out docs-web/public/api",
+    "dev": "pnpm api && astro dev",
+    "start": "pnpm api && astro dev",
+    "build": "pnpm api && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/starlight": "^0.42.3",
+    "astro": "^7.2.10",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sharp": "^0.35.3",
+    "yarcl": "workspace:*"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^24.13.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

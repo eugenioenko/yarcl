@@ -1,0 +1,34 @@
+---
+title: "Inline"
+description: "Lays out children horizontally with a gap from your spacing scale."
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { InlineDemo } from '@/demos/layout';
+
+```tsx
+import { Inline } from 'yarcl';
+```
+
+<Preview column>
+  <InlineDemo />
+</Preview>
+
+```tsx
+<Inline justify="between">
+  <Text>Title</Text>
+  <Inline gap="sm">
+    <Button variant="outline">Cancel</Button>
+    <Button>Save</Button>
+  </Inline>
+</Inline>
+```
+
+Children are centered vertically and wrap by default. Set `wrap={false}` to keep them on one line.
+
+## Props
+
+<Props of="InlineProps" />

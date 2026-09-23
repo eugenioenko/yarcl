@@ -2,6 +2,7 @@ packages:
   - library
   - consumer
   - consumer-b
+  - docs-web
 
 allowBuilds:
   esbuild: true

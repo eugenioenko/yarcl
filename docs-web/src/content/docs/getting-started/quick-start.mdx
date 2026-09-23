@@ -1,0 +1,82 @@
+---
+title: Quick start
+description: Build a small sign-up form and change the design system from the config.
+sidebar:
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+This walkthrough assumes you've completed the [installation](/getting-started/installation/).
+
+## 1. A form
+
+```tsx title="src/SignUp.tsx"
+import { Button, Card, Checkbox, Field, Heading, Inline, Input, Stack } from 'yarcl';
+
+export function SignUp() {
+  return (
+    <Card shadow="md">
+      <Stack as="form">
+        <Heading level={2}>Create an account</Heading>
+        <Field label="Email" required>
+          <Input type="email" placeholder="ada@example.com" />
+        </Field>
+        <Field label="Password" description="At least 12 characters.">
+          <Input type="password" />
+        </Field>
+        <Checkbox>Send me product updates</Checkbox>
+        <Inline justify="end">
+          <Button variant="outline">Cancel</Button>
+          <Button type="submit">Sign up</Button>
+        </Inline>
+      </Stack>
+    </Card>
+  );
+}
+```
+
+Everything you didn't specify comes from `defaults` in your config: the size of the inputs and buttons, their radius, the color, the spacing inside `Stack` and `Card`.
+
+## 2. Change the design system
+
+Make the controls larger and the buttons square, from the config only:
+
+```ts title="src/yarcl.config.ts" ins={3,4}
+export default defineConfig({
+  ...defaults,
+  defaults: { ...defaults.defaults, size: 'lg' },
+  components: { Button: { radius: 'square' } },
+});
+```
+
+Every input and button grows to the `lg` height together, because they share one [size scale](/configuration/sizes-and-radii/). Only the buttons lose their rounded corners. The dev server picks up the change without a restart.
+
+## 3. Let the compiler catch mistakes
+
+Rename a size in the config, for example `lg` to `large`:
+
+```ts
+sizes: { sm: …, md: …, large: … },
+```
+
+Every `size="lg"` in your app, and `defaults.size: 'lg'` in the config itself, is now a type error. Nothing ships with a size that no longer exists.
+
+<Aside>
+The same applies to every group: colors, variants, radii, spacing, shadows, text styles and densities.
+</Aside>
+
+## 4. Dark mode
+
+There's nothing to do. Every color in the config is a `{ light, dark }` pair, and the page follows the operating system's setting. To force a mode, set `color-scheme` on any element:
+
+```ts
+document.documentElement.style.colorScheme = 'dark';
+```
+
+See [colors and theming](/configuration/colors-and-theming/).
+
+## Next
+
+- [The config file](/configuration/config-file/): every group, and what `defineConfig` checks.
+- [Components](/components/buttons/button/): live examples and props.

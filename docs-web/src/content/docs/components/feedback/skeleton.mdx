@@ -1,0 +1,41 @@
+---
+title: "Skeleton"
+description: "A placeholder shown while content loads, matching text styles and control heights."
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SkeletonDemo } from '@/demos/feedback';
+
+```tsx
+import { Skeleton } from 'yarcl';
+```
+
+<Preview>
+  <SkeletonDemo client:visible />
+</Preview>
+
+```tsx
+<Card aria-busy={loading}>
+  <Stack gap="sm">
+    <Skeleton textStyle="subheading" width="50%" />
+    <Skeleton lines={2} />
+    <Skeleton shape="control" size="sm" width="4.5rem" />
+  </Stack>
+</Card>
+```
+
+| Shape | Size |
+|---|---|
+| `text` | lines matching a text style's font size and line height |
+| `control` | the height of a control of the given `size` |
+| `circle` | the control height of `size`, as a circle |
+| `rect` | `width` and `height` |
+
+Because shapes come from the same tokens as the content, the layout doesn't jump when the content arrives. Skeletons are hidden from screen readers; mark the loading region with `aria-busy`.
+
+## Props
+
+<Props of="SkeletonProps" />

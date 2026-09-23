@@ -1,0 +1,41 @@
+---
+title: "Text"
+description: "Text in one of your config's text styles."
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { TextDemo, TruncateDemo } from '@/demos/typography';
+
+```tsx
+import { Text } from 'yarcl';
+```
+
+<Preview>
+  <TextDemo />
+</Preview>
+
+```tsx
+<Text textStyle="subheading">Subheading style</Text>
+<Text as="p" muted>Muted text for secondary information.</Text>
+<Text color="danger">danger</Text>
+```
+
+`textStyle` accepts the keys of your [text styles](/configuration/typography/#text-styles). It defaults to `defaults.textStyle`.
+
+## Truncation
+
+<Preview>
+  <TruncateDemo />
+</Preview>
+
+```tsx
+<Text truncate>One line…</Text>
+<Text truncate={2}>Two lines…</Text>
+```
+
+## Props
+
+<Props of="TextProps" />

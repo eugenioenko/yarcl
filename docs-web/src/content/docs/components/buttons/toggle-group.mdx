@@ -1,0 +1,74 @@
+---
+title: "ToggleGroup"
+description: "A set of toggle buttons: a segmented control or a group of formatting buttons."
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { ToggleGroupMultiple, ToggleGroupSingle } from '@/demos/buttons';
+
+```tsx
+import { ToggleGroup } from 'yarcl';
+```
+
+## Single selection
+
+`type="single"` behaves like a segmented control. With `required`, the selected item can't be turned off.
+
+<Preview>
+  <ToggleGroupSingle client:visible />
+</Preview>
+
+```tsx
+const [range, setRange] = useState<string | null>('week');
+
+<ToggleGroup type="single" value={range} onValueChange={setRange} required aria-label="Range">
+  <ToggleGroup.Item value="day">Day</ToggleGroup.Item>
+  <ToggleGroup.Item value="week">Week</ToggleGroup.Item>
+  <ToggleGroup.Item value="month">Month</ToggleGroup.Item>
+</ToggleGroup>
+```
+
+## Multiple selection
+
+`type="multiple"` lets any number of items be on. `icon` makes an item square.
+
+<Preview>
+  <ToggleGroupMultiple client:visible />
+</Preview>
+
+```tsx
+<ToggleGroup type="multiple" defaultValue={['bold']} aria-label="Formatting" variant="ghost" selectedVariant="soft">
+  <ToggleGroup.Item value="bold" icon aria-label="Bold"><b>B</b></ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" icon aria-label="Italic"><i>I</i></ToggleGroup.Item>
+</ToggleGroup>
+```
+
+## Styling
+
+Unselected items use `variant` (default: `defaults.softVariant`), selected items use `selectedVariant` (default: `defaults.variant`). Both are keys of your [variants](/configuration/variants/).
+
+## Keyboard
+
+| Key | Action |
+|---|---|
+| <kbd>Tab</kbd> | moves into the group, to the selected item (or the first one) |
+| <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> | moves between items, skipping disabled ones |
+| <kbd>Home</kbd> <kbd>End</kbd> | first and last item |
+| <kbd>Space</kbd> <kbd>Enter</kbd> | toggles the focused item |
+
+Items use `aria-pressed`. The group is `role="group"`; give it an `aria-label`.
+
+## Props
+
+### ToggleGroup
+
+Plus `type` (`'single'` or `'multiple'`), and `value`, `defaultValue` and `onValueChange` typed for that mode. With `type="single"`, `required` keeps one item on.
+
+<Props of="ToggleGroupBaseProps" />
+
+### ToggleGroup.Item
+
+<Props of="ToggleGroupItemProps" />

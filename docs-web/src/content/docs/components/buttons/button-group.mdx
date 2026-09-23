@@ -1,0 +1,42 @@
+---
+title: "ButtonGroup"
+description: "Groups related buttons and passes size, color, variant and radius down to them."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { ButtonGroupDemo } from '@/demos/buttons';
+
+```tsx
+import { ButtonGroup } from 'yarcl';
+```
+
+Buttons inside a group inherit `size`, `color`, `variant` and `radius` unless they set their own. Attached groups share borders, with a divider between solid buttons.
+
+<Preview>
+  <ButtonGroupDemo />
+</Preview>
+
+```tsx
+<ButtonGroup aria-label="Pagination" variant="outline" color="neutral">
+  <Button>Previous</Button>
+  <Button>1</Button>
+  <Button>2</Button>
+  <Button>Next</Button>
+</ButtonGroup>
+
+<ButtonGroup aria-label="Share" attached={false} variant="soft" size="sm">
+  <Button>Copy link</Button>
+  <Button>Email</Button>
+</ButtonGroup>
+```
+
+## Accessibility
+
+- Renders `role="group"`. Give it an `aria-label` that describes the set of actions.
+
+## Props
+
+<Props of="ButtonGroupProps" />

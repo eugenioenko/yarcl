@@ -1,0 +1,45 @@
+---
+title: "Popover"
+description: "A floating panel anchored to a trigger, opened by click."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { PopoverDemo } from '@/demos/overlays';
+
+```tsx
+import { Popover } from 'yarcl';
+```
+
+<Preview>
+  <PopoverDemo client:visible />
+</Preview>
+
+```tsx
+<Popover>
+  <Popover.Trigger>
+    <Button variant="outline">Filters</Button>
+  </Popover.Trigger>
+  <Popover.Content>
+    <Checkbox>Archived</Checkbox>
+  </Popover.Content>
+</Popover>
+```
+
+- Positioned with [Floating UI](https://floating-ui.com): it flips and shifts to stay on screen.
+- Closes on <kbd>Esc</kbd> and outside click; focus returns to the trigger.
+- `modal` traps focus inside while open.
+
+For lists, use [Menu](/components/overlays/menu/), [Select](/components/forms/select/) or [Combobox](/components/forms/combobox/) instead.
+
+## Props
+
+### Popover
+
+<Props of="PopoverProps" />
+
+### Popover.Content
+
+<Props of="PopoverContentProps" />

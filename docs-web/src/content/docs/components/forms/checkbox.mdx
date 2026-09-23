@@ -1,0 +1,34 @@
+---
+title: "Checkbox"
+description: "A checkbox with an optional label, including a mixed state."
+sidebar:
+  order: 6
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { CheckboxDemo } from '@/demos/forms';
+
+```tsx
+import { Checkbox } from 'yarcl';
+```
+
+<Preview>
+  <CheckboxDemo client:visible />
+</Preview>
+
+```tsx
+<Checkbox defaultChecked>Email notifications</Checkbox>
+<Checkbox indeterminate>Select all</Checkbox>
+<Checkbox color="success" size="lg">Large, success</Checkbox>
+```
+
+- It's a native `<input type="checkbox">`, so `checked`, `defaultChecked` and `onChange` work as usual.
+- The box is sized from the size's `iconSize`.
+- `indeterminate` shows a mixed state; the browser clears it when the user toggles the box.
+
+## Props
+
+Accepts every native `<input>` attribute except `type`, `color` and `size`.
+
+<Props of="CheckboxProps" />

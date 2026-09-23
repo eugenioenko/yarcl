@@ -1,0 +1,54 @@
+---
+title: "Menu"
+description: "A list of actions opened from a trigger."
+sidebar:
+  order: 6
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { MenuDemo } from '@/demos/overlays';
+
+```tsx
+import { Menu } from 'yarcl';
+```
+
+<Preview>
+  <MenuDemo client:visible />
+</Preview>
+
+```tsx
+<Menu>
+  <Menu.Trigger>
+    <Button variant="outline">Actions</Button>
+  </Menu.Trigger>
+  <Menu.Content>
+    <Menu.Item onSelect={rename}>Rename</Menu.Item>
+    <Menu.Item disabled>Move</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item color="danger" onSelect={remove}>Delete</Menu.Item>
+  </Menu.Content>
+</Menu>
+```
+
+For choosing a value, use [Select](/components/forms/select/) instead: a menu is for actions (`role="menu"`), a select for values (`role="listbox"`).
+
+## Keyboard
+
+| Key | Action |
+|---|---|
+| <kbd>Enter</kbd> <kbd>Space</kbd> <kbd>↓</kbd> on the trigger | opens the menu and focuses the first item |
+| <kbd>↑</kbd> <kbd>↓</kbd> | moves between items, skipping disabled ones |
+| typing | jumps to a matching item |
+| <kbd>Enter</kbd> <kbd>Space</kbd> | runs the item and closes the menu |
+| <kbd>Esc</kbd> | closes; focus returns to the trigger |
+
+## Props
+
+### Menu
+
+<Props of="MenuProps" />
+
+### Menu.Item
+
+<Props of="MenuItemProps" />

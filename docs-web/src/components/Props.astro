@@ -1,0 +1,150 @@
+---
+import api from '../generated/api.json';
+
+interface Props {
+  of: string;
+  exclude?: string[];
+}
+
+type Node = {
+  id: number;
+  name: string;
+  kind: number;
+  flags: { isOptional?: boolean; isExternal?: boolean };
+  comment?: { summary?: Part[]; blockTags?: { tag: string; content: Part[] }[] };
+  children?: Node[];
+  type?: Type;
+};
+type Part = { kind: string; text: string };
+type Type = Record<string, any>;
+
+const { of, exclude = [] } = Astro.props;
+
+const all: Node[] = [];
+(function walk(node: { children?: Node[] }) {
+  node.children?.forEach((child) => {
+    all.push(child);
+    walk(child);
+  });
+})(api as unknown as { children: Node[] });
+
+const target = all.find((node) => node.name === of && node.children?.length);
+if (!target) throw new Error(`Props: no declaration with properties named "${of}"`);
+
+const tokenTypes: Record<string, string> = {
+  Size: '/configuration/sizes-and-radii/',
+  Radius: '/configuration/sizes-and-radii/',
+  Color: '/configuration/colors-and-theming/',
+  Variant: '/configuration/variants/',
+  Spacing: '/configuration/spacing-shadows-density/',
+  Shadow: '/configuration/spacing-shadows-density/',
+  Density: '/configuration/spacing-shadows-density/',
+  TextStyle: '/configuration/typography/',
+};
+
+function format(type: Type | undefined): string {
+  if (!type) return '';
+  switch (type.type) {
+    case 'intrinsic':
+      return type.name;
+    case 'literal':
+      return type.value === null ? 'null' : typeof type.value === 'string' ? `'${type.value}'` : String(type.value);
+    case 'union':
+      return type.types.map(format).join(' | ');
+    case 'intersection':
+      return type.types.map(format).join(' & ');
+    case 'array':
+      return `${format(type.elementType)}[]`;
+    case 'reference':
+      return type.typeArguments?.length ? `${type.name}<${type.typeArguments.map(format).join(', ')}>` : type.name;
+    case 'typeOperator':
+      return `${type.operator} ${format(type.target)}`;
+    case 'indexedAccess':
+      return `${format(type.objectType)}[${format(type.indexType)}]`;
+    case 'reflection': {
+      const signature = type.declaration?.signatures?.[0];
+      if (signature) {
+        const params = (signature.parameters ?? []).map((p: Node) => `${p.name}: ${format(p.type)}`).join(', ');
+        return `(${params}) => ${format(signature.type)}`;
+      }
+      const fields = (type.declaration?.children ?? []) as Node[];
+      return `{ ${fields.map((f) => `${f.name}${f.flags.isOptional ? '?' : ''}: ${format(f.type)}`).join('; ')} }`;
+    }
+    default:
+      return type.name ?? '…';
+  }
+}
+
+function text(parts: Part[] = []): string {
+  return parts
+    .map((part) => (part.kind === 'code' ? part.text.replace(/^```\w*\n?|\n?```$/g, '') : part.text))
+    .join('')
+    .trim();
+}
+
+function inline(value: string): string {
+  const escaped = value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return escaped.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\{@link ([^}]+)\}/g, '<code>$1</code>');
+}
+
+const rows = target
+  .children!.filter((child) => !child.flags.isExternal && !exclude.includes(child.name))
+  .sort((a, b) => Number(!!a.flags.isOptional) - Number(!!b.flags.isOptional) || a.name.localeCompare(b.name))
+  .map((child) => {
+    const type = format(child.type);
+    const fallback = child.comment?.blockTags?.find((tag) => tag.tag === '@default');
+    return {
+      name: child.name,
+      required: !child.flags.isOptional,
+      type,
+      tokens: Object.keys(tokenTypes).filter((token) => new RegExp(`\\b${token}\\b`).test(type)),
+      defaultValue: fallback ? text(fallback.content).replace(/^`|`$/g, '') : '',
+      description: inline(text(child.comment?.summary)),
+    };
+  });
+---
+
+<table class="props-table">
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((row) => (
+        <tr>
+          <td>
+            <code>{row.name}</code>
+            {row.required && <span class="required"> required</span>}
+          </td>
+          <td>
+            <code>{row.type}</code>
+            {row.tokens.slice(0, 1).map((token) => (
+              <a class="token-link" href={tokenTypes[token]} title={`${token}: a key of your config`}>
+                config
+              </a>
+            ))}
+          </td>
+          <td>{row.defaultValue && <code>{row.defaultValue}</code>}</td>
+          <td set:html={row.description} />
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .token-link {
+    margin-left: 0.375rem;
+    font-size: var(--sl-text-xs);
+  }
+
+  .required {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-text-accent);
+  }
+</style>

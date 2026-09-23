@@ -1,0 +1,41 @@
+---
+title: "Heading"
+description: "A section heading: the level sets the semantics, the config sets the look."
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { HeadingDemo, HeadingOverrideDemo } from '@/demos/typography';
+
+```tsx
+import { Heading } from 'yarcl';
+```
+
+`<Heading level={n}>` renders an `<hn>` styled with the text style your config maps to that level in [`typography.headings`](/configuration/typography/#heading-levels).
+
+<Preview>
+  <HeadingDemo />
+</Preview>
+
+```tsx
+<Heading level={1}>Settings</Heading>
+<Heading level={2}>Profile</Heading>
+```
+
+## Overriding the look
+
+Choose the level by document structure, not by size. When a heading should look different, override `textStyle` and keep the right level:
+
+<Preview>
+  <HeadingOverrideDemo />
+</Preview>
+
+```tsx
+<Heading level={2} textStyle="display">An h2 that looks like display</Heading>
+```
+
+## Props
+
+<Props of="HeadingProps" />

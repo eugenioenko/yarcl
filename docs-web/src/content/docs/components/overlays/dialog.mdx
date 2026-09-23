@@ -1,0 +1,56 @@
+---
+title: "Dialog"
+description: "A modal dialog built on the native dialog element."
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { DialogControlledDemo, DialogDemo } from '@/demos/overlays';
+
+```tsx
+import { Dialog } from 'yarcl';
+```
+
+<Preview>
+  <DialogDemo client:visible />
+</Preview>
+
+```tsx
+<Dialog
+  trigger={<Button>Invite teammate</Button>}
+  title="Invite a teammate"
+  description="They'll get an email with a link to join."
+  footer={<Button>Send invite</Button>}
+>
+  <Field label="Email"><Input type="email" /></Field>
+</Dialog>
+```
+
+## Controlled
+
+<Preview>
+  <DialogControlledDemo client:visible />
+</Preview>
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Dialog open={open} onOpenChange={setOpen} title="Delete project?" width="26rem" footer={…} />
+```
+
+## Behavior
+
+Built on `<dialog>` with `showModal()`, so the browser handles the hard parts:
+
+- focus moves into the dialog and is trapped there
+- the rest of the page is inert and doesn't scroll
+- <kbd>Esc</kbd>, the close button and a backdrop click close it (`closeOnBackdrop={false}` to disable the last one)
+- focus returns to the element that opened it
+
+`title` is the dialog's accessible name; `description` its accessible description.
+
+## Props
+
+<Props of="DialogProps" />

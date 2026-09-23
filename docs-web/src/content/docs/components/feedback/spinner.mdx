@@ -1,0 +1,29 @@
+---
+title: "Spinner"
+description: "An indeterminate loading indicator."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SpinnerDemo } from '@/demos/feedback';
+
+```tsx
+import { Spinner } from 'yarcl';
+```
+
+<Preview>
+  <SpinnerDemo client:visible />
+</Preview>
+
+```tsx
+<Spinner size="lg" color="primary" />
+<Button loading={saving}>Save</Button>
+```
+
+A spinner is sized like an icon, so inside a control it matches the control's size. Without `color` it uses the current text color. It's announced as "Loading"; change that with `label`.
+
+## Props
+
+<Props of="SpinnerProps" />

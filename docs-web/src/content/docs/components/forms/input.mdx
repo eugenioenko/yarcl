@@ -1,0 +1,34 @@
+---
+title: "Input"
+description: "A single-line text input on the shared size scale."
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { InputDemo } from '@/demos/forms';
+
+```tsx
+import { Input } from 'yarcl';
+```
+
+<Preview>
+  <InputDemo client:visible />
+</Preview>
+
+```tsx
+<Input placeholder="Default" />
+<Input size="lg" color="success" />
+<Input disabled />
+```
+
+- `size` sets the height, padding and font size. An input and a [Button](/components/buttons/button/) of the same size have the same height.
+- `color` sets the focus border and ring.
+- Inside a [Field](/components/forms/field/) it's labelled, described and marked invalid automatically.
+
+## Props
+
+Accepts every native `<input>` attribute except `color` and `size`, which are replaced by design tokens.
+
+<Props of="InputProps" />

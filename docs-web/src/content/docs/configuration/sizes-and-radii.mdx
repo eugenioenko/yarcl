@@ -1,0 +1,66 @@
+---
+title: Sizes and radii
+description: The shared control size scale and the radius scale.
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import { SizeScaleDemo } from '@/demos/config';
+
+## One size scale for every control
+
+Each entry in `sizes` describes one step of the control scale:
+
+```ts
+sizes: {
+  sm: { height: '2rem',   paddingX: '0.75rem', fontSize: '0.8125rem', iconSize: '0.875rem' },
+  md: { height: '2.5rem', paddingX: '1rem',    fontSize: '0.875rem',  iconSize: '1rem' },
+  lg: { height: '3rem',   paddingX: '1.25rem', fontSize: '1rem',      iconSize: '1.25rem' },
+},
+```
+
+Buttons, icon buttons, inputs, selects, comboboxes, tabs, menus, checkboxes, radios, switches and badges all read the same entry, so controls of the same size always line up:
+
+<Preview column>
+  <SizeScaleDemo client:visible />
+</Preview>
+
+| Field | Used for |
+|---|---|
+| `height` | the fixed height of buttons, inputs, selects and tabs |
+| `paddingX` | horizontal padding |
+| `fontSize` | text inside the control |
+| `iconSize` | `<svg>` icons inside controls, and the box of checkboxes, radios and switches |
+
+Use `rem`, so controls scale with the user's browser font size. Keep `px` for borders and focus rings.
+
+`defaults.size` is the size every control uses when `size` is omitted. Set it to `sm` and the whole app becomes compact.
+
+## Radius scale
+
+`radii` is an open group. The convention is to name the steps like your sizes, plus two exceptions:
+
+```ts
+radii: {
+  square: '0',
+  sm: '0.25rem',
+  md: '0.375rem',
+  lg: '0.5rem',
+  xl: '0.75rem',
+  rounded: '9999px',
+},
+```
+
+`defaults.radius` is the radius every component uses when `radius` is omitted: buttons, inputs, cards, dialogs, badges, alerts. The library default is `md`.
+
+```ts
+defaults: { radius: 'md' },                  // every component
+components: { Button: { radius: 'square' } } // except buttons
+```
+
+See [component defaults](/configuration/component-defaults/) for per-component overrides.
+
+### Matching radius to size (opt-in)
+
+Set `defaults.radius: 'size'` to give each control the radius named like its size: an `lg` button gets `radii.lg`, an `sm` input gets `radii.sm`. Components without a size use the radius of `defaults.size`. `size` is reserved and can't be used as a radius key.

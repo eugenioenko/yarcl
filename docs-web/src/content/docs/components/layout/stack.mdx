@@ -1,0 +1,33 @@
+---
+title: "Stack"
+description: "Lays out children vertically with a gap from your spacing scale."
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { StackDemo } from '@/demos/layout';
+
+```tsx
+import { Stack } from 'yarcl';
+```
+
+<Preview>
+  <StackDemo />
+</Preview>
+
+```tsx
+<Stack gap="md">
+  <Heading level={2}>Profile</Heading>
+  <Field label="Name"><Input /></Field>
+</Stack>
+```
+
+`gap` accepts the keys of your [spacing](/configuration/spacing-shadows-density/) and defaults to `defaults.gap`. Use `as` to render a semantic element (`section`, `form`, `ul`, `nav` …); list styles are reset.
+
+## Props
+
+Accepts every native `<div>` attribute.
+
+<Props of="LayoutProps" />

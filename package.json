@@ -8,7 +8,9 @@
     "typecheck": "tsc -p library && tsc -p consumer && tsc -p consumer-b",
     "dev:b": "pnpm -C consumer-b dev",
     "test:e2e": "node e2e/run.mjs",
-    "docs:api": "typedoc"
+    "docs:api": "typedoc",
+    "docs:dev": "pnpm -C docs-web dev",
+    "docs:build": "pnpm -C docs-web build"
   },
   "devDependencies": {
     "playwright-core": "^1.63.0",

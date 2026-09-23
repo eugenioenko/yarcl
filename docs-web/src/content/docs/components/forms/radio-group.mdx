@@ -1,0 +1,42 @@
+---
+title: "RadioGroup"
+description: "A labelled group of radio buttons."
+sidebar:
+  order: 7
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { RadioGroupDemo } from '@/demos/forms';
+
+```tsx
+import { Radio, RadioGroup } from 'yarcl';
+```
+
+<Preview>
+  <RadioGroupDemo client:visible />
+</Preview>
+
+```tsx
+<RadioGroup label="Plan" value={plan} onValueChange={setPlan} orientation="horizontal">
+  <Radio value="free">Free</Radio>
+  <Radio value="pro">Pro</Radio>
+  <Radio value="team">Team</Radio>
+</RadioGroup>
+```
+
+`RadioGroup` renders a `<fieldset>` with a `<legend>`, gives the radios a shared `name`, and tracks the selected value. Radios inside don't need `name` or `checked`. Like [Field](/components/forms/field/), it takes `description` and `error`.
+
+Native radio keyboard behavior applies: <kbd>Tab</kbd> moves into the group, arrow keys change the selection.
+
+## Props
+
+### RadioGroup
+
+<Props of="RadioGroupProps" />
+
+### Radio
+
+Accepts every native `<input>` attribute except `type`, `color` and `size`.
+
+<Props of="RadioProps" />
