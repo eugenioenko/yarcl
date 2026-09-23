@@ -36,10 +36,10 @@ import {
 
 export const contract = (
   <>
-    <Button size="xl" color="warning" radius="pill" variant="subtle" />
+    <Button size="xl" color="warning" radius="rounded" variant="subtle" />
     <Input size="xs" color="danger" radius="square" />
     <IconButton aria-label="Add" variant="quiet" />
-    <Textarea size="lg" radius="round" />
+    <Textarea size="lg" radius="size" />
     <Checkbox size="sm" color="success" indeterminate />
     <Radio size="lg" color="neutral" />
     <Switch size="xl" color="brand" />
@@ -51,12 +51,12 @@ export const contract = (
     <Link color="neutral" underline="hover" external />
     <Stack gap="loose" align="center" as="ul" />
     <Inline gap="tight" justify="between" wrap={false} />
-    <Card padding="tight" radius="pill" shadow="lg" as="article" />
+    <Card padding="tight" radius="rounded" shadow="lg" as="article" />
     <Divider orientation="vertical" />
     <Tooltip content="Hi">
       <Button />
     </Tooltip>
-    <HoverCard content="Hi" padding="tight" radius="round">
+    <HoverCard content="Hi" padding="tight" radius="xl">
       <Link />
     </HoverCard>
     <Popover placement="top" modal>
@@ -70,24 +70,24 @@ export const contract = (
         <Menu.Item color="danger" />
       </Menu.Content>
     </Menu>
-    <Select options={[{ value: 'a', label: 'A' }]} size="lg" radius="pill" color="success" />
+    <Select options={[{ value: 'a', label: 'A' }]} size="lg" radius="rounded" color="success" />
     <Combobox options={[]} filter={false} allowCustomValue size="xs" />
-    <Dialog title="T" radius="round" width="40rem" />
+    <Dialog title="T" radius="xl" width="40rem" />
     <Drawer title="T" side="left" />
     <Tabs defaultValue="a" size="sm" color="success" />
     <Tabs value="a" onValueChange={() => {}} />
     <Table density="dense" striped interactive />
-    <Badge color="success" variant="outline" size="sm" radius="pill" onRemove={() => {}} />
-    <Alert color="warning" variant="solid" radius="round" live="polite" onDismiss={() => {}} />
+    <Badge color="success" variant="outline" size="sm" radius="rounded" onRemove={() => {}} />
+    <Alert color="warning" variant="solid" radius="md" live="polite" onDismiss={() => {}} />
     <Spinner size="xl" color="danger" />
-    <Skeleton shape="control" size="lg" radius="soft" />
+    <Skeleton shape="control" size="lg" radius="lg" />
     <Skeleton textStyle="display" lines={3} />
     <Button loading />
     <Heading level={3} />
     <RadioGroup label="L" size="sm" color="success" orientation="horizontal" defaultValue="a">
       <Radio value="a" />
     </RadioGroup>
-    <ButtonGroup size="lg" variant="outline" color="neutral" radius="pill" attached={false} orientation="vertical" />
+    <ButtonGroup size="lg" variant="outline" color="neutral" radius="rounded" attached={false} orientation="vertical" />
     <ToggleGroup type="single" defaultValue="a" required variant="quiet" selectedVariant="solid" />
     <ToggleGroup type="multiple" defaultValue={['a']} onValueChange={(v: string[]) => v} />
 
@@ -131,6 +131,8 @@ export const contract = (
     <Select options={[]} size="huge" />
     {/* @ts-expect-error */}
     <Combobox options={[]} radius="full" />
+    {/* @ts-expect-error */}
+    <Card radius="size" />
     {/* @ts-expect-error */}
     <Popover.Content padding="md" />
     {/* @ts-expect-error */}

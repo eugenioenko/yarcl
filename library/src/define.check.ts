@@ -114,3 +114,45 @@ defineConfig({
   // @ts-expect-error
   defaults: { ...defaults.defaults, labelStyle: 'tiny' },
 });
+
+defineConfig({
+  ...defaults,
+  components: {
+    Button: { radius: 'square', variant: 'outline' },
+    IconButton: { radius: 'size' },
+    Card: { padding: 'xl', shadow: 'lg' },
+    Stack: { gap: 'sm' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Buton: { radius: 'square' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Card: { variant: 'solid' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Button: { radius: 'pill' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  radii: { ...defaults.radii, size: '1rem' },
+});
+
+defineConfig({ ...defaults, defaults: { ...defaults.defaults, radius: 'square' } });

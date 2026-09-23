@@ -1,5 +1,7 @@
-import { cx, gapClass } from '../classes';
+import { cx, defaultsFor, gapClass } from '../classes';
 import type { LayoutProps } from './Stack';
+
+const own = defaultsFor('Inline');
 
 /** Props for {@link Inline}. */
 export interface InlineProps extends LayoutProps {
@@ -27,7 +29,7 @@ export function Inline({ as = 'div', gap, align = 'center', justify, wrap = true
     <Tag
       className={cx(
         'yarcl-inline',
-        gapClass(gap),
+        gapClass(gap ?? own.gap),
         `yarcl-align-${align}`,
         justify && `yarcl-justify-${justify}`,
         !wrap && 'yarcl-inline-nowrap',

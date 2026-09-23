@@ -17,12 +17,14 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import { CheckIcon, floatingMiddleware } from '../floating';
 import { useControllable } from '../hooks';
 import type { TokenProps } from '../types';
 import type { SelectOption } from './Select';
+
+const own = defaultsFor('Combobox');
 
 /** Props for {@link Combobox}. */
 export interface ComboboxProps<V extends string = string>
@@ -180,7 +182,7 @@ export function Combobox<V extends string = string>(props: ComboboxProps<V>) {
     <>
       <input
         ref={refs.setReference}
-        className={cx('yarcl-input yarcl-combobox', sizeClass(size), radiusClass(radius), colorClass(color), className)}
+        className={cx('yarcl-input yarcl-combobox', sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), colorClass(color ?? own.color), className)}
         autoComplete="off"
         aria-autocomplete="list"
         {...getReferenceProps({
@@ -201,7 +203,7 @@ export function Combobox<V extends string = string>(props: ComboboxProps<V>) {
           <div
             ref={refs.setFloating}
             style={floatingStyles}
-            className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size), colorClass(color))}
+            className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size), colorClass(color ?? own.color))}
             {...getFloatingProps({ onMouseDown: (event) => event.preventDefault() })}
           >
             {loading ? (

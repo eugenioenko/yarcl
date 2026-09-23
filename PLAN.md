@@ -27,6 +27,8 @@ A component library where the **consumer's config is the design system**. The li
 | Groups | `ButtonGroup` passes size/color/variant/radius to child buttons and can attach them (shared borders, variant-derived separators); `ToggleGroup` (`single`/`multiple`, `aria-pressed`, roving tab stop, arrow keys, `required`), unselected/selected variants from `defaults.softVariant` / `defaults.variant`; `RadioGroup` is a fieldset/legend with shared name and value | Segmented controls and grouped actions without new tokens |
 | Reference page | `DesignReference` (`yarcl/reference`) renders the active config with library components: colors with contrast ratios, size scale with live controls, variants, spacing, shadows, fonts, text styles, heading levels, density, other tokens, defaults | The config documents itself |
 | Testing | `pnpm test:e2e`: Playwright (`playwright-core`, system Chrome or `CHROME_PATH`) against both consumers, light and dark; `pnpm typecheck` includes `@ts-expect-error` contract files in library and both consumers | Repeatable checkpoints |
+| Component defaults | Optional `components: { Button: { radius: 'square' }, … }`; each component accepts only its own token props, values checked against the config; resolution: prop → enclosing group → `components.<Name>` → `defaults` | Opinions per component ("buttons are always sharp") belong in the config, not at every call site |
+| Radius scale | Radii are named after the sizes (`sm`, `md`, `lg` …) plus exceptions (`square`, `rounded`); `defaults.radius: 'size'` makes controls use the radius named like their size (components without a size use `defaults.size`); `'size'` is reserved as a key and also accepted by the `radius` prop of sized components | Radius scales with control size by default; exceptions stay explicit |
 | Icon size | Part of each `sizes` entry (`iconSize`), not a separate group | Icons follow the control size automatically |
 | Text styles | Generated `.yarcl-type-{key}` classes; `family` references a `typography.families` key | Text styles usable before `Text` exists; group named `type` so the `Text` component can be `yarcl-text` |
 | Plugin runtime | Vite loads the plugin with Node's TS type stripping; relative imports in plugin code use `.ts` extensions. Publishing requires compiling the plugin (Node won't strip types inside `node_modules`) | Works from source in the workspace today |
@@ -72,7 +74,7 @@ export default defineConfig({
   sizes: {
     md: { height: '2.5rem', paddingX: '1rem', fontSize: '0.875rem', iconSize: '1rem' },
   },
-  radii: { soft: '0.375rem', pill: '9999px' },
+  radii: { square: '0', sm: '0.25rem', md: '0.375rem', lg: '0.5rem', rounded: '9999px' },
   variants: {
     solid:   { background: 'fill', border: 'color', text: 'on' },
     outline: { background: 'none', border: 'color', text: 'color' },
@@ -93,8 +95,9 @@ export default defineConfig({
   motion: { fast: '120ms', base: '200ms', easing: '…' /* + extras */ },
   borders: { width: '1px' /* + extras */ },
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
+  components: { Button: { radius: 'square' }, Card: { radius: 'lg' } },
   defaults: {
-    size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger',
+    size: 'md', radius: 'size', color: 'brand', variant: 'solid', errorColor: 'danger',
     textStyle: 'body', labelStyle: 'label', helperStyle: 'caption', gap: 'normal', padding: 'normal', floatingShadow: 'md', density: 'compact', softVariant: 'subtle',
   },
 });

@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
-import { cx, gapClass } from '../classes';
+import { cx, defaultsFor, gapClass } from '../classes';
 import type { Align, Justify, Spacing } from '../types';
+
+const own = defaultsFor('Stack');
 
 /** Elements layout components can render as. */
 export type LayoutElement = 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'main' | 'nav' | 'form' | 'ul' | 'ol';
@@ -43,7 +45,7 @@ export function Stack({ as = 'div', gap, align, justify, className, ...props }: 
     <Tag
       className={cx(
         'yarcl-stack',
-        gapClass(gap),
+        gapClass(gap ?? own.gap),
         align && `yarcl-align-${align}`,
         justify && `yarcl-justify-${justify}`,
         className,

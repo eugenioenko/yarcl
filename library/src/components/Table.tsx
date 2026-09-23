@@ -1,6 +1,8 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { cx, densityClass } from '../classes';
+import { cx, defaultsFor, densityClass } from '../classes';
 import type { Density } from '../types';
+
+const own = defaultsFor('Table');
 
 /** Props for {@link Table}. */
 export interface TableProps extends ComponentProps<'table'> {
@@ -23,7 +25,7 @@ function TableRoot({ density, striped, interactive, caption, className, children
       <table
         className={cx(
           'yarcl-table',
-          densityClass(density),
+          densityClass(density ?? own.density),
           striped && 'yarcl-table-striped',
           interactive && 'yarcl-table-interactive',
           className,

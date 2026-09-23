@@ -20,10 +20,12 @@ export default defineConfig({
     lg: { height: '3rem', paddingX: '1.25rem', fontSize: '1rem', iconSize: '1.25rem' },
   },
   radii: {
-    none: '0',
+    square: '0',
     sm: '0.25rem',
-    md: '0.5rem',
-    full: '9999px',
+    md: '0.375rem',
+    lg: '0.5rem',
+    xl: '0.75rem',
+    rounded: '9999px',
   },
   variants: {
     solid: { background: 'fill', border: 'color', text: 'on' },
@@ -69,7 +71,7 @@ export default defineConfig({
   focusRing: { width: '2px', offset: '2px', color: 'primary' },
   defaults: {
     size: 'md',
-    radius: 'md',
+    radius: 'size',
     color: 'primary',
     variant: 'solid',
     errorColor: 'danger',

@@ -1,7 +1,9 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import type { Color, Size } from '../types';
+
+const own = defaultsFor('Switch');
 
 /** Props for {@link Switch}. Accepts all native `<input>` attributes except `type`, `color` and `size`. */
 export interface SwitchProps extends Omit<ComponentProps<'input'>, 'type' | 'color' | 'size' | 'children'> {
@@ -31,7 +33,7 @@ export interface SwitchProps extends Omit<ComponentProps<'input'>, 'type' | 'col
 export function Switch(props: SwitchProps) {
   const { children, size, color, className, style, ...rest } = useFieldProps(props);
   return (
-    <label className={cx('yarcl-switch', sizeClass(size), colorClass(color), className)} style={style}>
+    <label className={cx('yarcl-switch', sizeClass(size ?? own.size), colorClass(color ?? own.color), className)} style={style}>
       <input type="checkbox" role="switch" className="yarcl-switch-input" {...rest} />
       {children != null && <span className="yarcl-switch-label">{children}</span>}
     </label>

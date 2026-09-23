@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
 import type { Color, Size } from '../types';
+
+const own = defaultsFor('Spinner');
 
 /** Props for {@link Spinner}. */
 export interface SpinnerProps extends Omit<ComponentProps<'span'>, 'color'> {
@@ -28,7 +30,7 @@ export function Spinner({ size, color, label = 'Loading', className, ...props }:
     <span
       role="status"
       aria-label={label}
-      className={cx('yarcl-spinner', size && sizeClass(size), color && cx('yarcl-spinner-colored', colorClass(color)), className)}
+      className={cx('yarcl-spinner', (size ?? own.size) && sizeClass(size ?? own.size), (color ?? own.color) && cx('yarcl-spinner-colored', colorClass(color ?? own.color)), className)}
       {...props}
     />
   );

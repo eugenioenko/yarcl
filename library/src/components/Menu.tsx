@@ -22,10 +22,12 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, Size } from '../types';
+
+const own = defaultsFor('Menu');
 
 type MenuContextValue = ReturnType<typeof useMenuState>;
 
@@ -125,7 +127,7 @@ function MenuContent({ className, style, children, ...props }: MenuContentProps)
         <div
           ref={refs.setFloating}
           style={{ ...floatingStyles, ...style }}
-          className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size), colorClass(), className)}
+          className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size), colorClass(), className)}
           {...getFloatingProps(props)}
         >
           <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>

@@ -1,6 +1,8 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, radiusClass, softVariantClass } from '../classes';
+import { colorClass, cx, defaultsFor, radiusClass, softVariantClass } from '../classes';
 import type { Color, Radius, Variant } from '../types';
+
+const own = defaultsFor('Alert');
 
 /** Props for {@link Alert}. */
 export interface AlertProps extends Omit<ComponentProps<'div'>, 'color' | 'title'> {
@@ -61,7 +63,7 @@ export function Alert({
   return (
     <div
       role={live === 'assertive' ? 'alert' : live === 'polite' ? 'status' : undefined}
-      className={cx('yarcl-alert', colorClass(color), softVariantClass(variant), radiusClass(radius), className)}
+      className={cx('yarcl-alert', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant), radiusClass(radius ?? own.radius), className)}
       {...props}
     >
       {icon != null && <span className="yarcl-alert-icon">{icon}</span>}

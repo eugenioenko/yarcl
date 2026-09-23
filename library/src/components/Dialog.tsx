@@ -1,5 +1,8 @@
+import { defaultsFor } from '../classes';
 import { Modal, type ModalProps } from './Modal';
 import type { Radius } from '../types';
+
+const own = defaultsFor('Dialog');
 
 /** Props for {@link Dialog}. */
 export interface DialogProps extends ModalProps {
@@ -25,5 +28,5 @@ export interface DialogProps extends ModalProps {
  * ```
  */
 export function Dialog(props: DialogProps) {
-  return <Modal {...props} className="yarcl-dialog" />;
+  return <Modal {...props} radius={props.radius ?? (own.radius === 'size' ? undefined : own.radius)} className="yarcl-dialog" />;
 }

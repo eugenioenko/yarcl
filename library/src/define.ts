@@ -88,6 +88,42 @@ export interface TextStyleToken {
 }
 
 /**
+ * Token props each component accepts in `components`. A component's defaults can only set
+ * props it actually has.
+ */
+export interface ComponentTokenProps {
+  Button: 'size' | 'radius' | 'color' | 'variant';
+  IconButton: 'size' | 'radius' | 'color' | 'variant';
+  ToggleGroup: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';
+  Input: 'size' | 'radius' | 'color';
+  Textarea: 'size' | 'radius' | 'color';
+  Select: 'size' | 'radius' | 'color';
+  Combobox: 'size' | 'radius' | 'color';
+  Checkbox: 'size' | 'color';
+  Radio: 'size' | 'color';
+  Switch: 'size' | 'color';
+  Badge: 'size' | 'radius' | 'color' | 'variant';
+  Alert: 'radius' | 'color' | 'variant';
+  Card: 'radius' | 'padding' | 'shadow';
+  Popover: 'radius' | 'padding';
+  HoverCard: 'radius' | 'padding';
+  Dialog: 'radius';
+  Menu: 'size';
+  Tabs: 'size' | 'color';
+  Table: 'density';
+  Stack: 'gap';
+  Inline: 'gap';
+  Text: 'textStyle' | 'color';
+  Link: 'color';
+  Spinner: 'size' | 'color';
+  Skeleton: 'size' | 'radius';
+  Toast: 'color';
+}
+
+/** Names of components that accept defaults in `components`. */
+export type ComponentName = keyof ComponentTokenProps;
+
+/**
  * The structure every yarcl config must satisfy.
  *
  * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `typography`) take any keys;
@@ -113,7 +149,11 @@ export interface YarclShape {
   };
   /** Control size scale. Keys become the valid values of the `size` prop. */
   sizes: Record<string, SizeToken>;
-  /** Border radii. Keys become the valid values of the `radius` prop. */
+  /**
+   * Border radii. Keys become the valid values of the `radius` prop. Name them after your
+   * sizes (`sm`, `md`, `lg` …) so controls can match their size, plus exceptions such as
+   * `square` and `rounded`. `size` is reserved.
+   */
   radii: Record<string, string>;
   /** Style recipes. Keys become the valid values of the `variant` prop. */
   variants: Record<string, VariantToken>;
@@ -156,9 +196,18 @@ export interface YarclShape {
     /** A key of `colors`. */
     color: string;
   };
+  /**
+   * Per-component defaults, e.g. `{ Button: { radius: 'square' } }`. Applied when a prop is omitted,
+   * before the global `defaults`. Each value must be a key of its group.
+   */
+  components?: { [C in ComponentName]?: { [P in ComponentTokenProps[C]]?: string } };
   /** Values used when a component prop is omitted. Each must be a key of its group. */
   defaults: {
     size: string;
+    /**
+     * A key of `radii`, or `'size'` to use the radius named like the control's size
+     * (a `lg` button gets `radii.lg`). Components without a size use `defaults.size`.
+     */
     radius: string;
     color: string;
     variant: string;
@@ -191,14 +240,34 @@ type KeyCheck<G> = {
   };
 };
 
+interface TokenKeys<T extends YarclShape> {
+  size: keyof T['sizes'];
+  radius: keyof T['radii'] | 'size';
+  color: keyof T['colors'];
+  variant: keyof T['variants'];
+  selectedVariant: keyof T['variants'];
+  gap: keyof T['spacing'];
+  padding: keyof T['spacing'];
+  shadow: keyof T['shadows'];
+  density: keyof T['density'];
+  textStyle: keyof T['typography']['styles'];
+}
+
+type ComponentChecks<T extends YarclShape> = {
+  [C in keyof T['components']]: C extends ComponentName
+    ? { [P in keyof T['components'][C]]: P extends ComponentTokenProps[C] ? TokenKeys<T>[P] : never }
+    : { error: `Unknown component "${C & string}"` };
+};
+
 type Checks<T extends YarclShape> = {
+  components?: ComponentChecks<T>;
   colors: KeyCheck<T['colors']>;
   neutrals: KeyCheck<T['neutrals']>;
   zIndex: KeyCheck<T['zIndex']>;
   motion: KeyCheck<T['motion']>;
   borders: KeyCheck<T['borders']>;
   sizes: KeyCheck<T['sizes']>;
-  radii: KeyCheck<T['radii']>;
+  radii: KeyCheck<T['radii']> & { size?: { error: 'The radius key "size" is reserved' } };
   variants: KeyCheck<T['variants']>;
   spacing: KeyCheck<T['spacing']>;
   shadows: KeyCheck<T['shadows']>;
@@ -213,7 +282,7 @@ type Checks<T extends YarclShape> = {
   focusRing: { color: keyof T['colors'] };
   defaults: {
     size: keyof T['sizes'];
-    radius: keyof T['radii'];
+    radius: keyof T['radii'] | 'size';
     color: keyof T['colors'];
     variant: keyof T['variants'];
     errorColor: keyof T['colors'];
@@ -235,6 +304,7 @@ type Checks<T extends YarclShape> = {
  * - every color has a `light` and `dark` value
  * - `defaults`, `focusRing.color`, `typography.headings` and each text style's `family` reference existing keys
  * - no key contains whitespace
+ * - `components` only names known components, only sets props they have, and only uses existing keys
  *
  * Returns the config unchanged with literal types preserved, so the library can derive
  * its prop types from it. Spread `yarcl/defaults` to extend the library defaults instead

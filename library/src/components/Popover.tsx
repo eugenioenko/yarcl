@@ -10,10 +10,12 @@ import {
   type Placement,
 } from '@floating-ui/react';
 import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode } from 'react';
-import { cx, paddingClass, radiusClass } from '../classes';
+import { cx, defaultsFor, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
 import type { Radius, Spacing } from '../types';
+
+const own = defaultsFor('Popover');
 
 type PopoverContextValue = ReturnType<typeof usePopoverState>;
 
@@ -107,7 +109,7 @@ function PopoverContent({ padding, radius, className, style, ...props }: Popover
         <div
           ref={refs.setFloating}
           style={{ ...floatingStyles, ...style }}
-          className={cx('yarcl-floating yarcl-panel yarcl-popover', paddingClass(padding), radiusClass(radius), className)}
+          className={cx('yarcl-floating yarcl-panel yarcl-popover', paddingClass(padding ?? own.padding), radiusClass(radius ?? own.radius), className)}
           {...getFloatingProps(props)}
         />
       </FloatingFocusManager>

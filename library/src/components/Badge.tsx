@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, radiusClass, sizeClass, softVariantClass } from '../classes';
+import { colorClass, cx, defaultsFor, radiusClass, sizeClass, softVariantClass } from '../classes';
 import type { Color, Radius, Size, Variant } from '../types';
+
+const own = defaultsFor('Badge');
 
 /** Props for {@link Badge}. */
 export interface BadgeProps extends Omit<ComponentProps<'span'>, 'color'> {
@@ -23,7 +25,7 @@ export interface BadgeProps extends Omit<ComponentProps<'span'>, 'color'> {
    * Corner radius, from the `radii` config.
    * @default config.defaults.radius
    */
-  radius?: Radius;
+  radius?: Radius | 'size';
   /** Shows a remove button, making the badge a removable tag. Called when it is pressed. */
   onRemove?: () => void;
   /**
@@ -56,7 +58,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={cx('yarcl-badge', colorClass(color), softVariantClass(variant), sizeClass(size), radiusClass(radius), className)}
+      className={cx('yarcl-badge', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant), sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), className)}
       {...props}
     >
       {children}

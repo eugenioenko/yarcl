@@ -1,7 +1,9 @@
 import type { ChangeEvent, ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
 import type { Color, Size } from '../types';
 import { useRadioGroup } from './RadioGroup';
+
+const own = defaultsFor('Radio');
 
 /** Props for {@link Radio}. Accepts all native `<input>` attributes except `type`, `color` and `size`. */
 export interface RadioProps extends Omit<ComponentProps<'input'>, 'type' | 'color' | 'size' | 'children' | 'value'> {
@@ -46,7 +48,7 @@ export function Radio({ children, size, color, value, className, style, onChange
   };
   return (
     <label
-      className={cx('yarcl-radio', sizeClass(size ?? group?.size), colorClass(color ?? group?.color), className)}
+      className={cx('yarcl-radio', sizeClass(size ?? group?.size ?? own.size), colorClass(color ?? group?.color ?? own.color), className)}
       style={style}
     >
       <input type="radio" className="yarcl-radio-input" value={value} onChange={onChange} {...props} {...groupProps} />

@@ -254,7 +254,7 @@ export function App() {
                   <u>U</u>
                 </ToggleGroup.Item>
               </ToggleGroup>
-              <ToggleGroup type="single" defaultValue="grid" aria-label="View" size="sm" radius="pill" attached={false} variant="quiet" selectedVariant="solid">
+              <ToggleGroup type="single" defaultValue="grid" aria-label="View" size="sm" radius="rounded" attached={false} variant="quiet" selectedVariant="solid">
                 <ToggleGroup.Item value="list">List</ToggleGroup.Item>
                 <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
               </ToggleGroup>
@@ -321,7 +321,7 @@ export function App() {
                   </Stack>
                 </Card>
               ))}
-              <Card radius="round" padding="loose" className="card">
+              <Card radius="xl" padding="loose" className="card">
                 <Stack gap="tight">
                   <Heading level={3} textStyle="body">
                     Card

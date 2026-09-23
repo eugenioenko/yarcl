@@ -19,9 +19,12 @@ export default defineConfig({
   },
   radii: {
     square: '0',
-    soft: '0.375rem',
-    round: '0.75rem',
-    pill: '9999px',
+    xs: '0.25rem',
+    sm: '0.3125rem',
+    md: '0.375rem',
+    lg: '0.5rem',
+    xl: '0.625rem',
+    rounded: '9999px',
   },
   variants: {
     solid: { background: 'fill', border: 'color', text: 'on' },
@@ -57,9 +60,13 @@ export default defineConfig({
   },
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
+  components: {
+    Badge: { radius: 'rounded' },
+    Card: { radius: 'lg' },
+  },
   defaults: {
     size: 'md',
-    radius: 'soft',
+    radius: 'size',
     color: 'brand',
     variant: 'solid',
     errorColor: 'danger',

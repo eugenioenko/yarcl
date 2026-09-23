@@ -27,10 +27,10 @@ export interface TokenProps {
    */
   size?: Size;
   /**
-   * Border radius, from the `radii` config.
+   * Border radius, from the `radii` config, or `'size'` for the radius named like the control's size.
    * @default config.defaults.radius
    */
-  radius?: Radius;
+  radius?: Radius | 'size';
   /**
    * Semantic color, from the `colors` config.
    * @default config.defaults.color
@@ -50,4 +50,18 @@ export interface VariantProps {
    * @default config.defaults.variant
    */
   variant?: Variant;
+}
+
+/** Values a component can receive from `components` in the config. */
+export interface ComponentDefaults {
+  size?: Size;
+  radius?: Radius | 'size';
+  color?: Color;
+  variant?: Variant;
+  selectedVariant?: Variant;
+  gap?: Spacing;
+  padding?: Spacing;
+  shadow?: Shadow;
+  density?: Density;
+  textStyle?: TextStyle;
 }

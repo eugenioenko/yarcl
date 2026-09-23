@@ -186,7 +186,14 @@ export function DesignReference({ title = 'Design reference' }: DesignReferenceP
         </Table>
       </Section>
 
-      <Section title="Radii">
+      <Section
+        title="Radii"
+        description={
+          shape.defaults.radius === 'size'
+            ? 'Controls use the radius named like their size; other keys are exceptions.'
+            : `Default radius: ${shape.defaults.radius}.`
+        }
+      >
         <Inline>
           {keys<Radius>(config.radii).map((key) => (
             <Stack key={key} gap={config.defaults.gap} align="center">
@@ -331,9 +338,25 @@ export function DesignReference({ title = 'Design reference' }: DesignReferenceP
         />
       </Section>
 
-      <Section title="Defaults" description="Values used when a component prop is omitted.">
+      <Section
+        title="Defaults"
+        description="Values used when a component prop is omitted: the prop, then an enclosing group, then component defaults, then global defaults."
+      >
+        {Object.keys(shape.components ?? {}).length > 0 && (
+          <KeyValues
+            caption="Component defaults"
+            rows={Object.entries(shape.components ?? {}).map(([name, values]): [string, ReactNode] => [
+              name,
+              <Code>
+                {Object.entries(values ?? {})
+                  .map(([prop, value]) => `${prop}: ${value}`)
+                  .join(' · ')}
+              </Code>,
+            ])}
+          />
+        )}
         <KeyValues
-          caption="Defaults"
+          caption="Global defaults"
           rows={Object.entries(shape.defaults).map(([key, value]): [string, ReactNode] => [key, <Code>{value}</Code>])}
         />
       </Section>

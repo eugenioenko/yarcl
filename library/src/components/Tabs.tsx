@@ -6,9 +6,11 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, Size } from '../types';
+
+const own = defaultsFor('Tabs');
 
 interface TabsContextValue {
   value: string;
@@ -53,7 +55,7 @@ function TabsRoot({ value: valueProp, defaultValue, onValueChange, size, color, 
   const idFor = (kind: 'tab' | 'panel', v: string) => `${baseId}-${kind}-${v.replace(/[^\w-]/g, '_')}`;
   return (
     <TabsContext.Provider value={{ value, select, idFor }}>
-      <div className={cx('yarcl-tabs', sizeClass(size), colorClass(color), className)} {...props} />
+      <div className={cx('yarcl-tabs', sizeClass(size ?? own.size), colorClass(color ?? own.color), className)} {...props} />
     </TabsContext.Provider>
   );
 }

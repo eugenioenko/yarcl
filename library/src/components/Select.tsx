@@ -11,11 +11,13 @@ import {
   useTypeahead,
 } from '@floating-ui/react';
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import { CheckIcon, ChevronIcon, floatingMiddleware } from '../floating';
 import { useControllable } from '../hooks';
 import type { TokenProps } from '../types';
+
+const own = defaultsFor('Select');
 
 /** An option of a {@link Select} or {@link Combobox}. */
 export interface SelectOption<V extends string = string> {
@@ -137,7 +139,7 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
         ref={refs.setReference}
         type="button"
         disabled={disabled}
-        className={cx('yarcl-input yarcl-select', sizeClass(size), radiusClass(radius), colorClass(color), className)}
+        className={cx('yarcl-input yarcl-select', sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), colorClass(color ?? own.color), className)}
         {...getReferenceProps(rest)}
       >
         <span className={cx('yarcl-select-value', !selected && 'yarcl-select-placeholder')}>
@@ -152,7 +154,7 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
             <div
               ref={refs.setFloating}
               style={floatingStyles}
-              className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size), colorClass(color))}
+              className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size), colorClass(color ?? own.color))}
               {...getFloatingProps()}
             >
               {options.map((option, i) => {

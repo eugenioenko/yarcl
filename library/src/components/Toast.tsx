@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { colorClass, cx } from '../classes';
+import { colorClass, cx, defaultsFor } from '../classes';
 import type { Color } from '../types';
+
+const own = defaultsFor('Toast');
 
 /** Options for {@link toast}. */
 export interface ToastOptions {
@@ -153,7 +155,7 @@ function ToastItem({ entry }: { entry: ToastEntry }) {
   return (
     <div
       role={urgent ? 'alert' : 'status'}
-      className={cx('yarcl-toast', colorClass(color))}
+      className={cx('yarcl-toast', colorClass(color ?? own.color))}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}

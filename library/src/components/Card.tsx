@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
-import { cx, paddingClass, radiusClass, shadowClass } from '../classes';
+import { cx, defaultsFor, paddingClass, radiusClass, shadowClass } from '../classes';
 import type { Radius, Shadow, Spacing } from '../types';
+
+const own = defaultsFor('Card');
 
 /** Props for {@link Card}. */
 export interface CardProps extends ComponentProps<'div'> {
@@ -40,7 +42,7 @@ export function Card({ as = 'div', padding, radius, shadow, className, ...props 
   const Tag = as as 'div';
   return (
     <Tag
-      className={cx('yarcl-card', paddingClass(padding), radiusClass(radius), shadowClass(shadow), className)}
+      className={cx('yarcl-card', paddingClass(padding ?? own.padding), radiusClass(radius ?? own.radius), shadowClass(shadow ?? own.shadow), className)}
       {...props}
     />
   );

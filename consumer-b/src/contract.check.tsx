@@ -16,7 +16,7 @@ export const contract = (
     {/* @ts-expect-error */}
     <Button variant="solid" />
     {/* @ts-expect-error */}
-    <Input radius="soft" />
+    <Input radius="lg" />
     {/* @ts-expect-error */}
     <Inline gap="normal" />
     {/* @ts-expect-error */}

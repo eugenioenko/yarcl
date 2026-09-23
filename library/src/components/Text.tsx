@@ -1,7 +1,9 @@
 import config from '@yarcl/config';
 import type { ComponentProps, CSSProperties } from 'react';
-import { colorClass, cx, typeClass } from '../classes';
+import { colorClass, cx, defaultsFor, typeClass } from '../classes';
 import type { Color, TextStyle } from '../types';
+
+const own = defaultsFor('Text');
 
 /** Elements {@link Text} can render as. */
 export type TextElement = 'span' | 'p' | 'div' | 'strong' | 'em' | 'small' | 'code' | 'label';
@@ -36,7 +38,7 @@ export interface TextProps extends Omit<ComponentProps<'span'>, 'color'> {
  */
 export function Text({
   as = 'span',
-  textStyle = config.defaults.textStyle,
+  textStyle = own.textStyle ?? config.defaults.textStyle,
   color,
   muted,
   truncate,
@@ -51,7 +53,7 @@ export function Text({
       className={cx(
         'yarcl-text',
         typeClass(textStyle),
-        color && cx('yarcl-text-colored', colorClass(color)),
+        (color ?? own.color) && cx('yarcl-text-colored', colorClass(color ?? own.color)),
         muted && 'yarcl-text-muted',
         lines === 1 && 'yarcl-text-truncate',
         lines > 1 && 'yarcl-text-clamp',

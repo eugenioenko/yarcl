@@ -1,7 +1,9 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { colorClass, cx, defaultsFor, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import type { TokenProps } from '../types';
+
+const own = defaultsFor('Input');
 
 /**
  * Props for {@link Input}. Accepts all native `<input>` attributes except
@@ -21,5 +23,5 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'color' | 'siz
  */
 export function Input(props: InputProps) {
   const { size, radius, color, className, ...rest } = useFieldProps(props);
-  return <input className={cx('yarcl-input', sizeClass(size), radiusClass(radius), colorClass(color), className)} {...rest} />;
+  return <input className={cx('yarcl-input', sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), colorClass(color ?? own.color), className)} {...rest} />;
 }

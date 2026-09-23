@@ -8,17 +8,19 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { cx } from '../classes';
+import { cx, defaultsFor } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, Radius, Size, Variant } from '../types';
 import { Button } from './Button';
+
+const own = defaultsFor('ToggleGroup');
 
 interface ToggleGroupContextValue {
   selected: string[];
   toggle: (value: string) => void;
   size?: Size;
   color?: Color;
-  radius?: Radius;
+  radius?: Radius | 'size';
   variant: Variant;
   selectedVariant: Variant;
   disabled?: boolean;
@@ -32,8 +34,8 @@ export interface ToggleGroupBaseProps extends Omit<ComponentProps<'div'>, 'defau
   size?: Size;
   /** Color of every item, from the `colors` config. */
   color?: Color;
-  /** Radius of every item, from the `radii` config. */
-  radius?: Radius;
+  /** Radius of every item, from the `radii` config, or `'size'` to match the item size. */
+  radius?: Radius | 'size';
   /**
    * Variant of unselected items, from the `variants` config.
    * @default config.defaults.softVariant
@@ -92,11 +94,11 @@ function ToggleGroupRoot(props: ToggleGroupProps) {
     defaultValue,
     onValueChange,
     required,
-    size,
-    color,
-    radius,
-    variant = config.defaults.softVariant,
-    selectedVariant = config.defaults.variant,
+    size = own.size,
+    color = own.color,
+    radius = own.radius,
+    variant = own.variant ?? config.defaults.softVariant,
+    selectedVariant = own.selectedVariant ?? config.defaults.variant,
     attached = true,
     disabled,
     className,

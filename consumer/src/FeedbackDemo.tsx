@@ -58,7 +58,7 @@ export function FeedbackDemo() {
         ))}
         <Inline gap="tight">
           {tags.map((tag) => (
-            <Badge key={tag} radius="pill" color="neutral" onRemove={() => setTags(tags.filter((t) => t !== tag))} removeLabel={`Remove ${tag}`}>
+            <Badge key={tag} color="neutral" onRemove={() => setTags(tags.filter((t) => t !== tag))} removeLabel={`Remove ${tag}`}>
               {tag}
             </Badge>
           ))}
@@ -142,7 +142,7 @@ export function FeedbackDemo() {
           </Button>
           <Inline gap="tight">
             <Skeleton shape="circle" size="lg" />
-            <Skeleton shape="rect" width="6rem" height="3rem" radius="round" />
+            <Skeleton shape="rect" width="6rem" height="3rem" radius="xl" />
           </Inline>
         </Stack>
       </Inline>

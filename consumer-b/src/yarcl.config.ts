@@ -21,7 +21,7 @@ export default defineConfig({
     'talla-l': { height: '3.25rem', paddingX: '1.75rem', fontSize: '0.875rem', iconSize: '1.125rem' },
   },
   radii: {
-    none: '0',
+    square: '0',
     hairline: '2px',
   },
   variants: {
@@ -67,9 +67,14 @@ export default defineConfig({
   motion: { ...defaults.motion, fast: '160ms', easing: 'cubic-bezier(0.3, 0, 0, 1)' },
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '3px', color: 'clay' },
+  components: {
+    Button: { radius: 'square' },
+    IconButton: { radius: 'square' },
+    ToggleGroup: { radius: 'square' },
+  },
   defaults: {
     size: 'talla-m',
-    radius: 'none',
+    radius: 'hairline',
     color: 'ink',
     variant: 'filled',
     errorColor: 'alert',

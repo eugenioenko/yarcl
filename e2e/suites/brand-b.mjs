@@ -8,7 +8,9 @@ export default async function ({ page, check }) {
   const add = page.getByRole('button', { name: 'Add to bag' });
   const save = page.getByRole('button', { name: 'Save' });
   check('talla-l buttons share height', (await add.boundingBox()).height === (await save.boundingBox()).height);
-  check('radius none renders square corners', (await add.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
+  check('component default: buttons square', (await add.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
+  const shade = page.getByRole('combobox', { name: 'Shade' });
+  check('global default: other controls hairline', (await shade.evaluate((el) => getComputedStyle(el).borderRadius)) === '2px');
 
   await add.click();
   check('size required before adding', await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).isVisible());
