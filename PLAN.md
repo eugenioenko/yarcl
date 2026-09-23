@@ -23,6 +23,10 @@ A component library where the **consumer's config is the design system**. The li
 | Layout | `Stack` / `Inline` with `gap` from spacing, static `align` / `justify`; `Card` with `padding`, `radius`, `shadow`; `Divider` has no spacing prop — the parent's `gap` spaces it | Spacing lives in one place: the layout container |
 | Shadows | Plain strings; use `light-dark()` for the shadow color so it works in dark mode | Shadows need to be stronger on dark backgrounds |
 | Feedback | `Badge` and `Alert` use variant recipes with `defaults.softVariant`; `Badge` with `onRemove` is a removable tag; `Alert` has no live role unless `live` is set; `Spinner` inherits `currentColor` and the surrounding control's icon size; `Button`/`IconButton` `loading` disables, sets `aria-busy` and shows a Spinner; `Skeleton` uses `shape` (`text`/`control`/`circle`/`rect`) so it matches text styles and control heights | Loading placeholders line up with the content that replaces them |
+| Typography | `typography.fontFaces` → `@font-face` rules (format inferred, `local()` supported, `font-display: swap` default); `typography.headings` maps h1–h6 to text styles, so `<Heading level={n}>` renders `<hN>` with the configured look; `defaults.labelStyle` / `defaults.helperStyle` style Field labels, legends, helper and error text | Brand fonts and heading scale are design decisions, so they live in the config |
+| Groups | `ButtonGroup` passes size/color/variant/radius to child buttons and can attach them (shared borders, variant-derived separators); `ToggleGroup` (`single`/`multiple`, `aria-pressed`, roving tab stop, arrow keys, `required`), unselected/selected variants from `defaults.softVariant` / `defaults.variant`; `RadioGroup` is a fieldset/legend with shared name and value | Segmented controls and grouped actions without new tokens |
+| Reference page | `DesignReference` (`yarcl/reference`) renders the active config with library components: colors with contrast ratios, size scale with live controls, variants, spacing, shadows, fonts, text styles, heading levels, density, other tokens, defaults | The config documents itself |
+| Testing | `pnpm test:e2e`: Playwright (`playwright-core`, system Chrome or `CHROME_PATH`) against both consumers, light and dark; `pnpm typecheck` includes `@ts-expect-error` contract files in library and both consumers | Repeatable checkpoints |
 | Icon size | Part of each `sizes` entry (`iconSize`), not a separate group | Icons follow the control size automatically |
 | Text styles | Generated `.yarcl-type-{key}` classes; `family` references a `typography.families` key | Text styles usable before `Text` exists; group named `type` so the `Text` component can be `yarcl-text` |
 | Plugin runtime | Vite loads the plugin with Node's TS type stripping; relative imports in plugin code use `.ts` extensions. Publishing requires compiling the plugin (Node won't strip types inside `node_modules`) | Works from source in the workspace today |
@@ -77,11 +81,13 @@ export default defineConfig({
   shadows: { sm: '…', md: '…' },
   density: { compact: { paddingX: '0.5rem', paddingY: '0.25rem', fontSize: '0.8125rem' } },
   typography: {
+    fontFaces: [{ family: 'Fraunces', src: '/fonts/fraunces.woff2', weight: '100 900' }],
     families: { sans: '…', mono: '…' },
     styles: {
       display: { family: 'sans', size: '2.25rem', weight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' },
       body:    { family: 'sans', size: '1rem',    weight: 400, lineHeight: 1.5 },
     },
+    headings: { h1: 'display', h2: 'title', h3: 'title', h4: 'body', h5: 'body', h6: 'body' },
   },
   zIndex: { dropdown: 1000, tooltip: 1100, dialog: 1200, toast: 1300 /* + extras */ },
   motion: { fast: '120ms', base: '200ms', easing: '…' /* + extras */ },
@@ -89,7 +95,7 @@ export default defineConfig({
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
   defaults: {
     size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger',
-    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal', floatingShadow: 'md', density: 'compact', softVariant: 'subtle',
+    textStyle: 'body', labelStyle: 'label', helperStyle: 'caption', gap: 'normal', padding: 'normal', floatingShadow: 'md', density: 'compact', softVariant: 'subtle',
   },
 });
 ```
@@ -107,10 +113,10 @@ export default defineConfig({
 
 ### `defineConfig` checks
 
-- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`, `floatingShadow`, `density`, `softVariant`)
+- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `labelStyle`, `helperStyle`, `gap`, `padding`, `floatingShadow`, `density`, `softVariant`)
 - [x] Every color has `light` and `dark`
 - [x] Keys contain no whitespace (other characters are escaped in CSS)
-- [x] `focusRing.color` is a color key; each text style's `family` is a family key
+- [x] `focusRing.color` is a color key; each text style's `family` is a family key; every `typography.headings` level is a style key
 - [x] Required keys present in `neutrals`, `zIndex`, `motion`, `borders`
 - [x] Build/dev warning when a color's foreground fails WCAG AA (4.5:1) in either mode, or can't be computed (non-hex without `on`)
 
@@ -119,7 +125,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
 ## Components
 
 **Controls (shared size scale)**
-`Button`, `IconButton`, `Input`, `Textarea`, `Checkbox`, `Radio`, `Switch`
+`Button`, `IconButton`, `ButtonGroup`, `ToggleGroup`, `Input`, `Textarea`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`
 
 **Forms**
 `Field` (label, helper text, error; `aria-describedby` wiring)
@@ -164,12 +170,13 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
    - `defineConfig` checks
    - Config merge: export library `defaults` so consumers can spread and extend
 2. **Controls** ✅ — `IconButton`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Field`, `variants`
-   - Follow-up: `RadioGroup` (fieldset/legend) so radios work inside `Field`
+   - `RadioGroup` (fieldset/legend) added in Phase 7
 3. **Typography & layout** ✅ — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
 4. **Floating** ✅ — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
 5. **Overlays, navigation, data** ✅ — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
 6. **Feedback** ✅ — `Badge`, `Alert`, `Spinner`, `Skeleton`
-7. **Showcase** — generated reference page from config; second consumer app with a different brand; docs site from JSDoc; decision record (alias vs augmentation vs codegen)
+7. **Showcase** ✅ — `DesignReference` from config; `consumer-b` (Maison Talla) with a different brand, web font and keys; TypeDoc API docs (`pnpm docs:api`); ADR 0001 (alias vs augmentation vs codegen); README; e2e suites in repo (`pnpm test:e2e`)
+   - Also added: `typography.fontFaces`, `typography.headings`, `defaults.labelStyle` / `helperStyle`, `ButtonGroup`, `ToggleGroup`, `RadioGroup`
 
 ## Out of scope
 

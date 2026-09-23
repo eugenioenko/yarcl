@@ -1,6 +1,7 @@
 import type { ComponentProps } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
 import type { TokenProps, VariantProps } from '../types';
+import { useButtonGroup } from './ButtonGroup';
 import { Spinner } from './Spinner';
 
 /** Props for {@link Button}. Accepts all native `<button>` attributes except `color`. */
@@ -31,15 +32,16 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
+  const group = useButtonGroup();
   return (
     <button
       type={type}
       className={cx(
         'yarcl-button',
-        sizeClass(size),
-        radiusClass(radius),
-        colorClass(color),
-        variantClass(variant),
+        sizeClass(size ?? group?.size),
+        radiusClass(radius ?? group?.radius),
+        colorClass(color ?? group?.color),
+        variantClass(variant ?? group?.variant),
         className,
       )}
       disabled={disabled || loading}

@@ -1,5 +1,5 @@
 import { contrast, parseHex, readableOn } from './color.ts';
-import type { ColorPair, ColorToken, VariantToken, YarclShape } from './define.ts';
+import type { ColorPair, ColorToken, FontFaceToken, VariantToken, YarclShape } from './define.ts';
 
 const MIN_CONTRAST = 4.5;
 
@@ -59,6 +59,23 @@ const texts: Record<VariantToken['text'], string> = {
   color: 'var(--yarcl-c)',
   neutral: 'var(--yarcl-neutral-text)',
 };
+
+const formats: Record<string, string> = { woff2: 'woff2', woff: 'woff', ttf: 'truetype', otf: 'opentype' };
+
+function fontFace(face: FontFaceToken): string {
+  const sources = (Array.isArray(face.src) ? face.src : [face.src]).map((src) => {
+    if (src.startsWith('local(')) return src;
+    const format = formats[src.split(/[?#]/)[0].split('.').pop()?.toLowerCase() ?? ''];
+    return `url(${JSON.stringify(src)})${format ? ` format("${format}")` : ''}`;
+  });
+  return rule('@font-face', [
+    ['font-family', JSON.stringify(face.family)],
+    ['src', sources.join(', ')],
+    ...(face.weight != null ? [['font-weight', face.weight] as [string, string | number]] : []),
+    ...(face.style ? [['font-style', face.style] as [string, string]] : []),
+    ['font-display', face.display ?? 'swap'],
+  ]);
+}
 
 function rule(selector: string, declarations: [string, string | number][]): string {
   return `${selector} {\n${declarations.map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`;
@@ -170,5 +187,6 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     ['--yarcl-gap', `var(--yarcl-space-${ident(config.defaults.gap)})`],
   );
 
-  return [rule(':root', root), ...rules].join('\n\n') + '\n';
+  const faces = (config.typography.fontFaces ?? []).map(fontFace);
+  return [...faces, rule(':root', root), ...rules].join('\n\n') + '\n';
 }

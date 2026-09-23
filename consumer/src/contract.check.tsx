@@ -6,6 +6,9 @@ import {
   Field,
   Alert,
   Badge,
+  ButtonGroup,
+  RadioGroup,
+  ToggleGroup,
   Combobox,
   Skeleton,
   Spinner,
@@ -80,6 +83,13 @@ export const contract = (
     <Skeleton shape="control" size="lg" radius="soft" />
     <Skeleton textStyle="display" lines={3} />
     <Button loading />
+    <Heading level={3} />
+    <RadioGroup label="L" size="sm" color="success" orientation="horizontal" defaultValue="a">
+      <Radio value="a" />
+    </RadioGroup>
+    <ButtonGroup size="lg" variant="outline" color="neutral" radius="pill" attached={false} orientation="vertical" />
+    <ToggleGroup type="single" defaultValue="a" required variant="quiet" selectedVariant="solid" />
+    <ToggleGroup type="multiple" defaultValue={['a']} onValueChange={(v: string[]) => v} />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
@@ -145,6 +155,20 @@ export const contract = (
     <Skeleton shape="triangle" />
     {/* @ts-expect-error */}
     <Skeleton textStyle="heading" />
+    {/* @ts-expect-error */}
+    <RadioGroup>
+      <Radio value="a" />
+    </RadioGroup>
+    {/* @ts-expect-error */}
+    <ButtonGroup variant="soft" />
+    {/* @ts-expect-error */}
+    <ToggleGroup defaultValue="a" />
+    {/* @ts-expect-error */}
+    <ToggleGroup type="multiple" defaultValue="a" />
+    {/* @ts-expect-error */}
+    <ToggleGroup type="multiple" required />
+    {/* @ts-expect-error */}
+    <ToggleGroup type="single" selectedVariant="filled" />
   </>
 );
 

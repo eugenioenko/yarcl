@@ -1,0 +1,205 @@
+import { useState } from 'react';
+import {
+  Alert,
+  Badge,
+  Button,
+  ButtonGroup,
+  Dialog,
+  Divider,
+  Heading,
+  Inline,
+  Link,
+  Select,
+  Stack,
+  Table,
+  Tabs,
+  Text,
+  Toaster,
+  ToggleGroup,
+  toast,
+} from 'yarcl';
+import { DesignReference } from 'yarcl/reference';
+
+const garmentSizes = ['XS', 'S', 'M', 'L', 'XL'];
+const shades = [
+  { value: 'natural', label: 'Natural linen' },
+  { value: 'charcoal', label: 'Charcoal' },
+  { value: 'olive', label: 'Olive' },
+];
+
+type Scheme = 'light dark' | 'light' | 'dark';
+
+export function App() {
+  const params = new URLSearchParams(location.search);
+  const [scheme, setScheme] = useState<Scheme>(() => {
+    const s = params.get('scheme');
+    const initial: Scheme = s === 'light' || s === 'dark' ? s : 'light dark';
+    document.documentElement.style.colorScheme = initial;
+    return initial;
+  });
+  const [size, setSize] = useState<string | null>(null);
+  const [shade, setShade] = useState<string | null>('natural');
+  const [sizeError, setSizeError] = useState(false);
+
+  function applyScheme(next: Scheme) {
+    document.documentElement.style.colorScheme = next;
+    setScheme(next);
+  }
+
+  function addToBag() {
+    if (!size) {
+      setSizeError(true);
+      return;
+    }
+    toast({ title: 'Added to bag', description: `Linen overshirt · ${size} · ${shade}`, color: 'moss' });
+  }
+
+  return (
+    <Stack as="main" gap="12" className="page">
+      <Inline as="header" justify="between">
+        <Text textStyle="title">Maison Talla</Text>
+        <Inline gap="4">
+          <Link href="?page=shop" underline="hover" color="ink">
+            Shop
+          </Link>
+          <Link href="?page=reference" underline="hover" color="ink">
+            Design reference
+          </Link>
+          <ToggleGroup
+            type="single"
+            required
+            value={scheme}
+            onValueChange={(v) => v && applyScheme(v as Scheme)}
+            size="talla-s"
+            variant="text"
+            selectedVariant="line"
+            aria-label="Color scheme"
+          >
+            <ToggleGroup.Item value="light dark">Auto</ToggleGroup.Item>
+            <ToggleGroup.Item value="light">Light</ToggleGroup.Item>
+            <ToggleGroup.Item value="dark">Dark</ToggleGroup.Item>
+          </ToggleGroup>
+        </Inline>
+      </Inline>
+
+      {params.get('page') === 'reference' ? (
+        <DesignReference title="Maison Talla design system" />
+      ) : (
+        <div className="product">
+          <div className="product-image" role="img" aria-label="Linen overshirt in natural" />
+          <Stack gap="6">
+            <Stack gap="2">
+              <Inline gap="2">
+                <Badge color="clay">New season</Badge>
+                <Badge color="moss" variant="line">
+                  Organic linen
+                </Badge>
+              </Inline>
+              <Heading level={1}>Linen overshirt</Heading>
+              <Text textStyle="price">€ 185</Text>
+            </Stack>
+            <Text as="p" textStyle="lead" muted>
+              Cut from heavyweight Portuguese linen that softens with every wash. Relaxed through the body, with a
+              straight hem made to be worn open.
+            </Text>
+
+            <Stack gap="2">
+              <Inline justify="between">
+                <Text textStyle="label" id="size-label">
+                  SIZE
+                </Text>
+                <Dialog
+                  trigger={
+                    <Button variant="text" size="talla-s">
+                      Size guide
+                    </Button>
+                  }
+                  title="Size guide"
+                  description="Body measurements in centimetres."
+                  width="34rem"
+                >
+                  <Table caption="Chest and length">
+                    <Table.Head>
+                      <Table.Row>
+                        <Table.HeaderCell>Size</Table.HeaderCell>
+                        <Table.HeaderCell align="end">Chest</Table.HeaderCell>
+                        <Table.HeaderCell align="end">Length</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Head>
+                    <Table.Body>
+                      {garmentSizes.map((s, i) => (
+                        <Table.Row key={s}>
+                          <Table.Cell>{s}</Table.Cell>
+                          <Table.Cell align="end">{96 + i * 6}</Table.Cell>
+                          <Table.Cell align="end">{72 + i * 2}</Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                </Dialog>
+              </Inline>
+              <ToggleGroup
+                type="single"
+                value={size}
+                onValueChange={(v) => {
+                  setSize(v);
+                  setSizeError(false);
+                }}
+                attached={false}
+                variant="line"
+                selectedVariant="filled"
+                aria-labelledby="size-label"
+              >
+                {garmentSizes.map((s) => (
+                  <ToggleGroup.Item key={s} value={s} icon>
+                    {s}
+                  </ToggleGroup.Item>
+                ))}
+              </ToggleGroup>
+              {sizeError && (
+                <Text textStyle="fine" color="alert" role="alert">
+                  Choose a size first.
+                </Text>
+              )}
+            </Stack>
+
+            <Select options={shades} value={shade} onValueChange={setShade} aria-label="Shade" />
+
+            <ButtonGroup attached={false} size="talla-l">
+              <Button onClick={addToBag} className="grow">
+                Add to bag
+              </Button>
+              <Button variant="line" onClick={() => toast({ title: 'Saved to wishlist', color: 'clay' })}>
+                Save
+              </Button>
+            </ButtonGroup>
+
+            <Alert color="clay" title="Free returns within 30 days">
+              Delivered in 2–4 working days across the EU.
+            </Alert>
+
+            <Divider />
+
+            <Tabs defaultValue="details">
+              <Tabs.List aria-label="Product information">
+                <Tabs.Trigger value="details">Details</Tabs.Trigger>
+                <Tabs.Trigger value="care">Care</Tabs.Trigger>
+                <Tabs.Trigger value="shipping">Shipping</Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Panel value="details">
+                <Text as="p">100% linen, 230 gsm. Corozo buttons. Made in Porto.</Text>
+              </Tabs.Panel>
+              <Tabs.Panel value="care">
+                <Text as="p">Machine wash at 30°. Line dry. Iron while damp.</Text>
+              </Tabs.Panel>
+              <Tabs.Panel value="shipping">
+                <Text as="p">Carbon-neutral shipping. Duties included.</Text>
+              </Tabs.Panel>
+            </Tabs>
+          </Stack>
+        </div>
+      )}
+      <Toaster placement="top-right" />
+    </Stack>
+  );
+}

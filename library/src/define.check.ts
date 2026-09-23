@@ -82,3 +82,35 @@ defineConfig({
   // @ts-expect-error
   defaults: { ...defaults.defaults, softVariant: 'subtle' },
 });
+
+defineConfig({
+  ...defaults,
+  typography: {
+    ...defaults.typography,
+    fontFaces: [{ family: 'Inter', src: ['/fonts/inter.woff2', 'local(Inter)'], weight: '100 900' }],
+  },
+});
+
+defineConfig({
+  ...defaults,
+  typography: {
+    ...defaults.typography,
+    // @ts-expect-error
+    headings: { ...defaults.typography.headings, h3: 'huge' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  typography: {
+    ...defaults.typography,
+    // @ts-expect-error
+    headings: { h1: 'display', h2: 'heading' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  defaults: { ...defaults.defaults, labelStyle: 'tiny' },
+});

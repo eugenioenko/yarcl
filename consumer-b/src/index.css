@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  font-family: var(--yarcl-font-sans);
+  color: var(--yarcl-neutral-text);
+  background: var(--yarcl-neutral-bg);
+}
+
+.page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--yarcl-space-6) var(--yarcl-space-4);
+}
+
+.product {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: var(--yarcl-space-12);
+  align-items: start;
+}
+
+.product-image {
+  aspect-ratio: 4 / 5;
+  background:
+    radial-gradient(120% 80% at 30% 20%, light-dark(#efe6d8, #3a332e), transparent),
+    linear-gradient(160deg, light-dark(#e2d6c2, #2a2420), light-dark(#cdbba1, #1c1917));
+}
+
+.grow {
+  flex: 1;
+}

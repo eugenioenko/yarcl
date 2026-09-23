@@ -40,7 +40,7 @@ function TableRoot({ density, striped, interactive, caption, className, children
 /** Horizontal alignment of a cell's content. `end` also uses tabular numbers, for numeric columns. */
 export type CellAlign = 'start' | 'center' | 'end';
 
-/** Props for {@link Table.HeaderCell}. */
+/** Props for `Table.HeaderCell`. */
 export interface TableHeaderCellProps extends Omit<ComponentProps<'th'>, 'align'> {
   /**
    * Content alignment.
@@ -53,7 +53,7 @@ function TableHeaderCell({ align = 'start', scope = 'col', className, ...props }
   return <th scope={scope} className={cx(`yarcl-cell-${align}`, className)} {...props} />;
 }
 
-/** Props for {@link Table.Cell}. */
+/** Props for `Table.Cell`. */
 export interface TableCellProps extends Omit<ComponentProps<'td'>, 'align'> {
   /**
    * Content alignment.

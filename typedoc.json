@@ -1,0 +1,27 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "yarcl",
+  "entryPoints": [
+    "library/src/index.ts",
+    "library/src/define.ts",
+    "library/src/plugin.ts",
+    "library/src/reference/index.ts"
+  ],
+  "tsconfig": "library/tsconfig.json",
+  "out": "docs/api",
+  "readme": "README.md",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "sort": [
+    "kind",
+    "alphabetical"
+  ],
+  "navigation": {
+    "includeCategories": false,
+    "includeGroups": true
+  },
+  "validation": {
+    "notExported": false
+  },
+  "disableSources": true
+}

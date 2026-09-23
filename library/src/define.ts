@@ -53,6 +53,26 @@ export interface DensityToken {
   fontSize: string;
 }
 
+/** A font file to load, emitted as an `@font-face` rule. */
+export interface FontFaceToken {
+  /** Family name to reference from `typography.families`, e.g. `'Inter'`. */
+  family: string;
+  /**
+   * Font file URL(s), e.g. `'/fonts/inter.woff2'`, or `'local(Inter)'`.
+   * The format is inferred from the extension.
+   */
+  src: string | string[];
+  /** Weight or weight range, e.g. `400` or `'100 900'` for variable fonts. */
+  weight?: number | string;
+  /** Font style of this file. */
+  style?: 'normal' | 'italic';
+  /**
+   * How the font displays while loading.
+   * @default 'swap'
+   */
+  display?: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
+}
+
 /** A named text style. */
 export interface TextStyleToken {
   /** A key of `typography.families`. */
@@ -103,12 +123,16 @@ export interface YarclShape {
   shadows: Record<string, string>;
   /** Table densities. Keys become the valid values of the `density` prop. */
   density: Record<string, DensityToken>;
-  /** Font families and named text styles. */
+  /** Font files, font families, named text styles and heading levels. */
   typography: {
+    /** Font files to load. Reference their `family` names in `families`. */
+    fontFaces?: readonly FontFaceToken[];
     /** Font stacks, e.g. `{ sans: 'Inter, system-ui, sans-serif' }`. */
     families: Record<string, string>;
     /** Named text styles. Keys become the valid text style names. */
     styles: Record<string, TextStyleToken>;
+    /** Text style for each heading level, used by `Heading`. Each must be a key of `styles`. */
+    headings: { h1: string; h2: string; h3: string; h4: string; h5: string; h6: string };
   };
   /** Stacking order of floating layers. Extra keys allowed. */
   zIndex: Record<string, number> & { dropdown: number; tooltip: number; dialog: number; toast: number };
@@ -142,8 +166,10 @@ export interface YarclShape {
     errorColor: string;
     /** Text style for `Text`. A key of `typography.styles`. */
     textStyle: string;
-    /** Text style for `Heading`. A key of `typography.styles`. */
-    headingStyle: string;
+    /** Text style for form labels and legends. A key of `typography.styles`. */
+    labelStyle: string;
+    /** Text style for helper and error text below form controls. A key of `typography.styles`. */
+    helperStyle: string;
     /** Gap for `Stack` and `Inline`. A key of `spacing`. */
     gap: string;
     /** Padding for `Card`. A key of `spacing`. */
@@ -182,6 +208,7 @@ type Checks<T extends YarclShape> = {
     styles: KeyCheck<T['typography']['styles']> & {
       [K in keyof T['typography']['styles']]: { family: keyof T['typography']['families'] };
     };
+    headings: Record<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6', keyof T['typography']['styles']>;
   };
   focusRing: { color: keyof T['colors'] };
   defaults: {
@@ -191,7 +218,8 @@ type Checks<T extends YarclShape> = {
     variant: keyof T['variants'];
     errorColor: keyof T['colors'];
     textStyle: keyof T['typography']['styles'];
-    headingStyle: keyof T['typography']['styles'];
+    labelStyle: keyof T['typography']['styles'];
+    helperStyle: keyof T['typography']['styles'];
     gap: keyof T['spacing'];
     padding: keyof T['spacing'];
     floatingShadow: keyof T['shadows'];
@@ -205,7 +233,7 @@ type Checks<T extends YarclShape> = {
  *
  * Checks at compile time that:
  * - every color has a `light` and `dark` value
- * - `defaults`, `focusRing.color` and each text style's `family` reference existing keys
+ * - `defaults`, `focusRing.color`, `typography.headings` and each text style's `family` reference existing keys
  * - no key contains whitespace
  *
  * Returns the config unchanged with literal types preserved, so the library can derive

@@ -103,7 +103,7 @@ export function Modal({
           <div className="yarcl-modal-content">
             <div className="yarcl-modal-header">
               <div className="yarcl-modal-heading">
-                <h2 id={titleId} className={cx('yarcl-modal-title', typeClass(config.defaults.headingStyle))}>
+                <h2 id={titleId} className={cx('yarcl-modal-title', typeClass(config.typography.headings.h2))}>
                   {title}
                 </h2>
                 {description != null && (

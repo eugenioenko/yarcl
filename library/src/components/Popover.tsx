@@ -45,7 +45,7 @@ function usePopoverState({ open: openProp, defaultOpen = false, onOpenChange, pl
 
 /** Props for {@link Popover}. */
 export interface PopoverProps {
-  /** {@link Popover.Trigger} and {@link Popover.Content}. */
+  /** `Popover.Trigger` and `Popover.Content`. */
   children?: ReactNode;
   /** Controlled open state. */
   open?: boolean;
@@ -73,7 +73,7 @@ function PopoverRoot(props: PopoverProps) {
   return <PopoverContext.Provider value={state}>{props.children}</PopoverContext.Provider>;
 }
 
-/** Props for {@link Popover.Trigger}. */
+/** Props for `Popover.Trigger`. */
 export interface PopoverTriggerProps {
   /** A single element, usually a {@link Button}. It receives the click handler and ARIA attributes. */
   children: ReactElement;
@@ -84,7 +84,7 @@ function PopoverTrigger({ children }: PopoverTriggerProps) {
   return useTrigger(children, refs.setReference, getReferenceProps);
 }
 
-/** Props for {@link Popover.Content}. */
+/** Props for `Popover.Content`. */
 export interface PopoverContentProps extends ComponentProps<'div'> {
   /**
    * Inner padding, from the `spacing` config.

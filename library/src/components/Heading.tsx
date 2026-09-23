@@ -8,8 +8,9 @@ export interface HeadingProps extends Omit<ComponentProps<'h2'>, 'color'> {
   /** Heading level: renders `<h1>` … `<h6>`. Choose by document structure, not by size. */
   level: 1 | 2 | 3 | 4 | 5 | 6;
   /**
-   * Text style, from the `typography.styles` config. Sets the visual size independently of `level`.
-   * @default config.defaults.headingStyle
+   * Text style, from the `typography.styles` config. Overrides the level's style when the
+   * visual size should differ from the document structure.
+   * @default config.typography.headings[`h${level}`]
    */
   textStyle?: TextStyle;
   /** Semantic color, from the `colors` config. Uses the default text color when omitted. */
@@ -17,18 +18,21 @@ export interface HeadingProps extends Omit<ComponentProps<'h2'>, 'color'> {
 }
 
 /**
- * A section heading. `level` sets the semantics, `textStyle` sets the look.
+ * A section heading. Renders `<h1>` … `<h6>` styled with the level's text style from
+ * `typography.headings`; `textStyle` overrides the look without changing the level.
  *
  * @example
  * ```tsx
- * <Heading level={1} textStyle="display">Settings</Heading>
+ * <Heading level={1}>Settings</Heading>
+ * <Heading level={2} textStyle="display">Big section title</Heading>
  * ```
  */
-export function Heading({ level, textStyle = config.defaults.headingStyle, color, className, ...props }: HeadingProps) {
+export function Heading({ level, textStyle, color, className, ...props }: HeadingProps) {
   const Tag = `h${level}` as 'h2';
+  const style: TextStyle = textStyle ?? config.typography.headings[`h${level}`];
   return (
     <Tag
-      className={cx('yarcl-heading', typeClass(textStyle), color && cx('yarcl-text-colored', colorClass(color)), className)}
+      className={cx('yarcl-heading', typeClass(style), color && cx('yarcl-text-colored', colorClass(color)), className)}
       {...props}
     />
   );

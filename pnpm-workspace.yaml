@@ -1,6 +1,7 @@
 packages:
   - library
   - consumer
+  - consumer-b
 
 allowBuilds:
   esbuild: true

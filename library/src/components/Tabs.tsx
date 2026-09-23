@@ -24,7 +24,8 @@ function useTabsContext(component: string) {
   return context;
 }
 
-interface TabsBaseProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'color'> {
+/** Props shared by both forms of {@link TabsProps}. */
+export interface TabsBaseProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'color'> {
   /** Called with the newly selected tab's value. */
   onValueChange?: (value: string) => void;
   /**
@@ -57,9 +58,9 @@ function TabsRoot({ value: valueProp, defaultValue, onValueChange, size, color, 
   );
 }
 
-/** Props for {@link Tabs.List}. */
+/** Props for `Tabs.List`. */
 export interface TabsListProps extends ComponentProps<'div'> {
-  /** {@link Tabs.Trigger}s. */
+  /** `Tabs.Trigger`s. */
   children?: ReactNode;
 }
 
@@ -86,9 +87,9 @@ function TabsList({ className, onKeyDown, ...props }: TabsListProps) {
   return <div role="tablist" className={cx('yarcl-tabs-list', className)} onKeyDown={handleKeyDown} {...props} />;
 }
 
-/** Props for {@link Tabs.Trigger}. */
+/** Props for `Tabs.Trigger`. */
 export interface TabsTriggerProps extends Omit<ComponentProps<'button'>, 'value'> {
-  /** Identifies the tab; matches a {@link Tabs.Panel}'s `value`. */
+  /** Identifies the tab; matches a `Tabs.Panel`'s `value`. */
   value: string;
 }
 
@@ -114,9 +115,9 @@ function TabsTrigger({ value, className, onClick, ...props }: TabsTriggerProps) 
   );
 }
 
-/** Props for {@link Tabs.Panel}. */
+/** Props for `Tabs.Panel`. */
 export interface TabsPanelProps extends Omit<ComponentProps<'div'>, 'value'> {
-  /** Matches the `value` of the {@link Tabs.Trigger} that shows this panel. */
+  /** Matches the `value` of the `Tabs.Trigger` that shows this panel. */
   value: string;
 }
 

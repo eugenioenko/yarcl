@@ -240,9 +240,7 @@
 }
 
 .yarcl-field-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.4;
+  color: var(--yarcl-neutral-text);
 }
 
 .yarcl-field-required {
@@ -252,8 +250,6 @@
 .yarcl-field-description,
 .yarcl-field-error {
   margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.4;
 }
 
 .yarcl-field-description {
@@ -1151,4 +1147,92 @@ html:has(.yarcl-modal[open]) {
   .yarcl-skeleton {
     animation: none;
   }
+}
+
+/* RadioGroup */
+
+.yarcl-radio-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.yarcl-radio-group > legend {
+  padding: 0;
+  margin-bottom: 0.375rem;
+}
+
+.yarcl-radio-group-options {
+  display: flex;
+  gap: 0.5rem 1rem;
+}
+
+.yarcl-radio-group-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.yarcl-radio-group-horizontal {
+  flex-wrap: wrap;
+}
+
+.yarcl-radio-input[aria-invalid='true'] {
+  border-color: var(--yarcl-error);
+}
+
+/* ButtonGroup & ToggleGroup */
+
+.yarcl-button-group {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.yarcl-button-group-vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.yarcl-button-group-attached {
+  gap: 0;
+}
+
+.yarcl-button-group-attached > .yarcl-button {
+  position: relative;
+}
+
+.yarcl-button-group-attached > .yarcl-button:hover,
+.yarcl-button-group-attached > .yarcl-button:focus-visible,
+.yarcl-button-group-attached > .yarcl-button[aria-pressed='true'] {
+  z-index: 1;
+}
+
+.yarcl-button-group-attached.yarcl-button-group-horizontal > .yarcl-button:not(:first-child) {
+  margin-inline-start: calc(var(--yarcl-border-width) * -1);
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.yarcl-button-group-attached.yarcl-button-group-horizontal > .yarcl-button:not(:last-child) {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.yarcl-button-group-attached.yarcl-button-group-vertical > .yarcl-button:not(:first-child) {
+  margin-block-start: calc(var(--yarcl-border-width) * -1);
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.yarcl-button-group-attached.yarcl-button-group-vertical > .yarcl-button:not(:last-child) {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.yarcl-button-group-attached.yarcl-button-group-horizontal > .yarcl-button:not(:first-child) {
+  border-inline-start-color: color-mix(in oklab, var(--yarcl-v-border), var(--yarcl-v-fg) 30%);
+}
+
+.yarcl-button-group-attached.yarcl-button-group-vertical > .yarcl-button:not(:first-child) {
+  border-block-start-color: color-mix(in oklab, var(--yarcl-v-border), var(--yarcl-v-fg) 30%);
 }

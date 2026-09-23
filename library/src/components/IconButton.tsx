@@ -1,6 +1,7 @@
 import type { ComponentProps } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
 import type { TokenProps, VariantProps } from '../types';
+import { useButtonGroup } from './ButtonGroup';
 import { Spinner } from './Spinner';
 
 /** Props for {@link IconButton}. `aria-label` is required because the button has no visible text. */
@@ -32,15 +33,16 @@ export function IconButton({
   children,
   ...props
 }: IconButtonProps) {
+  const group = useButtonGroup();
   return (
     <button
       type={type}
       className={cx(
         'yarcl-button yarcl-icon-button',
-        sizeClass(size),
-        radiusClass(radius),
-        colorClass(color),
-        variantClass(variant),
+        sizeClass(size ?? group?.size),
+        radiusClass(radius ?? group?.radius),
+        colorClass(color ?? group?.color),
+        variantClass(variant ?? group?.variant),
         className,
       )}
       disabled={disabled || loading}

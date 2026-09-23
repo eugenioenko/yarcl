@@ -73,7 +73,7 @@ function useMenuState({ open: openProp, defaultOpen = false, onOpenChange, place
 
 /** Props for {@link Menu}. */
 export interface MenuProps {
-  /** {@link Menu.Trigger} and {@link Menu.Content}. */
+  /** `Menu.Trigger` and `Menu.Content`. */
   children?: ReactNode;
   /** Controlled open state. */
   open?: boolean;
@@ -101,7 +101,7 @@ function MenuRoot(props: MenuProps) {
   return <MenuContext.Provider value={state}>{props.children}</MenuContext.Provider>;
 }
 
-/** Props for {@link Menu.Trigger}. */
+/** Props for `Menu.Trigger`. */
 export interface MenuTriggerProps {
   /** A single element, usually a {@link Button}. */
   children: ReactElement;
@@ -112,7 +112,7 @@ function MenuTrigger({ children }: MenuTriggerProps) {
   return useTrigger(children, refs.setReference, getReferenceProps);
 }
 
-/** Props for {@link Menu.Content}. */
+/** Props for `Menu.Content`. */
 export interface MenuContentProps extends ComponentProps<'div'> {}
 
 function MenuContent({ className, style, children, ...props }: MenuContentProps) {
@@ -137,7 +137,7 @@ function MenuContent({ className, style, children, ...props }: MenuContentProps)
   );
 }
 
-/** Props for {@link Menu.Item}. */
+/** Props for `Menu.Item`. */
 export interface MenuItemProps extends Omit<ComponentProps<'button'>, 'color' | 'onSelect'> {
   /** Called when the item is chosen by click, Enter or Space. The menu closes afterwards. */
   onSelect?: () => void;
@@ -175,7 +175,7 @@ function MenuItem({ onSelect, color, textValue, disabled, className, children, .
   );
 }
 
-/** A line between groups of {@link Menu.Item}s. */
+/** A line between groups of `Menu.Item`s. */
 function MenuSeparator() {
   return <div role="separator" className="yarcl-listbox-separator" />;
 }

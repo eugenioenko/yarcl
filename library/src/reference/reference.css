@@ -1,0 +1,58 @@
+.yarcl-ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--yarcl-gap);
+}
+
+.yarcl-ref-color {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.yarcl-ref-swatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--yarcl-c-on);
+  background: var(--yarcl-c);
+  border-radius: 0.375rem;
+}
+
+.yarcl-ref-neutral {
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
+.yarcl-ref-code {
+  font-family: var(--yarcl-ref-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace);
+  font-size: 0.85em;
+  overflow-wrap: anywhere;
+}
+
+.yarcl-ref-radius {
+  width: 4rem;
+  height: 4rem;
+  background: color-mix(in oklab, var(--yarcl-focus-color) 18%, var(--yarcl-neutral-surface));
+  border: var(--yarcl-border-width) solid var(--yarcl-focus-color);
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-ref-space {
+  height: 1rem;
+  background: var(--yarcl-focus-color);
+  border-radius: 2px;
+}
+
+.yarcl-ref-label {
+  min-width: 6rem;
+}
+
+.yarcl-ref-shadow {
+  width: 8rem;
+}
+
+.yarcl-ref-input {
+  width: 8rem;
+}

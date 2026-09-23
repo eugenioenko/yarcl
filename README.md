@@ -1,0 +1,117 @@
+# yarcl
+
+A React component library where **the consumer's config is the design system**.
+
+The library ships mechanisms. Your config file makes the decisions: which colors, sizes, radii, variants, spacing, text styles and densities exist. Every key you define is at the same time
+
+- a **valid prop value**: `<Button size="talla-xl" />` compiles only if `talla-xl` is in your config, and
+- a **rendered style**: the plugin generates CSS for it at build time.
+
+No codegen, no module augmentation, no provider. One file.
+
+```ts
+// src/yarcl.config.ts
+import { defineConfig } from 'yarcl/define';
+import defaults from 'yarcl/defaults';
+
+export default defineConfig({
+  ...defaults,
+  colors: {
+    ink: { light: '#1c1917', dark: '#f5f5f4' },
+    clay: { light: '#a4441f', dark: '#f0a07a' },
+  },
+  sizes: {
+    'talla-s': { height: '2.25rem', paddingX: '0.875rem', fontSize: '0.75rem', iconSize: '0.875rem' },
+    'talla-m': { height: '2.75rem', paddingX: '1.25rem', fontSize: '0.8125rem', iconSize: '1rem' },
+  },
+  defaults: { ...defaults.defaults, size: 'talla-m', color: 'ink' },
+});
+```
+
+```tsx
+<Button size="talla-m" color="clay" />  // ✓
+<Button size="md" />                    // ✗ Type '"md"' is not assignable to type '"talla-s" | "talla-m"'
+```
+
+## How it works
+
+1. **`as const` + `keyof typeof`**: `defineConfig` keeps literal types, and the library derives `Size`, `Color`, `Variant`, … from them.
+2. **A module alias**: the library imports `@yarcl/config`. The Vite plugin points it at your config file at runtime, and a matching `paths` entry in your `tsconfig.json` does the same for types. If your file doesn't exist, both fall back to the library defaults.
+3. **Build-time CSS**: the plugin loads your config and serves `virtual:yarcl.css`: CSS variables on `:root` plus one `yarcl-{group}-{key}` class per key. Components only set class names; no inline styles, nothing computed at runtime. Editing the config hot-reloads the CSS.
+
+Why an alias instead of module augmentation or codegen: see [ADR 0001](docs/decisions/0001-config-delivery.md).
+
+## Setup
+
+```ts
+// vite.config.ts
+import react from '@vitejs/plugin-react';
+import { yarcl } from 'yarcl/plugin';
+
+export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })] });
+```
+
+```jsonc
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/yarcl/src/yarcl.default.config.ts"]
+    }
+  }
+}
+```
+
+## What the config controls
+
+| Group | Keys | Used by |
+|---|---|---|
+| `colors` | open, `{ light, dark, on? }` → `light-dark()` | `color` prop everywhere |
+| `neutrals` | `bg`, `surface`, `text`, `muted`, `border` + any | surfaces, text, borders |
+| `sizes` | open, `{ height, paddingX, fontSize, iconSize }` | every control; same size = same height |
+| `radii` | open | `radius` prop |
+| `variants` | open recipes: `background` / `border` / `text` | `variant` prop (Button, Badge, Alert, …) |
+| `spacing` | open | `gap`, `padding` |
+| `shadows` | open | `shadow` prop, floating panels |
+| `density` | open, `{ paddingX, paddingY, fontSize }` | `Table` |
+| `typography` | `fontFaces`, `families`, `styles` (open), `headings` h1–h6 | `Text`, `Heading`, labels |
+| `zIndex`, `motion`, `borders` | required keys + any | layering, transitions |
+| `focusRing`, `defaults` | references to keys above | focus outline, omitted props |
+
+`defineConfig` checks at compile time that every color has both modes, that references (`defaults`, `headings`, `focusRing.color`, text style families) point at existing keys, and that required keys exist. The plugin warns when a color's foreground fails WCAG AA contrast.
+
+## Components
+
+**Controls**: Button, IconButton, ButtonGroup, ToggleGroup, Input, Textarea, Checkbox, Radio, RadioGroup, Switch, Select, Combobox, Field
+**Typography & layout**: Text, Heading, Link, Stack, Inline, Card, Divider
+**Floating**: Tooltip, HoverCard, Popover, Menu
+**Overlays**: Dialog, Drawer, Toast
+**Data & navigation**: Tabs, Table
+**Feedback**: Badge, Alert, Spinner, Skeleton
+**Reference**: `DesignReference` from `yarcl/reference` renders your whole design system from your config.
+
+## Repository
+
+| Path | What |
+|---|---|
+| `library/` | the `yarcl` package: components, `defineConfig`, Vite plugin, CSS generator |
+| `consumer/` | demo app with one design system; every component, light and dark |
+| `consumer-b/` | "Maison Talla": the same library with a completely different config |
+| `docs/decisions/` | architecture decision records |
+| `PLAN.md` | decisions, schema, phases |
+
+```sh
+pnpm install
+pnpm dev          # consumer on :5173
+pnpm dev:b        # consumer-b on :5174
+pnpm typecheck    # library + both consumers, including @ts-expect-error contract checks
+pnpm test:e2e     # keyboard/mouse checks in Chrome, light and dark
+pnpm docs:api     # API reference from JSDoc → docs/api
+```
+
+## Limitations
+
+- **Vite only.** The alias works the same way in webpack, Rollup, esbuild and Turbopack; adapters aren't written yet.
+- **One config per build.** Two brands in one bundle would need a Provider for the runtime values.
+- **Types are a development-time guarantee.** Keep config changes and deploys in the same build.
+- **The package ships TypeScript source.** Publishing it needs a compiled plugin (Node won't strip types inside `node_modules`).

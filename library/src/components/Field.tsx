@@ -1,5 +1,6 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
-import { cx } from '../classes';
+import config from '@yarcl/config';
+import { cx, typeClass } from '../classes';
 import { FieldContext } from '../field-context';
 
 /** Props for {@link Field}. */
@@ -38,7 +39,7 @@ export function Field({ label, description, error, required, children, className
       value={{ id, describedBy: cx(descriptionId, errorId) || undefined, invalid: errorId != null, required }}
     >
       <div className={cx('yarcl-field', className)} {...props}>
-        <label className="yarcl-field-label" htmlFor={id}>
+        <label className={cx('yarcl-field-label', typeClass(config.defaults.labelStyle))} htmlFor={id}>
           {label}
           {required && (
             <span className="yarcl-field-required" aria-hidden="true">
@@ -48,12 +49,12 @@ export function Field({ label, description, error, required, children, className
         </label>
         {children}
         {descriptionId && (
-          <p className="yarcl-field-description" id={descriptionId}>
+          <p className={cx('yarcl-field-description', typeClass(config.defaults.helperStyle))} id={descriptionId}>
             {description}
           </p>
         )}
         {errorId && (
-          <p className="yarcl-field-error" id={errorId}>
+          <p className={cx('yarcl-field-error', typeClass(config.defaults.helperStyle))} id={errorId}>
             {error}
           </p>
         )}
