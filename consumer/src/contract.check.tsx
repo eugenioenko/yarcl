@@ -4,7 +4,13 @@ import {
   Checkbox,
   Divider,
   Field,
+  Combobox,
   Heading,
+  HoverCard,
+  Menu,
+  Popover,
+  Select,
+  Tooltip,
   IconButton,
   Inline,
   Input,
@@ -35,6 +41,25 @@ export const contract = (
     <Inline gap="tight" justify="between" wrap={false} />
     <Card padding="tight" radius="pill" shadow="lg" as="article" />
     <Divider orientation="vertical" />
+    <Tooltip content="Hi">
+      <Button />
+    </Tooltip>
+    <HoverCard content="Hi" padding="tight" radius="round">
+      <Link />
+    </HoverCard>
+    <Popover placement="top" modal>
+      <Popover.Trigger>
+        <Button />
+      </Popover.Trigger>
+      <Popover.Content padding="loose" />
+    </Popover>
+    <Menu size="sm">
+      <Menu.Content>
+        <Menu.Item color="danger" />
+      </Menu.Content>
+    </Menu>
+    <Select options={[{ value: 'a', label: 'A' }]} size="lg" radius="pill" color="success" />
+    <Combobox options={[]} filter={false} allowCustomValue size="xs" />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
@@ -66,5 +91,19 @@ export const contract = (
     <Card shadow="xl" />
     {/* @ts-expect-error */}
     <Card padding="lg" />
+    {/* @ts-expect-error */}
+    <Tooltip>
+      <Button />
+    </Tooltip>
+    {/* @ts-expect-error */}
+    <Menu.Item color="primary" />
+    {/* @ts-expect-error */}
+    <Select options={[]} size="huge" />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} radius="full" />
+    {/* @ts-expect-error */}
+    <Popover.Content padding="md" />
+    {/* @ts-expect-error */}
+    <Select options={[{ value: 'a' }]} />
   </>
 );

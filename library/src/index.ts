@@ -31,6 +31,18 @@ export { Card } from './components/Card';
 export type { CardProps } from './components/Card';
 export { Divider } from './components/Divider';
 export type { DividerProps } from './components/Divider';
+export { Popover } from './components/Popover';
+export type { PopoverProps, PopoverTriggerProps, PopoverContentProps } from './components/Popover';
+export { Tooltip } from './components/Tooltip';
+export type { TooltipProps } from './components/Tooltip';
+export { HoverCard } from './components/HoverCard';
+export type { HoverCardProps } from './components/HoverCard';
+export { Menu } from './components/Menu';
+export type { MenuProps, MenuTriggerProps, MenuContentProps, MenuItemProps } from './components/Menu';
+export { Select } from './components/Select';
+export type { SelectProps, SelectOption } from './components/Select';
+export { Combobox } from './components/Combobox';
+export type { ComboboxProps } from './components/Combobox';
 export type {
   Size,
   Radius,

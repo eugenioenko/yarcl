@@ -29,7 +29,11 @@ A component library where the **consumer's config is the design system**. The li
 | Control height | Fixed `height` in rem from the shared size scale; buttons `nowrap` | Same approach as Chakra/Mantine/shadcn/Radix; same size = same height by construction |
 | Color modes | Each color is a `{ light, dark }` pair → `light-dark()`; `:root { color-scheme: light dark }` | Automatic with OS; manual toggle via `color-scheme` on any element; no JS |
 | Foreground colors | Computed by contrast at build time; optional `on` override per color | Readable text on any semantic color |
-| Floating elements | `@floating-ui/react` | Positioning + hover/focus/dismiss/list navigation/typeahead |
+| Floating elements | `@floating-ui/react`; positioned with `top`/`left` (`transform: false`) so CSS can animate `transform`; shared `.yarcl-panel` surface with `defaults.floatingShadow` | Positioning + hover/focus/dismiss/list navigation/typeahead |
+| Floating APIs | `Popover` and `Menu` are compound (`.Trigger`, `.Content`, `.Item`, `.Separator`); `Tooltip` and `HoverCard` wrap their trigger and take `content`; triggers are cloned with merged refs and props | Compound where there's structure; a wrapper where there's one trigger and one payload |
+| Select & Combobox data | `options: { value, label, disabled? }[]` prop instead of `Select.Option` children; generic value type | Selected label is known while closed; filtering and async results are plain data |
+| Combobox modes | One component: searchable select (default), typeahead (`allowCustomValue`), async (`filter={false}` + `onInputValueChange` + `loading`) | One set of keyboard and ARIA behavior |
+| Menu focus | Keyboard open focuses the first item; pointer open focuses the menu (Floating UI `focusItemOnOpen: 'auto'`) | Same as Radix / WAI-ARIA practice |
 | Dialog & Drawer | Native `<dialog>` + `showModal()`; Drawer is a `<dialog>` pinned to an edge | Top layer, Esc, backdrop, inert background for free; one primitive for both |
 | Docs | JSDoc on all public exports (`@example`, `@default`) | Docs site generated via TypeDoc / react-docgen-typescript |
 | Bundlers | Vite only | webpack/Turbopack are straightforward aliases; out of scope for now |
@@ -80,7 +84,7 @@ export default defineConfig({
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
   defaults: {
     size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger',
-    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal',
+    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal', floatingShadow: 'md',
   },
 });
 ```
@@ -94,12 +98,12 @@ Later phases add: `density` (Phase 5).
 - `.yarcl-variant-{k}` → `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg`
 - `.yarcl-type-{k}` sets font properties directly
 - `.yarcl-gap-{k}`, `.yarcl-padding-{k}` from `spacing`; `.yarcl-shadow-{k}` from `shadows`
-- `--yarcl-error` from `defaults.errorColor`
+- `--yarcl-error` from `defaults.errorColor`; `--yarcl-floating-shadow` from `defaults.floatingShadow`
 - Keys are CSS-escaped, so any non-whitespace key works
 
 ### `defineConfig` checks
 
-- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`)
+- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`, `floatingShadow`)
 - [x] Every color has `light` and `dark`
 - [x] Keys contain no whitespace (other characters are escaped in CSS)
 - [x] `focusRing.color` is a color key; each text style's `family` is a family key
@@ -120,7 +124,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
 `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
 
 **Floating (Floating UI)**
-`Popover` (base), `Menu`, `Select`, `Combobox` (typeahead / autocomplete / searchable / async), `Tooltip`, `HoverCard`, shared `Listbox` + `Option`. Optional: `MultiSelect`.
+`Popover` (base), `Menu`, `Select`, `Combobox` (typeahead / autocomplete / searchable / async), `Tooltip`, `HoverCard`; shared `.yarcl-listbox` / `.yarcl-option` styles. Optional: `MultiSelect`.
 
 **Overlays**
 `Dialog`, `Drawer` (`side: "left" | "right"`), `Toast`
@@ -141,6 +145,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
 - **Checkpoint at the end of every phase:**
   - `pnpm typecheck` passes, including `@ts-expect-error` contract checks for invalid props on every new component
   - Demo page has a section per new component, checked in a browser in light and dark mode
+  - Interactive components: scripted keyboard/mouse checks in a real browser (Playwright driving the installed Chrome)
   - JSDoc on every new public export
   - One git commit per phase
 - **`PLAN.md` is updated whenever a decision changes.**
@@ -157,7 +162,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
 2. **Controls** ✅ — `IconButton`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Field`, `variants`
    - Follow-up: `RadioGroup` (fieldset/legend) so radios work inside `Field`
 3. **Typography & layout** ✅ — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
-4. **Floating** — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
+4. **Floating** ✅ — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
 5. **Overlays, navigation, data** — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
 6. **Feedback** — `Badge`, `Alert`, `Spinner`, `Skeleton`
 7. **Showcase** — generated reference page from config; second consumer app with a different brand; docs site from JSDoc; decision record (alias vs augmentation vs codegen)

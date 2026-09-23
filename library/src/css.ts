@@ -155,6 +155,7 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     ['--yarcl-focus-offset', config.focusRing.offset],
     ['--yarcl-focus-color', `var(--yarcl-color-${ident(config.focusRing.color)})`],
     ['--yarcl-error', `var(--yarcl-color-${ident(config.defaults.errorColor)})`],
+    ['--yarcl-floating-shadow', `var(--yarcl-shadow-${ident(config.defaults.floatingShadow)})`],
   );
 
   return [rule(':root', root), ...rules].join('\n\n') + '\n';

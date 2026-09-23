@@ -33,3 +33,7 @@ body {
   border-radius: var(--yarcl-radius-soft);
   background: var(--yarcl-color-brand);
 }
+
+.fields > * {
+  width: 13rem;
+}

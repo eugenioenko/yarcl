@@ -136,6 +136,8 @@ export interface YarclShape {
     gap: string;
     /** Padding for `Card`. A key of `spacing`. */
     padding: string;
+    /** Elevation of popovers, menus and listboxes. A key of `shadows`. */
+    floatingShadow: string;
   };
 }
 
@@ -175,6 +177,7 @@ type Checks<T extends YarclShape> = {
     headingStyle: keyof T['typography']['styles'];
     gap: keyof T['spacing'];
     padding: keyof T['spacing'];
+    floatingShadow: keyof T['shadows'];
   };
 };
 

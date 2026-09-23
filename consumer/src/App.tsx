@@ -24,6 +24,7 @@ import {
   type TextStyle,
   type Variant,
 } from 'yarcl';
+import { FloatingDemo } from './FloatingDemo';
 import { PlusIcon, SearchIcon } from './icons';
 
 const keys = <T extends string>(o: object) => Object.keys(o) as T[];
@@ -175,6 +176,10 @@ export function App() {
             <Checkbox>I accept the terms</Checkbox>
           </Field>
         </Stack>
+      </Section>
+
+      <Section title="Floating">
+        <FloatingDemo />
       </Section>
 
       <Section title="Typography">

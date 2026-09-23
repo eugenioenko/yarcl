@@ -56,5 +56,6 @@ export default defineConfig({
     headingStyle: 'title',
     gap: 'normal',
     padding: 'normal',
+    floatingShadow: 'md',
   },
 });
