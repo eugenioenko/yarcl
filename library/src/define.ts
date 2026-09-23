@@ -128,6 +128,14 @@ export interface YarclShape {
     variant: string;
     /** Color used for invalid fields. A key of `colors`. */
     errorColor: string;
+    /** Text style for `Text`. A key of `typography.styles`. */
+    textStyle: string;
+    /** Text style for `Heading`. A key of `typography.styles`. */
+    headingStyle: string;
+    /** Gap for `Stack` and `Inline`. A key of `spacing`. */
+    gap: string;
+    /** Padding for `Card`. A key of `spacing`. */
+    padding: string;
   };
 }
 
@@ -163,6 +171,10 @@ type Checks<T extends YarclShape> = {
     color: keyof T['colors'];
     variant: keyof T['variants'];
     errorColor: keyof T['colors'];
+    textStyle: keyof T['typography']['styles'];
+    headingStyle: keyof T['typography']['styles'];
+    gap: keyof T['spacing'];
+    padding: keyof T['spacing'];
   };
 };
 

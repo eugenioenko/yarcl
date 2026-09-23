@@ -1,27 +1,39 @@
 import { useState, type ReactNode } from 'react';
 import {
   Button,
+  Card,
   Checkbox,
+  Divider,
   Field,
+  Heading,
   IconButton,
+  Inline,
   Input,
+  Link,
   Radio,
+  Stack,
   Switch,
+  Text,
   Textarea,
   config,
   type Color,
   type Radius,
+  type Shadow,
   type Size,
+  type Spacing,
   type TextStyle,
   type Variant,
 } from 'yarcl';
 import { PlusIcon, SearchIcon } from './icons';
 
-const sizes = Object.keys(config.sizes) as Size[];
-const radii = Object.keys(config.radii) as Radius[];
-const colors = Object.keys(config.colors) as Color[];
-const variants = Object.keys(config.variants) as Variant[];
-const textStyles = Object.keys(config.typography.styles) as TextStyle[];
+const keys = <T extends string>(o: object) => Object.keys(o) as T[];
+const sizes = keys<Size>(config.sizes);
+const radii = keys<Radius>(config.radii);
+const colors = keys<Color>(config.colors);
+const variants = keys<Variant>(config.variants);
+const spacings = keys<Spacing>(config.spacing);
+const shadows = keys<Shadow>(config.shadows);
+const textStyles = keys<TextStyle>(config.typography.styles);
 
 type Scheme = 'light dark' | 'light' | 'dark';
 
@@ -32,19 +44,21 @@ function initialScheme(): Scheme {
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section>
-      <h2 className="yarcl-type-title">{title}</h2>
+    <Stack as="section" gap="tight">
+      <Heading level={2}>{title}</Heading>
       {children}
-    </section>
+    </Stack>
   );
 }
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="row">
-      <code className="label">{label}</code>
+    <Inline gap="tight">
+      <Text as="code" textStyle="code" muted className="label">
+        {label}
+      </Text>
       {children}
-    </div>
+    </Inline>
   );
 }
 
@@ -62,10 +76,12 @@ export function App() {
   }
 
   return (
-    <main>
-      <header className="row">
-        <h1 className="yarcl-type-display">yarcl</h1>
-        <div className="row">
+    <Stack as="main" gap="loose" className="page">
+      <Inline as="header" justify="between">
+        <Heading level={1} textStyle="display">
+          yarcl
+        </Heading>
+        <Inline gap="tight">
           {(['light dark', 'light', 'dark'] as Scheme[]).map((s) => (
             <Button
               key={s}
@@ -77,8 +93,8 @@ export function App() {
               {s === 'light dark' ? 'system' : s}
             </Button>
           ))}
-        </div>
-      </header>
+        </Inline>
+      </Inline>
 
       <Section title="Sizes">
         {sizes.map((size) => (
@@ -145,7 +161,7 @@ export function App() {
       </Section>
 
       <Section title="Fields">
-        <div className="form">
+        <Stack className="form">
           <Field label="Name" description="As it appears on your ID." required>
             <Input placeholder="Ada Lovelace" />
           </Field>
@@ -155,13 +171,100 @@ export function App() {
           <Field label="Message" description="One row tall by default, same height as an input.">
             <Textarea rows={1} placeholder="Say hello" />
           </Field>
-          <Field label="Notes">
-            <Textarea rows={4} />
-          </Field>
           <Field label="Terms" error="You must accept the terms.">
             <Checkbox>I accept the terms</Checkbox>
           </Field>
-        </div>
+        </Stack>
+      </Section>
+
+      <Section title="Typography">
+        {textStyles.map((style) => (
+          <Row key={style} label={style}>
+            <Text textStyle={style}>The quick brown fox</Text>
+          </Row>
+        ))}
+        <Row label="color">
+          {colors.map((color) => (
+            <Text key={color} color={color}>
+              {color}
+            </Text>
+          ))}
+          <Text muted>muted</Text>
+        </Row>
+        <Row label="link">
+          <Text>
+            Read the <Link href="#">documentation</Link>, or visit <Link href="https://example.com" external>example.com</Link>.
+          </Text>
+          <Link href="#" underline="hover" color="neutral">
+            Hover underline
+          </Link>
+        </Row>
+        <Row label="truncate">
+          <Text truncate className="narrow">
+            A single line that is much too long for its box and gets an ellipsis
+          </Text>
+          <Text truncate={2} className="narrow">
+            Two lines of text that keep going well past the second line, so the rest is clamped away with an ellipsis at the end.
+          </Text>
+        </Row>
+      </Section>
+
+      <Section title="Layout">
+        {spacings.map((gap) => (
+          <Row key={gap} label={`gap ${gap}`}>
+            <Inline gap={gap}>
+              {[1, 2, 3, 4].map((n) => (
+                <span key={n} className="box" />
+              ))}
+            </Inline>
+          </Row>
+        ))}
+        <Inline gap="normal" align="stretch">
+          {shadows.map((shadow) => (
+            <Card key={shadow} shadow={shadow} className="card">
+              <Stack gap="tight">
+                <Heading level={3} textStyle="body">
+                  Card
+                </Heading>
+                <Text textStyle="caption" muted>
+                  shadow="{shadow}"
+                </Text>
+              </Stack>
+            </Card>
+          ))}
+          <Card radius="round" padding="loose" className="card">
+            <Stack gap="tight">
+              <Heading level={3} textStyle="body">
+                Card
+              </Heading>
+              <Text textStyle="caption" muted>
+                no shadow, padding="loose"
+              </Text>
+            </Stack>
+          </Card>
+        </Inline>
+        <Card>
+          <Stack>
+            <Heading level={3}>Delete project</Heading>
+            <Text as="p" muted>
+              This removes the project and all of its data. It can't be undone.
+            </Text>
+            <Divider />
+            <Inline justify="between">
+              <Inline gap="tight">
+                <Text textStyle="caption">3 members</Text>
+                <Divider orientation="vertical" />
+                <Text textStyle="caption">12 files</Text>
+              </Inline>
+              <Inline gap="tight">
+                <Button variant="outline" color="neutral">
+                  Cancel
+                </Button>
+                <Button color="danger">Delete</Button>
+              </Inline>
+            </Inline>
+          </Stack>
+        </Card>
       </Section>
 
       <Section title="Radii">
@@ -175,14 +278,6 @@ export function App() {
           </Row>
         ))}
       </Section>
-
-      <Section title="Text styles">
-        {textStyles.map((style) => (
-          <Row key={style} label={style}>
-            <span className={`yarcl-type-${style}`}>The quick brown fox</span>
-          </Row>
-        ))}
-      </Section>
-    </main>
+    </Stack>
   );
 }

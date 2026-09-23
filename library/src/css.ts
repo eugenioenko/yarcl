@@ -118,8 +118,20 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     );
   }
 
-  for (const [key, value] of Object.entries(config.spacing)) root.push([`--yarcl-space-${ident(key)}`, value]);
-  for (const [key, value] of Object.entries(config.shadows)) root.push([`--yarcl-shadow-${ident(key)}`, value]);
+  for (const [key, value] of Object.entries(config.spacing)) {
+    const k = ident(key);
+    root.push([`--yarcl-space-${k}`, value]);
+    rules.push(
+      rule(`.yarcl-gap-${k}`, [['gap', `var(--yarcl-space-${k})`]]),
+      rule(`.yarcl-padding-${k}`, [['padding', `var(--yarcl-space-${k})`]]),
+    );
+  }
+
+  for (const [key, value] of Object.entries(config.shadows)) {
+    const k = ident(key);
+    root.push([`--yarcl-shadow-${k}`, value]);
+    rules.push(rule(`.yarcl-shadow-${k}`, [['box-shadow', `var(--yarcl-shadow-${k})`]]));
+  }
   for (const [key, value] of Object.entries(config.typography.families)) root.push([`--yarcl-font-${ident(key)}`, value]);
 
   for (const [key, style] of Object.entries(config.typography.styles)) {

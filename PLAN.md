@@ -12,13 +12,16 @@ A component library where the **consumer's config is the design system**. The li
 | Styling | Plain CSS, no Tailwind in the library | Consumer keys are unknown at build time; don't force Tailwind on consumers. Optional generated `@theme` later. |
 | CSS from config | Plugin generates `virtual:yarcl.css` at build time | No inline styles (CSP-safe), SSR-safe, no flash, tokens usable in consumer CSS, HMR on config change |
 | Class naming | `yarcl-{component}`, `yarcl-{component}-{element}` (static); `yarcl-{group}-{key}` (generated, shared across components) | Generated CSS scales with keys, not components × keys. Group in the name prevents key collisions. |
-| Reserved names | Token group names (`color`, `size`, `radius`, `type`, `variant`, …) can't be component names | Avoids `yarcl-size` component vs `yarcl-size-*` modifier collision |
+| Reserved names | Token group and modifier names (`color`, `size`, `radius`, `type`, `variant`, `gap`, `padding`, `shadow`, `align`, `justify`) can't be component names | Avoids `yarcl-size` component vs `yarcl-size-*` modifier collision |
 | Token groups | **Open** (`colors`, `sizes`, `radii`, `spacing`, `shadows`, `typography`): any keys. **Required + extras** (`neutrals`, `zIndex`, `motion`, `borders`): keys the library uses are required, any extra keys allowed and emitted as CSS variables | Consumer overrides every value and adds any key; the library can still rely on the names it needs |
 | Neutrals | Required `neutrals` group: `bg`, `surface`, `text`, `muted`, `border` | Components need background/text/border colors that aren't semantic `color` prop values |
 | Variants | Open `variants` group of recipes: `background` (`fill`/`tint`/`none`), `border` (`color`/`neutral`/`none`), `text` (`on`/`color`/`neutral`). Generated `.yarcl-variant-{k}` sets `--yarcl-v-*` variables, shared across components | Consumers invent variants without library code; one group serves Button, IconButton, later Badge/Alert |
 | Error color | `defaults.errorColor` (a color key) → `--yarcl-error`; controls with `aria-invalid="true"` use it | Color keys are the consumer's, so there's no guaranteed `danger` |
 | Field | `Field` provides `id`, `aria-describedby`, `aria-invalid`, `required` to its control via context (`useFieldProps`) | Accessible labelling without prop plumbing; works for Input, Textarea, Checkbox, Switch |
 | Selection controls | Native inputs with `appearance: none`; box size from the size's `iconSize`; Switch is `<input type="checkbox" role="switch">` | Native form behavior, keyboard and `checked`/`onChange` for free |
+| Text & Heading | `Text` (`as`, `textStyle`, `color`, `muted`, `truncate`); `Heading` requires `level` (semantics) and takes `textStyle` (look) separately | Heading level follows document structure; visual size is a design decision |
+| Layout | `Stack` / `Inline` with `gap` from spacing, static `align` / `justify`; `Card` with `padding`, `radius`, `shadow`; `Divider` has no spacing prop — the parent's `gap` spaces it | Spacing lives in one place: the layout container |
+| Shadows | Plain strings; use `light-dark()` for the shadow color so it works in dark mode | Shadows need to be stronger on dark backgrounds |
 | Icon size | Part of each `sizes` entry (`iconSize`), not a separate group | Icons follow the control size automatically |
 | Text styles | Generated `.yarcl-type-{key}` classes; `family` references a `typography.families` key | Text styles usable before `Text` exists; group named `type` so the `Text` component can be `yarcl-text` |
 | Plugin runtime | Vite loads the plugin with Node's TS type stripping; relative imports in plugin code use `.ts` extensions. Publishing requires compiling the plugin (Node won't strip types inside `node_modules`) | Works from source in the workspace today |
@@ -75,7 +78,10 @@ export default defineConfig({
   motion: { fast: '120ms', base: '200ms', easing: '…' /* + extras */ },
   borders: { width: '1px' /* + extras */ },
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
-  defaults: { size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger' },
+  defaults: {
+    size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger',
+    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal',
+  },
 });
 ```
 
@@ -87,12 +93,13 @@ Later phases add: `density` (Phase 5).
 - Modifier classes set component-level variables: `.yarcl-color-{k}` → `--yarcl-c`, `--yarcl-c-on`; `.yarcl-size-{k}` → `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon`; `.yarcl-radius-{k}` → `--yarcl-r`
 - `.yarcl-variant-{k}` → `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg`
 - `.yarcl-type-{k}` sets font properties directly
+- `.yarcl-gap-{k}`, `.yarcl-padding-{k}` from `spacing`; `.yarcl-shadow-{k}` from `shadows`
 - `--yarcl-error` from `defaults.errorColor`
 - Keys are CSS-escaped, so any non-whitespace key works
 
 ### `defineConfig` checks
 
-- [x] `defaults` entries are existing keys (including `variant`, `errorColor`)
+- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`)
 - [x] Every color has `light` and `dark`
 - [x] Keys contain no whitespace (other characters are escaped in CSS)
 - [x] `focusRing.color` is a color key; each text style's `family` is a family key
@@ -149,7 +156,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
    - Config merge: export library `defaults` so consumers can spread and extend
 2. **Controls** ✅ — `IconButton`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Field`, `variants`
    - Follow-up: `RadioGroup` (fieldset/legend) so radios work inside `Field`
-3. **Typography & layout** — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
+3. **Typography & layout** ✅ — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
 4. **Floating** — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
 5. **Overlays, navigation, data** — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
 6. **Feedback** — `Badge`, `Alert`, `Spinner`, `Skeleton`

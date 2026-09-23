@@ -277,3 +277,133 @@
     transition: none;
   }
 }
+
+/* Text & Heading */
+
+.yarcl-heading {
+  margin: 0;
+  color: var(--yarcl-neutral-text);
+}
+
+p.yarcl-text {
+  margin: 0;
+}
+
+.yarcl-text-colored {
+  color: var(--yarcl-c);
+}
+
+.yarcl-text-muted {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-text-truncate {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.yarcl-text-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--yarcl-lines);
+  line-clamp: var(--yarcl-lines);
+  overflow: hidden;
+}
+
+/* Link */
+
+.yarcl-link {
+  color: var(--yarcl-c);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.2em;
+  border-radius: 0.125em;
+}
+
+.yarcl-link:hover {
+  color: color-mix(in oklab, var(--yarcl-c), var(--yarcl-neutral-text) 25%);
+}
+
+.yarcl-link:focus-visible {
+  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
+  outline-offset: var(--yarcl-focus-offset);
+}
+
+.yarcl-link-underline-always {
+  text-decoration-line: underline;
+}
+
+.yarcl-link-underline-hover,
+.yarcl-link-underline-none {
+  text-decoration-line: none;
+}
+
+.yarcl-link-underline-hover:hover {
+  text-decoration-line: underline;
+}
+
+/* Stack & Inline */
+
+.yarcl-stack,
+.yarcl-inline {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yarcl-stack {
+  flex-direction: column;
+}
+
+.yarcl-inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.yarcl-inline-nowrap {
+  flex-wrap: nowrap;
+}
+
+.yarcl-align-start { align-items: flex-start; }
+.yarcl-align-center { align-items: center; }
+.yarcl-align-end { align-items: flex-end; }
+.yarcl-align-stretch { align-items: stretch; }
+.yarcl-align-baseline { align-items: baseline; }
+
+.yarcl-justify-start { justify-content: flex-start; }
+.yarcl-justify-center { justify-content: center; }
+.yarcl-justify-end { justify-content: flex-end; }
+.yarcl-justify-between { justify-content: space-between; }
+
+/* Card */
+
+.yarcl-card {
+  box-sizing: border-box;
+  color: var(--yarcl-neutral-text);
+  background: var(--yarcl-neutral-surface);
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-r);
+}
+
+/* Divider */
+
+.yarcl-divider {
+  flex-shrink: 0;
+  margin: 0;
+  border: 0;
+  background: var(--yarcl-neutral-border);
+}
+
+.yarcl-divider-horizontal {
+  align-self: stretch;
+  height: var(--yarcl-border-width);
+}
+
+.yarcl-divider-vertical {
+  align-self: stretch;
+  width: var(--yarcl-border-width);
+  height: auto;
+  min-height: 1em;
+}

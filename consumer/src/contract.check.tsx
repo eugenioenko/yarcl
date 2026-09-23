@@ -1,4 +1,20 @@
-import { Button, Checkbox, Field, IconButton, Input, Radio, Switch, Textarea } from 'yarcl';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  Field,
+  Heading,
+  IconButton,
+  Inline,
+  Input,
+  Link,
+  Radio,
+  Stack,
+  Switch,
+  Text,
+  Textarea,
+} from 'yarcl';
 
 export const contract = (
   <>
@@ -12,6 +28,14 @@ export const contract = (
     <Field label="Name">
       <Input />
     </Field>
+    <Text textStyle="caption" color="danger" truncate={2} />
+    <Heading level={2} textStyle="display" />
+    <Link color="neutral" underline="hover" external />
+    <Stack gap="loose" align="center" as="ul" />
+    <Inline gap="tight" justify="between" wrap={false} />
+    <Card padding="tight" radius="pill" shadow="lg" as="article" />
+    <Divider orientation="vertical" />
+
     {/* @ts-expect-error */}
     <Button size="gigantic" />
     {/* @ts-expect-error */}
@@ -30,5 +54,17 @@ export const contract = (
     <Field>
       <Input />
     </Field>
+    {/* @ts-expect-error */}
+    <Text textStyle="heading" />
+    {/* @ts-expect-error */}
+    <Heading textStyle="title" />
+    {/* @ts-expect-error */}
+    <Heading level={7} />
+    {/* @ts-expect-error */}
+    <Stack gap="md" />
+    {/* @ts-expect-error */}
+    <Card shadow="xl" />
+    {/* @ts-expect-error */}
+    <Card padding="lg" />
   </>
 );

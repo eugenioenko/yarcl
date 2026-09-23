@@ -5,40 +5,31 @@ body {
   background: var(--yarcl-neutral-bg);
 }
 
-main {
+.page {
   max-width: 60rem;
   margin: 0 auto;
   padding: var(--yarcl-space-loose) var(--yarcl-space-normal);
 }
 
-header {
-  justify-content: space-between;
-}
-
-h1,
-h2 {
-  margin: 0 0 var(--yarcl-space-normal);
-}
-
-section {
-  margin-top: var(--yarcl-space-loose);
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--yarcl-space-tight);
-  margin-bottom: var(--yarcl-space-tight);
-}
-
 .label {
-  width: 4.5rem;
-  color: var(--yarcl-neutral-muted);
+  width: 5.5rem;
 }
 
 .form {
-  display: grid;
-  gap: var(--yarcl-space-normal);
   max-width: 24rem;
+}
+
+.narrow {
+  width: 12rem;
+}
+
+.card {
+  width: 10rem;
+}
+
+.box {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--yarcl-radius-soft);
+  background: var(--yarcl-color-brand);
 }

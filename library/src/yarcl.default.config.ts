@@ -39,9 +39,9 @@ export default defineConfig({
     xl: '2rem',
   },
   shadows: {
-    sm: '0 1px 2px rgb(0 0 0 / 0.08)',
-    md: '0 4px 12px rgb(0 0 0 / 0.12)',
-    lg: '0 12px 32px rgb(0 0 0 / 0.18)',
+    sm: '0 1px 2px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.5))',
+    md: '0 4px 12px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.6))',
+    lg: '0 12px 32px light-dark(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.7))',
   },
   typography: {
     families: {
@@ -59,5 +59,15 @@ export default defineConfig({
   motion: { fast: '120ms', base: '200ms', easing: 'cubic-bezier(0.2, 0, 0, 1)' },
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '2px', color: 'primary' },
-  defaults: { size: 'md', radius: 'md', color: 'primary', variant: 'solid', errorColor: 'danger' },
+  defaults: {
+    size: 'md',
+    radius: 'md',
+    color: 'primary',
+    variant: 'solid',
+    errorColor: 'danger',
+    textStyle: 'body',
+    headingStyle: 'heading',
+    gap: 'md',
+    padding: 'lg',
+  },
 });

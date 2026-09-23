@@ -64,3 +64,15 @@ defineConfig({
   // @ts-expect-error
   defaults: { ...defaults.defaults, errorColor: 'red' },
 });
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  defaults: { ...defaults.defaults, textStyle: 'huge' },
+});
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  defaults: { ...defaults.defaults, gap: 'tight' },
+});

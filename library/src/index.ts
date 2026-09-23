@@ -17,6 +17,32 @@ export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
 export { Field } from './components/Field';
 export type { FieldProps } from './components/Field';
-export type { Size, Radius, Color, Variant, Spacing, Shadow, TextStyle, TokenProps, VariantProps } from './types';
+export { Text } from './components/Text';
+export type { TextProps, TextElement } from './components/Text';
+export { Heading } from './components/Heading';
+export type { HeadingProps } from './components/Heading';
+export { Link } from './components/Link';
+export type { LinkProps } from './components/Link';
+export { Stack } from './components/Stack';
+export type { StackProps, LayoutProps, LayoutElement } from './components/Stack';
+export { Inline } from './components/Inline';
+export type { InlineProps } from './components/Inline';
+export { Card } from './components/Card';
+export type { CardProps } from './components/Card';
+export { Divider } from './components/Divider';
+export type { DividerProps } from './components/Divider';
+export type {
+  Size,
+  Radius,
+  Color,
+  Variant,
+  Spacing,
+  Shadow,
+  TextStyle,
+  Align,
+  Justify,
+  TokenProps,
+  VariantProps,
+} from './types';
 /** The resolved design system config: the consumer's, or the library default. */
 export { default as config } from '@yarcl/config';

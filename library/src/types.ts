@@ -36,6 +36,11 @@ export interface TokenProps {
   color?: Color;
 }
 
+/** Cross-axis alignment for layout components. */
+export type Align = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+/** Main-axis distribution for layout components. */
+export type Justify = 'start' | 'center' | 'end' | 'between';
+
 /** The `variant` prop shared by components that apply a style recipe. */
 export interface VariantProps {
   /**

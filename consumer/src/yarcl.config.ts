@@ -46,5 +46,15 @@ export default defineConfig({
   },
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
-  defaults: { size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger' },
+  defaults: {
+    size: 'md',
+    radius: 'soft',
+    color: 'brand',
+    variant: 'solid',
+    errorColor: 'danger',
+    textStyle: 'body',
+    headingStyle: 'title',
+    gap: 'normal',
+    padding: 'normal',
+  },
 });
