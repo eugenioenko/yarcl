@@ -69,7 +69,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 | `colors` | open, `{ light, dark, on? }` → `light-dark()` | `color` prop everywhere |
 | `neutrals` | `bg`, `surface`, `text`, `muted`, `border` + any | surfaces, text, borders |
 | `sizes` | open, `{ height, paddingX, fontSize, iconSize }` | every control; same size = same height |
-| `radii` | open; name them after your sizes plus exceptions (`square`, `rounded`) | `radius` prop; with `defaults.radius: 'size'` a `lg` control gets `radii.lg` |
+| `radii` | open; conventionally `sm`, `md`, `lg`, `xl` plus exceptions (`square`, `rounded`) | `radius` prop; `defaults.radius` (e.g. `md`) applies to every component |
 | `variants` | open recipes: `background` / `border` / `text` | `variant` prop (Button, Badge, Alert, …) |
 | `spacing` | open | `gap`, `padding` |
 | `shadows` | open | `shadow` prop, floating panels |
@@ -83,8 +83,8 @@ A prop resolves as: the prop → an enclosing group (`ButtonGroup`, `RadioGroup`
 
 ```ts
 radii: { square: '0', sm: '0.25rem', md: '0.375rem', lg: '0.5rem', rounded: '9999px' },
-components: { Button: { radius: 'square' } },   // buttons always sharp
-defaults: { radius: 'size', … },                 // everything else matches its size
+defaults: { radius: 'md', … },                   // every component: md corners
+components: { Button: { radius: 'square' } },   // except buttons: always sharp
 ```
 
 `defineConfig` checks at compile time that every color has both modes, that references (`defaults`, `components`, `headings`, `focusRing.color`, text style families) point at existing keys, that `components` only names known components and props they have, and that required keys exist. The plugin warns when a color's foreground fails WCAG AA contrast.

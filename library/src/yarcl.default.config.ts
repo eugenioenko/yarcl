@@ -71,7 +71,7 @@ export default defineConfig({
   focusRing: { width: '2px', offset: '2px', color: 'primary' },
   defaults: {
     size: 'md',
-    radius: 'size',
+    radius: 'md',
     color: 'primary',
     variant: 'solid',
     errorColor: 'danger',

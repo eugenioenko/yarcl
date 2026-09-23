@@ -43,12 +43,13 @@ export default async function ({ page, check, focused }) {
   const sizes = page.locator('section', { has: page.getByRole('heading', { name: 'Sizes', exact: true }) });
   const xsButton = sizes.getByRole('button', { name: 'Button' }).first();
   const xlButton = sizes.getByRole('button', { name: 'Button' }).last();
-  check('radius follows size (xs → radii.xs, xl → radii.xl)', (await radius(xsButton)) === 4 && (await radius(xlButton)) === 10, `${await radius(xsButton)} / ${await radius(xlButton)}`);
+  const input = sizes.getByRole('textbox').first();
+  check('default radius md on every size', (await radius(xsButton)) === 6 && (await radius(xlButton)) === 6 && (await radius(input)) === 6, `${await radius(xsButton)} / ${await radius(xlButton)} / ${await radius(input)}`);
   check('radius prop overrides size', (await radius(page.getByRole('group', { name: 'View' }).getByRole('button').first())) > 100);
   const badge = page.locator('.yarcl-badge').first();
   check('component default (Badge → rounded)', (await radius(badge)) > 100);
   const card = page.locator('.yarcl-card').first();
-  check('component default (Card → lg)', (await radius(card)) === 8, String(await radius(card)));
+  check('default radius md on cards', (await radius(card)) === 6, String(await radius(card)));
 
   const h1 = page.getByRole('heading', { name: 'Heading level 1' });
   const h6 = page.getByRole('heading', { name: 'Heading level 6' });

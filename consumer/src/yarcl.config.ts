@@ -62,11 +62,10 @@ export default defineConfig({
   focusRing: { ...defaults.focusRing, color: 'brand' },
   components: {
     Badge: { radius: 'rounded' },
-    Card: { radius: 'lg' },
   },
   defaults: {
     size: 'md',
-    radius: 'size',
+    radius: 'md',
     color: 'brand',
     variant: 'solid',
     errorColor: 'danger',
