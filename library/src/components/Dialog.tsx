@@ -1,0 +1,29 @@
+import { Modal, type ModalProps } from './Modal';
+import type { Radius } from '../types';
+
+/** Props for {@link Dialog}. */
+export interface DialogProps extends ModalProps {
+  /**
+   * Corner radius, from the `radii` config.
+   * @default config.defaults.radius
+   */
+  radius?: Radius;
+}
+
+/**
+ * A modal dialog built on the native `<dialog>` element: focus is trapped, the page behind is inert
+ * and doesn't scroll, and Esc closes it.
+ *
+ * @example
+ * ```tsx
+ * <Dialog
+ *   trigger={<Button color="danger">Delete</Button>}
+ *   title="Delete project?"
+ *   description="This can't be undone."
+ *   footer={<Button color="danger" onClick={remove}>Delete</Button>}
+ * />
+ * ```
+ */
+export function Dialog(props: DialogProps) {
+  return <Modal {...props} className="yarcl-dialog" />;
+}

@@ -5,6 +5,11 @@ import {
   Divider,
   Field,
   Combobox,
+  Dialog,
+  Drawer,
+  Table,
+  Tabs,
+  toast,
   Heading,
   HoverCard,
   Menu,
@@ -60,6 +65,11 @@ export const contract = (
     </Menu>
     <Select options={[{ value: 'a', label: 'A' }]} size="lg" radius="pill" color="success" />
     <Combobox options={[]} filter={false} allowCustomValue size="xs" />
+    <Dialog title="T" radius="round" width="40rem" />
+    <Drawer title="T" side="left" />
+    <Tabs defaultValue="a" size="sm" color="success" />
+    <Tabs value="a" onValueChange={() => {}} />
+    <Table density="dense" striped interactive />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
@@ -105,5 +115,19 @@ export const contract = (
     <Popover.Content padding="md" />
     {/* @ts-expect-error */}
     <Select options={[{ value: 'a' }]} />
+    {/* @ts-expect-error */}
+    <Dialog />
+    {/* @ts-expect-error */}
+    <Drawer title="T" side="top" />
+    {/* @ts-expect-error */}
+    <Tabs />
+    {/* @ts-expect-error */}
+    <Tabs value="a" defaultValue="b" />
+    {/* @ts-expect-error */}
+    <Table density="comfortable" />
   </>
 );
+
+toast({ title: 'ok', color: 'success' });
+// @ts-expect-error
+toast({ title: 'bad', color: 'primary' });

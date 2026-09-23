@@ -43,6 +43,10 @@ export default defineConfig({
     md: '0 4px 12px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.6))',
     lg: '0 12px 32px light-dark(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.7))',
   },
+  density: {
+    compact: { paddingX: '0.5rem', paddingY: '0.25rem', fontSize: '0.8125rem' },
+    comfortable: { paddingX: '0.75rem', paddingY: '0.625rem', fontSize: '0.875rem' },
+  },
   typography: {
     families: {
       sans: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
@@ -70,5 +74,6 @@ export default defineConfig({
     gap: 'md',
     padding: 'lg',
     floatingShadow: 'md',
+    density: 'comfortable',
   },
 });

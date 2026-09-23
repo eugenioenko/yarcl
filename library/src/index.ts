@@ -43,6 +43,17 @@ export { Select } from './components/Select';
 export type { SelectProps, SelectOption } from './components/Select';
 export { Combobox } from './components/Combobox';
 export type { ComboboxProps } from './components/Combobox';
+export { Dialog } from './components/Dialog';
+export type { DialogProps } from './components/Dialog';
+export { Drawer } from './components/Drawer';
+export type { DrawerProps } from './components/Drawer';
+export type { ModalProps } from './components/Modal';
+export { Toaster, toast } from './components/Toast';
+export type { ToasterProps, ToastOptions } from './components/Toast';
+export { Tabs } from './components/Tabs';
+export type { TabsProps, TabsListProps, TabsTriggerProps, TabsPanelProps } from './components/Tabs';
+export { Table } from './components/Table';
+export type { TableProps, TableHeaderCellProps, TableCellProps, CellAlign } from './components/Table';
 export type {
   Size,
   Radius,
@@ -51,6 +62,7 @@ export type {
   Spacing,
   Shadow,
   TextStyle,
+  Density,
   Align,
   Justify,
   TokenProps,

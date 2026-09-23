@@ -15,6 +15,7 @@ import {
   Switch,
   Text,
   Textarea,
+  Toaster,
   config,
   type Color,
   type Radius,
@@ -25,6 +26,7 @@ import {
   type Variant,
 } from 'yarcl';
 import { FloatingDemo } from './FloatingDemo';
+import { OverlaysDemo } from './OverlaysDemo';
 import { PlusIcon, SearchIcon } from './icons';
 
 const keys = <T extends string>(o: object) => Object.keys(o) as T[];
@@ -182,6 +184,10 @@ export function App() {
         <FloatingDemo />
       </Section>
 
+      <Section title="Overlays, tabs, table">
+        <OverlaysDemo />
+      </Section>
+
       <Section title="Typography">
         {textStyles.map((style) => (
           <Row key={style} label={style}>
@@ -283,6 +289,7 @@ export function App() {
           </Row>
         ))}
       </Section>
+      <Toaster />
     </Stack>
   );
 }

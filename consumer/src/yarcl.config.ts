@@ -34,6 +34,11 @@ export default defineConfig({
     normal: '1rem',
     loose: '2rem',
   },
+  density: {
+    dense: { paddingX: '0.5rem', paddingY: '0.25rem', fontSize: '0.8125rem' },
+    regular: { paddingX: '0.75rem', paddingY: '0.5rem', fontSize: '0.875rem' },
+    relaxed: { paddingX: '1rem', paddingY: '0.875rem', fontSize: '0.9375rem' },
+  },
   typography: {
     ...defaults.typography,
     styles: {
@@ -57,5 +62,6 @@ export default defineConfig({
     gap: 'normal',
     padding: 'normal',
     floatingShadow: 'md',
+    density: 'regular',
   },
 });

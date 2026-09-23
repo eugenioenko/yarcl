@@ -43,6 +43,16 @@ export interface VariantToken {
   text: 'on' | 'color' | 'neutral';
 }
 
+/** Cell spacing for tables at one density. */
+export interface DensityToken {
+  /** Horizontal cell padding, e.g. `'0.75rem'`. */
+  paddingX: string;
+  /** Vertical cell padding, e.g. `'0.5rem'`. */
+  paddingY: string;
+  /** Cell font size, e.g. `'0.875rem'`. */
+  fontSize: string;
+}
+
 /** A named text style. */
 export interface TextStyleToken {
   /** A key of `typography.families`. */
@@ -60,7 +70,7 @@ export interface TextStyleToken {
 /**
  * The structure every yarcl config must satisfy.
  *
- * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `typography`) take any keys;
+ * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `typography`) take any keys;
  * those keys become the valid prop values. Groups with required keys (`neutrals`, `zIndex`,
  * `motion`, `borders`) must include the keys the library depends on, and accept any extra
  * keys, which are emitted as CSS variables for the consumer's own styles.
@@ -91,6 +101,8 @@ export interface YarclShape {
   spacing: Record<string, string>;
   /** Box shadows. */
   shadows: Record<string, string>;
+  /** Table densities. Keys become the valid values of the `density` prop. */
+  density: Record<string, DensityToken>;
   /** Font families and named text styles. */
   typography: {
     /** Font stacks, e.g. `{ sans: 'Inter, system-ui, sans-serif' }`. */
@@ -138,6 +150,8 @@ export interface YarclShape {
     padding: string;
     /** Elevation of popovers, menus and listboxes. A key of `shadows`. */
     floatingShadow: string;
+    /** Density for `Table`. A key of `density`. */
+    density: string;
   };
 }
 
@@ -160,6 +174,7 @@ type Checks<T extends YarclShape> = {
   variants: KeyCheck<T['variants']>;
   spacing: KeyCheck<T['spacing']>;
   shadows: KeyCheck<T['shadows']>;
+  density: KeyCheck<T['density']>;
   typography: {
     families: KeyCheck<T['typography']['families']>;
     styles: KeyCheck<T['typography']['styles']> & {
@@ -178,6 +193,7 @@ type Checks<T extends YarclShape> = {
     gap: keyof T['spacing'];
     padding: keyof T['spacing'];
     floatingShadow: keyof T['shadows'];
+    density: keyof T['density'];
   };
 };
 

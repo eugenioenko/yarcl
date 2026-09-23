@@ -14,6 +14,8 @@ export type Variant = keyof Config['variants'] & string;
 export type Spacing = keyof Config['spacing'] & string;
 /** A key of the consumer's `shadows` config. */
 export type Shadow = keyof Config['shadows'] & string;
+/** A key of the consumer's `density` config. */
+export type Density = keyof Config['density'] & string;
 /** A key of the consumer's `typography.styles` config. */
 export type TextStyle = keyof Config['typography']['styles'] & string;
 

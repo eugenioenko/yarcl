@@ -1,5 +1,5 @@
 import config from '@yarcl/config';
-import type { Color, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types';
+import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types';
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
   return parts.filter(Boolean).join(' ');
@@ -13,3 +13,4 @@ export const gapClass = (gap: Spacing = config.defaults.gap) => `yarcl-gap-${gap
 export const paddingClass = (padding: Spacing = config.defaults.padding) => `yarcl-padding-${padding}`;
 export const shadowClass = (shadow?: Shadow) => shadow && `yarcl-shadow-${shadow}`;
 export const typeClass = (style: TextStyle) => `yarcl-type-${style}`;
+export const densityClass = (density: Density = config.defaults.density) => `yarcl-density-${density}`;

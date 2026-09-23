@@ -132,6 +132,16 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     root.push([`--yarcl-shadow-${k}`, value]);
     rules.push(rule(`.yarcl-shadow-${k}`, [['box-shadow', `var(--yarcl-shadow-${k})`]]));
   }
+  for (const [key, density] of Object.entries(config.density)) {
+    rules.push(
+      rule(`.yarcl-density-${ident(key)}`, [
+        ['--yarcl-cell-px', density.paddingX],
+        ['--yarcl-cell-py', density.paddingY],
+        ['--yarcl-cell-fs', density.fontSize],
+      ]),
+    );
+  }
+
   for (const [key, value] of Object.entries(config.typography.families)) root.push([`--yarcl-font-${ident(key)}`, value]);
 
   for (const [key, style] of Object.entries(config.typography.styles)) {
@@ -156,6 +166,8 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     ['--yarcl-focus-color', `var(--yarcl-color-${ident(config.focusRing.color)})`],
     ['--yarcl-error', `var(--yarcl-color-${ident(config.defaults.errorColor)})`],
     ['--yarcl-floating-shadow', `var(--yarcl-shadow-${ident(config.defaults.floatingShadow)})`],
+    ['--yarcl-padding', `var(--yarcl-space-${ident(config.defaults.padding)})`],
+    ['--yarcl-gap', `var(--yarcl-space-${ident(config.defaults.gap)})`],
   );
 
   return [rule(':root', root), ...rules].join('\n\n') + '\n';

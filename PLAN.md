@@ -12,7 +12,7 @@ A component library where the **consumer's config is the design system**. The li
 | Styling | Plain CSS, no Tailwind in the library | Consumer keys are unknown at build time; don't force Tailwind on consumers. Optional generated `@theme` later. |
 | CSS from config | Plugin generates `virtual:yarcl.css` at build time | No inline styles (CSP-safe), SSR-safe, no flash, tokens usable in consumer CSS, HMR on config change |
 | Class naming | `yarcl-{component}`, `yarcl-{component}-{element}` (static); `yarcl-{group}-{key}` (generated, shared across components) | Generated CSS scales with keys, not components × keys. Group in the name prevents key collisions. |
-| Reserved names | Token group and modifier names (`color`, `size`, `radius`, `type`, `variant`, `gap`, `padding`, `shadow`, `align`, `justify`) can't be component names | Avoids `yarcl-size` component vs `yarcl-size-*` modifier collision |
+| Reserved names | Token group and modifier names (`color`, `size`, `radius`, `type`, `variant`, `gap`, `padding`, `shadow`, `density`, `align`, `justify`) can't be component names | Avoids `yarcl-size` component vs `yarcl-size-*` modifier collision |
 | Token groups | **Open** (`colors`, `sizes`, `radii`, `spacing`, `shadows`, `typography`): any keys. **Required + extras** (`neutrals`, `zIndex`, `motion`, `borders`): keys the library uses are required, any extra keys allowed and emitted as CSS variables | Consumer overrides every value and adds any key; the library can still rely on the names it needs |
 | Neutrals | Required `neutrals` group: `bg`, `surface`, `text`, `muted`, `border` | Components need background/text/border colors that aren't semantic `color` prop values |
 | Variants | Open `variants` group of recipes: `background` (`fill`/`tint`/`none`), `border` (`color`/`neutral`/`none`), `text` (`on`/`color`/`neutral`). Generated `.yarcl-variant-{k}` sets `--yarcl-v-*` variables, shared across components | Consumers invent variants without library code; one group serves Button, IconButton, later Badge/Alert |
@@ -34,7 +34,10 @@ A component library where the **consumer's config is the design system**. The li
 | Select & Combobox data | `options: { value, label, disabled? }[]` prop instead of `Select.Option` children; generic value type | Selected label is known while closed; filtering and async results are plain data |
 | Combobox modes | One component: searchable select (default), typeahead (`allowCustomValue`), async (`filter={false}` + `onInputValueChange` + `loading`) | One set of keyboard and ARIA behavior |
 | Menu focus | Keyboard open focuses the first item; pointer open focuses the menu (Floating UI `focusItemOnOpen: 'auto'`) | Same as Radix / WAI-ARIA practice |
-| Dialog & Drawer | Native `<dialog>` + `showModal()`; Drawer is a `<dialog>` pinned to an edge | Top layer, Esc, backdrop, inert background for free; one primitive for both |
+| Dialog & Drawer | Native `<dialog>` + `showModal()` via a shared `Modal` base; Drawer is a `<dialog>` pinned to an edge. Flat API: `title`, `description`, `children`, `footer`, optional `trigger`, controlled or uncontrolled. Scroll lock via `html:has(.yarcl-modal[open])`. Library-styled close button (no consumer keys assumed) | Top layer, Esc, backdrop, inert background and focus return for free; one primitive for both |
+| Toast | Imperative `toast({...})` + one `<Toaster />`; `popover="manual"` region in the top layer; portals into the topmost open modal `<dialog>` so toasts stay clickable; over-limit toasts dismissed oldest-first; pause on hover/focus; `urgent` → `role="alert"` | A modal dialog makes everything outside it inert, including top-layer popovers |
+| Tabs | Compound (`List`, `Trigger`, `Panel`); automatic activation; arrow keys, Home/End, skips disabled; roving tabindex; `value` or `defaultValue` required by type | WAI-ARIA tabs pattern |
+| Table | Semantic compound wrapper (`Head`, `Body`, `Row`, `HeaderCell`, `Cell`); open `density` group (`paddingX`, `paddingY`, `fontSize`) → `.yarcl-density-{k}`; `align="end"` uses tabular numbers | Density is a design decision, so it lives in the config |
 | Docs | JSDoc on all public exports (`@example`, `@default`) | Docs site generated via TypeDoc / react-docgen-typescript |
 | Bundlers | Vite only | webpack/Turbopack are straightforward aliases; out of scope for now |
 
@@ -71,6 +74,7 @@ export default defineConfig({
   },
   spacing: { tight: '0.5rem', normal: '1rem', loose: '2rem' },
   shadows: { sm: '…', md: '…' },
+  density: { compact: { paddingX: '0.5rem', paddingY: '0.25rem', fontSize: '0.8125rem' } },
   typography: {
     families: { sans: '…', mono: '…' },
     styles: {
@@ -84,12 +88,10 @@ export default defineConfig({
   focusRing: { width: '2px', offset: '2px', color: 'brand' },
   defaults: {
     size: 'md', radius: 'soft', color: 'brand', variant: 'solid', errorColor: 'danger',
-    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal', floatingShadow: 'md',
+    textStyle: 'body', headingStyle: 'title', gap: 'normal', padding: 'normal', floatingShadow: 'md', density: 'compact',
   },
 });
 ```
-
-Later phases add: `density` (Phase 5).
 
 ### Generated CSS
 
@@ -98,12 +100,13 @@ Later phases add: `density` (Phase 5).
 - `.yarcl-variant-{k}` → `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg`
 - `.yarcl-type-{k}` sets font properties directly
 - `.yarcl-gap-{k}`, `.yarcl-padding-{k}` from `spacing`; `.yarcl-shadow-{k}` from `shadows`
-- `--yarcl-error` from `defaults.errorColor`; `--yarcl-floating-shadow` from `defaults.floatingShadow`
+- `--yarcl-error` from `defaults.errorColor`; `--yarcl-floating-shadow` from `defaults.floatingShadow`; `--yarcl-padding` / `--yarcl-gap` from `defaults.padding` / `defaults.gap`
+- `.yarcl-density-{k}` → `--yarcl-cell-px`, `--yarcl-cell-py`, `--yarcl-cell-fs`
 - Keys are CSS-escaped, so any non-whitespace key works
 
 ### `defineConfig` checks
 
-- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`, `floatingShadow`)
+- [x] `defaults` entries are existing keys (`size`, `radius`, `color`, `variant`, `errorColor`, `textStyle`, `headingStyle`, `gap`, `padding`, `floatingShadow`, `density`)
 - [x] Every color has `light` and `dark`
 - [x] Keys contain no whitespace (other characters are escaped in CSS)
 - [x] `focusRing.color` is a color key; each text style's `family` is a family key
@@ -163,7 +166,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
    - Follow-up: `RadioGroup` (fieldset/legend) so radios work inside `Field`
 3. **Typography & layout** ✅ — `Text`, `Heading`, `Link`, `Stack`, `Inline`, `Card`, `Divider`
 4. **Floating** ✅ — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
-5. **Overlays, navigation, data** — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
+5. **Overlays, navigation, data** ✅ — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
 6. **Feedback** — `Badge`, `Alert`, `Spinner`, `Skeleton`
 7. **Showcase** — generated reference page from config; second consumer app with a different brand; docs site from JSDoc; decision record (alias vs augmentation vs codegen)
 
