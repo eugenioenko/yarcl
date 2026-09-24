@@ -23,6 +23,26 @@ export function contrast(a: Rgb, b: Rgb): number {
 const WHITE: Rgb = [255, 255, 255];
 const BLACK: Rgb = [0, 0, 0];
 
+export function mix(a: Rgb, b: Rgb, amount: number): Rgb {
+  return a.map((channel, i) => Math.round(channel + (b[i] - channel) * amount)) as Rgb;
+}
+
+export function toHex(rgb: Rgb): string {
+  return `#${rgb.map((c) => c.toString(16).padStart(2, '0')).join('')}`;
+}
+
+/**
+ * The color, mixed toward `toward` in small steps until it reaches `min` contrast
+ * against every background. Returns the color unchanged when it already passes.
+ */
+export function readableText(color: Rgb, backgrounds: Rgb[], toward: Rgb, min: number): Rgb {
+  for (let step = 0; step <= 20; step++) {
+    const candidate = mix(color, toward, step / 20);
+    if (backgrounds.every((bg) => contrast(candidate, bg) >= min)) return candidate;
+  }
+  return toward;
+}
+
 export function readableOn(background: Rgb): string {
   return contrast(background, WHITE) >= contrast(background, BLACK) ? '#ffffff' : '#000000';
 }

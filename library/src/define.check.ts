@@ -176,3 +176,8 @@ defineConfig({
   // @ts-expect-error
   defaults: { ...defaults.defaults, modalSize: 'giant' },
 });
+
+defineConfig({
+  ...defaults,
+  colors: { ...defaults.colors, primary: { light: '#2d4bb8', dark: '#8aa2ff', text: { light: '#1e3480', dark: '#c3cfff' } } },
+});

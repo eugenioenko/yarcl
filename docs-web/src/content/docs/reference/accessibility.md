@@ -13,7 +13,8 @@ sidebar:
 - **Labelling**: `Field` and `RadioGroup` connect labels, descriptions and errors; `IconButton` requires `aria-label` in its types.
 - **Live regions**: toasts use `role="status"` (or `role="alert"` when urgent); alerts opt in with `live`.
 - **Visible focus**: every control shows a focus ring for keyboard users (`:focus-visible`), configured in `focusRing`.
-- **Contrast checks**: the build warns when a color's text color fails WCAG AA in light or dark mode.
+- **Contrast**: text on a color gets a computed foreground, and a color drawn as text gets a computed text shade, both at least 4.5:1 (WCAG AA) in light and dark mode. The build warns when a foreground can't reach it.
+- **Automated audits**: the e2e suite runs axe-core (WCAG 2.2 A and AA) on both demo apps in light and dark mode, including every open menu, select, combobox, popover, tooltip, hover card, dialog, drawer and toast.
 - **Reduced motion**: transitions and entry animations are turned off when the user prefers reduced motion.
 - **Scalable sizes**: sizes in `rem` follow the user's browser font size.
 
@@ -33,5 +34,5 @@ sidebar:
 - Give icon-only buttons, button groups, toggle groups and tab lists meaningful labels.
 - Choose heading levels by document structure; change the look with `textStyle`.
 - Keep links in running text underlined.
-- Check that semantic colors used as **text** on your page background have enough contrast. The build only checks text drawn on the colors themselves.
+- Check your own CSS that uses `--yarcl-color-{key}` for text; use `--yarcl-color-{key}-text` instead.
 - Set `live` on alerts that appear in response to user actions.

@@ -2,6 +2,8 @@ import { chromium } from 'playwright-core';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+import a11yBrandB from './suites/a11y-brand-b.mjs';
+import a11y from './suites/a11y.mjs';
 import brandB from './suites/brand-b.mjs';
 import feedback from './suites/feedback.mjs';
 import floating from './suites/floating.mjs';
@@ -24,6 +26,8 @@ const suites = [
   ['consumer', 'feedback', feedback],
   ['consumer', 'groups', groups],
   ['consumer-b', 'brand-b', brandB],
+  ['consumer', 'a11y', a11y],
+  ['consumer-b', 'a11y-brand-b', a11yBrandB],
 ];
 const only = process.argv[2];
 
@@ -41,14 +45,15 @@ let failures = 0;
 for (const [app, name, suite] of suites) {
   if (only && only !== name) continue;
   for (const scheme of ['light', 'dark']) {
-    const page = await browser.newPage({ viewport: { width: 1100, height: 800 }, reducedMotion: 'reduce' });
+    const context = await browser.newContext({ viewport: { width: 1100, height: 800 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
     const lines = [];
     const check = (label, ok, detail = '') => {
       if (!ok) failures++;
-      lines.push(`  ${ok ? '✓' : '✗'} ${label}${!ok && detail ? `  — ${detail}` : ''}`);
+      lines.push(`  ${ok ? '✓' : '✗'} ${label}${!ok && detail ? `: ${detail}` : ''}`);
     };
     const focused = (locator) => locator.evaluate((el) => el === document.activeElement || el.contains(document.activeElement));
     const htmlOverflow = () => page.evaluate(() => getComputedStyle(document.documentElement).overflow);
@@ -60,7 +65,7 @@ for (const [app, name, suite] of suites) {
     }
     check('no console errors', errors.length === 0, errors.join(' | '));
     console.log(`${name} (${scheme})\n${lines.join('\n')}`);
-    await page.close();
+    await context.close();
   }
 }
 

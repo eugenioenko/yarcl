@@ -13,6 +13,13 @@ export interface ColorToken extends ColorPair {
    * Computed by contrast (black or white) per scheme when omitted; requires hex values.
    */
   on?: string | ColorPair;
+  /**
+   * Color used when this color is drawn as text: outline, soft and ghost variants, colored `Text`,
+   * `Link`, menu items. Computed per scheme when omitted: the color itself when it has enough
+   * contrast on the page, surface and tinted backgrounds, otherwise mixed toward the neutral text
+   * color until it does. Requires hex values.
+   */
+  text?: string | ColorPair;
 }
 
 /**

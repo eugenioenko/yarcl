@@ -1,4 +1,4 @@
-import { contrast, parseHex, readableOn } from './color.ts';
+import { contrast, mix, parseHex, readableOn, readableText, toHex } from './color.ts';
 import type { ColorPair, ColorToken, FontFaceToken, VariantToken, YarclShape } from './define.ts';
 
 const MIN_CONTRAST = 4.5;
@@ -56,7 +56,7 @@ const borders: Record<VariantToken['border'], string> = {
 
 const texts: Record<VariantToken['text'], string> = {
   on: 'var(--yarcl-c-on)',
-  color: 'var(--yarcl-c)',
+  color: 'var(--yarcl-c-text)',
   neutral: 'var(--yarcl-neutral-text)',
 };
 
@@ -77,6 +77,22 @@ function fontFace(face: FontFaceToken): string {
   ]);
 }
 
+const TEXT_TINTS = [0, 0.14, 0.22];
+
+function textShade(name: string, token: ColorToken, neutrals: YarclShape['neutrals']): string {
+  if (token.text) return pair(typeof token.text === 'string' ? { light: token.text, dark: token.text } : token.text);
+  const modes = ['light', 'dark'] as const;
+  const resolved = modes.map((mode) => {
+    const color = parseHex(token[mode]);
+    const text = parseHex(neutrals.text[mode]);
+    const grounds = [parseHex(neutrals.bg[mode]), parseHex(neutrals.surface[mode])];
+    if (!color || !text || grounds.some((g) => !g)) return token[mode];
+    const backgrounds = grounds.flatMap((ground) => TEXT_TINTS.map((alpha) => mix(ground!, color, alpha)));
+    return toHex(readableText(color, backgrounds, text, MIN_CONTRAST));
+  });
+  return pair({ light: resolved[0], dark: resolved[1] });
+}
+
 function rule(selector: string, declarations: [string, string | number][]): string {
   return `${selector} {\n${declarations.map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`;
 }
@@ -87,11 +103,16 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
 
   for (const [key, token] of Object.entries(config.colors)) {
     const k = ident(key);
-    root.push([`--yarcl-color-${k}`, pair(token)], [`--yarcl-color-${k}-on`, foreground(key, token, warn)]);
+    root.push(
+      [`--yarcl-color-${k}`, pair(token)],
+      [`--yarcl-color-${k}-on`, foreground(key, token, warn)],
+      [`--yarcl-color-${k}-text`, textShade(key, token, config.neutrals)],
+    );
     rules.push(
       rule(`.yarcl-color-${k}`, [
         ['--yarcl-c', `var(--yarcl-color-${k})`],
         ['--yarcl-c-on', `var(--yarcl-color-${k}-on)`],
+        ['--yarcl-c-text', `var(--yarcl-color-${k}-text)`],
       ]),
     );
   }

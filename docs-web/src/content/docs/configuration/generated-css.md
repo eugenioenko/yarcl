@@ -18,7 +18,7 @@ Components never set inline styles. They render class names, and all values come
 
 | Variable | From |
 |---|---|
-| `--yarcl-color-{key}`, `--yarcl-color-{key}-on` | `colors` |
+| `--yarcl-color-{key}`, `--yarcl-color-{key}-on`, `--yarcl-color-{key}-text` | `colors` |
 | `--yarcl-neutral-{key}` | `neutrals` |
 | `--yarcl-size-{key}-height`, `-padding-x`, `-font-size`, `-icon-size` | `sizes` |
 | `--yarcl-radius-{key}` | `radii` |
@@ -40,7 +40,7 @@ One class per key, shared by every component:
 
 | Class | Sets |
 |---|---|
-| `yarcl-color-{key}` | `--yarcl-c`, `--yarcl-c-on` |
+| `yarcl-color-{key}` | `--yarcl-c`, `--yarcl-c-on`, `--yarcl-c-text` |
 | `yarcl-size-{key}` | `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon` |
 | `yarcl-radius-{key}` | `--yarcl-r` |
 | `yarcl-variant-{key}` | `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg` |

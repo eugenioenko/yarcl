@@ -36,6 +36,23 @@ warning: { light: '#b45309', dark: '#fbbf24', on: { light: '#ffffff', dark: '#1c
 
 Automatic foregrounds need hex values. For `oklch()`, `hsl()` or other formats, set `on` explicitly.
 
+### Text shade (`text`)
+
+Outline, soft and ghost variants, colored `Text`, `Link` and menu items draw the color **as text**, often on a light tint of itself. Mid-tone colors like green, amber and red can fall below 4.5:1 there.
+
+So the build also computes a text shade per color and scheme: the color itself when it already has enough contrast against the page background, the surface and the tinted backgrounds, otherwise the color mixed toward the neutral text color, in small steps, until it does. Colors that pass are left untouched; backgrounds and borders always use the exact color.
+
+```ts
+success: { light: '#15803d', dark: '#4ade80' },
+// generated: --yarcl-color-success-text: light-dark(#146b39, #4ade80)
+```
+
+Set `text` to choose it yourself, as one value or per scheme:
+
+```ts
+success: { light: '#15803d', dark: '#4ade80', text: { light: '#0f5c2e', dark: '#4ade80' } },
+```
+
 ### Contrast warnings
 
 The plugin checks every color's foreground against its background in both schemes. Anything below 4.5:1 (WCAG AA for normal text) is reported when you build or run the dev server:
