@@ -3,6 +3,7 @@ import { cx } from './classes';
 
 export interface FieldContextValue {
   id: string;
+  labelId: string;
   describedBy: string | undefined;
   invalid: boolean;
   required: boolean | undefined;

@@ -27,6 +27,7 @@
     .yarcl-checkbox-input,
     .yarcl-radio-input,
     .yarcl-switch-input,
+    .yarcl-slider-thumb,
     .yarcl-link,
     .yarcl-modal-close,
     .yarcl-toast-close,
@@ -242,6 +243,84 @@
 .yarcl-switch-input:checked::before {
   background: var(--yarcl-c-on);
   transform: translateX(calc(var(--yarcl-track-h) * 1.8 - var(--yarcl-thumb) - 4px));
+}
+
+/* Slider */
+
+.yarcl-slider {
+  --yarcl-slider-thumb: calc(var(--yarcl-icon) * 1.25);
+  --yarcl-slider-track: calc(var(--yarcl-icon) * 0.375);
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--yarcl-slider-thumb);
+  padding-inline: calc(var(--yarcl-slider-thumb) / 2);
+  touch-action: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.yarcl-slider:has([aria-invalid='true']) {
+  --yarcl-c: var(--yarcl-error);
+}
+
+.yarcl-slider[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.yarcl-slider-track {
+  position: relative;
+  flex: 1;
+  height: var(--yarcl-slider-track);
+  border-radius: var(--yarcl-r);
+  background: color-mix(in oklab, var(--yarcl-neutral-muted) 35%, var(--yarcl-neutral-bg));
+}
+
+.yarcl-slider-range {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--yarcl-slider-start);
+  inset-inline-end: calc(100% - var(--yarcl-slider-end));
+  border-radius: inherit;
+  background: var(--yarcl-c);
+}
+
+.yarcl-slider-thumb {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: var(--yarcl-slider-position);
+  box-sizing: border-box;
+  width: var(--yarcl-slider-thumb);
+  height: var(--yarcl-slider-thumb);
+  margin-block-start: calc(var(--yarcl-slider-thumb) / -2);
+  margin-inline-start: calc(var(--yarcl-slider-thumb) / -2);
+  border: calc(var(--yarcl-border-width) * 2) solid var(--yarcl-c);
+  border-radius: var(--yarcl-r);
+  background: var(--yarcl-neutral-surface);
+  box-shadow: var(--yarcl-shadow-sm, none);
+  cursor: grab;
+  transition: box-shadow var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-slider:not([data-disabled]) .yarcl-slider-thumb:hover {
+  box-shadow: 0 0 0 calc(var(--yarcl-slider-thumb) / 4) color-mix(in oklab, var(--yarcl-c) 18%, transparent);
+}
+
+.yarcl-slider:not([data-disabled]) .yarcl-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.yarcl-slider[data-disabled] .yarcl-slider-thumb {
+  cursor: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yarcl-slider-thumb {
+    transition: none;
+  }
 }
 
 /* Field */

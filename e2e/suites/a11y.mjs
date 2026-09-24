@@ -24,6 +24,10 @@ export default async function (ctx) {
 
   await audit(ctx, 'whole demo page');
 
+  await page.getByRole('slider', { name: 'Price range Maximum' }).focus();
+  await page.keyboard.press('Home');
+  await audit(ctx, 'sliders after keyboard input', '.yarcl-slider');
+
   await page.getByRole('button', { name: 'Actions' }).click();
   await audit(ctx, 'menu open', '.yarcl-floating');
   await page.keyboard.press('Escape');

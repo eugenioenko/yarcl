@@ -1,0 +1,52 @@
+---
+title: "Slider"
+description: "Picks a number or a range by dragging along a track."
+sidebar:
+  order: 9
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SliderDemo } from '@/demos/forms';
+
+```tsx
+import { Slider } from 'yarcl';
+```
+
+<Preview>
+  <SliderDemo client:visible />
+</Preview>
+
+```tsx
+<Field label="Volume">
+  <Slider value={volume} onValueChange={setVolume} />
+</Field>
+
+<Field label="Price">
+  <Slider defaultValue={[200, 800]} min={0} max={1000} step={50} formatValue={(v) => `$${v}`} />
+</Field>
+```
+
+Pass a number for one thumb, or a `[start, end]` pair for a range with two thumbs. The type of `onValueChange` follows: a number, or a pair. Values snap to `step`, counted from `min`, and the two thumbs of a range can't cross.
+
+## Tokens
+
+- `size` scales the thumb and the track from the size's `iconSize`.
+- `radius` rounds the thumb and the track.
+- `color` fills the selected part of the track and the thumb border. Inside a `Field` with an error, it switches to `defaults.errorColor`.
+- Set per-component defaults with `components.Slider` (`size`, `radius`, `color`).
+
+## Accessibility
+
+- Each thumb has `role="slider"` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`. In a range, each thumb's bounds are the other thumb's value.
+- Arrow keys move by `step`, PageUp and PageDown by `largeStep`, Home and End to the ends.
+- Inside a `Field`, thumbs are labelled by the field label and described by its helper text and error. Outside one, pass `aria-label` or `aria-labelledby`.
+- Range thumbs add "Minimum" and "Maximum" to the label; change them with `thumbLabels`.
+- `formatValue` sets `aria-valuetext`, so screen readers announce "$200" instead of "200".
+- `name` renders a hidden input per thumb, so the value submits with a form.
+
+## Props
+
+Accepts every native `<div>` attribute except `color`, `defaultValue`, `onChange` and `children`.
+
+<Props of="SliderProps" />

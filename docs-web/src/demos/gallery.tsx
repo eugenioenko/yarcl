@@ -18,6 +18,7 @@ import {
   Select,
   Skeleton,
   Spinner,
+  Slider,
   Stack,
   Switch,
   Table,
@@ -197,6 +198,17 @@ const groups: Record<string, Item[]> = {
             Notifications
           </Switch>
           <Switch size="sm">Dark mode</Switch>
+        </Stack>
+      ),
+    },
+    {
+      name: 'Slider',
+      href: '/components/forms/slider/',
+      description: 'Picks a number or a range by dragging or with the keyboard.',
+      preview: (
+        <Stack gap="sm" className="gallery-fill">
+          <Slider size="sm" defaultValue={60} aria-label="Volume" />
+          <Slider size="sm" defaultValue={[25, 75]} aria-label="Price" />
         </Stack>
       ),
     },
