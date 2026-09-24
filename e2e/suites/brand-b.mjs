@@ -29,6 +29,16 @@ export default async function ({ page, check }) {
     return [getComputedStyle(document.querySelector('.yarcl-slider-range')).backgroundColor, ink];
   });
   check('slider: default color ink', fill === ink, `${fill} vs ${ink}`);
+  const delivery = page.getByRole('button', { name: 'Delivery date', includeHidden: true });
+  check('date picker matches Select height', (await delivery.boundingBox()).height === (await shade.boundingBox()).height);
+  check('component default: date picker square', (await delivery.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
+  const bgOf = (el) => getComputedStyle(el).backgroundColor;
+  const addFill = await add.evaluate(bgOf);
+  await delivery.click();
+  const picked = page.getByRole('gridcell', { name: 'Monday, October 5th, 2026' });
+  check("picked day uses the consumer's default variant and color", (await picked.evaluate(bgOf)) === addFill);
+  check('month before min disabled', (await page.getByRole('button', { name: 'Previous month' }).getAttribute('aria-disabled')) === 'true');
+  await page.keyboard.press('Escape');
 
   await add.click();
   check('size required before adding', await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).isVisible());

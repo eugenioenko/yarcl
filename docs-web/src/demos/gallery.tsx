@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Card,
   Checkbox,
+  DatePicker,
   Divider,
   Field,
   Heading,
@@ -52,6 +53,24 @@ function MockListbox({ items, active = 0, danger }: { items: string[]; active?: 
         >
           {item}
         </div>
+      ))}
+    </div>
+  );
+}
+
+function MockCalendar() {
+  const days = Array.from({ length: 14 }, (_, i) => i + 1);
+  return (
+    <div className="yarcl-panel yarcl-size-xs yarcl-color-primary yarcl-radius-md gallery-float gallery-calendar" aria-hidden="true">
+      {days.map((day) => (
+        <span
+          key={day}
+          className={`yarcl-date-picker-day${day === 3 || day === 7 ? ' yarcl-variant-solid' : day > 3 && day < 7 ? ' yarcl-variant-soft' : ''}`}
+          data-selected={day === 3 || day === 7 || undefined}
+          data-in-range={(day > 3 && day < 7) || undefined}
+        >
+          {day}
+        </span>
       ))}
     </div>
   );
@@ -176,6 +195,17 @@ const groups: Record<string, Item[]> = {
         <Stack gap="xs" className="gallery-fill">
           <Input size="sm" defaultValue="sw" aria-label="Country" />
           <MockListbox items={['Sweden', 'Switzerland']} />
+        </Stack>
+      ),
+    },
+    {
+      name: 'DatePicker',
+      href: '/components/forms/date-picker/',
+      description: 'Picks a day or a range from a calendar, with date-fns locales.',
+      preview: (
+        <Stack gap="xs" className="gallery-fill">
+          <DatePicker size="sm" aria-label="Stay" mode="range" defaultValue={{ from: new Date(2026, 8, 3), to: new Date(2026, 8, 7) }} />
+          <MockCalendar />
         </Stack>
       ),
     },

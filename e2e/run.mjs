@@ -5,6 +5,7 @@ import { createServer } from 'vite';
 import a11yBrandB from './suites/a11y-brand-b.mjs';
 import a11y from './suites/a11y.mjs';
 import brandB from './suites/brand-b.mjs';
+import datePicker from './suites/date-picker.mjs';
 import feedback from './suites/feedback.mjs';
 import floating from './suites/floating.mjs';
 import focusBrandB from './suites/focus-brand-b.mjs';
@@ -31,6 +32,7 @@ const suites = [
   ['consumer', 'groups', groups],
   ['consumer', 'slider', slider],
   ['consumer', 'label', label],
+  ['consumer', 'date-picker', datePicker],
   ['fixture', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
   ['fixture', 'a11y-brand-b', a11yBrandB],

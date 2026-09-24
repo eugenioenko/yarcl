@@ -13,6 +13,8 @@ import {
   Pagination,
   Combobox,
   Progress,
+  DatePicker,
+  type DateRange,
   Skeleton,
   Spinner,
   Dialog,
@@ -79,6 +81,23 @@ export const contract = (
     </Menu>
     <Select options={[{ value: 'a', label: 'A' }]} size="lg" radius="rounded" color="success" />
     <Combobox options={[]} filter={false} allowCustomValue size="xs" />
+    <DatePicker
+      value={new Date()}
+      onValueChange={(d: Date | null) => d}
+      min={new Date()}
+      max={new Date()}
+      isDateDisabled={() => false}
+      weekStartsOn={1}
+      displayFormat="P"
+      placeholder="Pick"
+      name="day"
+      labels={{ dialog: 'Choose' }}
+      size="lg"
+      radius="size"
+      color="success"
+      variant="subtle"
+    />
+    <DatePicker mode="range" defaultValue={{ from: new Date(), to: null }} onValueChange={(r: DateRange | null) => r} />
     <Dialog title="T" radius="xl" size="lg" />
     <Drawer title="T" side="left" />
     <Tabs defaultValue="a" size="sm" color="success" />
@@ -188,6 +207,18 @@ export const contract = (
     <Select options={[]} size="huge" />
     {/* @ts-expect-error */}
     <Combobox options={[]} radius="full" />
+    {/* @ts-expect-error */}
+    <DatePicker size="huge" />
+    {/* @ts-expect-error */}
+    <DatePicker variant="ghost" />
+    {/* @ts-expect-error */}
+    <DatePicker color="primary" />
+    {/* @ts-expect-error */}
+    <DatePicker mode="range" value={new Date()} />
+    {/* @ts-expect-error */}
+    <DatePicker value={{ from: new Date(), to: null }} />
+    {/* @ts-expect-error */}
+    <DatePicker weekStartsOn={7} />
     {/* @ts-expect-error */}
     <Card radius="size" />
     {/* @ts-expect-error */}

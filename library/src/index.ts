@@ -53,6 +53,15 @@ export { Select } from './components/Select';
 export type { SelectProps, SelectOption } from './components/Select';
 export { Combobox } from './components/Combobox';
 export type { ComboboxProps } from './components/Combobox';
+export { DatePicker } from './components/DatePicker';
+export type {
+  DatePickerProps,
+  DatePickerBaseProps,
+  DatePickerSingleProps,
+  DatePickerRangeProps,
+  DatePickerLabels,
+  DateRange,
+} from './components/DatePicker';
 export { Dialog } from './components/Dialog';
 export type { DialogProps } from './components/Dialog';
 export { Drawer } from './components/Drawer';

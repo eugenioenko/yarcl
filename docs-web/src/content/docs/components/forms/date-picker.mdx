@@ -1,0 +1,122 @@
+---
+title: "DatePicker"
+description: "Picks a day or a range of days from a calendar popover, with date-fns locales."
+sidebar:
+  order: 9
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { DatePickerDemo, DatePickerLimitsDemo, DatePickerLocaleDemo, DatePickerRangeDemo } from '@/demos/forms';
+
+```tsx
+import { DatePicker } from 'yarcl';
+```
+
+<Preview>
+  <DatePickerDemo client:visible />
+</Preview>
+
+```tsx
+<Field label="Appointment">
+  <DatePicker value={date} onValueChange={setDate} placeholder="Pick a date" />
+</Field>
+```
+
+The trigger is a button styled like an input, with the same height as `Input` at the same size. The calendar opens in a `Popover`. Values are plain `Date`s at the start of the day; pass `name` to submit them with a form as `yyyy-MM-dd`.
+
+## Range
+
+`mode="range"` picks a start and an end day. The first pick reports `{ from, to: null }` and keeps the calendar open; the second completes the range and closes it. Picking an end before the start swaps them.
+
+<Preview>
+  <DatePickerRangeDemo client:visible />
+</Preview>
+
+```tsx
+const [stay, setStay] = useState<DateRange | null>(null);
+
+<DatePicker mode="range" value={stay} onValueChange={setStay} />
+```
+
+## Limits and disabled days
+
+`min` and `max` bound the calendar; days outside them are disabled and the month buttons stop at the limits. `isDateDisabled` disables any other day, such as weekends or booked dates. Disabled days can still be focused, so keyboard users hear why they can't be picked.
+
+<Preview>
+  <DatePickerLimitsDemo client:visible />
+</Preview>
+
+```tsx
+import { addDays, isWeekend } from 'date-fns';
+
+<DatePicker min={addDays(today, 1)} max={addDays(today, 30)} isDateDisabled={isWeekend} />
+```
+
+## Locale
+
+Dates are formatted with [date-fns](https://date-fns.org). Pass a date-fns `locale` for month and weekday names and the first day of the week, `displayFormat` for the trigger text, and `labels` to translate the accessible names of the popover and month buttons.
+
+<Preview>
+  <DatePickerLocaleDemo client:visible />
+</Preview>
+
+```tsx
+import { de } from 'date-fns/locale';
+
+<DatePicker
+  locale={de}
+  displayFormat="P"
+  labels={{ dialog: 'Datum wählen', previousMonth: 'Vorheriger Monat', nextMonth: 'Nächster Monat' }}
+/>
+```
+
+## Tokens
+
+- `size` sets the trigger height and the size of the calendar cells.
+- `color` sets the focus border, the picked days and today's marker.
+- `radius` rounds the trigger and the day cells; `rounded` makes circular days.
+- Picked days use `variant` (default `defaults.variant`); days inside a range use `defaults.softVariant`.
+- All four can be set for every date picker with `components.DatePicker`.
+
+## Keyboard
+
+The calendar follows the WAI-ARIA date picker dialog pattern.
+
+| Key | Action |
+|---|---|
+| <kbd>Enter</kbd> <kbd>Space</kbd> | on the trigger, opens the calendar at the picked day, or today |
+| <kbd>←</kbd> <kbd>→</kbd> | previous and next day |
+| <kbd>↑</kbd> <kbd>↓</kbd> | same day of the previous and next week |
+| <kbd>Home</kbd> <kbd>End</kbd> | first and last day of the week |
+| <kbd>PageUp</kbd> <kbd>PageDown</kbd> | same day of the previous and next month |
+| <kbd>Shift</kbd> + <kbd>PageUp</kbd> <kbd>PageDown</kbd> | same day of the previous and next year |
+| <kbd>Enter</kbd> <kbd>Space</kbd> | picks the focused day |
+| <kbd>Tab</kbd> | moves between the month buttons and the grid |
+| <kbd>Esc</kbd> | closes without picking and returns focus to the trigger |
+
+The popover is a modal `role="dialog"`. The calendar is a `role="grid"` labelled by the month heading, which is announced as it changes. Days have their full date as their name, `aria-selected` when picked and `aria-current="date"` for today. Inside a `Field`, the trigger is labelled by the field and described by its value.
+
+## Props
+
+### DatePicker
+
+Accepts every native `<button>` attribute except `color`, `value`, `defaultValue`, `onChange`, `type` and `name`.
+
+<Props of="DatePickerBaseProps" />
+
+### Single mode
+
+<Props of="DatePickerSingleProps" exclude={['min', 'max', 'isDateDisabled', 'locale', 'weekStartsOn', 'displayFormat', 'placeholder', 'name', 'labels', 'size', 'radius', 'color', 'variant']} />
+
+### Range mode
+
+<Props of="DatePickerRangeProps" exclude={['min', 'max', 'isDateDisabled', 'locale', 'weekStartsOn', 'displayFormat', 'placeholder', 'name', 'labels', 'size', 'radius', 'color', 'variant']} />
+
+### DateRange
+
+<Props of="DateRange" />
+
+### DatePickerLabels
+
+<Props of="DatePickerLabels" />

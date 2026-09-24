@@ -31,6 +31,7 @@ import {
   type Variant,
 } from 'yarcl';
 import { DesignReference } from 'yarcl/reference';
+import { DatePickerDemo } from './DatePickerDemo';
 import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
 import { OverlaysDemo } from './OverlaysDemo';
@@ -257,6 +258,10 @@ export function App() {
 
           <Section title="Floating">
             <FloatingDemo />
+          </Section>
+
+          <Section title="Date picker">
+            <DatePickerDemo />
           </Section>
 
           <Section title="Overlays, tabs, table">

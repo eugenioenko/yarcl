@@ -6,6 +6,7 @@ import {
   Card,
   Checkbox,
   Combobox,
+  DatePicker,
   Dialog,
   Drawer,
   Field,
@@ -169,6 +170,9 @@ function SettingsForm() {
       </Field>
       <Field label="Seats" description="Between 5 and 50 seats.">
         <Slider defaultValue={12} min={5} max={50} />
+      </Field>
+      <Field label="Renewal date">
+        <DatePicker placeholder="Pick a date" />
       </Field>
       <RadioGroup label="Billing" defaultValue="yearly" orientation="horizontal">
         <Radio value="monthly">Monthly</Radio>

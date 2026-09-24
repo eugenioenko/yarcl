@@ -4,6 +4,7 @@ import {
   Badge,
   Button,
   ButtonGroup,
+  DatePicker,
   Dialog,
   Divider,
   Heading,
@@ -175,6 +176,7 @@ export function App() {
               </Text>
               <Slider aria-labelledby="sleeve-label" defaultValue={[58, 64]} min={54} max={70} step={2} formatValue={(v) => `${v} cm`} />
             </Stack>
+            <DatePicker aria-label="Delivery date" defaultValue={new Date(2026, 9, 5)} min={new Date(2026, 9, 1)} />
 
             <ButtonGroup attached={false} size="talla-l">
               <Button onClick={addToBag} className="grow">
