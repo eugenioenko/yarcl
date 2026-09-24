@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   Checkbox,
+  CommandPalette,
   Dialog,
   Drawer,
   Field,
@@ -19,9 +20,10 @@ import {
   toast,
   config,
   type Color,
+  type CommandPaletteCommand,
   type ModalSize,
 } from 'yarcl';
-import { PlusIcon, SearchIcon, TrashIcon } from './icons';
+import { InfoIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
 
 export function DialogDemo() {
   return (
@@ -239,5 +241,66 @@ export function ToastDemo() {
       </Inline>
       <Toaster />
     </>
+  );
+}
+
+function paletteCommands(run: (label: string) => void): CommandPaletteCommand[] {
+  const command = (id: string, label: string, extra: Partial<CommandPaletteCommand> = {}) => ({
+    id,
+    label,
+    onSelect: () => run(label),
+    ...extra,
+  });
+  return [
+    command('new', 'New document', { group: 'Create', icon: <PlusIcon />, shortcut: 'Mod+Alt+N' }),
+    command('invite', 'Invite teammate', { group: 'Create', keywords: ['member', 'user', 'share'] }),
+    command('search', 'Search files', { group: 'Navigate', icon: <SearchIcon />, shortcut: 'Mod+P' }),
+    command('help', 'Open help center', { group: 'Navigate', icon: <InfoIcon />, keywords: ['docs', 'support'] }),
+    command('dashboard', 'Go to dashboard', { group: 'Navigate', shortcut: 'G D' }),
+    command('theme', 'Toggle dark mode', { group: 'Preferences', keywords: ['theme', 'appearance'] }),
+    command('archive', 'Archive workspace', { group: 'Danger zone', disabled: true }),
+    command('delete', 'Delete workspace', { group: 'Danger zone', icon: <TrashIcon /> }),
+  ];
+}
+
+export function CommandPaletteDemo() {
+  const [last, setLast] = useState('nothing yet');
+  return (
+    <Stack gap="sm" align="start">
+      <CommandPalette
+        shortcut="Mod+J"
+        commands={paletteCommands(setLast)}
+        trigger={
+          <Button variant="outline" color="neutral">
+            <SearchIcon /> Open command palette
+          </Button>
+        }
+      />
+      <Text textStyle="caption" muted>
+        Last command: {last}
+      </Text>
+    </Stack>
+  );
+}
+
+export function CommandPaletteControlledDemo() {
+  const [open, setOpen] = useState(false);
+  const [last, setLast] = useState('nothing yet');
+  return (
+    <Stack gap="sm" align="start">
+      <Button onClick={() => setOpen(true)}>Run a command</Button>
+      <CommandPalette
+        open={open}
+        onOpenChange={setOpen}
+        shortcut={false}
+        placeholder="What do you want to do?"
+        emptyMessage="No matching commands. Try another word."
+        commands={paletteCommands(() => {})}
+        onSelect={(command) => setLast(command.label)}
+      />
+      <Text textStyle="caption" muted>
+        Palette is {open ? 'open' : 'closed'}. Last command: {last}
+      </Text>
+    </Stack>
   );
 }

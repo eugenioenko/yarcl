@@ -6,6 +6,7 @@ import {
   type MouseEvent,
   type ReactElement,
   type ReactNode,
+  type SyntheticEvent,
 } from 'react';
 import { cx, radiusClass, typeClass } from '../classes';
 import { useControllable } from '../hooks';
@@ -67,25 +68,8 @@ function CloseIcon() {
   );
 }
 
-export function Modal({
-  title,
-  description,
-  children,
-  footer,
-  trigger,
-  open: openProp,
-  defaultOpen = false,
-  onOpenChange,
-  closeOnBackdrop = true,
-  size,
-  className,
-  radius,
-}: ModalProps & { className: string; radius?: Radius }) {
-  const config = useConfig();
-  const [open, setOpen] = useControllable(openProp, defaultOpen, onOpenChange);
+export function useModalDialog(open: boolean, setOpen: (open: boolean) => void, closeOnBackdrop = true) {
   const ref = useRef<HTMLDialogElement>(null);
-  const titleId = useId();
-  const descriptionId = useId();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -107,6 +91,37 @@ export function Modal({
     };
   }, []);
 
+  return {
+    ref,
+    onClose(event: SyntheticEvent<HTMLDialogElement>) {
+      if (event.target === event.currentTarget && open) setOpen(false);
+    },
+    onClick(event: MouseEvent<HTMLDialogElement>) {
+      if (closeOnBackdrop && event.target === event.currentTarget) setOpen(false);
+    },
+  };
+}
+
+export function Modal({
+  title,
+  description,
+  children,
+  footer,
+  trigger,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  closeOnBackdrop = true,
+  size,
+  className,
+  radius,
+}: ModalProps & { className: string; radius?: Radius }) {
+  const config = useConfig();
+  const [open, setOpen] = useControllable(openProp, defaultOpen, onOpenChange);
+  const dialogProps = useModalDialog(open, setOpen, closeOnBackdrop);
+  const titleId = useId();
+  const descriptionId = useId();
+
   return (
     <>
       {trigger &&
@@ -117,16 +132,10 @@ export function Modal({
           },
         })}
       <dialog
-        ref={ref}
+        {...dialogProps}
         className={cx('yarcl-modal', `yarcl-modal-size-${size ?? config.defaults.modalSize}`, radiusClass(radius), className)}
         aria-labelledby={titleId}
         aria-describedby={description != null ? descriptionId : undefined}
-        onClose={(event) => {
-          if (event.target === event.currentTarget && open) setOpen(false);
-        }}
-        onClick={(event) => {
-          if (closeOnBackdrop && event.target === event.currentTarget) setOpen(false);
-        }}
       >
         {open && (
           <div className="yarcl-modal-content">

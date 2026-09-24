@@ -54,7 +54,7 @@ export async function highlightContrast({ page, check }, name, open) {
   await page.waitForTimeout(150);
   const colors = await page.evaluate(() => {
     const active = document.querySelector('.yarcl-option[data-active]');
-    const panel = active?.closest('.yarcl-panel');
+    const panel = active?.closest('.yarcl-panel, .yarcl-modal');
     if (!active || !panel) return null;
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 1;
@@ -94,5 +94,9 @@ export default async function (ctx) {
     await country.focus();
     await country.fill('s');
     await page.keyboard.press('ArrowDown');
+  });
+  await highlightContrast(ctx, 'CommandPalette', async () => {
+    await page.getByRole('button', { name: 'Command palette' }).focus();
+    await page.keyboard.press('Control+k');
   });
 }

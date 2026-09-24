@@ -25,7 +25,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Forms | `Field`, `Label`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `Stack`, `Inline`, `Card`, `Divider` |
-| Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `Toaster`, `toast` |
+| Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `CommandPalette`, `Toaster`, `toast` |
 | Data display | `Tabs`, `Table`, `Pagination` |
 | Feedback | `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress` |
 

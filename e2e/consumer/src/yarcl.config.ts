@@ -81,6 +81,7 @@ export default defineConfig({
     Drawer: { size: 'narrow' },
     Label: { color: 'clay' },
     Progress: { color: 'moss' },
+    CommandPalette: { radius: 'square', color: 'clay' },
   },
   defaults: {
     size: 'talla-m',

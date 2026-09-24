@@ -1,0 +1,102 @@
+---
+title: "CommandPalette"
+description: "A searchable command menu in a modal dialog, opened with a keyboard shortcut."
+sidebar:
+  order: 8
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { CommandPaletteControlledDemo, CommandPaletteDemo } from '@/demos/overlays';
+
+```tsx
+import { CommandPalette } from 'yarcl';
+```
+
+<Preview>
+  <CommandPaletteDemo client:visible />
+</Preview>
+
+Open it with the button, or press <kbd>⌘</kbd> <kbd>J</kbd> (<kbd>Ctrl</kbd> <kbd>J</kbd> on Windows and Linux). The default shortcut is <kbd>⌘</kbd> <kbd>K</kbd>, but this site's search already uses it.
+
+```tsx
+<CommandPalette
+  trigger={<Button variant="outline">Open command palette</Button>}
+  commands={[
+    { id: 'new', label: 'New document', group: 'Create', shortcut: 'Mod+Alt+N', onSelect: createDocument },
+    { id: 'invite', label: 'Invite teammate', group: 'Create', keywords: ['member', 'share'], onSelect: invite },
+    { id: 'search', label: 'Search files', group: 'Navigate', icon: <SearchIcon />, shortcut: 'Mod+P', onSelect: search },
+    { id: 'archive', label: 'Archive workspace', group: 'Danger zone', disabled: true },
+  ]}
+/>
+```
+
+## Commands
+
+Commands are plain data. Each one has an `id`, a `label` and an `onSelect`, plus optional:
+
+- `group`: commands with the same group are listed together under that heading, in the order the groups first appear
+- `keywords`: extra words the search matches, such as synonyms
+- `shortcut`: a hint shown on the right, like `'Mod+S'` or `'G D'` for a sequence. It's only a hint; bind the key yourself
+- `icon`: shown before the label
+- `disabled`: listed but can't be chosen, and skipped by the arrow keys
+
+The search matches every typed word against the label, group and keywords, ignoring case. Pass a function to `filter` for custom matching, or `filter={false}` with `inputValue` and `onInputValueChange` to filter on a server. When nothing matches, `emptyMessage` is shown.
+
+## Shortcut
+
+`shortcut` toggles the palette from anywhere on the page. It's one key combination written with `+`: `'Mod+K'` (the default), `'Shift+Mod+P'`, `'Alt+Space'`. `Mod` is <kbd>⌘</kbd> on Apple devices and <kbd>Ctrl</kbd> elsewhere. `shortcut={false}` turns it off.
+
+## Controlled
+
+<Preview>
+  <CommandPaletteControlledDemo client:visible />
+</Preview>
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<CommandPalette
+  open={open}
+  onOpenChange={setOpen}
+  shortcut={false}
+  commands={commands}
+  onSelect={(command) => track(command.id)}
+/>
+```
+
+`onSelect` on the palette runs after the command's own `onSelect`, which is handy for analytics or recent items.
+
+## Tokens
+
+The palette is a [Dialog](/components/overlays/dialog/) with a search field and the listbox styles shared with [Select](/components/forms/select/) and [Combobox](/components/forms/combobox/):
+
+- `size` sets the height and font size of the search field and the commands, from your `sizes` config
+- `color` sets the highlighted command, from your `colors` config
+- `radius` sets the corners, from your `radii` config
+- the width is `defaults.modalSize`
+
+All three can be set once for the app with `components: { CommandPalette: { … } }` in the config.
+
+## Accessibility
+
+- It's a native modal `<dialog>`: focus moves to the search field, the page behind is inert, and <kbd>Esc</kbd> closes it and returns focus to where it was.
+- The search field is a `combobox` that controls a `listbox`. The highlighted command is tracked with `aria-activedescendant`, so focus never leaves the field.
+- Groups are `group`s named by their heading. Shortcut hints are exposed as `aria-keyshortcuts`.
+- The empty message is a live region, so screen readers announce when nothing matches.
+
+| Key | Action |
+|---|---|
+| <kbd>⌘</kbd> <kbd>K</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd> | opens or closes the palette |
+| <kbd>↑</kbd> <kbd>↓</kbd> | moves between commands, skipping disabled ones, and wraps |
+| <kbd>Home</kbd> <kbd>End</kbd> | first and last command |
+| <kbd>Enter</kbd> | runs the highlighted command and closes |
+| <kbd>Esc</kbd> | closes; focus returns |
+
+## Props
+
+<Props of="CommandPaletteProps" />
+
+### CommandPaletteCommand
+
+<Props of="CommandPaletteCommand" />

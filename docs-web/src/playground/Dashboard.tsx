@@ -6,6 +6,7 @@ import {
   Card,
   Checkbox,
   Combobox,
+  CommandPalette,
   DatePicker,
   Dialog,
   Drawer,
@@ -217,7 +218,27 @@ export function Dashboard() {
           <span className="pg-logo" aria-hidden="true" />
           <Text textStyle="subheading">Acme</Text>
         </Inline>
-        <Input className="pg-search" size="sm" placeholder="Search invoices, customers…" aria-label="Search" />
+        <CommandPalette
+          shortcut="Mod+J"
+          trigger={
+            <Button className="pg-search" size="sm" variant="outline" color="neutral">
+              <SearchIcon />
+              Search or jump to…
+            </Button>
+          }
+          commands={[
+            ...nav.map((item) => ({
+              id: item.id,
+              label: `Go to ${item.label.toLowerCase()}`,
+              group: 'Navigate',
+              icon: item.icon,
+              onSelect: () => setActive(item.id),
+            })),
+            { id: 'invoice', label: 'New invoice', group: 'Actions', icon: <PlusIcon />, shortcut: 'Mod+I', onSelect: () => toast({ title: 'Invoice drafted' }) },
+            { id: 'export', label: 'Export report', group: 'Actions', icon: <DownloadIcon />, keywords: ['csv', 'download'], onSelect: () => toast({ title: 'Report exported', color: 'success' }) },
+            { id: 'invite', label: 'Invite teammate', group: 'Actions', icon: <UsersIcon />, disabled: true },
+          ]}
+        />
         <Inline gap="sm" wrap={false}>
           <Tooltip content="Notifications">
             <IconButton aria-label="Notifications" variant="ghost" color="neutral">

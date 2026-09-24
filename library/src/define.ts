@@ -118,6 +118,7 @@ export interface ComponentTokenProps {
   HoverCard: 'radius' | 'padding';
   Dialog: 'radius' | 'size';
   Drawer: 'size';
+  CommandPalette: 'size' | 'radius' | 'color';
   Menu: 'size';
   Tabs: 'size' | 'color';
   Pagination: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';

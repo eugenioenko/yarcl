@@ -164,6 +164,16 @@ defineConfig({
   radii: { ...defaults.radii, size: '1rem' },
 });
 
+defineConfig({ ...defaults, components: { CommandPalette: { size: 'lg', radius: 'size', color: 'danger' } } });
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    CommandPalette: { variant: 'solid' },
+  },
+});
+
 defineConfig({ ...defaults, defaults: { ...defaults.defaults, radius: 'square' } });
 
 defineConfig({

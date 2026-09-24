@@ -80,6 +80,14 @@ export default async function (ctx) {
   await audit(ctx, 'dialog open', 'dialog[open]');
   await page.keyboard.press('Escape');
 
+  await page.getByRole('button', { name: 'Command palette' }).click();
+  await audit(ctx, 'command palette open', 'dialog[open]');
+  await page.getByRole('combobox', { name: 'Command palette' }).fill('project');
+  await audit(ctx, 'command palette filtered, with a disabled command', 'dialog[open]');
+  await page.getByRole('combobox', { name: 'Command palette' }).fill('zzz');
+  await audit(ctx, 'command palette empty', 'dialog[open]');
+  await page.keyboard.press('Escape');
+
   await page.getByRole('button', { name: 'Right drawer' }).click();
   await audit(ctx, 'drawer open', 'dialog[open]');
   await page.keyboard.press('Escape');

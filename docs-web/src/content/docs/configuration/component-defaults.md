@@ -22,7 +22,7 @@ sidebar:
 | `gap`, `padding` | layout components, cards, overlays |
 | `floatingShadow` | popovers, menus, dialogs, toasts |
 | `density` | `Table` |
-| `modalSize` | `Dialog`, `Drawer` |
+| `modalSize` | `Dialog`, `Drawer`, `CommandPalette` |
 
 ## Per-component defaults
 
@@ -69,6 +69,7 @@ For any token prop, the first value found wins:
 | `Dialog` | `radius`, `size` (from `modalSizes`) |
 | `Drawer` | `size` (from `modalSizes`) |
 | `Menu` | `size` |
+| `CommandPalette` | `size`, `radius`, `color` |
 | `Tabs` | `size`, `color` |
 | `Table` | `density` |
 | `Stack`, `Inline` | `gap` |
