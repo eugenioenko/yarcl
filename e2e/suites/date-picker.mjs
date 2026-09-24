@@ -10,7 +10,7 @@ export default async function ({ page, check, focused }) {
   check('trigger labelled by Field', (await trigger.count()) === 1);
   check('trigger shows the value', (await trigger.innerText()).includes('Sep 15, 2026'));
   check('trigger announces a dialog', (await trigger.getAttribute('aria-haspopup')) === 'dialog');
-  const input = page.getByRole('textbox', { name: 'Name' });
+  const input = page.getByRole('textbox', { name: 'Name', exact: true });
   const solid = await page.getByRole('button', { name: 'Button' }).first().evaluate((el) => getComputedStyle(el).backgroundColor);
   const bg = (locator) => locator.evaluate((el) => getComputedStyle(el).backgroundColor);
   check('trigger matches Input height', (await trigger.boundingBox()).height === (await input.boundingBox()).height);
