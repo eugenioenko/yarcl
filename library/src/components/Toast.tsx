@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } fro
 import { createPortal } from 'react-dom';
 import { colorClass, cx } from '../classes';
 import type { Color } from '../types';
-import { useDefaults } from '../runtime';
+import { useConfig, useDefaults } from '../runtime';
 
 
 /** Options for {@link toast}. */
@@ -18,7 +18,7 @@ export interface ToastOptions {
   color?: Color;
   /**
    * Time before it dismisses itself, in ms. Paused while hovered or focused. `0` keeps it until dismissed.
-   * @default 5000
+   * @default config.timing.toastDuration
    */
   duration?: number;
   /** A single action, e.g. Undo. Choosing it dismisses the toast. */
@@ -144,7 +144,9 @@ export function Toaster({ placement = 'bottom-right', limit = 4, label = 'Notifi
 
 function ToastItem({ entry }: { entry: ToastEntry }) {
   const own = useDefaults('Toast');
-  const { id, title, description, color, duration = 5000, action, urgent } = entry;
+  const config = useConfig();
+  const { id, title, description, color, action, urgent } = entry;
+  const duration = entry.duration ?? config.timing.toastDuration;
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {

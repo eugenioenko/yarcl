@@ -70,14 +70,14 @@ In both `consumer/src/contract.check.tsx` and `e2e/consumer/src/contract.check.t
 - `consumer/src`: add a demo in the matching file (`FeedbackDemo.tsx`, `FloatingDemo.tsx`, `OverlaysDemo.tsx`) or `App.tsx`, inside the right `<section>`. Use plain human-readable labels, not config keys.
 - `e2e/consumer/src/App.tsx`: add it too if its styling depends on config (the fixture checks a second brand's tokens).
 
-## 8. E2E tests
+## 8. Browser tests
 
-Add checks to the matching suite in `e2e/suites/` (or create one and register it in `suites` in `e2e/run.mjs`):
+Add checks to the matching suite in `e2e/suites/`, or create one plus a test file that runs it (`consumer/tests/foo.test.ts`, calling `runSuite`):
 
 - Behavior: open/close, keyboard, focus management, `aria-*` state.
 - Styling: computed styles match the config tokens in both apps (see `brand-b.mjs`).
 - Accessibility: an `audit(...)` call in `a11y.mjs` for every state that renders new DOM (open, expanded, error). Also cover it in `focus.mjs` if it's focusable.
-- Poll for async state instead of fixed waits.
+- Poll for async state (`poll` from `e2e/suites/poll.mjs`) instead of fixed waits.
 
 ## 9. Docs site
 
@@ -96,7 +96,7 @@ Run from the repo root; all must pass:
 pnpm typecheck
 pnpm lint
 pnpm build
-pnpm test:e2e
+pnpm test
 pnpm docs:build
 grep -rn "—" library/src docs-web/src README.md
 ```

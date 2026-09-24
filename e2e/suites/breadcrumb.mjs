@@ -1,4 +1,4 @@
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused }) {
   const trail = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
   await trail.scrollIntoViewIfNeeded();

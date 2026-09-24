@@ -124,7 +124,7 @@ export { editorial as default } from '@yarcl/react/themes';
 pnpm install
 pnpm dev          # consumer on :5173
 pnpm typecheck    # library + both consumers, including @ts-expect-error contract checks
-pnpm test:e2e     # keyboard/mouse checks and axe-core audits in Chrome, light and dark
+pnpm test         # Vitest browser mode in headless Chrome: behavior, styling and axe audits, light and dark
 pnpm docs:dev     # documentation site on :4321
 pnpm docs:build   # static docs site → docs-web/dist
 pnpm docs:api     # API reference from JSDoc → docs/api

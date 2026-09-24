@@ -70,6 +70,7 @@ export default defineConfig({
   },
   zIndex: defaults.zIndex,
   motion: { ...defaults.motion, fast: '160ms', easing: 'cubic-bezier(0.3, 0, 0, 1)' },
+  timing: defaults.timing,
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '3px', color: 'clay' },
   components: {

@@ -13,7 +13,7 @@ import { useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import type { Radius, Spacing } from '../types';
-import { useDefaults } from '../runtime';
+import { useConfig, useDefaults } from '../runtime';
 
 
 /** Props for {@link HoverCard}. */
@@ -29,12 +29,12 @@ export interface HoverCardProps {
   placement?: Placement;
   /**
    * Delay before opening, in ms.
-   * @default 300
+   * @default config.timing.hoverOpenDelay
    */
   openDelay?: number;
   /**
    * Delay before closing after the pointer leaves, in ms.
-   * @default 150
+   * @default config.timing.hoverCloseDelay
    */
   closeDelay?: number;
   /**
@@ -64,12 +64,14 @@ export function HoverCard({
   content,
   children,
   placement = 'bottom',
-  openDelay = 300,
-  closeDelay = 150,
+  openDelay,
+  closeDelay,
   padding,
   radius,
 }: HoverCardProps) {
   const own = useDefaults('HoverCard');
+  const config = useConfig();
+  const delay = { open: openDelay ?? config.timing.hoverOpenDelay, close: closeDelay ?? config.timing.hoverCloseDelay };
   const [open, setOpen] = useState(false);
   const { refs, floatingStyles, context } = useFloating({
     open,
@@ -80,7 +82,7 @@ export function HoverCard({
     middleware: floatingMiddleware({ gap: 8 }),
   });
   const { getReferenceProps, getFloatingProps } = useInteractions([
-    useHover(context, { delay: { open: openDelay, close: closeDelay }, handleClose: safePolygon() }),
+    useHover(context, { delay, handleClose: safePolygon() }),
     useFocus(context),
     useDismiss(context),
   ]);

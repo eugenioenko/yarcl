@@ -6,21 +6,29 @@
     "dev": "pnpm -C consumer dev",
     "build": "pnpm -C consumer build && pnpm -C e2e/consumer build",
     "typecheck": "tsc -p library && tsc -p consumer && tsc -p e2e/consumer",
-    "test:e2e": "node e2e/run.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "docs:api": "typedoc",
     "docs:dev": "pnpm -C docs-web dev",
     "docs:build": "pnpm -C docs-web build",
     "lint": "eslint library/src consumer/src e2e/consumer/src"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitest/browser-playwright": "^5.0.1",
+    "@yarcl/react": "workspace:*",
     "axe-core": "^4.13.0",
     "eslint": "^10.0.3",
-    "playwright-core": "^1.63.0",
+    "playwright": "^1.63.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "typedoc": "^0.28.20",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.57.0",
-    "vite": "^8.3.1"
+    "vite": "^8.3.1",
+    "vitest": "^5.0.1",
+    "vitest-browser-react": "^2.3.0"
   }
 }

@@ -11,7 +11,7 @@ export const resolveColor = (page, value) =>
     return color;
   }, value);
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused, htmlOverflow }) {
   const trigger = page.getByRole('button', { name: 'Command palette' });
   const palette = page.getByRole('dialog', { name: 'Command palette' });

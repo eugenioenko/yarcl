@@ -1,6 +1,6 @@
 import { poll } from './poll.mjs';
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused }) {
   const section = page.locator('section', { has: page.locator('h2', { hasText: /^Date picker$/ }) });
   await section.scrollIntoViewIfNeeded();

@@ -1,4 +1,4 @@
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused, htmlOverflow }) {
   // Dialog (uncontrolled, trigger)
   const openBtn = page.getByRole('button', { name: 'Open dialog' });
@@ -82,18 +82,20 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   await page.keyboard.press('Escape');
 
   // Toast auto-dismiss + limit
+  await page.clock.install();
   await page.getByRole('button', { name: 'Toast success' }).click();
   const ok = page.getByRole('status').filter({ hasText: 'success toast' });
   check('toast appears', await ok.isVisible());
   for (const c of ['brand', 'neutral', 'warning', 'danger']) await page.getByRole('button', { name: `Toast ${c}` }).click();
   check('toast limit 4, oldest dismissed', (await page.locator('.yarcl-toast').count()) === 4 && !(await ok.isVisible()));
-  await page.waitForTimeout(5400);
+  await page.clock.runFor(5400);
   check('toasts auto-dismiss', (await page.locator('.yarcl-toast').count()) === 0, String(await page.locator('.yarcl-toast').count()));
   await page.getByRole('button', { name: 'Sticky toast' }).click();
-  await page.waitForTimeout(5400);
+  await page.clock.runFor(5400);
   check('sticky toast stays', await page.getByRole('status').filter({ hasText: 'Sticky' }).isVisible());
   await page.getByRole('status').filter({ hasText: 'Sticky' }).getByRole('button', { name: 'Dismiss' }).click();
   check('toaster hidden when empty', !(await page.locator('.yarcl-toaster').isVisible()));
+  await page.clock.uninstall();
 
   // Tabs
   const overview = page.getByRole('tab', { name: 'Overview' });

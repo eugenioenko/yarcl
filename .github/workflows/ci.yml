@@ -31,7 +31,12 @@ jobs:
         run: pnpm lint
 
   test:
+    name: test (React ${{ matrix.react }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        react: ['18', '19']
     steps:
       - uses: actions/checkout@v5
 
@@ -47,11 +52,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Use React 18
+        if: matrix.react == '18'
+        run: pnpm up -r react@^18.3.1 react-dom@^18.3.1 @types/react@^18.3.0 @types/react-dom@^18.3.0
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Build
         run: pnpm build
 
-      - name: E2E tests
-        run: pnpm test:e2e
+      - name: Tests
+        run: pnpm test

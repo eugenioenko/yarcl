@@ -19,6 +19,20 @@ motion: { fast: '120ms', base: '200ms', easing: 'cubic-bezier(0.2, 0, 0, 1)' },
 
 When the user asks for reduced motion (`prefers-reduced-motion: reduce`), transitions and entry animations are turned off and spinners slow down.
 
+## Timing
+
+```ts
+timing: { tooltipDelay: 400, hoverOpenDelay: 300, hoverCloseDelay: 150, toastDuration: 5000 },
+```
+
+Delays and durations in milliseconds, read when components render:
+
+- `tooltipDelay`: how long the pointer rests on a trigger before a `Tooltip` opens. Keyboard focus opens it immediately.
+- `hoverOpenDelay` and `hoverCloseDelay`: when a `HoverCard` opens and closes.
+- `toastDuration`: how long a toast stays. `0` keeps toasts until dismissed.
+
+The matching props (`delay`, `openDelay`, `closeDelay`, `duration`) override them per instance. Tests can set the delays to `0` to skip the waiting.
+
 ## Layers
 
 ```ts

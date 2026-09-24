@@ -43,7 +43,13 @@ export default defineConfig({
             ]),
           ],
         },
-        { label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }] },
+        {
+          label: 'Reference',
+          items: [
+            { autogenerate: { directory: 'reference' } },
+            { label: 'llms.txt', link: '/llms.txt', attrs: { target: '_blank' } },
+          ],
+        },
       ],
     }),
     react(),
