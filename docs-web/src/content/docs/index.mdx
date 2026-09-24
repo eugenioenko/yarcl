@@ -4,7 +4,7 @@ description: A React component library where your config file is the design syst
 template: splash
 hero:
   title: yarcl
-  tagline: A React component library where your config file is the design system. Every key you define becomes a typed prop value and a rendered style, with no codegen and no runtime theme.
+  tagline: '<strong>Yet another react component library.</strong><br />A React component library where your config file is the design system. Every key you define becomes a typed prop value and a rendered style, with no codegen and no runtime theme.'
   actions:
     - text: Get Started
       link: /getting-started/introduction/
@@ -23,7 +23,7 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 import Preview from '@/components/Preview.astro';
 import { ConfigPlayground } from '@/demos/playground';
 
-## Try it: pick a theme, change the config
+## Pick a theme, change the config
 
 <Preview>
   <ConfigPlayground client:load />
@@ -33,20 +33,13 @@ The form is built with yarcl components that take no styling props at all. Every
 
 ## Why yarcl exists
 
-Picking a component library usually means adopting its design system. You get its sizes, its variants, its idea of what a button or a table looks like, and a theming layer that lets you change colors, fonts and spacing. Everything else is fixed.
+Picking a component library usually means adopting its design system. Most libraries let you go beyond colors: you can add variants, sizes and default props. But each change lives somewhere different: theme overrides here, a type augmentation there, a wrapper component for the rest. The further your design drifts from the library's, the more of that glue you maintain.
 
-So when your design has an `xs` button, a `quiet` variant, square inputs next to pill-shaped buttons, or a table denser than the library's, you're fighting the framework: overriding its CSS, wrapping its components, or passing strings its types can't check. The product ends up looking like the framework with a new paint job, because the framework decided what exists and how it looks.
+The alternatives trade one problem for another. Copy-paste libraries give you full control, but you own and maintain every component. Headless libraries give you the mechanics and leave all the styling to you.
 
-That's backwards. Your design system is yours: your designers decide which sizes exist, what each variant looks like, how dense a table is, how focus is shown. A component library should provide the hard mechanics (accessibility, keyboard support, positioning, state) and let you define everything else.
+yarcl takes a different route: **your design system is a single data file**. It defines what exists (which sizes, colors, variants, densities), what each looks like, and the defaults, globally and per component. The components provide the hard parts (accessibility, keyboard support, positioning, state), and their types come straight from your file. Add a key and it's usable everywhere; remove one and every place that uses it stops compiling. No type augmentation, no codegen, no wrappers.
 
-yarcl works that way. Your config doesn't just theme the library, it **defines** it:
-
-- **What exists**: which sizes, colors, radii, variants, spacing steps and densities there are, not only their values.
-- **The API**: `size` accepts exactly your sizes. Remove a key and every place that uses it stops compiling.
-- **The look**: fonts, borders, shadows, focus rings and how each variant is drawn.
-- **The defaults**: globally and per component, so buttons can be square while cards are round.
-
-The same components can become [four completely different products](/theming/bundled-themes/), as the demo above shows.
+Because a design system is just data, the same components can become [four completely different products](/theming/bundled-themes/), and switch between them at runtime.
 
 ## The injection point
 
@@ -71,6 +64,8 @@ plugins: [yarcl({ config: 'src/yarcl.config.ts' })] // runtime values and genera
 ```
 
 It's dependency injection at the type level. The library is compiled against your config, so its props accept exactly your keys, its components render your values, and the build generates CSS for them. There's one source of truth, and if the wiring is missing you get a loud error, not silently wrong defaults. [Why an alias and not module augmentation or codegen?](/reference/architecture/)
+
+The full story behind this pattern: [Type-Level Library Dependency Injection. Let the Consumer App Define the API](https://eugene.yakhnenko.com/posts/config-to-type-pipeline/).
 
 ## What you get
 
