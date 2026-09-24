@@ -19,6 +19,7 @@ export default defineConfig({
         {
           label: 'Components',
           items: [
+            { label: 'Overview', link: '/components/' },
             { label: 'Buttons', items: [{ autogenerate: { directory: 'components/buttons' } }] },
             { label: 'Forms', items: [{ autogenerate: { directory: 'components/forms' } }] },
             { label: 'Typography', items: [{ autogenerate: { directory: 'components/typography' } }] },
