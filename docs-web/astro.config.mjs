@@ -20,6 +20,7 @@ export default defineConfig({
       sidebar: [
         { label: 'Getting Started', items: [{ autogenerate: { directory: 'getting-started' } }] },
         { label: 'Configuration', items: [{ autogenerate: { directory: 'configuration' } }] },
+        { label: 'Theming', items: [{ autogenerate: { directory: 'theming' } }] },
         {
           label: 'Components',
           items: [

@@ -5,7 +5,9 @@
     "library/src/index.ts",
     "library/src/define.ts",
     "library/src/plugin.ts",
-    "library/src/reference/index.ts"
+    "library/src/reference/index.ts",
+    "library/src/themes/index.ts",
+    "library/src/css.ts"
   ],
   "tsconfig": "library/tsconfig.json",
   "out": "docs/api",

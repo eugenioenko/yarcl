@@ -8,7 +8,9 @@
     "./define": "./src/define.ts",
     "./defaults": "./src/yarcl.default.config.ts",
     "./plugin": "./src/plugin.ts",
-    "./reference": "./src/reference/index.ts"
+    "./reference": "./src/reference/index.ts",
+    "./themes": "./src/themes/index.ts",
+    "./css": "./src/css.ts"
   },
   "peerDependencies": {
     "react": ">=18",

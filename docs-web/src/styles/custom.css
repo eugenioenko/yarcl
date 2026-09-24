@@ -321,3 +321,17 @@
     transition: none;
   }
 }
+
+:root:has(.theme-frame) {
+  --sl-content-width: 110rem;
+}
+
+.theme-frame {
+  display: block;
+  width: 100%;
+  height: 85vh;
+  min-height: 36rem;
+  margin-top: 1rem;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: 0.5rem;
+}

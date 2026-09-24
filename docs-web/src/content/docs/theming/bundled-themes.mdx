@@ -1,0 +1,58 @@
+---
+title: Bundled themes
+description: Four deliberately different themes that ship with yarcl, and how to use them.
+sidebar:
+  order: 3
+---
+
+yarcl ships with four themes that each change everything a theme can change: color, shape, type, density, depth and the focus ring. Same components, same keys, very different products.
+
+| Theme | Import | Color | Shape and type | Density and depth |
+|---|---|---|---|---|
+| **yarcl** | `yarcl/defaults` | blue | 6px corners, system sans | 40px controls, light shadows |
+| **Brutalist** | `brutalist` | yellow on black and white | square corners, 2px borders, monospace | hard offset shadows, dashed focus ring |
+| **Soft** | `soft` | violet on lavender | pill controls, round cards, rounded sans | large 44px controls, airy spacing, soft tinted shadows |
+| **Compact** | `compact` | teal on cool gray | 2px corners, 13px sans | 28px controls, tight spacing, compact tables, nearly flat |
+| **Editorial** | `editorial` | terracotta on cream | square corners, serif throughout | generous spacing, flat cards, double focus ring |
+
+See them all in the [theme playground](/theming/playground/).
+
+## Using one
+
+As is:
+
+```ts title="src/yarcl.config.ts"
+export { soft as default } from 'yarcl/themes';
+```
+
+As a starting point:
+
+```ts title="src/yarcl.config.ts"
+import { defineConfig } from 'yarcl/define';
+import { brutalist } from 'yarcl/themes';
+
+export default defineConfig({
+  ...brutalist,
+  colors: { ...brutalist.colors, primary: { light: '#00e5ff', dark: '#00e5ff' } },
+});
+```
+
+## What they share
+
+Every bundled theme satisfies `ThemeContract`: the same keys as the library defaults. That makes them interchangeable, and means an app written against the defaults works with any of them.
+
+| Group | Keys |
+|---|---|
+| `colors` | `primary`, `neutral`, `success`, `warning`, `danger`, `info` |
+| `sizes` | `sm`, `md`, `lg` |
+| `radii` | `square`, `sm`, `md`, `lg`, `xl`, `rounded` |
+| `variants` | `solid`, `soft`, `outline`, `ghost` |
+| `spacing` | `xs`, `sm`, `md`, `lg`, `xl` |
+| `shadows` | `sm`, `md`, `lg` |
+| `density` | `compact`, `comfortable` |
+| `modalSizes` | `sm`, `md`, `lg`, `xl`, `full` |
+| `typography.styles` | `display`, `heading`, `subheading`, `body`, `caption`, `code`, `label` |
+
+## Fonts
+
+Themes name their font families (JetBrains Mono, Nunito, IBM Plex Sans, Iowan Old Style) but don't ship font files. Without them, each stack falls back to a similar system font. To load them, add `typography.fontFaces` with your own files, or load them from a font service in your HTML.

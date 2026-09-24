@@ -1,0 +1,20 @@
+---
+title: Theme playground
+description: A full dashboard you can re-theme live, with every bundled theme and a theme editor.
+sidebar:
+  order: 4
+tableOfContents: false
+---
+
+A complete dashboard (navbar, sidebar, stats, tables, menus, a form, dialogs and toasts) built with yarcl components.<br />
+Switch between the [bundled themes](/theming/bundled-themes/), toggle light and dark, or open **Edit theme** to change any value and apply your own.
+
+<a href="/theme-playground/" target="_blank" rel="noopener">Open the playground full screen</a>
+
+<iframe class="theme-frame not-content" src="/theme-playground/" title="Theme playground"></iframe>
+
+## How it works
+
+The playground uses `generateCss` from `yarcl/css`, the same function the Vite plugin runs at build time, to regenerate the stylesheet in the browser whenever you pick a theme or apply your edits. See [switching themes](/theming/switching-themes/#at-runtime).
+
+**Copy config** copies the current theme as a config file you can paste into `src/yarcl.config.ts`.

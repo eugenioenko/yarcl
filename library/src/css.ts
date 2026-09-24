@@ -97,6 +97,14 @@ function rule(selector: string, declarations: [string, string | number][]): stri
   return `${selector} {\n${declarations.map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`;
 }
 
+/**
+ * Generates the stylesheet for a config: CSS variables on `:root`, one class per key and
+ * `@font-face` rules. The Vite plugin calls this at build time; call it yourself to preview
+ * or switch themes at runtime (inject the result into a `<style>` element).
+ *
+ * @param config A config from `defineConfig`, e.g. one of `yarcl/themes`.
+ * @param warn Receives contrast warnings.
+ */
 export function generateCss(config: YarclShape, warn: (message: string) => void = () => {}): string {
   const root: [string, string | number][] = [['color-scheme', 'light dark']];
   const rules: string[] = [];

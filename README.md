@@ -100,6 +100,16 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 **Feedback**: Badge, Alert, Spinner, Skeleton
 **Reference**: `DesignReference` from `yarcl/reference` renders your whole design system from your config.
 
+## Themes
+
+`yarcl/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Soft**, **Compact** and **Editorial**.
+
+```ts title="src/yarcl.config.ts"
+export { editorial as default } from 'yarcl/themes';
+```
+
+`yarcl/css` exports `generateCss`, the plugin's generator, for switching themes at runtime. The docs include a theme playground: a full dashboard you can re-theme live.
+
 ## Repository
 
 | Path | What |
