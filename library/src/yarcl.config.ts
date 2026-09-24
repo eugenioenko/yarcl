@@ -79,6 +79,7 @@ export default defineConfig({
   },
   zIndex: { dropdown: 1000, tooltip: 1100, dialog: 1200, toast: 1300 },
   motion: { fast: '120ms', base: '200ms', easing: 'cubic-bezier(0.2, 0, 0, 1)' },
+  timing: { tooltipDelay: 400, hoverOpenDelay: 300, hoverCloseDelay: 150, toastDuration: 5000 },
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '2px', color: 'primary' },
   defaults: {

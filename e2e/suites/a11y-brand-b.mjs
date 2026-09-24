@@ -1,6 +1,6 @@
 import { audit } from './a11y.mjs';
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function (ctx) {
   const { page } = ctx;
   await page.evaluate(() => document.fonts.ready);
@@ -25,7 +25,8 @@ export default async function (ctx) {
   await audit(ctx, 'command palette open', 'dialog[open]');
   await page.keyboard.press('Escape');
 
-  await page.getByRole('link', { name: 'Design reference' }).click();
-  await page.waitForURL(/page=reference/);
+  const referenceLink = page.getByRole('link', { name: 'Design reference' });
+  ctx.check('design reference link points to the reference page', (await referenceLink.getAttribute('href')) === '?page=reference');
+  await page.goto('?page=reference');
   await audit(ctx, 'design reference page');
 }

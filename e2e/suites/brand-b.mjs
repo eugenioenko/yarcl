@@ -1,7 +1,7 @@
 import { progressContrast } from './feedback.mjs';
 import { resolveColor } from './command-palette.mjs';
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check }) {
   await page.evaluate(() => document.fonts.ready);
   check('web font from fontFaces loaded', await page.evaluate(() => document.fonts.check('500 44px Fraunces')));
@@ -154,8 +154,9 @@ export default async function ({ page, check }) {
   await page.keyboard.press('Enter');
   check('palette command runs', await page.getByRole('status').filter({ hasText: 'Saved to wishlist' }).last().isVisible());
 
-  await page.getByRole('link', { name: 'Design reference' }).click();
-  await page.waitForURL(/page=reference/);
+  const referenceLink = page.getByRole('link', { name: 'Design reference' });
+  check('design reference link points to the reference page', (await referenceLink.getAttribute('href')) === '?page=reference');
+  await page.goto('?page=reference');
   check('reference page renders from config', await page.getByRole('heading', { name: 'Maison Talla design system' }).isVisible());
   check('reference lists consumer sizes', await page.getByRole('rowheader', { name: 'talla-l' }).isVisible());
 }

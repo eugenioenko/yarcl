@@ -1,12 +1,10 @@
-import { AxeBuilder } from '@axe-core/playwright';
+import axe from 'axe-core';
 
 const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 /** Runs axe on the page, or only on `include`, and records one check with a readable summary of violations. */
-export async function audit({ page, check }, name, include) {
-  let builder = new AxeBuilder({ page }).withTags(tags);
-  if (include) builder = builder.include(include);
-  const { violations } = await builder.analyze();
+export async function audit({ check }, name, include) {
+  const { violations } = await axe.run(include ?? document, { runOnly: { type: 'tag', values: tags } });
   const summary = violations
     .map((v) => {
       const node = v.nodes[0];
@@ -17,7 +15,7 @@ export async function audit({ page, check }, name, include) {
   check(`axe: ${name}`, violations.length === 0, summary);
 }
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function (ctx) {
   const { page } = ctx;
   const floating = page.locator('section', { has: page.getByRole('heading', { name: 'Floating', exact: true }) });
@@ -84,12 +82,12 @@ export default async function (ctx) {
   await page.keyboard.press('Escape');
 
   await floating.getByRole('button', { name: 'Search' }).hover();
-  await page.waitForTimeout(600);
+  await page.locator('.yarcl-tooltip').waitFor();
   await audit(ctx, 'tooltip open', '.yarcl-tooltip');
   await page.mouse.move(0, 0);
 
   await page.getByRole('link', { name: '@ada' }).hover();
-  await page.waitForTimeout(500);
+  await page.locator('.yarcl-hover-card').waitFor();
   await audit(ctx, 'hover card open', '.yarcl-hover-card');
   await page.mouse.move(0, 0);
 

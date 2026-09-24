@@ -40,7 +40,7 @@ function initial() {
   const theme = params.get('theme');
   const scheme = params.get('scheme');
   return {
-    theme: (ids.includes(theme as ThemeId) ? theme : '@yarcl/react') as ThemeId,
+    theme: (ids.includes(theme as ThemeId) ? theme : 'yarcl') as ThemeId,
     scheme: scheme === 'dark' || scheme === 'light' ? scheme : 'light',
   };
 }
@@ -98,7 +98,7 @@ export function ThemePlayground() {
   async function copy() {
     const text = custom
       ? `import { defineConfig } from '@yarcl/react/define';\n\nexport default defineConfig(${JSON.stringify(custom, null, 2)});\n`
-      : themeId === '@yarcl/react'
+      : themeId === 'yarcl'
         ? `export { default } from '@yarcl/react/defaults';\n`
         : `export { ${themeId} as default } from '@yarcl/react/themes';\n`;
     await navigator.clipboard.writeText(text);

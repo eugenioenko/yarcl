@@ -1,3 +1,5 @@
+import { poll } from './poll.mjs';
+
 function luminance(rgb) {
   const [r, g, b] = rgb.map((c) => c / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -52,7 +54,7 @@ export async function tabThrough({ page, check }) {
 /** Opens a list with the keyboard and checks the highlighted option stands out from the panel. */
 export async function highlightContrast({ page, check }, name, open) {
   await open();
-  await page.waitForTimeout(150);
+  await poll(() => page.evaluate(() => !!document.querySelector('.yarcl-option[data-active]')));
   const colors = await page.evaluate(() => {
     const active = document.querySelector('.yarcl-option[data-active]');
     const panel = active?.closest('.yarcl-panel, .yarcl-modal');
@@ -77,7 +79,7 @@ export async function highlightContrast({ page, check }, name, open) {
   await page.keyboard.press('Escape');
 }
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function (ctx) {
   const { page } = ctx;
   await tabThrough(ctx);

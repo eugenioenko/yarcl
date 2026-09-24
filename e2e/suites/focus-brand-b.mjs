@@ -1,6 +1,6 @@
 import { highlightContrast, tabThrough } from './focus.mjs';
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function (ctx) {
   const { page } = ctx;
   await tabThrough(ctx);

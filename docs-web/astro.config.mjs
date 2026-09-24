@@ -4,11 +4,21 @@ import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 import { yarcl } from '@yarcl/react/plugin';
 
+const componentSections = [
+  ['Buttons', 'buttons'],
+  ['Forms', 'forms'],
+  ['Typography', 'typography'],
+  ['Layout', 'layout'],
+  ['Overlays', 'overlays'],
+  ['Data display', 'data'],
+  ['Feedback', 'feedback'],
+];
+
 export default defineConfig({
   site: 'https://yarcl.dev',
   integrations: [
     starlight({
-      title: '@yarcl/react',
+      title: 'yarcl',
       description: 'A React component library where your config file is the design system.',
       logo: { src: './src/assets/yarcl.svg' },
       favicon: '/yarcl.svg',
@@ -17,7 +27,8 @@ export default defineConfig({
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
       ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/eugenioenko/yarcl' }],
-      customCss: ['./src/styles/custom.css'],
+      expressiveCode: { styleOverrides: { codeFontSize: '1rem' } },
+      customCss: ['@fontsource-variable/inter', '@fontsource/ubuntu-mono/400.css', '@fontsource/ubuntu-mono/700.css', './src/styles/custom.css'],
       sidebar: [
         { label: 'Getting Started', items: [{ autogenerate: { directory: 'getting-started' } }] },
         { label: 'Configuration', items: [{ autogenerate: { directory: 'configuration' } }] },
@@ -26,16 +37,19 @@ export default defineConfig({
           label: 'Components',
           items: [
             { label: 'Overview', link: '/components/' },
-            { label: 'Buttons', items: [{ autogenerate: { directory: 'components/buttons' } }] },
-            { label: 'Forms', items: [{ autogenerate: { directory: 'components/forms' } }] },
-            { label: 'Typography', items: [{ autogenerate: { directory: 'components/typography' } }] },
-            { label: 'Layout', items: [{ autogenerate: { directory: 'components/layout' } }] },
-            { label: 'Overlays', items: [{ autogenerate: { directory: 'components/overlays' } }] },
-            { label: 'Data display', items: [{ autogenerate: { directory: 'components/data' } }] },
-            { label: 'Feedback', items: [{ autogenerate: { directory: 'components/feedback' } }] },
+            ...componentSections.flatMap(([label, directory]) => [
+              { label, link: `/components/#${label.toLowerCase().replace(/ /g, '-')}`, attrs: { class: 'sidebar-divider' } },
+              { autogenerate: { directory: `components/${directory}` } },
+            ]),
           ],
         },
-        { label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }] },
+        {
+          label: 'Reference',
+          items: [
+            { autogenerate: { directory: 'reference' } },
+            { label: 'llms.txt', link: '/llms.txt', attrs: { target: '_blank' } },
+          ],
+        },
       ],
     }),
     react(),

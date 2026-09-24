@@ -58,7 +58,10 @@ export function yarcl({ config = 'src/yarcl.config.ts' }: YarclPluginOptions = {
       target = existsSync(consumerConfig) ? consumerConfig : defaultConfig;
       return {
         resolve: { alias: { '@yarcl/config': target } },
-        optimizeDeps: { exclude: [PACKAGE] },
+        optimizeDeps: {
+          exclude: [PACKAGE],
+          include: ['@floating-ui/react', 'date-fns', 'date-fns/locale', 'date-fns/locale/en-US'].map((dep) => `${PACKAGE} > ${dep}`),
+        },
         ssr: { noExternal: [PACKAGE] },
       };
     },

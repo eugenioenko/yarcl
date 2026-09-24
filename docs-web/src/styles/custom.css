@@ -1,4 +1,6 @@
 :root {
+  --sl-font: 'Inter Variable', system-ui, sans-serif;
+  --sl-font-mono: 'Ubuntu Mono', ui-monospace, monospace;
   --sl-color-accent-low: #1b2552;
   --sl-color-accent: #8aa2ff;
   --sl-color-accent-high: #c3cfff;
@@ -382,4 +384,23 @@
   margin-top: 1rem;
   border: 1px solid var(--sl-color-hairline-light);
   border-radius: 0.5rem;
+}
+
+.sidebar-content a.sidebar-divider {
+  margin-top: 0.75rem;
+  padding-block: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-2);
+  background: none;
+}
+
+.sidebar-content a.sidebar-divider:hover {
+  color: var(--sl-color-white);
+}
+
+.sidebar-content a:not(.large, .sidebar-divider) {
+  font-size: 0.9375rem;
 }

@@ -1,3 +1,5 @@
+import { poll } from './poll.mjs';
+
 /** Resolves a CSS color expression to the browser's computed rgb() string. */
 export const resolveColor = (page, value) =>
   page.evaluate((value) => {
@@ -9,13 +11,7 @@ export const resolveColor = (page, value) =>
     return color;
   }, value);
 
-async function poll(fn, tries = 20) {
-  let value;
-  for (let i = 0; i < tries && !(value = await fn()); i++) await new Promise((r) => setTimeout(r, 50));
-  return value;
-}
-
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused, htmlOverflow }) {
   const trigger = page.getByRole('button', { name: 'Command palette' });
   const palette = page.getByRole('dialog', { name: 'Command palette' });

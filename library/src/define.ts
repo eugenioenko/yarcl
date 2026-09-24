@@ -145,7 +145,7 @@ export type ComponentName = keyof ComponentTokenProps;
  *
  * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `modalSizes`, `typography`) take any keys;
  * those keys become the valid prop values. Groups with required keys (`neutrals`, `zIndex`,
- * `motion`, `borders`) must include the keys the library depends on, and accept any extra
+ * `motion`, `timing`, `borders`) must include the keys the library depends on, and accept any extra
  * keys, which are emitted as CSS variables for the consumer's own styles.
  */
 export interface YarclShape {
@@ -206,6 +206,17 @@ export interface YarclShape {
     base: string;
     /** Easing function. */
     easing: string;
+  };
+  /** Interaction timing in milliseconds, read by components at render time. Extra keys allowed. */
+  timing: Record<string, number> & {
+    /** Delay before a `Tooltip` opens on hover. */
+    tooltipDelay: number;
+    /** Delay before a `HoverCard` opens on hover. */
+    hoverOpenDelay: number;
+    /** Delay before a `HoverCard` closes after the pointer leaves. */
+    hoverCloseDelay: number;
+    /** How long a toast stays before it dismisses itself. `0` keeps toasts until dismissed. */
+    toastDuration: number;
   };
   /** Border widths. Extra keys allowed. */
   borders: Record<string, string> & { width: string };
@@ -302,6 +313,7 @@ type Checks<T extends YarclShape> = {
   neutrals: KeyCheck<T['neutrals']>;
   zIndex: KeyCheck<T['zIndex']>;
   motion: KeyCheck<T['motion']>;
+  timing: KeyCheck<T['timing']>;
   borders: KeyCheck<T['borders']>;
   sizes: KeyCheck<T['sizes']>;
   radii: KeyCheck<T['radii']> & { size?: { error: 'The radius key "size" is reserved' } };

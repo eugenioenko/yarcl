@@ -6,7 +6,7 @@ async function press(page, slider, key) {
   return now(slider);
 }
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused }) {
   const volume = page.getByRole('slider', { name: 'Volume', exact: true });
   await volume.scrollIntoViewIfNeeded();

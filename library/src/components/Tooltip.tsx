@@ -12,6 +12,7 @@ import {
 } from '@floating-ui/react';
 import { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { floatingMiddleware, useTrigger } from '../floating';
+import { useConfig } from '../runtime';
 
 /** Props for {@link Tooltip}. */
 export interface TooltipProps {
@@ -26,7 +27,7 @@ export interface TooltipProps {
   placement?: Placement;
   /**
    * Delay before opening on hover, in ms. Opens immediately on keyboard focus.
-   * @default 400
+   * @default config.timing.tooltipDelay
    */
   delay?: number;
 }
@@ -41,7 +42,8 @@ export interface TooltipProps {
  * </Tooltip>
  * ```
  */
-export function Tooltip({ content, children, placement = 'top', delay = 400 }: TooltipProps) {
+export function Tooltip({ content, children, placement = 'top', delay }: TooltipProps) {
+  const config = useConfig();
   const [open, setOpen] = useState(false);
   const arrowRef = useRef<SVGSVGElement>(null);
   const { refs, floatingStyles, context } = useFloating({
@@ -53,7 +55,7 @@ export function Tooltip({ content, children, placement = 'top', delay = 400 }: T
     middleware: floatingMiddleware({ gap: 8, arrowRef }),
   });
   const { getReferenceProps, getFloatingProps } = useInteractions([
-    useHover(context, { move: false, delay: { open: delay, close: 0 } }),
+    useHover(context, { move: false, delay: { open: delay ?? config.timing.tooltipDelay, close: 0 } }),
     useFocus(context),
     useDismiss(context),
     useRole(context, { role: 'tooltip' }),

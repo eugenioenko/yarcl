@@ -1,4 +1,4 @@
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function ({ page, check, focused }) {
   const guests = page.getByRole('spinbutton', { name: 'Guests' });
   await guests.scrollIntoViewIfNeeded();

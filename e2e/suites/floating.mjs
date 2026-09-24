@@ -1,15 +1,28 @@
-/** @param {import('../run.mjs').SuiteContext} ctx */
-export default async function ({ page, check, focused, htmlOverflow }) {
+import { poll } from './poll.mjs';
+
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
+export default async function ({ page, check, focused, htmlOverflow, setTiming }) {
   // Tooltip
   await page.getByRole('heading', { name: 'Floating' }).scrollIntoViewIfNeeded();
   const floatingSearch = page.locator('section', { has: page.getByRole('heading', { name: 'Floating' }) }).getByRole('button', { name: 'Search' });
   await floatingSearch.hover();
-  await page.waitForTimeout(600);
+  await page.getByRole('tooltip').waitFor();
   check('tooltip opens on hover', await page.getByRole('tooltip').isVisible());
   check('tooltip describes trigger', (await floatingSearch.getAttribute('aria-describedby')) !== null);
   await page.mouse.move(0, 0);
-  await page.waitForTimeout(100);
+  await page.getByRole('tooltip').waitFor({ state: 'hidden' });
   check('tooltip closes on leave', !(await page.getByRole('tooltip').isVisible()));
+  setTiming({ tooltipDelay: 400 });
+  await page.clock.install();
+  await floatingSearch.hover();
+  await page.clock.runFor(399);
+  check('tooltip waits for timing.tooltipDelay', !(await page.getByRole('tooltip').isVisible()));
+  await page.clock.runFor(1);
+  check('tooltip opens after timing.tooltipDelay', await poll(() => page.getByRole('tooltip').isVisible()));
+  await page.mouse.move(0, 0);
+  await page.clock.uninstall();
+  setTiming();
+  await page.getByRole('tooltip').waitFor({ state: 'hidden' });
 
   // Menu
   const actions = page.getByRole('button', { name: 'Actions' });
@@ -29,7 +42,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   check('focus returns to trigger', await actions.evaluate((el) => el === document.activeElement));
   await actions.click();
   await page.keyboard.type('du');
-  check('typeahead jumps to Duplicate', await page.getByRole('menuitem', { name: 'Duplicate' }).evaluate((el) => el === document.activeElement));
+  check('typeahead jumps to Duplicate', await poll(() => page.getByRole('menuitem', { name: 'Duplicate' }).evaluate((el) => el === document.activeElement)));
   await page.keyboard.press('Escape');
   check('Esc closes menu', !(await menu.isVisible()));
 
@@ -43,14 +56,14 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   // HoverCard
   const ada = page.getByRole('link', { name: '@ada' });
   await ada.hover();
-  await page.waitForTimeout(500);
   const card = page.locator('.yarcl-hover-card').getByText('Ada Lovelace');
+  await card.waitFor();
   check('hover card opens', await card.isVisible());
   await card.hover();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(50);
   check('hover card stays open when pointer moves in', await card.isVisible());
   await page.mouse.move(0, 0);
-  await page.waitForTimeout(400);
+  await card.waitFor({ state: 'hidden' });
 
   // Select
   const plan = page.getByRole('combobox', { name: 'Plan' });
@@ -59,7 +72,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   await plan.click();
   const listbox = page.getByRole('listbox');
   check('select opens listbox', await listbox.isVisible());
-  check('selected option focused', await page.getByRole('option', { name: 'Pro' }).evaluate((el) => el === document.activeElement));
+  check('selected option focused', await poll(() => page.getByRole('option', { name: 'Pro' }).evaluate((el) => el === document.activeElement)));
   await page.keyboard.press('ArrowDown');
   check('select ArrowDown moves', await page.getByRole('option', { name: 'Team' }).evaluate((el) => el === document.activeElement));
   await page.keyboard.press('ArrowDown');
@@ -69,8 +82,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   check('select Enter chooses', (await plan.innerText()).includes('Team') && (await page.getByText('Value: team').isVisible()));
   await plan.focus();
   await page.keyboard.type('f');
-  await page.waitForTimeout(100);
-  check('closed typeahead selects', (await plan.innerText()).includes('Free'));
+  check('closed typeahead selects', await poll(async () => (await plan.innerText()).includes('Free')));
 
   // Combobox (searchable select)
   const country = page.getByRole('combobox', { name: 'Country' });
@@ -104,8 +116,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   check('async shows nothing before typing', (await page.getByRole('listbox').count()) === 0);
   await remote.fill('ar');
   check('async loading', await page.getByText('Loading…').isVisible());
-  await page.waitForTimeout(700);
-  check('async results', (await page.getByRole('option').allInnerTexts()).join() === 'Argentina');
+  check('async results', await poll(async () => (await page.getByRole('option').allInnerTexts()).join() === 'Argentina', 40));
   await page.keyboard.press('Escape');
 
   // Combobox (multiple)

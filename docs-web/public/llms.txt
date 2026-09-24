@@ -1,0 +1,162 @@
+# yarcl
+
+> React component library where the consumer's config file is the design system. Every key in the config becomes a typed prop value and a generated CSS class. No codegen, no provider.
+
+## Why yarcl exists
+
+yarcl was created because design systems and component libraries disagree about who owns the contract. Most libraries decide the options: buttons come in `sm`, `md` and `lg`, colors are `primary` and `secondary`. When your design system has different names or values, you either live with the library's choices, pass free-form strings and lose type safety, or maintain a second list of types by hand that drifts from the real values.
+
+yarcl inverts that: the consumer's config defines the sizes, colors, variants, spacing and text styles, and the library derives both its TypeScript API and its CSS from that one file. The library ships mechanisms (buttons, inputs, dialogs, menus); the config makes the decisions.
+
+Benefits:
+
+- **Type-safe design tokens.** `<Button size="xl" />` compiles only if `xl` is in your config. Removing a key turns every stale usage into a compile error.
+- **One source of truth.** The same file drives the prop types and the generated CSS, so they can't drift apart.
+- **No runtime styling cost.** CSS is generated at build time: no inline styles, no CSS-in-JS, no provider. It's CSP- and SSR-safe.
+- **Themeable without code changes.** Light and dark mode from `{ light, dark }` pairs, per-component defaults in the config, bundled themes, and `applyTheme` for runtime switching.
+- **Accessible by default.** Keyboard support, ARIA wiring and computed readable text colors, checked with axe.
+
+Trade-offs: Vite only for now, and one design system per build.
+
+## Install
+
+Requires React 19+ and Vite 6.1+ (Vite only).
+
+```sh
+npm install @yarcl/react
+```
+
+All three wiring steps are required:
+
+1. `vite.config.ts`:
+
+```ts
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import { yarcl } from '@yarcl/react/plugin';
+
+export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })] });
+```
+
+2. `tsconfig.json`, so types come from the same file:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
+    }
+  }
+}
+```
+
+3. `src/yarcl.config.ts`:
+
+```ts
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
+
+export default defineConfig({
+  ...defaults,
+  colors: { ...defaults.colors, brand: { light: '#4f46e5', dark: '#a5b4fc' } },
+  defaults: { ...defaults.defaults, color: 'brand' },
+});
+```
+
+Then use components:
+
+```tsx
+import { Button, Field, Input } from '@yarcl/react';
+
+<Field label="Email"><Input type="email" /></Field>
+<Button color="brand">Save</Button>
+```
+
+Importing from `@yarcl/react` also loads the generated CSS and the component styles; there is no stylesheet to import. Editing the config hot-reloads the CSS.
+
+## How the Vite plugin and tsconfig work together
+
+The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring point it at your config file, one for runtime and one for types:
+
+- **Vite plugin** (`yarcl()` from `@yarcl/react/plugin`):
+  - aliases `@yarcl/config` to your config file, so components read your values at runtime
+  - loads the config at build time and generates the stylesheet (`virtual:yarcl.css`): CSS variables and one class per key
+  - regenerates the CSS when the config or its imports change
+  - option `config`: path to the config file, relative to the Vite root; default `'src/yarcl.config.ts'`. If the file doesn't exist, it falls back to the library defaults.
+- **tsconfig `paths`**: makes TypeScript resolve `@yarcl/config` to the same file, so prop types are the keys of your config. The second entry is a fallback to the library defaults.
+- Both must point at the same file. If they differ, types and rendered styles disagree.
+- With Vite's React template, the app's compiler options live in `tsconfig.app.json`: put `paths` there, not in the root `tsconfig.json` that only has `references`. `paths` resolve relative to the tsconfig file; no `baseUrl` needed.
+- Tests with Vitest need the plugin too: add `yarcl()` to the Vitest config, or reuse the Vite config with `mergeConfig`.
+
+## Configuring
+
+- Token props (`size`, `color`, `radius`, `variant`, `gap`, `padding`, `shadow`, `textStyle`, `density`) accept only keys of the project's config. Read the project's `src/yarcl.config.ts` before picking values; don't assume `md` or `primary` exist.
+- `Type '"md"' is not assignable to ...` means that key isn't in the config: use an existing key or add it.
+- To add a size, color, variant, spacing step or text style, add a key to its config group. It becomes a valid prop and a rendered style with no other changes.
+- Open groups (any keys): `colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `modalSizes`, `typography.styles`. Groups with required keys: `neutrals`, `zIndex`, `motion`, `timing`, `borders`.
+- Colors are `{ light, dark }` pairs; dark mode follows `color-scheme`. Readable text colors are computed.
+- Global defaults go in `defaults`; per-component defaults in `components`, e.g. `components: { Button: { radius: 'square' } }`. Props override both.
+- Style with props and config, not inline styles. Custom CSS can use the generated variables, e.g. `var(--yarcl-color-brand)`, `var(--yarcl-space-md)`.
+- Imports: components and `toast` from `@yarcl/react`; `/define`, `/defaults`, `/plugin`; bundled themes from `@yarcl/react/themes`; `applyTheme` from `@yarcl/react/css`.
+- "Failed to resolve import @yarcl/config" means the Vite plugin is missing. Type errors on `@yarcl/config` mean the tsconfig `paths` entry is missing or points at a different file.
+
+## Working in a yarcl project
+
+- Start by reading `src/yarcl.config.ts` (or the file passed to the Vite plugin): it lists every valid size, color, variant, spacing step and text style.
+- Props and JSDoc for every component ship as TypeScript source: `node_modules/@yarcl/react/src/components/<Name>.tsx`.
+- To type your own components with the same tokens: `import type { Size, Color, Variant, Radius, Spacing, TextStyle } from '@yarcl/react'`. They are the keys of the project's config.
+- Config values at runtime: `config` from `@yarcl/react`, or `useConfig()` inside components (follows runtime theme switches).
+- Icons are plain `<svg>` children, sized from the size's `iconSize`. `IconButton` requires `aria-label`.
+- The plugin warns at build time when a color's text fails WCAG AA contrast; adjust the color or set its `on` (text color) explicitly.
+- `radius="size"` picks the radius named like the control's size; set `defaults.radius: 'size'` to make that the default.
+
+## Theming
+
+- **Dark mode**: every color is a `{ light, dark }` pair rendered with `light-dark()`. It follows the OS by default; set `color-scheme: light` or `dark` on any element to force a mode. No JavaScript needed.
+- **Bundled themes** in `@yarcl/react/themes`: `brutalist`, `bloom`, `compact` and `editorial`, plus the library defaults (`@yarcl/react/defaults`).
+- **One theme per build**: make the config file the theme, `export { editorial as default } from '@yarcl/react/themes';`, or spread it and override: `defineConfig({ ...bloom, colors: { ...bloom.colors, brand: { light: '#4f46e5', dark: '#a5b4fc' } } })`.
+- **Several themes from one codebase** (white-label builds): keep one config file per theme and pick it in `vite.config.ts`, e.g. ``yarcl({ config: `src/themes/${process.env.THEME ?? 'default'}.ts` })``.
+- **Runtime switching**: `applyTheme(themes.bloom)` from `@yarcl/react/css` swaps the CSS and the defaults without a rebuild; `resetTheme()` returns to the build-time config. Prop types still come from the build-time config, so a runtime theme must define every key the app uses.
+- **Theme contract**: themes are interchangeable when they share keys. Check a theme with `satisfies ThemeContract` (from `@yarcl/react/themes`), or your own type listing the keys your app uses; a missing key is a type error.
+- **Beyond colors**: fonts (`typography.fontFaces`), text styles, radii, shadows, spacing, density, the focus ring, motion and per-component defaults (e.g. pill buttons) are all part of a theme.
+- Try themes live in the [theme playground](https://yarcl.dev/theme-playground/).
+
+## Components
+
+- Buttons: `Button`, `IconButton`, `ButtonGroup`, `ToggleGroup`
+- Forms: `Field`, `Label`, `Input`, `Textarea`, `NumberInput`, `Select`, `Combobox` (search, free text, async, `multiple` with chips), `DatePicker` (single and range, date-fns locales), `Checkbox`, `RadioGroup` + `Radio`, `Switch`, `Slider`
+- Typography: `Text`, `Heading` (`level` for semantics, `textStyle` for look), `Link`
+- Layout: `Stack`, `Inline`, `Card`, `Divider`
+- Overlays: `Dialog`, `Drawer`, `Popover`, `Menu`, `Tooltip`, `HoverCard`, `CommandPalette`, `toast` + one `<Toaster />`
+- Data display: `Tabs`, `Table`, `Accordion`, `Pagination`, `Breadcrumb`
+- Feedback: `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress`
+- `DesignReference` from `@yarcl/react/reference` renders the whole design system from the config.
+
+Conventions:
+
+- Wrap form controls in `Field` for the label, helper text and error wiring; don't set the control's `id`.
+- Stateful components are controlled or uncontrolled with `value` / `defaultValue` / `onValueChange` (`open` / `onOpenChange` for overlays).
+- Structured widgets are compound: `Tabs.List` / `Tabs.Trigger` / `Tabs.Panel`, `Menu.Trigger` / `Menu.Item`, `Accordion.Item`, `Breadcrumb.Item`, `Table.Row`, `Popover.Content`.
+- `Select` and `Combobox` take their options as data (`options={[{ value, label }]}`), not children; `CommandPalette` takes `commands`.
+- Hover delays and toast duration come from the `timing` config group; the matching props override them per instance.
+- Every component passes through native attributes, `className` and `style`.
+
+## Docs
+
+- [Installation](https://yarcl.dev/getting-started/installation/)
+- [Quick start](https://yarcl.dev/getting-started/quick-start/)
+- [The config file](https://yarcl.dev/configuration/config-file/): every group and what `defineConfig` checks
+- [Colors](https://yarcl.dev/configuration/colors-and-theming/)
+- [Sizes and radii](https://yarcl.dev/configuration/sizes-and-radii/)
+- [Variants](https://yarcl.dev/configuration/variants/)
+- [Typography](https://yarcl.dev/configuration/typography/)
+- [Defaults](https://yarcl.dev/configuration/component-defaults/)
+- [Generated CSS](https://yarcl.dev/configuration/generated-css/): CSS variables and classes
+- [Vite plugin](https://yarcl.dev/configuration/vite-plugin/): options, fallback and hot reload
+- [TypeScript](https://yarcl.dev/configuration/typescript/): how prop types come from your config
+- [Creating a theme](https://yarcl.dev/theming/creating-a-theme/)
+- [Switching themes](https://yarcl.dev/theming/switching-themes/): build-time, per-build and runtime
+- [Bundled themes](https://yarcl.dev/theming/bundled-themes/)
+- [Components](https://yarcl.dev/components/): every component with examples and props tables
+- [API reference](https://yarcl.dev/reference/api/)
+- [Source](https://github.com/eugenioenko/yarcl)

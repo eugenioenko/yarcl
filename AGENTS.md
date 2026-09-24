@@ -47,7 +47,8 @@ Missing wiring fails loudly: an unresolved module or type errors, never silently
 | `library/` | the package: components, config schema, plugin, themes, reference |
 | `consumer/` | demo app using its own config |
 | `e2e/consumer/` | test fixture with a different brand's config, to prove nothing is hardcoded |
-| `e2e/` | Playwright runner (`run.mjs`) and suites |
+| `e2e/suites/` | browser test suites, run by Vitest from `consumer/tests` and `e2e/consumer/tests` |
+| `test-utils/` | Vitest browser-mode helpers: a Playwright-style `page` and the suite runner |
 | `docs-web/` | Astro Starlight docs site; props tables are generated from TypeDoc JSON |
 | `docs/decisions/` | architecture decision records |
 | `.github/workflows/` | CI, docs deploy, and agent workflows (`*.md`) |
@@ -60,13 +61,13 @@ Run from the root with pnpm:
 pnpm typecheck
 pnpm lint
 pnpm build
-pnpm test:e2e
-pnpm test:e2e <suite>
+pnpm test
+pnpm test <suite>
 pnpm docs:dev
 pnpm docs:build
 ```
 
-`pnpm test:e2e` needs Chrome; set `CHROME_PATH` if it isn't installed as `chrome`. A change is done when all of the above pass. Kill stale dev servers before checking UI changes in a browser.
+`pnpm test` runs Vitest in browser mode with the installed Chrome, headless; set `CHROME_PATH` if it isn't installed as `chrome`. `TEST_CPU_THROTTLE=4 pnpm test` slows the CPU to surface timing races. A change is done when all of the above pass. Kill stale dev servers before checking UI changes in a browser.
 
 ## Rules
 
@@ -76,6 +77,7 @@ pnpm docs:build
 - No em dashes anywhere: code, JSDoc, docs, UI copy, commits, PRs.
 - Demo and docs UI use plain human-readable labels; config keys appear only in code samples.
 - The package is unpublished: change APIs freely, no deprecation paths or compat notes.
+- React 19 only: `ref` is a regular prop that components spread onto their element. Don't use `forwardRef`.
 - Accessibility is required: roles, keyboard support, focus management, and a clean axe audit.
 - The plugin runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing plugin code (`plugin.ts`, `css.ts`, `color.ts`, `define.ts`), run `pnpm -C library build`. Relative imports there keep `.ts` extensions; the build rewrites them.
 - Releases: bump `library/package.json` `version`, then push a matching tag (`v0.2.0`); `.github/workflows/publish.yml` publishes to npm.

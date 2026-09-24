@@ -1,3 +1,5 @@
+import { poll } from './poll.mjs';
+
 const barContrast = (locator) =>
   locator.evaluateAll((els) => {
     const canvas = document.createElement('canvas');
@@ -39,7 +41,7 @@ export async function progressContrast({ check }, scope) {
   check(`progress bars contrast with track (≥ 3:1, ${results.length} bars)`, results.length > 0 && low.length === 0, low.join(', '));
 }
 
-/** @param {import('../run.mjs').SuiteContext} ctx */
+/** @param {import('../../test-utils/suite.ts').SuiteContext} ctx */
 export default async function (ctx) {
   const { page, check } = ctx;
   const section = page.locator('section', { has: page.getByRole('heading', { name: 'Feedback' }) });
@@ -55,6 +57,7 @@ export default async function (ctx) {
   check('static alerts have no live role', (await section.locator('.yarcl-alert[role]').count()) === 0);
 
   const save = section.getByRole('button', { name: 'Save' });
+  await page.clock.install();
   await save.click();
   const saving = section.getByRole('button', { name: 'Saving…' });
   check('loading button disabled and busy', (await saving.isDisabled()) && (await saving.getAttribute('aria-busy')) === 'true');
@@ -62,9 +65,10 @@ export default async function (ctx) {
   const add = section.getByRole('button', { name: 'Add' });
   check('icon button swaps icon for spinner', (await add.locator('svg').count()) === 0 && (await add.locator('.yarcl-spinner').count()) === 1);
   const hBusy = (await saving.boundingBox()).height;
-  await page.waitForTimeout(1700);
-  check('loading ends', await save.isEnabled());
+  await page.clock.runFor(1500);
+  check('loading ends', await poll(() => save.isEnabled()));
   check('button height unchanged while loading', Math.abs((await save.boundingBox()).height - hBusy) < 0.5);
+  await page.clock.uninstall();
 
   check('spinners labelled', (await section.getByRole('status', { name: 'Loading' }).count()) === Object.keys({ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }).length);
 
