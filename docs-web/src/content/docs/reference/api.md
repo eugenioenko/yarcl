@@ -22,7 +22,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Group | Exports |
 |---|---|
 | Buttons | `Button`, `IconButton`, `ButtonGroup`, `ToggleGroup` |
-| Forms | `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `Checkbox`, `Radio`, `RadioGroup`, `Switch` |
+| Forms | `Field`, `Label`, `Input`, `Textarea`, `Select`, `Combobox`, `Checkbox`, `Radio`, `RadioGroup`, `Switch` |
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `Stack`, `Inline`, `Card`, `Divider` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `Toaster`, `toast` |

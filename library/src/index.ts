@@ -23,6 +23,8 @@ export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
 export { Field } from './components/Field';
 export type { FieldProps } from './components/Field';
+export { Label } from './components/Label';
+export type { LabelProps } from './components/Label';
 export { Text } from './components/Text';
 export type { TextProps, TextElement } from './components/Text';
 export { Heading } from './components/Heading';

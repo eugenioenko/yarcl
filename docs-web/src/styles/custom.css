@@ -49,6 +49,11 @@
   font-weight: 600;
 }
 
+.demo-part {
+  flex: 1;
+  min-width: 0;
+}
+
 .demo-label {
   min-width: 5rem;
   color: var(--yarcl-neutral-muted);
@@ -76,6 +81,11 @@
 
 .demo-grow {
   flex: 1;
+}
+
+.demo-label {
+  flex: none;
+  width: 5.5rem;
 }
 
 .demo-narrow {

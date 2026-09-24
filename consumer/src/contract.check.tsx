@@ -4,6 +4,7 @@ import {
   Checkbox,
   Divider,
   Field,
+  Label,
   Alert,
   Badge,
   ButtonGroup,
@@ -47,6 +48,9 @@ export const contract = (
       <Input />
     </Field>
     <Text textStyle="caption" color="danger" truncate={2} />
+    <Label htmlFor="name" textStyle="caption" color="neutral" required disabled>
+      Name
+    </Label>
     <Heading level={2} textStyle="display" />
     <Link color="neutral" underline="hover" external />
     <Stack gap="loose" align="center" as="ul" />
@@ -111,6 +115,10 @@ export const contract = (
     </Field>
     {/* @ts-expect-error */}
     <Text textStyle="heading" />
+    {/* @ts-expect-error */}
+    <Label textStyle="heading" />
+    {/* @ts-expect-error */}
+    <Label color="primary" />
     {/* @ts-expect-error */}
     <Heading textStyle="title" />
     {/* @ts-expect-error */}

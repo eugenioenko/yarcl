@@ -15,6 +15,18 @@ export default async function ({ page, check }) {
   await add.click();
   check('size required before adding', await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).isVisible());
   const sizes = page.getByRole('group', { name: 'SIZE' });
+  const sizeLabel = page.locator('label#size-label');
+  const labelLook = await sizeLabel.evaluate((el) => {
+    const s = getComputedStyle(el);
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--yarcl-color-clay-text)';
+    document.body.append(probe);
+    const clay = getComputedStyle(probe).color;
+    probe.remove();
+    return { size: s.fontSize, spacing: s.letterSpacing, match: s.color === clay };
+  });
+  check('Label uses labelStyle (11px, 0.12em)', labelLook.size === '11px' && labelLook.spacing === '1.32px', JSON.stringify(labelLook));
+  check('component default: Label color clay', labelLook.match);
   await sizes.getByRole('button', { name: 'M', exact: true }).click();
   check('size error clears', (await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).count()) === 0);
   await add.click();
