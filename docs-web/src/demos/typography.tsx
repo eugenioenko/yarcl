@@ -1,4 +1,4 @@
-import { Heading, Inline, Link, Stack, Text, config, type Color } from 'yarcl';
+import { Heading, Inline, Link, Stack, Text, config, type Color } from '@yarcl/react';
 
 const colors = Object.keys(config.colors) as Color[];
 

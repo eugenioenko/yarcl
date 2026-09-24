@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, ButtonGroup, IconButton, ToggleGroup, Tooltip } from 'yarcl';
+import { Button, ButtonGroup, IconButton, ToggleGroup, Tooltip } from '@yarcl/react';
 import { PlusIcon, SearchIcon, TrashIcon } from './icons';
 
 export function ButtonVariants() {

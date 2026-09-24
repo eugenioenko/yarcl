@@ -11,8 +11,8 @@ No codegen, no module augmentation, no provider. One file.
 
 ```ts
 // src/yarcl.config.ts
-import { defineConfig } from 'yarcl/define';
-import defaults from 'yarcl/defaults';
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
 
 export default defineConfig({
   ...defaults,
@@ -46,7 +46,7 @@ Why an alias instead of module augmentation or codegen: see [ADR 0001](docs/deci
 ```ts
 // vite.config.ts
 import react from '@vitejs/plugin-react';
-import { yarcl } from 'yarcl/plugin';
+import { yarcl } from '@yarcl/react/plugin';
 
 export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })] });
 ```
@@ -56,7 +56,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 {
   "compilerOptions": {
     "paths": {
-      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/yarcl/src/yarcl.config.ts"]
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
     }
   }
 }
@@ -98,23 +98,23 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 **Overlays**: Dialog, Drawer, CommandPalette, Toast
 **Data & navigation**: Tabs, Accordion, Table, Pagination, Breadcrumb
 **Feedback**: Badge, Alert, Spinner, Skeleton, Progress
-**Reference**: `DesignReference` from `yarcl/reference` renders your whole design system from your config.
+**Reference**: `DesignReference` from `@yarcl/react/reference` renders your whole design system from your config.
 
 ## Themes
 
-`yarcl/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Bloom**, **Compact** and **Editorial**.
+`@yarcl/react/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Bloom**, **Compact** and **Editorial**.
 
 ```ts title="src/yarcl.config.ts"
-export { editorial as default } from 'yarcl/themes';
+export { editorial as default } from '@yarcl/react/themes';
 ```
 
-`yarcl/css` exports `generateCss`, the plugin's generator, for switching themes at runtime. The docs include a theme playground: a full dashboard you can re-theme live.
+`@yarcl/react/css` exports `generateCss`, the plugin's generator, for switching themes at runtime. The docs include a theme playground: a full dashboard you can re-theme live.
 
 ## Repository
 
 | Path | What |
 |---|---|
-| `library/` | the `yarcl` package: components, `defineConfig`, Vite plugin, CSS generator |
+| `library/` | the `@yarcl/react` package: components, `defineConfig`, Vite plugin, CSS generator |
 | `consumer/` | demo app with one design system; every component, light and dark |
 | `docs-web/` | documentation site (Astro + Starlight) with live examples and a config playground |
 | `e2e/` | browser tests; `e2e/consumer/` is a fixture app with completely different keys ("Maison Talla"), proving the types come from each app's own config |

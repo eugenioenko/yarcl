@@ -8,20 +8,20 @@ export type { ThemeContract } from './contract';
 export { brutalist, compact, editorial, bloom };
 
 /**
- * Every bundled theme, keyed by id, including the library defaults as `yarcl`.
+ * Every bundled theme, keyed by id, including the library defaults as `@yarcl/react`.
  * All of them satisfy {@link ThemeContract}, so they're interchangeable.
  *
  * @example
  * ```ts
  * // src/yarcl.config.ts: use a theme as is
- * export { editorial as default } from 'yarcl/themes';
+ * export { editorial as default } from '@yarcl/react/themes';
  * ```
  *
  * @example
  * ```ts
  * // or start from one and change what you need
- * import { defineConfig } from 'yarcl/define';
- * import { bloom } from 'yarcl/themes';
+ * import { defineConfig } from '@yarcl/react/define';
+ * import { bloom } from '@yarcl/react/themes';
  *
  * export default defineConfig({
  *   ...bloom,

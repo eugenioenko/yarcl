@@ -8,7 +8,7 @@ sidebar:
 import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Aside type="caution">
-yarcl is a prototype and isn't published to npm yet. In this repository it's consumed as a workspace package (`"yarcl": "workspace:*"`). The steps below are the same either way.
+yarcl is a prototype and isn't published to npm yet. In this repository it's consumed as a workspace package (`"@yarcl/react": "workspace:*"`). The steps below are the same either way.
 </Aside>
 
 yarcl needs **React 18 or newer** and **Vite 5 or newer**.
@@ -20,17 +20,17 @@ yarcl needs **React 18 or newer** and **Vite 5 or newer**.
    <Tabs>
      <TabItem label="pnpm">
      ```sh
-     pnpm add yarcl
+     pnpm add @yarcl/react
      ```
      </TabItem>
      <TabItem label="npm">
      ```sh
-     npm install yarcl
+     npm install @yarcl/react
      ```
      </TabItem>
      <TabItem label="yarn">
      ```sh
-     yarn add yarcl
+     yarn add @yarcl/react
      ```
      </TabItem>
    </Tabs>
@@ -40,7 +40,7 @@ yarcl needs **React 18 or newer** and **Vite 5 or newer**.
    ```ts title="vite.config.ts"
    import react from '@vitejs/plugin-react';
    import { defineConfig } from 'vite';
-   import { yarcl } from 'yarcl/plugin';
+   import { yarcl } from '@yarcl/react/plugin';
 
    export default defineConfig({
      plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })],
@@ -56,7 +56,7 @@ yarcl needs **React 18 or newer** and **Vite 5 or newer**.
        "paths": {
          "@yarcl/config": [
            "./src/yarcl.config.ts",
-           "./node_modules/yarcl/src/yarcl.config.ts"
+           "./node_modules/@yarcl/react/src/yarcl.config.ts"
          ]
        }
      }
@@ -68,8 +68,8 @@ yarcl needs **React 18 or newer** and **Vite 5 or newer**.
 4. Create your config. Start from the library defaults and change what you need.
 
    ```ts title="src/yarcl.config.ts"
-   import { defineConfig } from 'yarcl/define';
-   import defaults from 'yarcl/defaults';
+   import { defineConfig } from '@yarcl/react/define';
+   import defaults from '@yarcl/react/defaults';
 
    export default defineConfig({
      ...defaults,
@@ -81,10 +81,10 @@ yarcl needs **React 18 or newer** and **Vite 5 or newer**.
    });
    ```
 
-5. Use the components. Importing from `yarcl` also loads the generated CSS.
+5. Use the components. Importing from `@yarcl/react` also loads the generated CSS.
 
    ```tsx title="src/App.tsx"
-   import { Button } from 'yarcl';
+   import { Button } from '@yarcl/react';
 
    export function App() {
      return <Button color="brand">It works</Button>;

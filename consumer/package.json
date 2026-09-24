@@ -12,7 +12,7 @@
     "date-fns": "^4.4.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "yarcl": "workspace:*"
+    "@yarcl/react": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

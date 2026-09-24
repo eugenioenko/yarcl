@@ -17,7 +17,7 @@ import {
   type Size,
   type TextStyle,
   type Variant,
-} from 'yarcl';
+} from '@yarcl/react';
 import { PlusIcon } from './icons';
 
 const sizes = Object.keys(config.sizes) as Size[];

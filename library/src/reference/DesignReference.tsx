@@ -86,11 +86,11 @@ export interface DesignReferenceProps {
  * A living reference of the active design system, rendered from the consumer's config:
  * colors with contrast ratios, the size scale with live controls, radii, variants, spacing,
  * shadows, fonts, text styles, heading levels, density, other tokens and defaults.
- * Import from `yarcl/reference`.
+ * Import from `@yarcl/react/reference`.
  *
  * @example
  * ```tsx
- * import { DesignReference } from 'yarcl/reference';
+ * import { DesignReference } from '@yarcl/react/reference';
  *
  * <DesignReference title="Acme design system" />
  * ```

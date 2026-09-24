@@ -14,7 +14,7 @@
     "paths": {
       "@yarcl/config": [
         "./src/yarcl.config.ts",
-        "./node_modules/yarcl/src/yarcl.config.ts"
+        "./node_modules/@yarcl/react/src/yarcl.config.ts"
       ]
     }
   },

@@ -30,7 +30,7 @@ function asPair(value: string | ColorPair): ColorPair {
  *
  * @example
  * ```ts
- * import { checkContrast } from 'yarcl/contrast';
+ * import { checkContrast } from '@yarcl/react/contrast';
  * import config from './src/yarcl.config';
  *
  * test('design system is readable', () => {

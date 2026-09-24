@@ -8,8 +8,8 @@ sidebar:
 Your config file default-exports the result of `defineConfig`. It's plain data: no functions, no theme objects, no CSS.
 
 ```ts title="src/yarcl.config.ts"
-import { defineConfig } from 'yarcl/define';
-import defaults from 'yarcl/defaults';
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
 
 export default defineConfig({
   ...defaults,
@@ -48,7 +48,7 @@ export default defineConfig({
 
 ## Extending instead of replacing
 
-`yarcl/defaults` exports the library's default config. Spread it and override what you need; spread a group to add keys to it:
+`@yarcl/react/defaults` exports the library's default config. Spread it and override what you need; spread a group to add keys to it:
 
 ```ts
 export default defineConfig({

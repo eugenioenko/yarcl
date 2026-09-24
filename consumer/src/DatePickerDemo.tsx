@@ -1,7 +1,7 @@
 import { format, isWeekend } from 'date-fns';
 import { de } from 'date-fns/locale/de';
 import { useState } from 'react';
-import { DatePicker, Field, Inline, type DateRange } from 'yarcl';
+import { DatePicker, Field, Inline, type DateRange } from '@yarcl/react';
 
 const day = (d: Date | null | undefined) => (d ? format(d, 'yyyy-MM-dd') : 'none');
 

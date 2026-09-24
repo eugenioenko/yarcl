@@ -19,7 +19,7 @@ import {
   type Color,
   type CommandPaletteCommand,
   type Density,
-} from 'yarcl';
+} from '@yarcl/react';
 
 const colors = Object.keys(config.colors) as Color[];
 const densities = (Object.keys(config.density) as Density[]).map((d) => ({ value: d, label: d }));

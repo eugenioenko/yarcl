@@ -15,10 +15,10 @@ import {
   Text,
   ToggleGroup,
   config as buildConfig,
-} from 'yarcl';
-import { applyTheme, resetTheme } from 'yarcl/css';
-import type { YarclShape } from 'yarcl/define';
-import { themeNames, themes } from 'yarcl/themes';
+} from '@yarcl/react';
+import { applyTheme, resetTheme } from '@yarcl/react/css';
+import type { YarclShape } from '@yarcl/react/define';
+import { themeNames, themes } from '@yarcl/react/themes';
 
 type ThemeId = keyof typeof themes;
 const themeIds = Object.keys(themes) as ThemeId[];
@@ -52,7 +52,7 @@ interface Overrides {
 const none: Overrides = { radius: null, size: null, padding: null, gap: null };
 
 function baseOf(id: ThemeId): YarclShape {
-  return (id === 'yarcl' ? buildConfig : themes[id]) as unknown as YarclShape;
+  return (id === '@yarcl/react' ? buildConfig : themes[id]) as unknown as YarclShape;
 }
 
 function compose(base: YarclShape, palette: Palette, overrides: Overrides): YarclShape {
@@ -99,14 +99,14 @@ function Choice<T extends string>({
 }
 
 export function ConfigPlayground() {
-  const [themeId, setThemeId] = useState<ThemeId>('yarcl');
+  const [themeId, setThemeId] = useState<ThemeId>('@yarcl/react');
   const [palette, setPalette] = useState<Palette>('theme');
   const [overrides, setOverrides] = useState<Overrides>(none);
   const [scheme, setScheme] = useState('light');
 
   const base = baseOf(themeId);
   const composed = useMemo(() => compose(base, palette, overrides), [base, palette, overrides]);
-  const untouched = themeId === 'yarcl' && palette === 'theme' && Object.values(overrides).every((v) => !v);
+  const untouched = themeId === '@yarcl/react' && palette === 'theme' && Object.values(overrides).every((v) => !v);
 
   useEffect(() => {
     if (untouched) resetTheme();
@@ -124,10 +124,10 @@ export function ConfigPlayground() {
   const set = (key: keyof Overrides) => (value: string) => setOverrides((current) => ({ ...current, [key]: value }));
   const current = composed.defaults;
 
-  const spread = themeId === 'yarcl' ? 'defaults' : themeId;
+  const spread = themeId === '@yarcl/react' ? 'defaults' : themeId;
   const changed = (Object.entries(overrides) as [keyof Overrides, string | null][]).filter(([, value]) => value);
   const code = [
-    themeId === 'yarcl' ? "import defaults from 'yarcl/defaults';" : `import { ${spread} } from 'yarcl/themes';`,
+    themeId === '@yarcl/react' ? "import defaults from '@yarcl/react/defaults';" : `import { ${spread} } from '@yarcl/react/themes';`,
     '',
     'export default defineConfig({',
     `  ...${spread},`,
@@ -152,7 +152,7 @@ export function ConfigPlayground() {
         <ToggleGroup type="single" required value={themeId} onValueChange={(v) => v && chooseTheme(v as ThemeId)} attached={false} aria-label="Theme">
           {themeIds.map((id) => (
             <ToggleGroup.Item key={id} value={id}>
-              {id === 'yarcl' ? 'yarcl' : themeNames[id]}
+              {id === '@yarcl/react' ? '@yarcl/react' : themeNames[id]}
             </ToggleGroup.Item>
           ))}
         </ToggleGroup>

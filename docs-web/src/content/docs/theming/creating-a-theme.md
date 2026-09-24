@@ -19,8 +19,8 @@ Re-theming means changing values. Keep the keys and nothing in your app needs to
 Start from the library defaults or from one of the [bundled themes](/theming/bundled-themes/), and override what you need:
 
 ```ts title="src/yarcl.config.ts"
-import { defineConfig } from 'yarcl/define';
-import { editorial } from 'yarcl/themes';
+import { defineConfig } from '@yarcl/react/define';
+import { editorial } from '@yarcl/react/themes';
 
 export default defineConfig({
   ...editorial,

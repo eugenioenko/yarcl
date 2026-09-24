@@ -22,7 +22,7 @@ import {
   type Color,
   type CommandPaletteCommand,
   type ModalSize,
-} from 'yarcl';
+} from '@yarcl/react';
 import { InfoIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
 
 export function DialogDemo() {

@@ -12,9 +12,9 @@ Two themes are interchangeable when they define the same keys. Your app referenc
 The bundled themes all satisfy `ThemeContract`, the keys of the library defaults. Use it to check your own themes:
 
 ```ts
-import { defineConfig } from 'yarcl/define';
-import defaults from 'yarcl/defaults';
-import type { ThemeContract } from 'yarcl/themes';
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
+import type { ThemeContract } from '@yarcl/react/themes';
 
 export const midnight = defineConfig({
   ...defaults,
@@ -32,7 +32,7 @@ For your own design system, define your own contract the same way: a type listin
 The simplest approach: one theme per build. Point the config file at the theme you want:
 
 ```ts title="src/yarcl.config.ts"
-export { compact as default } from 'yarcl/themes';
+export { compact as default } from '@yarcl/react/themes';
 ```
 
 To build the same app with several themes (white-label products, per-customer builds), keep one config file per theme and choose it with an environment variable in the plugin:
@@ -45,11 +45,11 @@ Remember the matching `paths` entry in `tsconfig.json`; with a shared contract, 
 
 ## At runtime
 
-`applyTheme` from `yarcl/css` switches the whole app to another theme without a rebuild:
+`applyTheme` from `@yarcl/react/css` switches the whole app to another theme without a rebuild:
 
 ```ts
-import { applyTheme, resetTheme } from 'yarcl/css';
-import { themes } from 'yarcl/themes';
+import { applyTheme, resetTheme } from '@yarcl/react/css';
+import { themes } from '@yarcl/react/themes';
 
 applyTheme(themes.editorial);
 // later
@@ -63,13 +63,13 @@ It does two things:
 
 The theme must define the keys your app uses, because prop types still come from the build-time config. The bundled themes share the defaults' keys (the contract above), so any of them can replace another.
 
-Pass `onWarning` to receive contrast warnings, and use `useConfig()` from `yarcl` when your own components need the active theme's values:
+Pass `onWarning` to receive contrast warnings, and use `useConfig()` from `@yarcl/react` when your own components need the active theme's values:
 
 ```ts
 applyTheme(theme, { onWarning: (message) => console.warn(message) });
 ```
 
-This is how the [theme playground](/theming/playground/) and the demo on the home page work. `generateCss` is exported from `yarcl/css` as well, if you only need the stylesheet.
+This is how the [theme playground](/theming/playground/) and the demo on the home page work. `generateCss` is exported from `@yarcl/react/css` as well, if you only need the stylesheet.
 
 ## Light and dark
 
