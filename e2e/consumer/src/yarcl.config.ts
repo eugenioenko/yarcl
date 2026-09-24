@@ -77,6 +77,7 @@ export default defineConfig({
     IconButton: { radius: 'square' },
     ToggleGroup: { radius: 'square' },
     Drawer: { size: 'narrow' },
+    Label: { color: 'clay' },
   },
   defaults: {
     size: 'talla-m',

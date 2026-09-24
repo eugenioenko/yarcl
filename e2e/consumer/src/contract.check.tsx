@@ -1,10 +1,11 @@
-import { Badge, Button, Dialog, Heading, Inline, Input, Stack, Table, Text } from 'yarcl';
+import { Badge, Button, Dialog, Heading, Inline, Input, Label, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
     <Button size="talla-l" color="clay" variant="wash" radius="hairline" />
     <Stack gap="12" />
     <Text textStyle="price" />
+    <Label htmlFor="size" textStyle="fine" color="clay" required disabled />
     <Heading level={1} />
     <Table density="cozy" />
 
@@ -21,6 +22,10 @@ export const contract = (
     <Inline gap="normal" />
     {/* @ts-expect-error */}
     <Text textStyle="body" />
+    {/* @ts-expect-error */}
+    <Label textStyle="label-md" />
+    {/* @ts-expect-error */}
+    <Label color="danger" />
     {/* @ts-expect-error */}
     <Badge variant="subtle" />
     {/* @ts-expect-error */}

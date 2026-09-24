@@ -8,6 +8,7 @@ import {
   Divider,
   Heading,
   Inline,
+  Label,
   Link,
   Select,
   Stack,
@@ -105,9 +106,9 @@ export function App() {
 
             <Stack gap="2">
               <Inline justify="between">
-                <Text textStyle="label" id="size-label">
+                <Label id="size-label">
                   SIZE
-                </Text>
+                </Label>
                 <Dialog
                   trigger={
                     <Button variant="text" size="talla-s">
