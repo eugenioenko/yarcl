@@ -346,14 +346,14 @@ type Checks<T extends YarclShape> = {
  * - `components` only names known components, only sets props they have, and only uses existing keys
  *
  * Returns the config unchanged with literal types preserved, so the library can derive
- * its prop types from it. Spread `yarcl/defaults` to extend the library defaults instead
+ * its prop types from it. Spread `@yarcl/react/defaults` to extend the library defaults instead
  * of replacing them.
  *
  * @example
  * ```ts
  * // src/yarcl.config.ts
- * import { defineConfig } from 'yarcl/define';
- * import defaults from 'yarcl/defaults';
+ * import { defineConfig } from '@yarcl/react/define';
+ * import defaults from '@yarcl/react/defaults';
  *
  * export default defineConfig({
  *   ...defaults,

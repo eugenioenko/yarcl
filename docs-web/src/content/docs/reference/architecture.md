@@ -11,7 +11,7 @@ yarcl needs your config twice: **at compile time**, to type props, and **at runt
 
 **A. Module alias (chosen).** The library imports `@yarcl/config`. A bundler alias resolves it to your file at runtime; a `tsconfig.json` `paths` entry resolves it to the same file for types.
 
-**B. Module augmentation and a Provider.** The library declares an empty interface; you register your config's type with `declare module 'yarcl'` and pass the values through `<YarclProvider config={config}>`. TanStack Router, Tamagui and MUI work this way.
+**B. Module augmentation and a Provider.** The library declares an empty interface; you register your config's type with `declare module '@yarcl/react'` and pass the values through `<YarclProvider config={config}>`. TanStack Router, Tamagui and MUI work this way.
 
 **C. Code generation.** A CLI reads your config and writes type declarations (and CSS). Panda CSS and Chakra v3 work this way.
 

@@ -22,8 +22,8 @@ export interface ApplyThemeOptions {
  *
  * @example
  * ```ts
- * import { applyTheme } from 'yarcl/css';
- * import { themes } from 'yarcl/themes';
+ * import { applyTheme } from '@yarcl/react/css';
+ * import { themes } from '@yarcl/react/themes';
  *
  * applyTheme(themes.editorial);
  * ```

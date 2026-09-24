@@ -9,7 +9,7 @@ yarcl ships with four themes that each change everything a theme can change: col
 
 | Theme | Import | Color | Shape and type | Density and depth |
 |---|---|---|---|---|
-| **yarcl** | `yarcl/defaults` | blue | 6px corners, system sans | 40px controls, light shadows |
+| **yarcl** | `@yarcl/react/defaults` | blue | 6px corners, system sans | 40px controls, light shadows |
 | **Brutalist** | `brutalist` | red on black and white | square corners, 2px borders, monospace | hard offset shadows, dashed focus ring |
 | **Bloom** | `bloom` | violet on lavender | pill controls, round cards, rounded sans | large 44px controls, airy spacing, soft tinted shadows |
 | **Compact** | `compact` | teal on cool gray | 2px corners, 13px sans | 28px controls, tight spacing, compact tables, nearly flat |
@@ -22,14 +22,14 @@ See them all in the [theme playground](/theming/playground/).
 As is:
 
 ```ts title="src/yarcl.config.ts"
-export { bloom as default } from 'yarcl/themes';
+export { bloom as default } from '@yarcl/react/themes';
 ```
 
 As a starting point:
 
 ```ts title="src/yarcl.config.ts"
-import { defineConfig } from 'yarcl/define';
-import { brutalist } from 'yarcl/themes';
+import { defineConfig } from '@yarcl/react/define';
+import { brutalist } from '@yarcl/react/themes';
 
 export default defineConfig({
   ...brutalist,

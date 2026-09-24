@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Accordion, Badge, Breadcrumb, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
+import { Accordion, Badge, Breadcrumb, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from '@yarcl/react';
 
 export function TabsDemo() {
   return (

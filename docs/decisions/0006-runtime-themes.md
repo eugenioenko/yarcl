@@ -9,7 +9,7 @@ ADR 0001 fixes one config per build. Previews, playgrounds and theme pickers sti
 
 ## Decision
 
-`applyTheme(theme)` and `resetTheme()` in `yarcl/css`:
+`applyTheme(theme)` and `resetTheme()` in `@yarcl/react/css`:
 
 - inject `generateCss(theme)` into a `<style>` that overrides the build-time CSS
 - swap the active config in `runtime.ts`, which components subscribe to through `useSyncExternalStore`, so they re-render with the theme's defaults

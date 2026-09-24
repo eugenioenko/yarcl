@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Button, Drawer, Inline, Link, Select, Stack, Text, Textarea, Toaster, ToggleGroup, toast } from 'yarcl';
-import { applyTheme } from 'yarcl/css';
-import type { YarclShape } from 'yarcl/define';
-import { themeNames, themes } from 'yarcl/themes';
+import { Alert, Button, Drawer, Inline, Link, Select, Stack, Text, Textarea, Toaster, ToggleGroup, toast } from '@yarcl/react';
+import { applyTheme } from '@yarcl/react/css';
+import type { YarclShape } from '@yarcl/react/define';
+import { themeNames, themes } from '@yarcl/react/themes';
 import { Dashboard } from './Dashboard';
 
 type ThemeId = keyof typeof themes;
@@ -40,7 +40,7 @@ function initial() {
   const theme = params.get('theme');
   const scheme = params.get('scheme');
   return {
-    theme: (ids.includes(theme as ThemeId) ? theme : 'yarcl') as ThemeId,
+    theme: (ids.includes(theme as ThemeId) ? theme : '@yarcl/react') as ThemeId,
     scheme: scheme === 'dark' || scheme === 'light' ? scheme : 'light',
   };
 }
@@ -97,10 +97,10 @@ export function ThemePlayground() {
 
   async function copy() {
     const text = custom
-      ? `import { defineConfig } from 'yarcl/define';\n\nexport default defineConfig(${JSON.stringify(custom, null, 2)});\n`
-      : themeId === 'yarcl'
-        ? `export { default } from 'yarcl/defaults';\n`
-        : `export { ${themeId} as default } from 'yarcl/themes';\n`;
+      ? `import { defineConfig } from '@yarcl/react/define';\n\nexport default defineConfig(${JSON.stringify(custom, null, 2)});\n`
+      : themeId === '@yarcl/react'
+        ? `export { default } from '@yarcl/react/defaults';\n`
+        : `export { ${themeId} as default } from '@yarcl/react/themes';\n`;
     await navigator.clipboard.writeText(text);
     toast({ title: 'Config copied', description: 'Paste it into src/yarcl.config.ts.' });
   }

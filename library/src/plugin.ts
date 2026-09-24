@@ -17,7 +17,10 @@ export interface YarclPluginOptions {
 
 const VIRTUAL_CSS = 'virtual:yarcl.css';
 const RESOLVED_CSS = '\0' + VIRTUAL_CSS;
-const defaultConfig = fileURLToPath(new URL('./yarcl.config.ts', import.meta.url));
+const PACKAGE = '@yarcl/react';
+const defaultConfig = [new URL('./yarcl.config.ts', import.meta.url), new URL('../src/yarcl.config.ts', import.meta.url)]
+  .map((url) => fileURLToPath(url))
+  .find((file) => existsSync(file))!;
 
 /**
  * Vite plugin that connects the library to the consumer's config.
@@ -34,7 +37,7 @@ const defaultConfig = fileURLToPath(new URL('./yarcl.config.ts', import.meta.url
  * @example
  * ```ts
  * // vite.config.ts
- * import { yarcl } from 'yarcl/plugin';
+ * import { yarcl } from '@yarcl/react/plugin';
  *
  * export default defineConfig({
  *   plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })],
@@ -53,7 +56,11 @@ export function yarcl({ config = 'src/yarcl.config.ts' }: YarclPluginOptions = {
       root = resolve(userConfig.root ?? process.cwd());
       const consumerConfig = resolve(root, config);
       target = existsSync(consumerConfig) ? consumerConfig : defaultConfig;
-      return { resolve: { alias: { '@yarcl/config': target } } };
+      return {
+        resolve: { alias: { '@yarcl/config': target } },
+        optimizeDeps: { exclude: [PACKAGE] },
+        ssr: { noExternal: [PACKAGE] },
+      };
     },
 
     resolveId(id) {
@@ -65,6 +72,7 @@ export function yarcl({ config = 'src/yarcl.config.ts' }: YarclPluginOptions = {
       const { module, dependencies } = await runnerImport<{ default: YarclShape }>(target, {
         configFile: false,
         root,
+        ssr: { noExternal: [PACKAGE] },
         logLevel: 'error',
       });
       watched = new Set([target, ...dependencies.map((dep) => resolve(root, dep))]);

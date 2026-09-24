@@ -11,11 +11,11 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 
 | Import | Contents |
 |---|---|
-| `yarcl` | components, `toast`, token types, the resolved `config` |
-| `yarcl/define` | `defineConfig` and the config types |
-| `yarcl/defaults` | the library's default config, for spreading |
-| `yarcl/plugin` | the Vite plugin |
-| `yarcl/reference` | `DesignReference` |
+| `@yarcl/react` | components, `toast`, token types, the resolved `config` |
+| `@yarcl/react/define` | `defineConfig` and the config types |
+| `@yarcl/react/defaults` | the library's default config, for spreading |
+| `@yarcl/react/plugin` | the Vite plugin |
+| `@yarcl/react/reference` | `DesignReference` |
 
 ## Components
 
@@ -39,4 +39,4 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | `TokenProps`, `VariantProps` | the shared `size` / `radius` / `color` and `variant` props |
 | `SelectOption` | `{ value, label, disabled? }` for `Select` and `Combobox` |
 | `DateRange` | `{ from, to }` for `DatePicker` in range mode |
-| `YarclShape`, `ColorToken`, `SizeToken`, `VariantToken`, … | the config schema, from `yarcl/define` |
+| `YarclShape`, `ColorToken`, `SizeToken`, `VariantToken`, … | the config schema, from `@yarcl/react/define` |

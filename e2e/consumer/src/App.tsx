@@ -27,8 +27,8 @@ import {
   Toaster,
   ToggleGroup,
   toast,
-} from 'yarcl';
-import { DesignReference } from 'yarcl/reference';
+} from '@yarcl/react';
+import { DesignReference } from '@yarcl/react/reference';
 
 const garmentSizes = ['XS', 'S', 'M', 'L', 'XL'];
 const occasions = ['Office', 'Weekend', 'Travel', 'Evening'].map((label) => ({ value: label.toLowerCase(), label }));

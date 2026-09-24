@@ -20,7 +20,7 @@ The library imports `@yarcl/config`. A bundler alias resolves it to the consumer
 
 ### B. Module augmentation + Provider
 
-The library declares an empty `interface Register {}`. The consumer adds `declare module 'yarcl' { interface Register { config: typeof config } }` for types, and passes the values through `<YarclProvider config={config}>` at runtime. (TanStack Router, Tamagui, MUI's theme augmentation.)
+The library declares an empty `interface Register {}`. The consumer adds `declare module '@yarcl/react' { interface Register { config: typeof config } }` for types, and passes the values through `<YarclProvider config={config}>` at runtime. (TanStack Router, Tamagui, MUI's theme augmentation.)
 
 ### C. Code generation
 

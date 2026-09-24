@@ -6,7 +6,7 @@ sidebar:
 ---
 
 ```ts title="vite.config.ts"
-import { yarcl } from 'yarcl/plugin';
+import { yarcl } from '@yarcl/react/plugin';
 
 export default defineConfig({
   plugins: [react(), yarcl({ config: 'src/yarcl.config.ts' })],

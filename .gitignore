@@ -4,3 +4,4 @@ docs/api
 docs-web/src/generated
 docs-web/public/api
 docs-web/.astro
+library/LICENSE

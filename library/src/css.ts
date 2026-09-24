@@ -102,7 +102,7 @@ function rule(selector: string, declarations: [string, string | number][]): stri
  * `@font-face` rules. The Vite plugin calls this at build time; call it yourself to preview
  * or switch themes at runtime (inject the result into a `<style>` element).
  *
- * @param config A config from `defineConfig`, e.g. one of `yarcl/themes`.
+ * @param config A config from `defineConfig`, e.g. one of `@yarcl/react/themes`.
  * @param warn Receives contrast warnings.
  */
 export function generateCss(config: YarclShape, warn: (message: string) => void = () => {}): string {

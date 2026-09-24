@@ -15,7 +15,7 @@ import {
   Text,
   Tooltip,
   type SelectOption,
-} from 'yarcl';
+} from '@yarcl/react';
 import { PlusIcon, SearchIcon } from './icons';
 
 type Plan = 'free' | 'pro' | 'team' | 'enterprise';

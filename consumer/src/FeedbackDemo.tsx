@@ -15,7 +15,7 @@ import {
   type Color,
   type Size,
   type Variant,
-} from 'yarcl';
+} from '@yarcl/react';
 import { PlusIcon } from './icons';
 
 const colors = Object.keys(config.colors) as Color[];

@@ -2,13 +2,13 @@
 import react from '@astrojs/react';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
-import { yarcl } from 'yarcl/plugin';
+import { yarcl } from '@yarcl/react/plugin';
 
 export default defineConfig({
   site: 'https://yarcl.dev',
   integrations: [
     starlight({
-      title: 'yarcl',
+      title: '@yarcl/react',
       description: 'A React component library where your config file is the design system.',
       logo: { src: './src/assets/yarcl.svg' },
       favicon: '/yarcl.svg',

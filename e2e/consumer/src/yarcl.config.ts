@@ -1,5 +1,5 @@
-import { defineConfig } from 'yarcl/define';
-import defaults from 'yarcl/defaults';
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
 
 export default defineConfig({
   colors: {

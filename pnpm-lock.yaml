@@ -38,6 +38,9 @@ importers:
 
   consumer:
     dependencies:
+      '@yarcl/react':
+        specifier: workspace:*
+        version: link:../library
       date-fns:
         specifier: ^4.4.0
         version: 4.4.0
@@ -47,9 +50,6 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.3.0(react@19.3.0)
-      yarcl:
-        specifier: workspace:*
-        version: link:../library
     devDependencies:
       '@types/node':
         specifier: ^24.0.0
@@ -78,6 +78,9 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.42.3
         version: 0.42.3(astro@7.3.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.6)(yaml@2.9.1))(typescript@5.9.3)
+      '@yarcl/react':
+        specifier: workspace:*
+        version: link:../library
       astro:
         specifier: ^7.2.10
         version: 7.3.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.6)(yaml@2.9.1)
@@ -93,9 +96,6 @@ importers:
       sharp:
         specifier: ^0.35.3
         version: 0.35.4(@types/node@24.13.6)
-      yarcl:
-        specifier: workspace:*
-        version: link:../library
     devDependencies:
       '@types/node':
         specifier: ^24.13.6
@@ -112,15 +112,15 @@ importers:
 
   e2e/consumer:
     dependencies:
+      '@yarcl/react':
+        specifier: workspace:*
+        version: link:../../library
       react:
         specifier: ^19.1.0
         version: 19.3.0
       react-dom:
         specifier: ^19.1.0
         version: 19.3.0(react@19.3.0)
-      yarcl:
-        specifier: workspace:*
-        version: link:../../library
     devDependencies:
       '@types/node':
         specifier: ^24.0.0

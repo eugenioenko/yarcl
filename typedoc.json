@@ -1,6 +1,6 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "name": "yarcl",
+  "name": "@yarcl/react",
   "entryPoints": [
     "library/src/index.ts",
     "library/src/define.ts",

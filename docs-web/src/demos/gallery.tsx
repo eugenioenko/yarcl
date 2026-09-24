@@ -33,7 +33,7 @@ import {
   Text,
   Textarea,
   ToggleGroup,
-} from 'yarcl';
+} from '@yarcl/react';
 import { InfoIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
 
 interface Item {

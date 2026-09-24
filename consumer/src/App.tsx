@@ -32,8 +32,8 @@ import {
   type Spacing,
   type TextStyle,
   type Variant,
-} from 'yarcl';
-import { DesignReference } from 'yarcl/reference';
+} from '@yarcl/react';
+import { DesignReference } from '@yarcl/react/reference';
 import { DatePickerDemo } from './DatePickerDemo';
 import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';

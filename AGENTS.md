@@ -18,7 +18,7 @@ In `tsconfig.json`, for types:
 
 ```json
 "paths": {
-  "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/yarcl/src/yarcl.config.ts"]
+  "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
 }
 ```
 
@@ -77,7 +77,8 @@ pnpm docs:build
 - Demo and docs UI use plain human-readable labels; config keys appear only in code samples.
 - The package is unpublished: change APIs freely, no deprecation paths or compat notes.
 - Accessibility is required: roles, keyboard support, focus management, and a clean axe audit.
-- Node loads the plugin with type stripping, so relative imports in plugin code need `.ts` extensions.
+- The plugin runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing plugin code (`plugin.ts`, `css.ts`, `color.ts`, `define.ts`), run `pnpm -C library build`. Relative imports there keep `.ts` extensions; the build rewrites them.
+- Releases: bump `library/package.json` `version`, then push a matching tag (`v0.2.0`); `.github/workflows/publish.yml` publishes to npm.
 - Don't commit, push, or open PRs unless asked.
 
 ## Workflows

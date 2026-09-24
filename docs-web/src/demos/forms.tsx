@@ -22,7 +22,7 @@ import {
   ToggleGroup,
   type DateRange,
   type SelectOption,
-} from 'yarcl';
+} from '@yarcl/react';
 
 export function FieldDemo() {
   const [email, setEmail] = useState('ada@');

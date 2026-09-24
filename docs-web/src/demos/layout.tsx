@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Divider, Heading, Inline, Stack, Text, config, type Shadow, type Spacing } from 'yarcl';
+import { Badge, Button, Card, Divider, Heading, Inline, Stack, Text, config, type Shadow, type Spacing } from '@yarcl/react';
 
 const spacings = Object.keys(config.spacing) as Spacing[];
 const shadows = Object.keys(config.shadows) as Shadow[];

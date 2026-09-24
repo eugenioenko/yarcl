@@ -24,7 +24,7 @@ Because `@yarcl/config` resolves to your file (through `paths` in your `tsconfig
 Use them to type your own components:
 
 ```ts
-import type { Color, Density, ModalSize, Radius, Shadow, Size, Spacing, TextStyle, Variant } from 'yarcl';
+import type { Color, Density, ModalSize, Radius, Shadow, Size, Spacing, TextStyle, Variant } from '@yarcl/react';
 
 interface PriceTagProps {
   tone?: Color;
@@ -35,7 +35,7 @@ interface PriceTagProps {
 `config` is exported too, the resolved config object, for iterating over keys:
 
 ```tsx
-import { Button, config, type Color } from 'yarcl';
+import { Button, config, type Color } from '@yarcl/react';
 
 const colors = Object.keys(config.colors) as Color[];
 colors.map((color) => <Button key={color} color={color}>{color}</Button>);
@@ -46,7 +46,7 @@ colors.map((color) => <Button key={color} color={color}>{color}</Button>);
 Keep a file of `@ts-expect-error` lines to prove that invalid values stay invalid. If one of them stops being an error, for example after someone adds a `primary` color by accident, type-checking fails:
 
 ```tsx title="src/contract.check.tsx"
-import { Button, Stack } from 'yarcl';
+import { Button, Stack } from '@yarcl/react';
 
 export const contract = (
   <>

@@ -42,7 +42,7 @@ import {
   Switch,
   Text,
   Textarea,
-} from 'yarcl';
+} from '@yarcl/react';
 
 export const contract = (
   <>

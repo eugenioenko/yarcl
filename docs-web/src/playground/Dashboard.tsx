@@ -34,7 +34,7 @@ import {
   ToggleGroup,
   Tooltip,
   toast,
-} from 'yarcl';
+} from '@yarcl/react';
 import {
   BellIcon,
   ChartIcon,
