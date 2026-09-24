@@ -119,6 +119,7 @@ export interface ComponentTokenProps {
   Drawer: 'size';
   Menu: 'size';
   Tabs: 'size' | 'color';
+  Pagination: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';
   Table: 'density';
   Stack: 'gap';
   Inline: 'gap';

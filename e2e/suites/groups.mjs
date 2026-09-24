@@ -31,6 +31,44 @@ export default async function ({ page, check, focused }) {
   const [a, b] = [await buttons.nth(0).boundingBox(), await buttons.nth(1).boundingBox()];
   check('button group: attached (borders overlap)', Math.abs(a.x + a.width - b.x - 1) < 0.5, `${a.x + a.width} vs ${b.x}`);
 
+  const invoices = page.getByRole('navigation', { name: 'Invoice pages' });
+  await invoices.scrollIntoViewIfNeeded();
+  const prev = invoices.getByRole('button', { name: 'Previous page' });
+  const next = invoices.getByRole('button', { name: 'Next page' });
+  const current = () => invoices.locator('[aria-current="page"]').getAttribute('aria-label');
+  check('pagination: first page current', (await current()) === 'Page 1');
+  check('pagination: previous disabled on first page', (await prev.getAttribute('aria-disabled')) === 'true');
+  const labels = await invoices.getByRole('button').evaluateAll((els) => els.map((el) => el.getAttribute('aria-label')));
+  check('pagination: boundary, siblings and ellipsis', labels.join() === 'Previous page,Page 1,Page 2,Page 3,Page 4,Page 5,Page 12,Next page', labels.join());
+  await next.click();
+  check('pagination: next advances (controlled)', (await current()) === 'Page 2' && (await page.getByTestId('invoice-page').textContent()) === 'Page 2 of 12');
+  check('pagination: focus stays on next', await focused(next));
+  await invoices.getByRole('button', { name: 'Page 12' }).click();
+  check('pagination: next disabled on last page', (await next.getAttribute('aria-disabled')) === 'true');
+  await next.click({ force: true });
+  check('pagination: disabled next does nothing', (await current()) === 'Page 12');
+  await invoices.getByRole('button', { name: 'Page 12' }).focus();
+  await page.keyboard.press('ArrowLeft');
+  check('pagination: arrow moves focus', await focused(invoices.getByRole('button', { name: 'Page 11' })));
+  await page.keyboard.press('Enter');
+  check('pagination: enter selects page', (await current()) === 'Page 11');
+  await page.keyboard.press('Home');
+  check('pagination: home focuses previous', await focused(prev));
+  await page.keyboard.press('End');
+  check('pagination: end focuses next', await focused(next));
+
+  const results = page.getByRole('navigation', { name: 'Search results' });
+  const resultLabels = await results.getByRole('button').evaluateAll((els) => els.map((el) => el.textContent || el.getAttribute('aria-label')));
+  check('pagination: two siblings, two ellipses', resultLabels.join() === 'Previous page,1,8,9,10,11,12,50,Next page' && (await results.locator('.yarcl-pagination-ellipsis').count()) === 2, resultLabels.join());
+  const resultButtons = results.getByRole('button');
+  const [r0, r1] = [await resultButtons.nth(0).boundingBox(), await resultButtons.nth(1).boundingBox()];
+  check('pagination: attached (borders overlap)', Math.abs(r0.x + r0.width - r1.x - 1) < 0.5, `${r0.x + r0.width} vs ${r1.x}`);
+  const bg = (locator) => locator.evaluate((el) => getComputedStyle(el).backgroundColor);
+  check('pagination: current page uses selected variant', (await bg(results.getByRole('button', { name: 'Page 10' }))) !== (await bg(results.getByRole('button', { name: 'Page 9' }))));
+  const sizeHeight = await results.getByRole('button', { name: 'Page 9' }).evaluate((el) => el.getBoundingClientRect().height);
+  const invoiceHeight = await invoices.getByRole('button', { name: 'Page 11' }).evaluate((el) => el.getBoundingClientRect().height);
+  check('pagination: size prop applies', sizeHeight < invoiceHeight, `${sizeHeight} < ${invoiceHeight}`);
+
   const plan = page.getByRole('group', { name: 'Plan' });
   const pro = plan.getByRole('radio', { name: 'Pro' });
   check('radio group: labelled by legend', await pro.isChecked());

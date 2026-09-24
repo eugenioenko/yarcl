@@ -122,6 +122,15 @@ defineConfig({
     IconButton: { radius: 'size' },
     Card: { padding: 'xl', shadow: 'lg' },
     Stack: { gap: 'sm' },
+    Pagination: { size: 'sm', variant: 'outline', selectedVariant: 'solid' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Pagination: { selectedVariant: 'filled' },
   },
 });
 

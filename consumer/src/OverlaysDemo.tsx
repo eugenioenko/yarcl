@@ -7,6 +7,7 @@ import {
   Inline,
   Input,
   Link,
+  Pagination,
   Select,
   Stack,
   Table,
@@ -33,6 +34,7 @@ const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD
 export function OverlaysDemo() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [density, setDensity] = useState<Density>(config.defaults.density);
+  const [invoicePage, setInvoicePage] = useState(1);
 
   return (
     <Stack gap="loose">
@@ -185,6 +187,23 @@ export function OverlaysDemo() {
             ))}
           </Table.Body>
         </Table>
+        <Inline justify="between">
+          <Text muted aria-live="polite" data-testid="invoice-page">
+            Page {invoicePage} of 12
+          </Text>
+          <Pagination count={12} page={invoicePage} onPageChange={setInvoicePage} aria-label="Invoice pages" />
+        </Inline>
+        <Pagination
+          count={50}
+          defaultPage={10}
+          siblings={2}
+          attached
+          size="sm"
+          color="neutral"
+          variant="outline"
+          selectedVariant="solid"
+          aria-label="Search results"
+        />
       </Stack>
     </Stack>
   );

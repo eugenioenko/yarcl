@@ -76,6 +76,7 @@ export default defineConfig({
     Button: { radius: 'square' },
     IconButton: { radius: 'square' },
     ToggleGroup: { radius: 'square' },
+    Pagination: { size: 'talla-s', radius: 'square', variant: 'text', selectedVariant: 'line' },
     Drawer: { size: 'narrow' },
     Label: { color: 'clay' },
     Progress: { color: 'moss' },

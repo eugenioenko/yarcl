@@ -62,6 +62,8 @@ export { Toaster, toast } from './components/Toast';
 export type { ToasterProps, ToastOptions } from './components/Toast';
 export { Tabs } from './components/Tabs';
 export type { TabsProps, TabsBaseProps, TabsListProps, TabsTriggerProps, TabsPanelProps } from './components/Tabs';
+export { Pagination } from './components/Pagination';
+export type { PaginationProps } from './components/Pagination';
 export { Table } from './components/Table';
 export type { TableProps, TableHeaderCellProps, TableCellProps, CellAlign } from './components/Table';
 export { Badge } from './components/Badge';

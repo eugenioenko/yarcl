@@ -32,6 +32,9 @@ export default async function (ctx) {
   await audit(ctx, 'labels with focused control', 'section:has(#label-city)');
   await page.getByRole('button', { name: 'Start upload' }).click();
   await audit(ctx, 'progress bars', '.progress-demo');
+  const invoices = page.getByRole('navigation', { name: 'Invoice pages' });
+  await invoices.getByRole('button', { name: 'Page 12' }).click();
+  await audit(ctx, 'pagination on last page', '.yarcl-pagination');
 
   await page.getByRole('button', { name: 'Actions' }).click();
   await audit(ctx, 'menu open', '.yarcl-floating');

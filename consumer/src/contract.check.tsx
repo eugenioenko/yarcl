@@ -10,6 +10,7 @@ import {
   ButtonGroup,
   RadioGroup,
   ToggleGroup,
+  Pagination,
   Combobox,
   Progress,
   Skeleton,
@@ -115,6 +116,25 @@ export const contract = (
     />
     <Slider defaultValue={[2, 8]} onValueChange={(v: [number, number]) => v} thumbLabels={['From', 'To']} />
     <Slider value={[2, 8]} />
+    <Pagination
+      count={10}
+      page={2}
+      onPageChange={(p: number) => p}
+      siblings={2}
+      boundaries={0}
+      size="sm"
+      color="neutral"
+      radius="rounded"
+      variant="quiet"
+      selectedVariant="solid"
+      attached
+      disabled
+      aria-label="Results"
+      previousLabel="Back"
+      nextLabel="Forward"
+      pageLabel={(p) => `Go to ${p}`}
+    />
+    <Pagination count={5} defaultPage={3} />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
@@ -220,6 +240,16 @@ export const contract = (
     <ToggleGroup type="multiple" required />
     {/* @ts-expect-error */}
     <ToggleGroup type="single" selectedVariant="filled" />
+    {/* @ts-expect-error */}
+    <Pagination />
+    {/* @ts-expect-error */}
+    <Pagination count={5} size="huge" />
+    {/* @ts-expect-error */}
+    <Pagination count={5} color="primary" />
+    {/* @ts-expect-error */}
+    <Pagination count={5} selectedVariant="filled" />
+    {/* @ts-expect-error */}
+    <Pagination count={5} page="2" />
   </>
 );
 
