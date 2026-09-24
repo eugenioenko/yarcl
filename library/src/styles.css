@@ -1408,3 +1408,40 @@ html:has(.yarcl-modal[open]) {
 .yarcl-button-group-attached.yarcl-button-group-vertical > .yarcl-button:not(:first-child) {
   border-block-start-color: color-mix(in oklab, var(--yarcl-v-border), var(--yarcl-v-fg) 30%);
 }
+
+/* Pagination */
+
+.yarcl-pagination {
+  display: flex;
+  max-width: 100%;
+}
+
+.yarcl-pagination-page {
+  min-width: var(--yarcl-h);
+  padding-inline: calc(var(--yarcl-px) / 2);
+  font-variant-numeric: tabular-nums;
+}
+
+.yarcl-pagination-ellipsis {
+  width: var(--yarcl-h);
+  padding: 0;
+  cursor: default;
+  user-select: none;
+}
+
+.yarcl-button-group:not(.yarcl-button-group-attached) > .yarcl-pagination-ellipsis {
+  color: var(--yarcl-neutral-muted);
+  background: none;
+  border-color: transparent;
+}
+
+.yarcl-pagination .yarcl-button[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.yarcl-pagination .yarcl-button[aria-disabled='true']:hover,
+.yarcl-pagination .yarcl-button[aria-disabled='true']:active,
+.yarcl-button-group-attached > .yarcl-pagination-ellipsis:hover {
+  background: var(--yarcl-v-bg);
+}

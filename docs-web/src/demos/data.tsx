@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
+import { Badge, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
 
 export function TabsDemo() {
   return (
@@ -70,6 +70,28 @@ export function TableDemo() {
           ))}
         </Table.Body>
       </Table>
+    </Stack>
+  );
+}
+
+export function PaginationDemo() {
+  const [page, setPage] = useState(6);
+  return (
+    <Stack>
+      <Pagination count={20} page={page} onPageChange={setPage} aria-label="Search results" />
+      <Text muted>
+        Page {page} of 20
+      </Text>
+    </Stack>
+  );
+}
+
+export function PaginationStylesDemo() {
+  return (
+    <Stack>
+      <Pagination count={10} defaultPage={4} attached variant="outline" selectedVariant="solid" color="neutral" aria-label="Attached example" />
+      <Pagination count={50} defaultPage={25} siblings={2} boundaries={2} size="sm" aria-label="Wider range example" />
+      <Pagination count={5} defaultPage={2} radius="rounded" variant="ghost" aria-label="Rounded example" />
     </Stack>
   );
 }

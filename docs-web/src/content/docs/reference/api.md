@@ -26,7 +26,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `Stack`, `Inline`, `Card`, `Divider` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `Toaster`, `toast` |
-| Data display | `Tabs`, `Table` |
+| Data display | `Tabs`, `Table`, `Pagination` |
 | Feedback | `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress` |
 
 ## Types

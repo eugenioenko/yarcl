@@ -1,0 +1,61 @@
+---
+title: "Pagination"
+description: "Moves between pages of results, with previous and next buttons and an ellipsis for skipped pages."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { PaginationDemo, PaginationStylesDemo } from '@/demos/data';
+
+```tsx
+import { Pagination } from 'yarcl';
+```
+
+<Preview>
+  <PaginationDemo client:visible />
+</Preview>
+
+```tsx
+const [page, setPage] = useState(1);
+
+<Pagination count={20} page={page} onPageChange={setPage} aria-label="Search results" />
+```
+
+Pass `page` and `onPageChange` to control it, or `defaultPage` to let it keep its own state. Pages start at 1.
+
+## Siblings and boundaries
+
+`siblings` sets how many pages show on each side of the current one, and `boundaries` how many always show at the start and end. Skipped ranges collapse into an ellipsis. The number of buttons stays the same as you move, so the control doesn't jump around.
+
+## Styles
+
+Buttons use the shared size scale, so a pagination lines up with a `Button` or `Input` of the same size. Other pages and the previous and next buttons use `variant` (the config's `softVariant` by default), and the current page uses `selectedVariant` (the default `variant`), like `ToggleGroup`. Set `attached` to join the buttons into one control, like `ButtonGroup`. Set defaults for every pagination in `components.Pagination`.
+
+<Preview>
+  <PaginationStylesDemo client:visible />
+</Preview>
+
+```tsx
+<Pagination count={10} attached variant="outline" selectedVariant="solid" color="neutral" />
+<Pagination count={50} siblings={2} boundaries={2} size="sm" />
+<Pagination count={5} radius="rounded" variant="ghost" />
+```
+
+## Accessibility
+
+Renders a `<nav>` landmark named by `aria-label` (default "Pagination"); give each pagination on a page its own name. The current page has `aria-current="page"`. Page buttons are announced as "Page 3" and the arrows as "Previous page" and "Next page"; change these with `pageLabel`, `previousLabel` and `nextLabel`. On the first or last page the previous or next button stays focusable with `aria-disabled`, so focus isn't lost. Ellipses are hidden from screen readers.
+
+## Keyboard
+
+| Key | Action |
+|---|---|
+| <kbd>Tab</kbd> | moves through the buttons |
+| <kbd>←</kbd> <kbd>→</kbd> | moves focus to the previous or next button |
+| <kbd>Home</kbd> <kbd>End</kbd> | moves focus to the first or last button |
+| <kbd>Enter</kbd> <kbd>Space</kbd> | goes to the focused page |
+
+## Props
+
+<Props of="PaginationProps" />

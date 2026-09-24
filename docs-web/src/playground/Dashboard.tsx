@@ -16,6 +16,7 @@ import {
   Link,
   Menu,
   Progress,
+  Pagination,
   Radio,
   RadioGroup,
   Select,
@@ -313,57 +314,62 @@ export function Dashboard() {
                   </Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Panel value="orders">
-                  <Table interactive caption="Recent invoices">
-                    <Table.Head>
-                      <Table.Row>
-                        <Table.HeaderCell>Invoice</Table.HeaderCell>
-                        <Table.HeaderCell>Customer</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                        <Table.HeaderCell align="end">Amount</Table.HeaderCell>
-                        <Table.HeaderCell>
-                          <span className="pg-visually-hidden">Actions</span>
-                        </Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Head>
-                    <Table.Body>
-                      {orders.map((order) => (
-                        <Table.Row key={order.id}>
-                          <Table.Cell>
-                            <Link href="#" underline="hover">
-                              {order.id}
-                            </Link>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Stack gap="xs">
-                              <Text>{order.customer}</Text>
-                              <Text textStyle="caption" muted>
-                                {order.plan}
-                              </Text>
-                            </Stack>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Badge color={statusColor[order.status as keyof typeof statusColor]}>{order.status}</Badge>
-                          </Table.Cell>
-                          <Table.Cell align="end">{money.format(order.amount)}</Table.Cell>
-                          <Table.Cell align="end">
-                            <Menu placement="bottom-end" size="sm">
-                              <Menu.Trigger>
-                                <IconButton aria-label={`Actions for ${order.id}`} size="sm" variant="ghost" color="neutral">
-                                  <DotsIcon />
-                                </IconButton>
-                              </Menu.Trigger>
-                              <Menu.Content>
-                                <Menu.Item>View</Menu.Item>
-                                <Menu.Item>Download PDF</Menu.Item>
-                                <Menu.Separator />
-                                <Menu.Item color="danger">Void invoice</Menu.Item>
-                              </Menu.Content>
-                            </Menu>
-                          </Table.Cell>
+                  <Stack>
+                    <Table interactive caption="Recent invoices">
+                      <Table.Head>
+                        <Table.Row>
+                          <Table.HeaderCell>Invoice</Table.HeaderCell>
+                          <Table.HeaderCell>Customer</Table.HeaderCell>
+                          <Table.HeaderCell>Status</Table.HeaderCell>
+                          <Table.HeaderCell align="end">Amount</Table.HeaderCell>
+                          <Table.HeaderCell>
+                            <span className="pg-visually-hidden">Actions</span>
+                          </Table.HeaderCell>
                         </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
+                      </Table.Head>
+                      <Table.Body>
+                        {orders.map((order) => (
+                          <Table.Row key={order.id}>
+                            <Table.Cell>
+                              <Link href="#" underline="hover">
+                                {order.id}
+                              </Link>
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Stack gap="xs">
+                                <Text>{order.customer}</Text>
+                                <Text textStyle="caption" muted>
+                                  {order.plan}
+                                </Text>
+                              </Stack>
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Badge color={statusColor[order.status as keyof typeof statusColor]}>{order.status}</Badge>
+                            </Table.Cell>
+                            <Table.Cell align="end">{money.format(order.amount)}</Table.Cell>
+                            <Table.Cell align="end">
+                              <Menu placement="bottom-end" size="sm">
+                                <Menu.Trigger>
+                                  <IconButton aria-label={`Actions for ${order.id}`} size="sm" variant="ghost" color="neutral">
+                                    <DotsIcon />
+                                  </IconButton>
+                                </Menu.Trigger>
+                                <Menu.Content>
+                                  <Menu.Item>View</Menu.Item>
+                                  <Menu.Item>Download PDF</Menu.Item>
+                                  <Menu.Separator />
+                                  <Menu.Item color="danger">Void invoice</Menu.Item>
+                                </Menu.Content>
+                              </Menu>
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+                    <Inline justify="end">
+                      <Pagination count={8} defaultPage={1} size="sm" aria-label="Invoice pages" />
+                    </Inline>
+                  </Stack>
                 </Tabs.Panel>
                 <Tabs.Panel value="customers">
                   <Stack>

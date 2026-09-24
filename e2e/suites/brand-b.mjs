@@ -79,6 +79,16 @@ export default async function ({ page, check }) {
   check("dialog uses the consumer's modal size (regular = 34rem)", Math.abs((await guide.boundingBox()).width - 34 * 16) < 2, String((await guide.boundingBox()).width));
   await page.keyboard.press('Escape');
 
+  const reviews = page.getByRole('navigation', { name: 'Reviews' });
+  const reviewPage = reviews.getByRole('button', { name: 'Page 4' });
+  const reviewCurrent = reviews.getByRole('button', { name: 'Page 5' });
+  const style = (locator) => locator.evaluate((el) => ({ h: el.getBoundingClientRect().height, r: getComputedStyle(el).borderRadius, bg: getComputedStyle(el).backgroundColor, border: getComputedStyle(el).borderTopColor }));
+  const [other, active] = [await style(reviewPage), await style(reviewCurrent)];
+  check('pagination: component default size (talla-s = 36px)', other.h === 36, String(other.h));
+  check('pagination: component default radius square', other.r === '0px' && active.r === '0px', `${other.r} / ${active.r}`);
+  check('pagination: component default variants (text, line)', other.bg === 'rgba(0, 0, 0, 0)' && other.border === 'rgba(0, 0, 0, 0)' && active.border !== 'rgba(0, 0, 0, 0)', JSON.stringify({ other, active }));
+  check('pagination: current page marked', (await reviewCurrent.getAttribute('aria-current')) === 'page');
+
   await page.getByRole('link', { name: 'Design reference' }).click();
   await page.waitForURL(/page=reference/);
   check('reference page renders from config', await page.getByRole('heading', { name: 'Maison Talla design system' }).isVisible());

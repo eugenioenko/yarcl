@@ -11,6 +11,7 @@ import {
   Label,
   Link,
   Progress,
+  Pagination,
   Select,
   Slider,
   Stack,
@@ -208,6 +209,8 @@ export function App() {
                 <Text as="p">Carbon-neutral shipping. Duties included.</Text>
               </Tabs.Panel>
             </Tabs>
+
+            <Pagination count={9} defaultPage={5} color="ink" aria-label="Reviews" />
           </Stack>
         </div>
       )}

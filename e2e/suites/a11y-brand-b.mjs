@@ -5,6 +5,7 @@ export default async function (ctx) {
   const { page } = ctx;
   await page.evaluate(() => document.fonts.ready);
   await audit(ctx, 'shop page');
+  await audit(ctx, 'pagination', '.yarcl-pagination');
 
   await page.getByRole('button', { name: 'Size guide' }).click();
   await audit(ctx, 'size guide dialog', 'dialog[open]');
