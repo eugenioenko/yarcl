@@ -14,7 +14,7 @@ export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
   error?: ReactNode;
   /** Marks the control as required and shows an indicator next to the label. */
   required?: boolean;
-  /** A single form control: {@link Input}, {@link Textarea}, {@link Checkbox} or {@link Switch}. */
+  /** A single form control: {@link Input}, {@link Textarea}, {@link Checkbox}, {@link Switch} or {@link Slider}. */
   children: ReactNode;
 }
 
@@ -38,10 +38,10 @@ export function Field({ label, description, error, required, children, className
 
   return (
     <FieldContext.Provider
-      value={{ id, describedBy: cx(descriptionId, errorId) || undefined, invalid: errorId != null, required }}
+      value={{ id, labelId: `${id}-label`, describedBy: cx(descriptionId, errorId) || undefined, invalid: errorId != null, required }}
     >
       <div className={cx('yarcl-field', className)} {...props}>
-        <Label htmlFor={id} required={required}>
+        <Label id={`${id}-label`} htmlFor={id} required={required}>
           {label}
         </Label>
         {children}

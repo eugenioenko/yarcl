@@ -19,6 +19,7 @@ import {
   RadioGroup,
   Select,
   Stack,
+  Slider,
   Switch,
   Table,
   Tabs,
@@ -163,6 +164,9 @@ function SettingsForm() {
       </Field>
       <Field label="Country">
         <Combobox options={countries} placeholder="Search countries" />
+      </Field>
+      <Field label="Seats" description="Between 5 and 50 seats.">
+        <Slider defaultValue={12} min={5} max={50} />
       </Field>
       <RadioGroup label="Billing" defaultValue="yearly" orientation="horizontal">
         <Radio value="monthly">Monthly</Radio>

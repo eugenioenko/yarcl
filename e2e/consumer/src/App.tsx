@@ -11,6 +11,7 @@ import {
   Label,
   Link,
   Select,
+  Slider,
   Stack,
   Table,
   Tabs,
@@ -165,6 +166,13 @@ export function App() {
             </Stack>
 
             <Select options={shades} value={shade} onValueChange={setShade} aria-label="Shade" />
+
+            <Stack gap="2">
+              <Text textStyle="label" id="sleeve-label">
+                SLEEVE LENGTH
+              </Text>
+              <Slider aria-labelledby="sleeve-label" defaultValue={[58, 64]} min={54} max={70} step={2} formatValue={(v) => `${v} cm`} />
+            </Stack>
 
             <ButtonGroup attached={false} size="talla-l">
               <Button onClick={addToBag} className="grow">

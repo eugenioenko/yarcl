@@ -59,7 +59,7 @@ For any token prop, the first value found wins:
 |---|---|
 | `Button`, `IconButton` | `size`, `radius`, `color`, `variant` |
 | `ToggleGroup` | `size`, `radius`, `color`, `variant`, `selectedVariant` |
-| `Input`, `Textarea`, `Select`, `Combobox` | `size`, `radius`, `color` |
+| `Input`, `Textarea`, `Select`, `Combobox`, `Slider` | `size`, `radius`, `color` |
 | `Checkbox`, `Radio`, `Switch` | `size`, `color` |
 | `Badge` | `size`, `radius`, `color`, `variant` |
 | `Alert` | `radius`, `color`, `variant` |

@@ -30,6 +30,7 @@ import {
   Link,
   Radio,
   Stack,
+  Slider,
   Switch,
   Text,
   Textarea,
@@ -94,6 +95,23 @@ export const contract = (
     <ButtonGroup size="lg" variant="outline" color="neutral" radius="rounded" attached={false} orientation="vertical" />
     <ToggleGroup type="single" defaultValue="a" required variant="quiet" selectedVariant="solid" />
     <ToggleGroup type="multiple" defaultValue={['a']} onValueChange={(v: string[]) => v} />
+    <Slider
+      size="lg"
+      radius="rounded"
+      color="success"
+      min={0}
+      max={10}
+      step={0.5}
+      largeStep={2}
+      defaultValue={4}
+      onValueChange={(v: number) => v}
+      name="volume"
+      disabled
+      formatValue={(v) => `${v}`}
+      aria-label="Volume"
+    />
+    <Slider defaultValue={[2, 8]} onValueChange={(v: [number, number]) => v} thumbLabels={['From', 'To']} />
+    <Slider value={[2, 8]} />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
@@ -107,6 +125,14 @@ export const contract = (
     <IconButton />
     {/* @ts-expect-error */}
     <Switch size="huge" />
+    {/* @ts-expect-error */}
+    <Slider color="primary" />
+    {/* @ts-expect-error */}
+    <Slider radius="full" />
+    {/* @ts-expect-error */}
+    <Slider defaultValue={[1, 2]} onValueChange={(v: number) => v} />
+    {/* @ts-expect-error */}
+    <Slider defaultValue={[1, 2, 3]} />
     {/* @ts-expect-error */}
     <Checkbox color="primary" />
     {/* @ts-expect-error */}

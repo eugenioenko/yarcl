@@ -12,6 +12,7 @@ import focus from './suites/focus.mjs';
 import groups from './suites/groups.mjs';
 import label from './suites/label.mjs';
 import overlays from './suites/overlays.mjs';
+import slider from './suites/slider.mjs';
 
 /**
  * @typedef {object} SuiteContext
@@ -28,6 +29,7 @@ const suites = [
   ['consumer', 'overlays', overlays],
   ['consumer', 'feedback', feedback],
   ['consumer', 'groups', groups],
+  ['consumer', 'slider', slider],
   ['consumer', 'label', label],
   ['fixture', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
@@ -65,6 +67,7 @@ for (const [app, name, suite] of suites) {
     const htmlOverflow = () => page.evaluate(() => getComputedStyle(document.documentElement).overflow);
     try {
       await page.goto(`${servers[app].resolvedUrls.local[0]}?scheme=${scheme}`);
+      await page.locator('#root > *').first().waitFor();
       await suite({ page, check, focused, htmlOverflow });
     } catch (error) {
       check('suite completed', false, error.message.split('\n')[0]);

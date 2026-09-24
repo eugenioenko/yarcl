@@ -10,6 +10,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Slider,
   Stack,
   Switch,
   Text,
@@ -233,6 +234,24 @@ export function SwitchDemo() {
       <Text textStyle="caption" muted>
         A native checkbox with role="switch".
       </Text>
+    </Stack>
+  );
+}
+
+export function SliderDemo() {
+  const [volume, setVolume] = useState(40);
+  const [price, setPrice] = useState<[number, number]>([200, 800]);
+  return (
+    <Stack className="demo-form">
+      <Field label="Volume" description={`${volume}%`}>
+        <Slider value={volume} onValueChange={setVolume} formatValue={(v) => `${v}%`} />
+      </Field>
+      <Field label="Price" description={`$${price[0]} to $${price[1]}`}>
+        <Slider value={price} onValueChange={setPrice} min={0} max={1000} step={50} formatValue={(v) => `$${v}`} />
+      </Field>
+      <Slider size="sm" color="success" radius="rounded" defaultValue={70} aria-label="Brightness" />
+      <Slider size="lg" defaultValue={30} aria-label="Large" />
+      <Slider disabled defaultValue={50} aria-label="Disabled" />
     </Stack>
   );
 }

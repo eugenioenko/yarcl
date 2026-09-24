@@ -109,6 +109,7 @@ export interface ComponentTokenProps {
   Checkbox: 'size' | 'color';
   Radio: 'size' | 'color';
   Switch: 'size' | 'color';
+  Slider: 'size' | 'radius' | 'color';
   Badge: 'size' | 'radius' | 'color' | 'variant';
   Alert: 'radius' | 'color' | 'variant';
   Card: 'radius' | 'padding' | 'shadow';

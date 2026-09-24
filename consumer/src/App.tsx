@@ -14,6 +14,7 @@ import {
   Link,
   Radio,
   RadioGroup,
+  Slider,
   Stack,
   Switch,
   Text,
@@ -176,6 +177,17 @@ export function App() {
             </Row>
           </Section>
 
+          <Section title="Sliders">
+            <Stack className="form" data-testid="sliders">
+              {sizes.map((size) => (
+                <Slider key={size} size={size} defaultValue={40} aria-label={`Volume ${size}`} />
+              ))}
+              <Slider defaultValue={[20, 80]} step={5} aria-label="Price" formatValue={(v) => `$${v}`} />
+              <Slider color="success" radius="rounded" defaultValue={60} aria-label="Brightness" />
+              <Slider disabled defaultValue={30} aria-label="Disabled volume" />
+            </Stack>
+          </Section>
+
           <Section title="Fields">
             <Stack className="form">
               <Field label="Name" description="As it appears on your ID." required>
@@ -196,6 +208,12 @@ export function App() {
                 <Radio value="monthly">Monthly</Radio>
                 <Radio value="yearly">Yearly</Radio>
               </RadioGroup>
+              <Field label="Volume" description="Use the arrow keys for fine steps.">
+                <Slider defaultValue={40} name="volume" />
+              </Field>
+              <Field label="Price range" error="Pick a narrower range.">
+                <Slider defaultValue={[10, 90]} min={0} max={200} step={10} />
+              </Field>
               <Field label="Terms" error="You must accept the terms.">
                 <Checkbox>I accept the terms</Checkbox>
               </Field>

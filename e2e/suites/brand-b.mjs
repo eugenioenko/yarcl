@@ -12,6 +12,22 @@ export default async function ({ page, check }) {
   const shade = page.getByRole('combobox', { name: 'Shade' });
   check('global default: other controls hairline', (await shade.evaluate((el) => getComputedStyle(el).borderRadius)) === '2px');
 
+  const sleeve = page.getByRole('slider', { name: 'SLEEVE LENGTH Minimum' });
+  check('slider: labelled by aria-labelledby plus thumb name', (await sleeve.count()) === 1);
+  await sleeve.focus();
+  await page.keyboard.press('ArrowRight');
+  check('slider: step and formatValue', (await sleeve.getAttribute('aria-valuetext')) === '60 cm');
+  check('slider: global default radius hairline', (await sleeve.evaluate((el) => getComputedStyle(el).borderRadius)) === '2px');
+  const [fill, ink] = await page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.style.color = 'var(--yarcl-color-ink)';
+    document.body.append(probe);
+    const ink = getComputedStyle(probe).color;
+    probe.remove();
+    return [getComputedStyle(document.querySelector('.yarcl-slider-range')).backgroundColor, ink];
+  });
+  check('slider: default color ink', fill === ink, `${fill} vs ${ink}`);
+
   await add.click();
   check('size required before adding', await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).isVisible());
   const sizes = page.getByRole('group', { name: 'SIZE' });

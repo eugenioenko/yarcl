@@ -1,4 +1,4 @@
-import { Badge, Button, Dialog, Heading, Inline, Input, Label, Stack, Table, Text } from 'yarcl';
+import { Badge, Button, Dialog, Heading, Inline, Input, Label, Slider, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -8,6 +8,7 @@ export const contract = (
     <Label htmlFor="size" textStyle="fine" color="clay" required disabled />
     <Heading level={1} />
     <Table density="cozy" />
+    <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} />
 
     {/* consumer A's keys are not valid here */}
     {/* @ts-expect-error */}
@@ -32,5 +33,9 @@ export const contract = (
     <Table density="regular" />
     {/* @ts-expect-error */}
     <Dialog title="T" size="md" />
+    {/* @ts-expect-error */}
+    <Slider size="md" />
+    {/* @ts-expect-error */}
+    <Slider color="brand" />
   </>
 );
