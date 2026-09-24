@@ -38,7 +38,37 @@ The border width of every control and surface.
 ## Focus ring
 
 ```ts
-focusRing: { width: '2px', offset: '2px', color: 'primary' },
+focusRing: { width: '2px', offset: '2px', color: 'primary', style: 'solid' },
 ```
 
-The outline shown for keyboard focus (`:focus-visible`). `color` is a key of `colors`. Inputs draw the ring in their own `color` and flush with the border.
+One focus ring for every focusable component: buttons, inputs, selects, checkboxes, radios, switches, links, tabs, and the close and dismiss buttons. It appears for keyboard focus only (`:focus-visible`), never on mouse clicks.
+
+| Key | Controls |
+|---|---|
+| `width` | outline thickness |
+| `offset` | gap between the element and the ring; a negative value draws it inside |
+| `color` | a key of `colors` |
+| `style` | `solid` (default), `dashed`, `dotted` or `double` |
+
+Inputs also switch their border to their own `color` while focused, so the active field is obvious. Tabs draw the ring inside their edge, because the tab list scrolls and would clip an outer ring.
+
+In menus, selects and comboboxes, the highlighted option is filled with the solid color and its foreground instead of a ring, like native menus. That keeps it at least 3:1 against the panel.
+
+### Overriding
+
+The ring comes from one low-specificity rule, so a plain class overrides it:
+
+```css
+.toolbar .yarcl-button:focus-visible {
+  outline-offset: -2px;
+}
+```
+
+Or change the variables for a region:
+
+```css
+.high-contrast {
+  --yarcl-focus-width: 3px;
+  --yarcl-focus-color: black;
+}
+```

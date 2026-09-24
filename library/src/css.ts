@@ -207,6 +207,7 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
   root.push(
     ['--yarcl-focus-width', config.focusRing.width],
     ['--yarcl-focus-offset', config.focusRing.offset],
+    ['--yarcl-focus-style', config.focusRing.style ?? 'solid'],
     ['--yarcl-focus-color', `var(--yarcl-color-${ident(config.focusRing.color)})`],
     ['--yarcl-error', `var(--yarcl-color-${ident(config.defaults.errorColor)})`],
     ['--yarcl-floating-shadow', `var(--yarcl-shadow-${ident(config.defaults.floatingShadow)})`],

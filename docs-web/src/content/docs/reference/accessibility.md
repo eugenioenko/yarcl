@@ -12,7 +12,7 @@ sidebar:
 - **Focus management**: dialogs and drawers trap focus and return it on close; menus and popovers return focus to their trigger.
 - **Labelling**: `Field` and `RadioGroup` connect labels, descriptions and errors; `IconButton` requires `aria-label` in its types.
 - **Live regions**: toasts use `role="status"` (or `role="alert"` when urgent); alerts opt in with `live`.
-- **Visible focus**: every control shows a focus ring for keyboard users (`:focus-visible`), configured in `focusRing`.
+- **Visible focus**: every focusable component shows the same focus ring for keyboard users (`:focus-visible`), configured in `focusRing`. Highlighted options in menus, selects and comboboxes use a solid fill with at least 3:1 contrast. The e2e suite tabs through both demo apps and checks every stop is visible and every ring matches.
 - **Contrast**: text on a color gets a computed foreground, and a color drawn as text gets a computed text shade, both at least 4.5:1 (WCAG AA) in light and dark mode. The build warns when a foreground can't reach it.
 - **Automated audits**: the e2e suite runs axe-core (WCAG 2.2 A and AA) on both demo apps in light and dark mode, including every open menu, select, combobox, popover, tooltip, hover card, dialog, drawer and toast.
 - **Reduced motion**: transitions and entry animations are turned off when the user prefers reduced motion.

@@ -200,14 +200,19 @@ export interface YarclShape {
   };
   /** Border widths. Extra keys allowed. */
   borders: Record<string, string> & { width: string };
-  /** Keyboard focus indicator. */
+  /** Keyboard focus indicator, shared by every focusable component. */
   focusRing: {
-    /** Outline width. */
+    /** Outline width, e.g. `'2px'`. */
     width: string;
-    /** Outline offset. */
+    /** Gap between the element and the outline, e.g. `'2px'`. Negative values draw it inside. */
     offset: string;
     /** A key of `colors`. */
     color: string;
+    /**
+     * Outline style.
+     * @default 'solid'
+     */
+    style?: 'solid' | 'dashed' | 'dotted' | 'double';
   };
   /**
    * Per-component defaults, e.g. `{ Button: { radius: 'square' } }`. Applied when a prop is omitted,

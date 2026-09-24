@@ -18,14 +18,30 @@
   line-height: 1;
 }
 
-.yarcl-button:focus-visible,
-.yarcl-input:focus-visible,
-.yarcl-textarea:focus-visible,
-.yarcl-checkbox-input:focus-visible,
-.yarcl-radio-input:focus-visible,
-.yarcl-switch-input:focus-visible {
-  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
+/* Focus ring: one rule for every focusable element, from focusRing in the config */
+
+:where(
+    .yarcl-button,
+    .yarcl-input,
+    .yarcl-textarea,
+    .yarcl-checkbox-input,
+    .yarcl-radio-input,
+    .yarcl-switch-input,
+    .yarcl-link,
+    .yarcl-modal-close,
+    .yarcl-toast-close,
+    .yarcl-toast-action,
+    .yarcl-badge-remove,
+    .yarcl-alert-dismiss,
+    .yarcl-tabs-trigger,
+    .yarcl-tabs-panel
+  ):focus-visible {
+  outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
+}
+
+:where(.yarcl-tabs-trigger, .yarcl-tabs-panel):focus-visible {
+  outline-offset: calc(var(--yarcl-focus-width) * -1);
 }
 
 /* Button */
@@ -91,14 +107,11 @@
 .yarcl-input:focus-visible,
 .yarcl-textarea:focus-visible {
   border-color: var(--yarcl-c);
-  outline-color: var(--yarcl-c);
-  outline-offset: 0;
 }
 
 .yarcl-input[aria-invalid='true'],
 .yarcl-textarea[aria-invalid='true'] {
   border-color: var(--yarcl-error);
-  outline-color: var(--yarcl-error);
 }
 
 .yarcl-input:disabled,
@@ -321,11 +334,6 @@ p.yarcl-text {
   color: color-mix(in oklab, var(--yarcl-c-text), var(--yarcl-neutral-text) 25%);
 }
 
-.yarcl-link:focus-visible {
-  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
-  outline-offset: var(--yarcl-focus-offset);
-}
-
 .yarcl-link-underline-always {
   text-decoration-line: underline;
 }
@@ -484,7 +492,12 @@ p.yarcl-text {
 }
 
 .yarcl-option[data-active] {
-  background: color-mix(in oklab, var(--yarcl-c) 12%, transparent);
+  color: var(--yarcl-c-on);
+  background: var(--yarcl-c);
+}
+
+.yarcl-option[data-active] svg {
+  color: inherit;
 }
 
 .yarcl-option-colored {
@@ -720,15 +733,6 @@ html:has(.yarcl-modal[open]) {
 .yarcl-toast-close svg {
   width: 1.125rem;
   height: 1.125rem;
-}
-
-.yarcl-modal-close:focus-visible,
-.yarcl-toast-close:focus-visible,
-.yarcl-toast-action:focus-visible,
-.yarcl-tabs-trigger:focus-visible,
-.yarcl-tabs-panel:focus-visible {
-  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
-  outline-offset: calc(var(--yarcl-focus-width) * -1);
 }
 
 /* Toast */
@@ -1019,7 +1023,6 @@ html:has(.yarcl-modal[open]) {
 }
 
 .yarcl-badge-remove:focus-visible {
-  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
   opacity: 1;
 }
 
@@ -1092,7 +1095,6 @@ html:has(.yarcl-modal[open]) {
 }
 
 .yarcl-alert-dismiss:focus-visible {
-  outline: var(--yarcl-focus-width) solid var(--yarcl-focus-color);
   opacity: 1;
 }
 

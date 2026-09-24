@@ -7,6 +7,8 @@ import a11y from './suites/a11y.mjs';
 import brandB from './suites/brand-b.mjs';
 import feedback from './suites/feedback.mjs';
 import floating from './suites/floating.mjs';
+import focusBrandB from './suites/focus-brand-b.mjs';
+import focus from './suites/focus.mjs';
 import groups from './suites/groups.mjs';
 import overlays from './suites/overlays.mjs';
 
@@ -28,6 +30,8 @@ const suites = [
   ['consumer-b', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
   ['consumer-b', 'a11y-brand-b', a11yBrandB],
+  ['consumer', 'focus', focus],
+  ['consumer-b', 'focus-brand-b', focusBrandB],
 ];
 const only = process.argv[2];
 

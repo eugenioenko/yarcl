@@ -29,7 +29,7 @@ Components never set inline styles. They render class names, and all values come
 | `--yarcl-z-{key}` | `zIndex` |
 | `--yarcl-motion-{key}` | `motion` |
 | `--yarcl-border-{key}` | `borders` |
-| `--yarcl-focus-width`, `-offset`, `-color` | `focusRing` |
+| `--yarcl-focus-width`, `-offset`, `-color`, `-style` | `focusRing` |
 | `--yarcl-error`, `--yarcl-floating-shadow`, `--yarcl-padding`, `--yarcl-gap` | `defaults` |
 
 Colors are emitted as `light-dark(light, dark)`, and `:root` gets `color-scheme: light dark`.
