@@ -119,7 +119,6 @@ export { editorial as default } from 'yarcl/themes';
 | `docs-web/` | documentation site (Astro + Starlight) with live examples and a config playground |
 | `e2e/` | browser tests; `e2e/consumer/` is a fixture app with completely different keys ("Maison Talla"), proving the types come from each app's own config |
 | `docs/decisions/` | architecture decision records |
-| `PLAN.md` | decisions, schema, phases |
 
 ```sh
 pnpm install
