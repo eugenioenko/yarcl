@@ -58,7 +58,7 @@ export default defineConfig({
 });
 ```
 
-Replacing a group removes the library's keys. That's intended: if your design system has no `secondary` color, `color="secondary"` should be a type error.
+Replacing a group removes the library's keys. That's intended: if your design system has no `info` color, `color="info"` should be a type error.
 
 ## What `defineConfig` checks
 

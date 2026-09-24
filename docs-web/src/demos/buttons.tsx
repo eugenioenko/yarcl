@@ -21,6 +21,7 @@ export function ButtonColors() {
       <Button color="success">Success</Button>
       <Button color="warning">Warning</Button>
       <Button color="danger">Danger</Button>
+      <Button color="info">Info</Button>
     </>
   );
 }

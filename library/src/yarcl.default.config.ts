@@ -4,8 +4,11 @@ import { defineConfig } from './define';
 export default defineConfig({
   colors: {
     primary: { light: '#2d4bb8', dark: '#8aa2ff' },
-    secondary: { light: '#8240b3', dark: '#c79bf0' },
+    neutral: { light: '#4b5263', dark: '#a3a9b8' },
+    success: { light: '#15803d', dark: '#4ade80' },
+    warning: { light: '#b45309', dark: '#fbbf24' },
     danger: { light: '#dc2626', dark: '#f87171' },
+    info: { light: '#0369a1', dark: '#38bdf8' },
   },
   neutrals: {
     bg: { light: '#f8f9fb', dark: '#0f1115' },
