@@ -67,6 +67,7 @@ for (const [app, name, suite] of suites) {
     const htmlOverflow = () => page.evaluate(() => getComputedStyle(document.documentElement).overflow);
     try {
       await page.goto(`${servers[app].resolvedUrls.local[0]}?scheme=${scheme}`);
+      await page.locator('#root > *').first().waitFor();
       await suite({ page, check, focused, htmlOverflow });
     } catch (error) {
       check('suite completed', false, error.message.split('\n')[0]);

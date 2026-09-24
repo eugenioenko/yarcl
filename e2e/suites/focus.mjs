@@ -44,7 +44,7 @@ export async function tabThrough({ page, check }) {
     if (!current || (seen.has(current.id) && i > 5)) break;
     previous = current;
   }
-  check(`every focus stop is visible (${seen.size} stops)`, invisible.length === 0, invisible.join(', '));
+  check(`every focus stop is visible (${seen.size} stops)`, seen.size > 0 && invisible.length === 0, invisible.join(', ') || 'no focus stops found');
   check('focus rings are cohesive', rings.size === 1, [...rings].join(' / '));
 }
 
