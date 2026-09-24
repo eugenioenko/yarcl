@@ -20,7 +20,7 @@ Trade-offs: Vite only for now, and one design system per build.
 
 ## Install
 
-Requires React 18+ and Vite 6.1+ (Vite only).
+Requires React 19+ and Vite 6.1+ (Vite only).
 
 ```sh
 npm install @yarcl/react
