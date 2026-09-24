@@ -168,7 +168,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
       <div className="playground-preview" style={preview}>
         <Card radius={r} padding={padding} shadow="md" className="playground-card">
           <Stack gap={gap}>
-            <Inline justify="between">
+            <Inline justify="between" gap={gap}>
               <Heading level={3}>Create workspace</Heading>
               <Badge radius={r} size={size}>
                 Beta
@@ -180,7 +180,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
             <Field label="Plan">
               <Select size={size} radius={r} options={plans} defaultValue="team" />
             </Field>
-            <Inline justify="between">
+            <Inline justify="between" gap={gap}>
               <Checkbox size={size} defaultChecked>
                 Invite my team
               </Checkbox>
@@ -189,12 +189,12 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
             <Alert radius={r} title="14-day trial">
               No card needed until the trial ends.
             </Alert>
-            <Inline justify="end" gap="sm">
+            <Inline justify="end" gap={gap}>
               <Button size={size} radius={r} variant="outline" color="neutral">
                 Cancel
               </Button>
               <Button size={size} radius={r}>
-                Create workspace
+                Submit
               </Button>
             </Inline>
           </Stack>
