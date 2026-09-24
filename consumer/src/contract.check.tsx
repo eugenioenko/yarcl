@@ -35,6 +35,7 @@ import {
   Input,
   Link,
   Breadcrumb,
+  NumberInput,
   Radio,
   Stack,
   Slider,
@@ -49,6 +50,11 @@ export const contract = (
     <Input size="xs" color="danger" radius="square" />
     <IconButton aria-label="Add" variant="quiet" />
     <Textarea size="lg" radius="size" />
+    <NumberInput size="sm" color="success" radius="rounded" min={0} max={10} step={0.5} defaultValue={2} />
+    <NumberInput value={null} onValueChange={(v: number | null) => v} incrementLabel="Add" decrementLabel="Remove" />
+    <Field label="Guests">
+      <NumberInput />
+    </Field>
     <Checkbox size="sm" color="success" indeterminate />
     <Radio size="lg" color="neutral" />
     <Switch size="xl" color="brand" />
@@ -222,6 +228,12 @@ export const contract = (
     <Button variant="ghost" />
     {/* @ts-expect-error */}
     <IconButton />
+    {/* @ts-expect-error */}
+    <NumberInput size="huge" />
+    {/* @ts-expect-error */}
+    <NumberInput color="primary" />
+    {/* @ts-expect-error */}
+    <NumberInput value="3" />
     {/* @ts-expect-error */}
     <Switch size="huge" />
     {/* @ts-expect-error */}

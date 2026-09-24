@@ -14,6 +14,7 @@ import {
   Label,
   Link,
   Breadcrumb,
+  NumberInput,
   Radio,
   RadioGroup,
   Slider,
@@ -121,6 +122,7 @@ export function App() {
             {sizes.map((size) => (
               <Row key={size} label={size}>
                 <Input size={size} placeholder={`Input ${size}`} />
+                <NumberInput size={size} aria-label="Quantity" defaultValue={1} min={0} />
                 <Button size={size}>
                   <PlusIcon /> Button
                 </Button>
@@ -198,6 +200,12 @@ export function App() {
               </Field>
               <Field label="Email" error={email.includes('@') ? undefined : 'Enter a valid email address.'}>
                 <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </Field>
+              <Field label="Guests" description="Between 1 and 12 people.">
+                <NumberInput min={1} max={12} defaultValue={2} />
+              </Field>
+              <Field label="Budget" error="Enter a budget of at least 50.">
+                <NumberInput step={10} placeholder="50" />
               </Field>
               <Field label="Message" description="One row tall by default, same height as an input.">
                 <Textarea rows={1} placeholder="Say hello" />

@@ -20,6 +20,7 @@ import {
   Menu,
   Progress,
   Pagination,
+  NumberInput,
   Radio,
   RadioGroup,
   Select,
@@ -129,7 +130,7 @@ function NewInvoiceDialog() {
         </Field>
         <Inline align="start" wrap={false}>
           <Field label="Amount" className="pg-grow">
-            <Input type="number" placeholder="0.00" />
+            <NumberInput min={0} step={0.01} placeholder="0.00" />
           </Field>
           <Field label="Due">
             <Select

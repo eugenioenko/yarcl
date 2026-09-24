@@ -17,6 +17,7 @@ import {
   Link,
   Progress,
   Pagination,
+  NumberInput,
   Select,
   Slider,
   Stack,
@@ -50,6 +51,7 @@ export function App() {
   const [size, setSize] = useState<string | null>(null);
   const [shade, setShade] = useState<string | null>('natural');
   const [sizeError, setSizeError] = useState(false);
+  const [quantity, setQuantity] = useState<number | null>(1);
 
   function applyScheme(next: Scheme) {
     document.documentElement.style.colorScheme = next;
@@ -61,7 +63,7 @@ export function App() {
       setSizeError(true);
       return;
     }
-    toast({ title: 'Added to bag', description: `Linen overshirt · ${size} · ${shade}`, color: 'moss' });
+    toast({ title: 'Added to bag', description: `Linen overshirt · ${size} · ${shade} · ${quantity ?? 1}`, color: 'moss' });
   }
 
   return (
@@ -193,7 +195,10 @@ export function App() {
               )}
             </Stack>
 
-            <Select options={shades} value={shade} onValueChange={setShade} aria-label="Shade" />
+            <Inline gap="2">
+              <Select options={shades} value={shade} onValueChange={setShade} aria-label="Shade" />
+              <NumberInput value={quantity} onValueChange={setQuantity} min={1} max={5} aria-label="Quantity" />
+            </Inline>
 
             <Combobox multiple options={occasions} defaultValue={['office']} aria-label="Occasions" placeholder="Add occasions" />
 

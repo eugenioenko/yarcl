@@ -18,6 +18,14 @@ export default async function ({ page, check }) {
   check('talla-l buttons share height', (await add.boundingBox()).height === (await save.boundingBox()).height);
   check('component default: buttons square', (await add.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
   const shade = page.getByRole('combobox', { name: 'Shade' });
+  const quantity = page.getByRole('spinbutton', { name: 'Quantity' });
+  check('component default: number input square', (await quantity.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
+  check('number input matches select height (talla-m)', (await quantity.boundingBox()).height === (await page.getByRole('combobox', { name: 'Shade' }).boundingBox()).height);
+  await quantity.locator('xpath=..').getByRole('button', { name: 'Increase' }).click();
+  check('number input steps within max', (await quantity.inputValue()) === '2');
+  await quantity.focus();
+  await page.keyboard.press('End');
+  check('number input End jumps to max', (await quantity.inputValue()) === '5');
   check('global default: other controls hairline', (await shade.evaluate((el) => getComputedStyle(el).borderRadius)) === '2px');
 
   const occasions = page.locator('.yarcl-combobox-control', { has: page.getByRole('combobox', { name: 'Occasions' }) });

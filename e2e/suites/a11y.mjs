@@ -37,6 +37,11 @@ export default async function (ctx) {
   await audit(ctx, 'pagination on last page', '.yarcl-pagination');
   await page.getByRole('button', { name: 'Show all breadcrumbs' }).click();
   await audit(ctx, 'breadcrumb expanded', '.yarcl-breadcrumb');
+  const guests = page.getByRole('spinbutton', { name: 'Guests' });
+  await guests.focus();
+  await page.keyboard.press('End');
+  await audit(ctx, 'number input at max', '.yarcl-number-input');
+  await page.keyboard.press('Home');
 
   await page.getByRole('button', { name: 'Actions' }).click();
   await audit(ctx, 'menu open', '.yarcl-floating');
