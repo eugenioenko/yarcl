@@ -1,3 +1,5 @@
+import { poll } from './poll.mjs';
+
 /** @param {import('../run.mjs').SuiteContext} ctx */
 export default async function ({ page, check, focused, htmlOverflow }) {
   // Tooltip
@@ -29,7 +31,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   check('focus returns to trigger', await actions.evaluate((el) => el === document.activeElement));
   await actions.click();
   await page.keyboard.type('du');
-  check('typeahead jumps to Duplicate', await page.getByRole('menuitem', { name: 'Duplicate' }).evaluate((el) => el === document.activeElement));
+  check('typeahead jumps to Duplicate', await poll(() => page.getByRole('menuitem', { name: 'Duplicate' }).evaluate((el) => el === document.activeElement)));
   await page.keyboard.press('Escape');
   check('Esc closes menu', !(await menu.isVisible()));
 
@@ -59,7 +61,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   await plan.click();
   const listbox = page.getByRole('listbox');
   check('select opens listbox', await listbox.isVisible());
-  check('selected option focused', await page.getByRole('option', { name: 'Pro' }).evaluate((el) => el === document.activeElement));
+  check('selected option focused', await poll(() => page.getByRole('option', { name: 'Pro' }).evaluate((el) => el === document.activeElement)));
   await page.keyboard.press('ArrowDown');
   check('select ArrowDown moves', await page.getByRole('option', { name: 'Team' }).evaluate((el) => el === document.activeElement));
   await page.keyboard.press('ArrowDown');

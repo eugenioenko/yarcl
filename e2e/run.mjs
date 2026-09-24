@@ -65,6 +65,10 @@ for (const [app, name, suite] of suites) {
   for (const scheme of ['light', 'dark']) {
     const context = await browser.newContext({ viewport: { width: 1100, height: 800 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
+    if (process.env.E2E_CPU_THROTTLE) {
+      const cdp = await context.newCDPSession(page);
+      await cdp.send('Emulation.setCPUThrottlingRate', { rate: Number(process.env.E2E_CPU_THROTTLE) });
+    }
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
