@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Accordion,
   Alert,
   Badge,
   Breadcrumb,
@@ -235,6 +236,20 @@ export function App() {
             </Tabs>
 
             <Pagination count={9} defaultPage={5} color="ink" aria-label="Reviews" />
+            <Accordion type="multiple" defaultValue={['fit']} color="moss">
+              <Accordion.Item value="fit">
+                <Accordion.Trigger>Fit</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Relaxed. Take your usual size.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="materials">
+                <Accordion.Trigger>Materials</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Heavyweight linen from northern Portugal.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
           </Stack>
         </div>
       )}

@@ -1,0 +1,91 @@
+---
+title: "Accordion"
+description: "Stacked sections that expand and collapse."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { AccordionDemo, AccordionMultipleDemo } from '@/demos/data';
+
+```tsx
+import { Accordion } from 'yarcl';
+```
+
+<Preview>
+  <AccordionDemo client:visible />
+</Preview>
+
+```tsx
+<Accordion type="single" defaultValue="shipping">
+  <Accordion.Item value="shipping">
+    <Accordion.Trigger>Shipping</Accordion.Trigger>
+    <Accordion.Content>Orders ship within two working days.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="returns">
+    <Accordion.Trigger>Returns</Accordion.Trigger>
+    <Accordion.Content>Free returns within 30 days of delivery.</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="gift-cards" disabled>
+    <Accordion.Trigger>Gift cards</Accordion.Trigger>
+    <Accordion.Content>Coming soon.</Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+```
+
+With `type="single"`, opening an item closes the others. Clicking the open item closes it; set `collapsible={false}` to keep one item open at all times.
+
+## Multiple open
+
+`type="multiple"` lets items open independently. Here the open items are controlled with `value` and `onValueChange`.
+
+<Preview>
+  <AccordionMultipleDemo client:visible />
+</Preview>
+
+```tsx
+const [open, setOpen] = useState<string[]>(['account']);
+
+<Accordion type="multiple" value={open} onValueChange={setOpen} size="sm" color="success">
+  <Accordion.Item value="account">…</Accordion.Item>
+  <Accordion.Item value="notifications">…</Accordion.Item>
+</Accordion>
+```
+
+## Tokens
+
+- `size` sets the trigger height, padding, font size and icon size from your `sizes`.
+- `radius` rounds the outer frame, from your `radii`.
+- `color` tints the open item's chevron, from your `colors`.
+- The frame and dividers use `borders.width` and the neutral border color.
+- Opening and closing animate with `motion.base` and `motion.easing`. With reduced motion preferred, panels open and close instantly.
+
+All three props can be set per component in `components.Accordion`.
+
+## Accessibility
+
+Follows the WAI-ARIA accordion pattern. Each `Accordion.Trigger` renders a button inside a heading (`h3` by default; set `level` to fit your page outline). The button has `aria-expanded` and `aria-controls`, and each `Accordion.Content` is a region labelled by its trigger. Closed panels are hidden from assistive technology.
+
+| Key | Action |
+|---|---|
+| <kbd>Enter</kbd> <kbd>Space</kbd> | opens or closes the focused item |
+| <kbd>Tab</kbd> | moves to the next trigger or focusable content |
+| <kbd>↓</kbd> <kbd>↑</kbd> | moves to the next or previous trigger, skipping disabled ones |
+| <kbd>Home</kbd> <kbd>End</kbd> | moves to the first or last trigger |
+
+## Props
+
+### Accordion
+
+Plus `type`, and `value` (controlled) or `defaultValue` (uncontrolled). With `type="single"` the value is a string or `null` and `collapsible` is available; with `type="multiple"` it is an array of strings.
+
+<Props of="AccordionBaseProps" />
+
+### Accordion.Item
+
+<Props of="AccordionItemProps" />
+
+### Accordion.Trigger
+
+<Props of="AccordionTriggerProps" />

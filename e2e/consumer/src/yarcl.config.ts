@@ -83,6 +83,7 @@ export default defineConfig({
     Progress: { color: 'moss' },
     CommandPalette: { radius: 'square', color: 'clay' },
     Breadcrumb: { textStyle: 'fine' },
+    Accordion: { size: 'talla-s', radius: 'square' },
   },
   defaults: {
     size: 'talla-m',

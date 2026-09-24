@@ -14,6 +14,9 @@ export default async function (ctx) {
   await page.getByRole('button', { name: 'Show all breadcrumbs' }).click();
   await audit(ctx, 'breadcrumb expanded', '.yarcl-breadcrumb');
 
+  await page.getByRole('button', { name: 'Materials' }).click();
+  await audit(ctx, 'accordion expanded', '.yarcl-accordion');
+
   await page.getByRole('button', { name: 'Size guide' }).click();
   await audit(ctx, 'size guide dialog', 'dialog[open]');
   await page.keyboard.press('Escape');

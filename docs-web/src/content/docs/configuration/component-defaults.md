@@ -71,6 +71,7 @@ For any token prop, the first value found wins:
 | `Menu` | `size` |
 | `CommandPalette` | `size`, `radius`, `color` |
 | `Tabs` | `size`, `color` |
+| `Accordion` | `size`, `radius`, `color` |
 | `Table` | `density` |
 | `Stack`, `Inline` | `gap` |
 | `Text`, `Label`, `Breadcrumb` | `textStyle`, `color` |

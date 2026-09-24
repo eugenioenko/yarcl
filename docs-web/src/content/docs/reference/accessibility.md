@@ -26,6 +26,7 @@ sidebar:
 | [Select](/components/forms/select/) | <kbd>↑</kbd> <kbd>↓</kbd>, typing (open or closed), <kbd>Enter</kbd>, <kbd>Esc</kbd> |
 | [Combobox](/components/forms/combobox/) | typing, <kbd>↑</kbd> <kbd>↓</kbd>, <kbd>Enter</kbd>, <kbd>Esc</kbd> |
 | [Tabs](/components/data/tabs/) | <kbd>←</kbd> <kbd>→</kbd>, <kbd>Home</kbd>, <kbd>End</kbd> |
+| [Accordion](/components/data/accordion/) | <kbd>Enter</kbd> <kbd>Space</kbd>, <kbd>↑</kbd> <kbd>↓</kbd>, <kbd>Home</kbd>, <kbd>End</kbd> |
 | [ToggleGroup](/components/buttons/toggle-group/) | arrow keys, <kbd>Home</kbd>, <kbd>End</kbd>, <kbd>Space</kbd> |
 | [Dialog](/components/overlays/dialog/), [Drawer](/components/overlays/drawer/), [Popover](/components/overlays/popover/), [Tooltip](/components/overlays/tooltip/) | <kbd>Esc</kbd> |
 

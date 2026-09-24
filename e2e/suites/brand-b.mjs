@@ -88,6 +88,16 @@ export default async function ({ page, check }) {
   check('progress track from talla-m icon size', Math.abs(progress.height - 8) < 0.5, String(progress.height));
   check('progress bar at 185 of 200', Math.abs(progress.ratio - 0.925) < 0.01, String(progress.ratio));
   await progressContrast({ check }, page.locator('body'));
+  const fit = page.getByRole('button', { name: 'Fit' });
+  const accordion = page.locator('.yarcl-accordion');
+  check('accordion: component default size (talla-s = 2.25rem)', (await fit.boundingBox()).height === 36, String((await fit.boundingBox()).height));
+  check('accordion: component default radius square', (await accordion.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
+  check(
+    "accordion: open indicator in the consumer's color",
+    (await fit.locator('svg').evaluate((el) => getComputedStyle(el).color)) === (await resolveColor(page, 'var(--yarcl-color-moss)')),
+  );
+  await page.getByRole('button', { name: 'Materials' }).click();
+  check('accordion: multiple items open', (await accordion.getByRole('region').count()) === 2);
 
   await page.getByRole('button', { name: 'Size guide' }).click();
   const guide = page.getByRole('dialog', { name: 'Size guide' });

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import {
+  Accordion,
   Alert,
   Badge,
   Breadcrumb,
@@ -511,6 +512,27 @@ const groups: Record<string, Item[]> = {
             <Text textStyle="caption">Overview panel</Text>
           </Tabs.Panel>
         </Tabs>
+      ),
+    },
+    {
+      name: 'Accordion',
+      href: '/components/data/accordion/',
+      description: 'Expandable sections, one or many open at a time.',
+      preview: (
+        <Accordion type="single" defaultValue="shipping" size="sm" className="gallery-fill">
+          <Accordion.Item value="shipping">
+            <Accordion.Trigger>Shipping</Accordion.Trigger>
+            <Accordion.Content>
+              <Text textStyle="caption">Ships in two days</Text>
+            </Accordion.Content>
+          </Accordion.Item>
+          <Accordion.Item value="returns">
+            <Accordion.Trigger>Returns</Accordion.Trigger>
+            <Accordion.Content>
+              <Text textStyle="caption">Free within 30 days</Text>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
       ),
     },
     {

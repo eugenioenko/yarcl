@@ -122,6 +122,7 @@ export interface ComponentTokenProps {
   Menu: 'size';
   Tabs: 'size' | 'color';
   Pagination: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';
+  Accordion: 'size' | 'radius' | 'color';
   Table: 'density';
   Stack: 'gap';
   Inline: 'gap';
