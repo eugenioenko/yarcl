@@ -10,7 +10,7 @@
     "docs:api": "typedoc",
     "docs:dev": "pnpm -C docs-web dev",
     "docs:build": "pnpm -C docs-web build",
-    "lint": "eslint library/src consumer/src consumer-b/src"
+    "lint": "eslint library/src consumer/src e2e/consumer/src"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
