@@ -1,5 +1,5 @@
 {
-  "name": "consumer-b",
+  "name": "e2e-consumer",
   "version": "0.0.1",
   "private": true,
   "type": "module",

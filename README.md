@@ -56,7 +56,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 {
   "compilerOptions": {
     "paths": {
-      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/yarcl/src/yarcl.default.config.ts"]
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/yarcl/src/yarcl.config.ts"]
     }
   }
 }
@@ -116,15 +116,14 @@ export { editorial as default } from 'yarcl/themes';
 |---|---|
 | `library/` | the `yarcl` package: components, `defineConfig`, Vite plugin, CSS generator |
 | `consumer/` | demo app with one design system; every component, light and dark |
-| `consumer-b/` | "Maison Talla": the same library with a completely different config |
 | `docs-web/` | documentation site (Astro + Starlight) with live examples and a config playground |
+| `e2e/` | browser tests; `e2e/consumer/` is a fixture app with completely different keys ("Maison Talla"), proving the types come from each app's own config |
 | `docs/decisions/` | architecture decision records |
 | `PLAN.md` | decisions, schema, phases |
 
 ```sh
 pnpm install
 pnpm dev          # consumer on :5173
-pnpm dev:b        # consumer-b on :5174
 pnpm typecheck    # library + both consumers, including @ts-expect-error contract checks
 pnpm test:e2e     # keyboard/mouse checks and axe-core audits in Chrome, light and dark
 pnpm docs:dev     # documentation site on :4321

@@ -4,9 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm -C consumer dev",
-    "build": "pnpm -C consumer build && pnpm -C consumer-b build",
-    "typecheck": "tsc -p library && tsc -p consumer && tsc -p consumer-b",
-    "dev:b": "pnpm -C consumer-b dev",
+    "build": "pnpm -C consumer build && pnpm -C e2e/consumer build",
+    "typecheck": "tsc -p library && tsc -p consumer && tsc -p e2e/consumer",
     "test:e2e": "node e2e/run.mjs",
     "docs:api": "typedoc",
     "docs:dev": "pnpm -C docs-web dev",

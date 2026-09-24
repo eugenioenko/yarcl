@@ -1,5 +1,5 @@
 import { defineConfig } from '../define';
-import defaults from '../yarcl.default.config';
+import defaults from '../yarcl.config';
 import type { ThemeContract } from './contract';
 
 const glow = (geometry: string, alpha: number) =>

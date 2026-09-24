@@ -1,7 +1,7 @@
 packages:
   - library
   - consumer
-  - consumer-b
+  - e2e/consumer
   - docs-web
 
 allowBuilds:
