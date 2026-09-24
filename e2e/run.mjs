@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import a11yBrandB from './suites/a11y-brand-b.mjs';
+import accordion from './suites/accordion.mjs';
 import a11y from './suites/a11y.mjs';
 import brandB from './suites/brand-b.mjs';
 import datePicker from './suites/date-picker.mjs';
@@ -37,6 +38,7 @@ const suites = [
   ['consumer', 'label', label],
   ['consumer', 'date-picker', datePicker],
   ['consumer', 'breadcrumb', breadcrumb],
+  ['consumer', 'accordion', accordion],
   ['fixture', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
   ['fixture', 'a11y-brand-b', a11yBrandB],

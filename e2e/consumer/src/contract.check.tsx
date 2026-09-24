@@ -1,4 +1,4 @@
-import { Badge, Breadcrumb, Button, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
+import { Accordion, Badge, Breadcrumb, Button, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -16,6 +16,7 @@ export const contract = (
     <Breadcrumb textStyle="fine" color="clay" underline="always" maxItems={3} separator="/">
       <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
     </Breadcrumb>
+    <Accordion type="multiple" size="talla-s" radius="hairline" color="moss" />
 
     {/* consumer A's keys are not valid here */}
     {/* @ts-expect-error */}
@@ -68,5 +69,11 @@ export const contract = (
     <Breadcrumb textStyle="caption" />
     {/* @ts-expect-error */}
     <Breadcrumb color="primary" />
+    {/* @ts-expect-error */}
+    <Accordion type="single" size="md" />
+    {/* @ts-expect-error */}
+    <Accordion type="single" color="primary" />
+    {/* @ts-expect-error */}
+    <Accordion type="single" radius="md" />
   </>
 );

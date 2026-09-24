@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Button,
   Card,
   Checkbox,
@@ -137,6 +138,14 @@ export const contract = (
     />
     <Tabs defaultValue="a" size="sm" color="success" />
     <Tabs value="a" onValueChange={() => {}} />
+    <Accordion type="single" defaultValue="a" collapsible={false} size="lg" radius="size" color="success" disabled>
+      <Accordion.Item value="a" disabled>
+        <Accordion.Trigger level={2}>A</Accordion.Trigger>
+        <Accordion.Content>A</Accordion.Content>
+      </Accordion.Item>
+    </Accordion>
+    <Accordion type="single" value={null} onValueChange={(v: string | null) => v} />
+    <Accordion type="multiple" value={['a']} onValueChange={(v: string[]) => v} />
     <Table density="dense" striped interactive />
     <Badge color="success" variant="outline" size="sm" radius="rounded" onRemove={() => {}} />
     <Alert color="warning" variant="solid" radius="md" live="polite" onDismiss={() => {}} />
@@ -286,6 +295,22 @@ export const contract = (
     <Breadcrumb underline="sometimes" />
     {/* @ts-expect-error */}
     <Tabs />
+    {/* @ts-expect-error */}
+    <Accordion />
+    {/* @ts-expect-error */}
+    <Accordion type="multiple" collapsible />
+    {/* @ts-expect-error */}
+    <Accordion type="single" defaultValue={['a']} />
+    {/* @ts-expect-error */}
+    <Accordion type="single" size="huge" />
+    {/* @ts-expect-error */}
+    <Accordion type="single" color="primary" />
+    {/* @ts-expect-error */}
+    <Accordion type="single" radius="full" />
+    {/* @ts-expect-error */}
+    <Accordion.Item />
+    {/* @ts-expect-error */}
+    <Accordion.Trigger level={7} />
     {/* @ts-expect-error */}
     <Tabs value="a" defaultValue="b" />
     {/* @ts-expect-error */}

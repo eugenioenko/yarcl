@@ -39,13 +39,14 @@
     .yarcl-tabs-trigger,
     .yarcl-tabs-panel,
     .yarcl-date-picker-nav,
-    .yarcl-date-picker-day
+    .yarcl-date-picker-day,
+    .yarcl-accordion-trigger
   ):focus-visible {
   outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
 }
 
-:where(.yarcl-tabs-trigger, .yarcl-tabs-panel):focus-visible {
+:where(.yarcl-tabs-trigger, .yarcl-tabs-panel, .yarcl-accordion-trigger):focus-visible {
   outline-offset: calc(var(--yarcl-focus-width) * -1);
 }
 
@@ -1144,6 +1145,102 @@ html:has(.yarcl-modal[open]) {
   padding-top: var(--yarcl-gap);
 }
 
+/* Accordion */
+
+.yarcl-accordion {
+  overflow: hidden;
+  color: var(--yarcl-neutral-text);
+  background: var(--yarcl-neutral-surface);
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-accordion-item + .yarcl-accordion-item {
+  border-top: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
+.yarcl-accordion-heading {
+  margin: 0;
+  font: inherit;
+}
+
+.yarcl-accordion-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--yarcl-h);
+  padding: 0 var(--yarcl-px);
+  font: inherit;
+  font-size: var(--yarcl-fs);
+  font-weight: 500;
+  text-align: start;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: background-color var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-accordion-trigger:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--yarcl-neutral-text) 4%, transparent);
+}
+
+.yarcl-accordion-trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.yarcl-accordion-label {
+  flex: 1;
+}
+
+.yarcl-accordion-trigger svg {
+  flex-shrink: 0;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+  color: var(--yarcl-neutral-muted);
+  transition: transform var(--yarcl-motion-base) var(--yarcl-motion-easing),
+    color var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-accordion-trigger[aria-expanded='true'] svg {
+  color: var(--yarcl-c);
+  transform: rotate(180deg);
+}
+
+.yarcl-accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  font-size: var(--yarcl-fs);
+  transition: grid-template-rows var(--yarcl-motion-base) var(--yarcl-motion-easing),
+    visibility var(--yarcl-motion-base) var(--yarcl-motion-easing);
+}
+
+.yarcl-accordion-content[data-state='open'] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.yarcl-accordion-body {
+  min-height: 0;
+  padding: 0 var(--yarcl-px);
+  overflow: hidden;
+}
+
+.yarcl-accordion-body::before,
+.yarcl-accordion-body::after {
+  content: '';
+  display: block;
+  height: calc(var(--yarcl-focus-width) + var(--yarcl-focus-offset));
+}
+
+.yarcl-accordion-body::after {
+  height: var(--yarcl-px);
+}
+
 /* Table */
 
 .yarcl-table-wrap {
@@ -1211,7 +1308,10 @@ html:has(.yarcl-modal[open]) {
   .yarcl-modal[open],
   .yarcl-modal::backdrop,
   .yarcl-toast,
-  .yarcl-tabs-trigger {
+  .yarcl-tabs-trigger,
+  .yarcl-accordion-trigger,
+  .yarcl-accordion-trigger svg,
+  .yarcl-accordion-content {
     animation: none;
     transition: none;
   }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Breadcrumb, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
+import { Accordion, Badge, Breadcrumb, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
 
 export function TabsDemo() {
   return (
@@ -112,6 +112,55 @@ export function BreadcrumbDemo() {
         <Breadcrumb.Item href="#">Navigation</Breadcrumb.Item>
         <Breadcrumb.Item>Breadcrumb</Breadcrumb.Item>
       </Breadcrumb>
+    </Stack>
+  );
+}
+
+const faq = [
+  { value: 'shipping', title: 'Shipping', body: 'Orders ship within two working days.' },
+  { value: 'returns', title: 'Returns', body: 'Free returns within 30 days of delivery.' },
+  { value: 'gift-cards', title: 'Gift cards', body: 'Coming soon.', disabled: true },
+  { value: 'warranty', title: 'Warranty', body: 'Two years on every product.' },
+];
+
+export function AccordionDemo() {
+  return (
+    <Accordion type="single" defaultValue="shipping" className="demo-wide">
+      {faq.map((item) => (
+        <Accordion.Item key={item.value} value={item.value} disabled={item.disabled}>
+          <Accordion.Trigger>{item.title}</Accordion.Trigger>
+          <Accordion.Content>
+            <Text as="p">{item.body}</Text>
+          </Accordion.Content>
+        </Accordion.Item>
+      ))}
+    </Accordion>
+  );
+}
+
+const settings = [
+  { value: 'account', title: 'Account', body: 'Name, email and password.' },
+  { value: 'notifications', title: 'Notifications', body: 'Email and push preferences.' },
+  { value: 'privacy', title: 'Privacy', body: 'Who can see your profile.' },
+];
+
+export function AccordionMultipleDemo() {
+  const [open, setOpen] = useState<string[]>(['account']);
+  return (
+    <Stack className="demo-wide">
+      <Text textStyle="caption" muted>
+        Open: {open.length ? open.map((v) => settings.find((s) => s.value === v)?.title).join(', ') : 'none'}
+      </Text>
+      <Accordion type="multiple" value={open} onValueChange={setOpen} size="sm" color="success">
+        {settings.map((item) => (
+          <Accordion.Item key={item.value} value={item.value}>
+            <Accordion.Trigger>{item.title}</Accordion.Trigger>
+            <Accordion.Content>
+              <Text as="p">{item.body}</Text>
+            </Accordion.Content>
+          </Accordion.Item>
+        ))}
+      </Accordion>
     </Stack>
   );
 }

@@ -73,6 +73,14 @@ export { CommandPalette } from './components/CommandPalette';
 export type { CommandPaletteProps, CommandPaletteCommand } from './components/CommandPalette';
 export { Toaster, toast } from './components/Toast';
 export type { ToasterProps, ToastOptions } from './components/Toast';
+export { Accordion } from './components/Accordion';
+export type {
+  AccordionProps,
+  AccordionBaseProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+} from './components/Accordion';
 export { Tabs } from './components/Tabs';
 export type { TabsProps, TabsBaseProps, TabsListProps, TabsTriggerProps, TabsPanelProps } from './components/Tabs';
 export { Pagination } from './components/Pagination';

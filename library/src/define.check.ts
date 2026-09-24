@@ -124,6 +124,7 @@ defineConfig({
     Stack: { gap: 'sm' },
     Pagination: { size: 'sm', variant: 'outline', selectedVariant: 'solid' },
     Breadcrumb: { textStyle: 'caption', color: 'neutral' },
+    Accordion: { size: 'sm', radius: 'size', color: 'success' },
   },
 });
 
@@ -148,6 +149,14 @@ defineConfig({
   components: {
     // @ts-expect-error
     Breadcrumb: { textStyle: 'huge' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Accordion: { variant: 'solid' },
   },
 });
 

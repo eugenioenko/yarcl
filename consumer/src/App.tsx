@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import {
+  Accordion,
   Button,
   ButtonGroup,
   Card,
@@ -267,6 +268,49 @@ export function App() {
 
           <Section title="Overlays, tabs, table">
             <OverlaysDemo />
+          </Section>
+
+          <Section title="Accordion">
+            <Accordion type="single" defaultValue="shipping" data-testid="faq">
+              <Accordion.Item value="shipping">
+                <Accordion.Trigger>Shipping</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Orders ship within two working days.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="returns">
+                <Accordion.Trigger>Returns</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Free returns within 30 days.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="gift-cards" disabled>
+                <Accordion.Trigger>Gift cards</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Coming soon.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="warranty">
+                <Accordion.Trigger>Warranty</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Two years on every product.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+            <Accordion type="multiple" defaultValue={['account']} size="sm" color="success" data-testid="settings">
+              <Accordion.Item value="account">
+                <Accordion.Trigger>Account</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Name, email and password.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="notifications">
+                <Accordion.Trigger>Notifications</Accordion.Trigger>
+                <Accordion.Content>
+                  <Text as="p">Email and push preferences.</Text>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
           </Section>
 
           <Section title="Feedback">

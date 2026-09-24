@@ -94,6 +94,11 @@ export default async function (ctx) {
   await audit(ctx, 'drawer open', 'dialog[open]');
   await page.keyboard.press('Escape');
 
+  const settings = page.getByTestId('settings');
+  await settings.getByRole('button', { name: 'Notifications' }).click();
+  await page.getByTestId('faq').getByRole('button', { name: 'Shipping' }).click();
+  await audit(ctx, 'accordion expanded and collapsed', '.yarcl-accordion');
+
   await page.getByRole('button', { name: 'Toast success' }).click();
   await audit(ctx, 'toast visible', '.yarcl-toaster');
 }
