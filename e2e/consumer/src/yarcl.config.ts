@@ -78,6 +78,7 @@ export default defineConfig({
     ToggleGroup: { radius: 'square' },
     Drawer: { size: 'narrow' },
     Label: { color: 'clay' },
+    Progress: { color: 'moss' },
   },
   defaults: {
     size: 'talla-m',

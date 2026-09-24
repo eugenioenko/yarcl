@@ -1249,6 +1249,74 @@ html:has(.yarcl-modal[open]) {
   }
 }
 
+/* Progress */
+
+@keyframes yarcl-progress-slide {
+  from {
+    inset-inline-start: -40%;
+  }
+  to {
+    inset-inline-start: 100%;
+  }
+}
+
+.yarcl-progress {
+  display: grid;
+  gap: 0.375em;
+  min-width: 0;
+  font-size: var(--yarcl-fs);
+  line-height: 1.25;
+  color: var(--yarcl-neutral-text);
+}
+
+.yarcl-progress-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.yarcl-progress-value {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.yarcl-progress-track {
+  position: relative;
+  overflow: hidden;
+  height: calc(var(--yarcl-icon) / 2);
+  border-radius: var(--yarcl-r, 0);
+  background: color-mix(in oklab, var(--yarcl-neutral-text) 12%, transparent);
+}
+
+.yarcl-progress-bar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: calc(var(--yarcl-progress, 0) * 100%);
+  border-radius: inherit;
+  background: var(--yarcl-c);
+  transition: width var(--yarcl-motion-base) var(--yarcl-motion-easing);
+}
+
+.yarcl-progress[data-indeterminate] .yarcl-progress-bar {
+  width: 40%;
+  transition: none;
+  animation: yarcl-progress-slide 1.4s var(--yarcl-motion-easing) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yarcl-progress-bar {
+    transition: none;
+  }
+
+  .yarcl-progress[data-indeterminate] .yarcl-progress-bar {
+    inset-inline-start: 0;
+    width: 100%;
+    animation: yarcl-pulse 1.6s ease-in-out infinite;
+  }
+}
+
 /* RadioGroup */
 
 .yarcl-radio-group {

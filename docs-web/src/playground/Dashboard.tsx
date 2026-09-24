@@ -15,6 +15,7 @@ import {
   Input,
   Link,
   Menu,
+  Progress,
   Radio,
   RadioGroup,
   Select,
@@ -394,6 +395,7 @@ export function Dashboard() {
                     Changes apply to everyone in Acme.
                   </Text>
                 </Stack>
+                <Progress value={18} max={25} label="Seats used" showValue formatValue={(v, max) => `${v} of ${max}`} />
                 <SettingsForm />
               </Stack>
             </Card>

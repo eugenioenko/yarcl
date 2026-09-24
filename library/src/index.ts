@@ -72,6 +72,8 @@ export { Spinner } from './components/Spinner';
 export type { SpinnerProps } from './components/Spinner';
 export { Skeleton } from './components/Skeleton';
 export type { SkeletonProps } from './components/Skeleton';
+export { Progress } from './components/Progress';
+export type { ProgressProps } from './components/Progress';
 export type {
   Size,
   Radius,

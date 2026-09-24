@@ -1,4 +1,4 @@
-import { Badge, Button, Dialog, Heading, Inline, Input, Label, Slider, Stack, Table, Text } from 'yarcl';
+import { Badge, Button, Dialog, Heading, Inline, Input, Label, Progress, Slider, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -9,6 +9,7 @@ export const contract = (
     <Heading level={1} />
     <Table density="cozy" />
     <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} />
+    <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
 
     {/* consumer A's keys are not valid here */}
     {/* @ts-expect-error */}
@@ -31,6 +32,12 @@ export const contract = (
     <Badge variant="subtle" />
     {/* @ts-expect-error */}
     <Table density="regular" />
+    {/* @ts-expect-error */}
+    <Progress size="md" />
+    {/* @ts-expect-error */}
+    <Progress color="brand" />
+    {/* @ts-expect-error */}
+    <Progress radius="lg" />
     {/* @ts-expect-error */}
     <Dialog title="T" size="md" />
     {/* @ts-expect-error */}

@@ -127,6 +127,7 @@ export interface ComponentTokenProps {
   Link: 'color';
   Spinner: 'size' | 'color';
   Skeleton: 'size' | 'radius';
+  Progress: 'size' | 'color' | 'radius';
   Toast: 'color';
 }
 

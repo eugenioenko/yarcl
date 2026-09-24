@@ -17,6 +17,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Progress,
   Skeleton,
   Spinner,
   Slider,
@@ -523,6 +524,17 @@ const groups: Record<string, Item[]> = {
         <Stack gap="xs" className="gallery-fill">
           <Skeleton textStyle="subheading" width="60%" />
           <Skeleton lines={2} />
+        </Stack>
+      ),
+    },
+    {
+      name: 'Progress',
+      href: '/components/feedback/progress/',
+      description: 'Determinate and indeterminate progress bars.',
+      preview: (
+        <Stack gap="sm" className="gallery-fill">
+          <Progress value={64} label="Uploading" showValue />
+          <Progress aria-label="Loading" color="success" />
         </Stack>
       ),
     },

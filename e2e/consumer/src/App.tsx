@@ -10,6 +10,7 @@ import {
   Inline,
   Label,
   Link,
+  Progress,
   Select,
   Slider,
   Stack,
@@ -186,6 +187,8 @@ export function App() {
             <Alert color="clay" title="Free returns within 30 days">
               Delivered in 2–4 working days across the EU.
             </Alert>
+
+            <Progress value={185} max={200} label="€ 15 away from free express shipping" />
 
             <Divider />
 

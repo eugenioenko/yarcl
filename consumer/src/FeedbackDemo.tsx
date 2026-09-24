@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Badge,
@@ -6,6 +6,7 @@ import {
   Card,
   IconButton,
   Inline,
+  Progress,
   Skeleton,
   Spinner,
   Stack,
@@ -35,6 +36,13 @@ export function FeedbackDemo() {
   const [alertOpen, setAlertOpen] = useState(true);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [upload, setUpload] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (upload == null || upload >= 100) return;
+    const timer = setTimeout(() => setUpload(Math.min(upload + 25, 100)), 200);
+    return () => clearTimeout(timer);
+  }, [upload]);
 
   function save() {
     setSaving(true);
@@ -111,6 +119,23 @@ export function FeedbackDemo() {
           <PlusIcon />
         </IconButton>
       </Inline>
+
+      <Stack gap="tight" className="progress-demo">
+        <Progress value={upload ?? 0} label="Uploading photos" showValue />
+        <Progress value={82} label="Storage used" showValue color="warning" />
+        <Progress value={3} max={8} label="Steps completed" showValue formatValue={(v, max) => `${v} of ${max}`} color="success" />
+        <Progress label="Syncing" />
+        <Progress value={40} aria-label="Failed checks" color="danger" />
+        <Progress value={40} aria-label="Paused sync" color="neutral" />
+        {sizes.map((size) => (
+          <Progress key={size} value={60} size={size} aria-label={`Size ${size}`} />
+        ))}
+        <Inline>
+          <Button variant="outline" color="neutral" onClick={() => setUpload(0)}>
+            Start upload
+          </Button>
+        </Inline>
+      </Stack>
 
       <Inline align="start">
         <Card className="skeleton-card" aria-busy={!loaded}>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Badge,
   Button,
   Card,
   Inline,
+  Progress,
   Skeleton,
   Spinner,
   Stack,
@@ -148,5 +149,34 @@ export function SkeletonDemo() {
         </Inline>
       </Stack>
     </Inline>
+  );
+}
+
+export function ProgressDemo() {
+  const [upload, setUpload] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (upload == null || upload >= 100) return;
+    const timer = setTimeout(() => setUpload(Math.min(upload + 12, 100)), 300);
+    return () => clearTimeout(timer);
+  }, [upload]);
+
+  return (
+    <Stack gap="md" className="demo-progress">
+      <Progress value={upload ?? 0} label="Uploading photos" showValue />
+      <Progress value={82} label="Storage used" showValue color="warning" />
+      <Progress value={3} max={8} label="Steps completed" showValue formatValue={(v, max) => `${v} of ${max}`} color="success" />
+      <Progress label="Syncing" />
+      <Stack gap="sm">
+        {sizes.map((size) => (
+          <Progress key={size} value={60} size={size} aria-label={`Size ${size}`} />
+        ))}
+      </Stack>
+      <Inline>
+        <Button variant="outline" color="neutral" onClick={() => setUpload(0)}>
+          {upload == null ? 'Start upload' : 'Restart upload'}
+        </Button>
+      </Inline>
+    </Stack>
   );
 }
