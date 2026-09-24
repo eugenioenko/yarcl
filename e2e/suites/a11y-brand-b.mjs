@@ -11,6 +11,9 @@ export default async function (ctx) {
   await audit(ctx, 'date picker open', '.yarcl-floating');
   await page.keyboard.press('Escape');
 
+  await page.getByRole('button', { name: 'Show all breadcrumbs' }).click();
+  await audit(ctx, 'breadcrumb expanded', '.yarcl-breadcrumb');
+
   await page.getByRole('button', { name: 'Size guide' }).click();
   await audit(ctx, 'size guide dialog', 'dialog[open]');
   await page.keyboard.press('Escape');

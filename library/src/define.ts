@@ -128,6 +128,7 @@ export interface ComponentTokenProps {
   Text: 'textStyle' | 'color';
   Label: 'textStyle' | 'color';
   Link: 'color';
+  Breadcrumb: 'textStyle' | 'color';
   Spinner: 'size' | 'color';
   Skeleton: 'size' | 'radius';
   Progress: 'size' | 'color' | 'radius';

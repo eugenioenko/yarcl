@@ -82,6 +82,7 @@ export default defineConfig({
     Label: { color: 'clay' },
     Progress: { color: 'moss' },
     CommandPalette: { radius: 'square', color: 'clay' },
+    Breadcrumb: { textStyle: 'fine' },
   },
   defaults: {
     size: 'talla-m',

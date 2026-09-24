@@ -1,0 +1,78 @@
+---
+title: "Breadcrumb"
+description: "Shows where the current page sits in a hierarchy."
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { BreadcrumbDemo } from '@/demos/data';
+
+```tsx
+import { Breadcrumb } from 'yarcl';
+```
+
+<Preview>
+  <BreadcrumbDemo client:visible />
+</Preview>
+
+```tsx
+<Breadcrumb>
+  <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+  <Breadcrumb.Item href="/projects">Projects</Breadcrumb.Item>
+  <Breadcrumb.Item href="/projects/apollo">Apollo</Breadcrumb.Item>
+  <Breadcrumb.Item>Settings</Breadcrumb.Item>
+</Breadcrumb>
+```
+
+The last item is the current page. Give it an `href` to keep it a link, or leave it out to render plain text.
+
+## Long trails
+
+Set `maxItems` to collapse the middle of a longer trail into an ellipsis button. Activating it shows the full trail and moves focus to the first item that was hidden. `itemsBeforeCollapse` and `itemsAfterCollapse` choose how many items stay visible on each side.
+
+```tsx
+<Breadcrumb maxItems={3} separator="/">
+  <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+  <Breadcrumb.Item href="/docs">Documentation</Breadcrumb.Item>
+  <Breadcrumb.Item href="/docs/components">Components</Breadcrumb.Item>
+  <Breadcrumb.Item href="/docs/components/navigation">Navigation</Breadcrumb.Item>
+  <Breadcrumb.Item>Breadcrumb</Breadcrumb.Item>
+</Breadcrumb>
+```
+
+## Styling
+
+The text style comes from `typography.styles` and the link color from `colors`, styled like [`Link`](/components/typography/link/). The current page uses the neutral text color and separators use the muted neutral. Set both per component in the config:
+
+```ts
+components: {
+  Breadcrumb: { textStyle: 'caption', color: 'neutral' },
+},
+```
+
+## Accessibility
+
+- Renders a `<nav>` landmark labelled "Breadcrumb" (override with `aria-label`) around an ordered list.
+- The last item has `aria-current="page"`.
+- Separators are hidden from screen readers.
+- Give each breadcrumb on a page its own `aria-label`.
+
+## Keyboard
+
+| Key | Action |
+|---|---|
+| <kbd>Tab</kbd> | moves between the links and the ellipsis button |
+| <kbd>Enter</kbd> | follows a link, or expands the collapsed trail |
+| <kbd>Space</kbd> | expands the collapsed trail |
+
+## Props
+
+### Breadcrumb
+
+<Props of="BreadcrumbProps" />
+
+### Breadcrumb.Item
+
+<Props of="BreadcrumbItemProps" />

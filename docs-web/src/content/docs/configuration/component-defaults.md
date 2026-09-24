@@ -73,7 +73,7 @@ For any token prop, the first value found wins:
 | `Tabs` | `size`, `color` |
 | `Table` | `density` |
 | `Stack`, `Inline` | `gap` |
-| `Text`, `Label` | `textStyle`, `color` |
+| `Text`, `Label`, `Breadcrumb` | `textStyle`, `color` |
 | `Link`, `Toast` | `color` |
 | `Spinner` | `size`, `color` |
 | `Skeleton` | `size`, `radius` |

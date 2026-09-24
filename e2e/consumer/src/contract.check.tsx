@@ -1,4 +1,4 @@
-import { Badge, Button, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
+import { Badge, Breadcrumb, Button, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -13,6 +13,9 @@ export const contract = (
     <Pagination count={8} size="talla-s" color="clay" radius="square" variant="text" selectedVariant="filled" />
     <DatePicker size="talla-s" color="clay" variant="wash" radius="hairline" />
     <CommandPalette commands={[]} size="talla-s" color="moss" radius="square" />
+    <Breadcrumb textStyle="fine" color="clay" underline="always" maxItems={3} separator="/">
+      <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+    </Breadcrumb>
 
     {/* consumer A's keys are not valid here */}
     {/* @ts-expect-error */}
@@ -61,5 +64,9 @@ export const contract = (
     <CommandPalette commands={[]} size="md" />
     {/* @ts-expect-error */}
     <CommandPalette commands={[]} color="brand" />
+    {/* @ts-expect-error */}
+    <Breadcrumb textStyle="caption" />
+    {/* @ts-expect-error */}
+    <Breadcrumb color="primary" />
   </>
 );
