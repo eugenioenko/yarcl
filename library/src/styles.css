@@ -29,6 +29,8 @@
     .yarcl-switch-input,
     .yarcl-slider-thumb,
     .yarcl-link,
+    .yarcl-breadcrumb-ellipsis,
+    .yarcl-breadcrumb-text,
     .yarcl-modal-close,
     .yarcl-toast-close,
     .yarcl-toast-action,
@@ -440,6 +442,57 @@ p.yarcl-text {
 
 .yarcl-link-underline-hover:hover {
   text-decoration-line: underline;
+}
+
+/* Breadcrumb */
+
+.yarcl-breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yarcl-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375em;
+  min-width: 0;
+}
+
+.yarcl-breadcrumb .yarcl-breadcrumb-current {
+  color: var(--yarcl-neutral-text);
+}
+
+.yarcl-breadcrumb-separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-breadcrumb-separator svg {
+  width: 1em;
+  height: 1em;
+}
+
+.yarcl-breadcrumb-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.125em;
+  font: inherit;
+  line-height: inherit;
+  color: var(--yarcl-c-text);
+  background: none;
+  border: 0;
+  border-radius: 0.125em;
+  cursor: pointer;
+}
+
+.yarcl-breadcrumb-ellipsis:hover {
+  background: color-mix(in oklab, var(--yarcl-c) 12%, transparent);
 }
 
 /* Stack & Inline */

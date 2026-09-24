@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import {
   Alert,
   Badge,
+  Breadcrumb,
   Button,
   ButtonGroup,
   Card,
@@ -542,6 +543,19 @@ const groups: Record<string, Item[]> = {
       href: '/components/data/pagination/',
       description: 'Pages with siblings, boundaries and ellipses.',
       preview: <Pagination count={10} defaultPage={4} size="sm" siblings={0} aria-label="Gallery example" />,
+    },
+    {
+      name: 'Breadcrumb',
+      href: '/components/data/breadcrumb/',
+      description: 'Where the current page sits, with collapsible long trails.',
+      preview: (
+        <Breadcrumb textStyle="caption" maxItems={3}>
+          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+          <Breadcrumb.Item href="#">Projects</Breadcrumb.Item>
+          <Breadcrumb.Item href="#">Apollo</Breadcrumb.Item>
+          <Breadcrumb.Item>Settings</Breadcrumb.Item>
+        </Breadcrumb>
+      ),
     },
   ],
   feedback: [

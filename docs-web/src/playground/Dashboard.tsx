@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Alert,
   Badge,
+  Breadcrumb,
   Button,
   Card,
   Checkbox,
@@ -280,6 +281,11 @@ export function Dashboard() {
         <Stack gap="lg">
           <Inline justify="between" align="end">
             <Stack gap="xs">
+              <Breadcrumb textStyle="caption">
+                <Breadcrumb.Item href="#">Acme Inc</Breadcrumb.Item>
+                <Breadcrumb.Item href="#">Workspace</Breadcrumb.Item>
+                <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+              </Breadcrumb>
               <Heading level={1}>Dashboard</Heading>
               <Text muted>Welcome back, Ada. Here's what happened this month.</Text>
             </Stack>

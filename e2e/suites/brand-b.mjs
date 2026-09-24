@@ -8,6 +8,11 @@ export default async function ({ page, check }) {
   const h1 = page.getByRole('heading', { level: 1 });
   check('h1 uses the serif family', (await h1.evaluate((el) => getComputedStyle(el).fontFamily)).startsWith('Fraunces'));
 
+  const trail = page.getByRole('navigation', { name: 'Breadcrumb' });
+  check('component default: breadcrumb uses fine text (12px)', (await trail.evaluate((el) => getComputedStyle(el).fontSize)) === '12px');
+  check('breadcrumb collapses to first and last two', (await trail.locator('> ol > li').count()) === 4 && (await trail.getByRole('link', { name: 'Women' }).count()) === 0);
+  check('breadcrumb marks the current page', (await trail.locator('[aria-current="page"]').textContent()) === 'Linen overshirt');
+
   const add = page.getByRole('button', { name: 'Add to bag' });
   const save = page.getByRole('button', { name: 'Save' });
   check('talla-l buttons share height', (await add.boundingBox()).height === (await save.boundingBox()).height);

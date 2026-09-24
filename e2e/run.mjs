@@ -7,6 +7,7 @@ import a11y from './suites/a11y.mjs';
 import brandB from './suites/brand-b.mjs';
 import datePicker from './suites/date-picker.mjs';
 import commandPalette from './suites/command-palette.mjs';
+import breadcrumb from './suites/breadcrumb.mjs';
 import feedback from './suites/feedback.mjs';
 import floating from './suites/floating.mjs';
 import focusBrandB from './suites/focus-brand-b.mjs';
@@ -35,6 +36,7 @@ const suites = [
   ['consumer', 'slider', slider],
   ['consumer', 'label', label],
   ['consumer', 'date-picker', datePicker],
+  ['consumer', 'breadcrumb', breadcrumb],
   ['fixture', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
   ['fixture', 'a11y-brand-b', a11yBrandB],

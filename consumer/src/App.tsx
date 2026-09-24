@@ -12,6 +12,7 @@ import {
   Input,
   Label,
   Link,
+  Breadcrumb,
   Radio,
   RadioGroup,
   Slider,
@@ -344,6 +345,23 @@ export function App() {
               <Link href="#" underline="hover" color="neutral">
                 Hover underline
               </Link>
+            </Row>
+            <Row label="breadcrumb">
+              <Breadcrumb>
+                <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                <Breadcrumb.Item href="#">Projects</Breadcrumb.Item>
+                <Breadcrumb.Item href="#">Apollo</Breadcrumb.Item>
+                <Breadcrumb.Item>Settings</Breadcrumb.Item>
+              </Breadcrumb>
+            </Row>
+            <Row label="collapsed breadcrumb">
+              <Breadcrumb aria-label="Documentation path" maxItems={3} separator="/">
+                <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                <Breadcrumb.Item href="#">Documentation</Breadcrumb.Item>
+                <Breadcrumb.Item href="#">Components</Breadcrumb.Item>
+                <Breadcrumb.Item href="#">Navigation</Breadcrumb.Item>
+                <Breadcrumb.Item>Breadcrumb</Breadcrumb.Item>
+              </Breadcrumb>
             </Row>
             <Row label="truncate">
               <Text truncate className="narrow">

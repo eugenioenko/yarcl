@@ -123,6 +123,7 @@ defineConfig({
     Card: { padding: 'xl', shadow: 'lg' },
     Stack: { gap: 'sm' },
     Pagination: { size: 'sm', variant: 'outline', selectedVariant: 'solid' },
+    Breadcrumb: { textStyle: 'caption', color: 'neutral' },
   },
 });
 
@@ -131,6 +132,22 @@ defineConfig({
   components: {
     // @ts-expect-error
     Pagination: { selectedVariant: 'filled' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Breadcrumb: { size: 'sm' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Breadcrumb: { textStyle: 'huge' },
   },
 });
 

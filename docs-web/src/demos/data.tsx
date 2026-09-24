@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
+import { Badge, Breadcrumb, Pagination, Stack, Table, Tabs, Text, ToggleGroup, config, type Density } from 'yarcl';
 
 export function TabsDemo() {
   return (
@@ -92,6 +92,26 @@ export function PaginationStylesDemo() {
       <Pagination count={10} defaultPage={4} attached variant="outline" selectedVariant="solid" color="neutral" aria-label="Attached example" />
       <Pagination count={50} defaultPage={25} siblings={2} boundaries={2} size="sm" aria-label="Wider range example" />
       <Pagination count={5} defaultPage={2} radius="rounded" variant="ghost" aria-label="Rounded example" />
+    </Stack>
+  );
+}
+
+export function BreadcrumbDemo() {
+  return (
+    <Stack gap="md">
+      <Breadcrumb>
+        <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Projects</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Apollo</Breadcrumb.Item>
+        <Breadcrumb.Item>Settings</Breadcrumb.Item>
+      </Breadcrumb>
+      <Breadcrumb aria-label="Documentation path" separator="/" maxItems={3}>
+        <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Documentation</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Components</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Navigation</Breadcrumb.Item>
+        <Breadcrumb.Item>Breadcrumb</Breadcrumb.Item>
+      </Breadcrumb>
     </Stack>
   );
 }

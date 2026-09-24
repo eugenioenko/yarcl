@@ -33,6 +33,7 @@ import {
   Inline,
   Input,
   Link,
+  Breadcrumb,
   Radio,
   Stack,
   Slider,
@@ -59,6 +60,19 @@ export const contract = (
     </Label>
     <Heading level={2} textStyle="display" />
     <Link color="neutral" underline="hover" external />
+    <Breadcrumb
+      textStyle="caption"
+      color="neutral"
+      underline="always"
+      separator="/"
+      maxItems={4}
+      itemsBeforeCollapse={1}
+      itemsAfterCollapse={2}
+      expandLabel="Show path"
+    >
+      <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+      <Breadcrumb.Item>Current</Breadcrumb.Item>
+    </Breadcrumb>
     <Stack gap="loose" align="center" as="ul" />
     <Inline gap="tight" justify="between" wrap={false} />
     <Card padding="tight" radius="rounded" shadow="lg" as="article" />
@@ -264,6 +278,12 @@ export const contract = (
     <Dialog title="T" size="huge" />
     {/* @ts-expect-error */}
     <Dialog title="T" width="40rem" />
+    {/* @ts-expect-error */}
+    <Breadcrumb textStyle="huge" />
+    {/* @ts-expect-error */}
+    <Breadcrumb color="primary" />
+    {/* @ts-expect-error */}
+    <Breadcrumb underline="sometimes" />
     {/* @ts-expect-error */}
     <Tabs />
     {/* @ts-expect-error */}

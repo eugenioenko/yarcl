@@ -33,6 +33,8 @@ export { Heading } from './components/Heading';
 export type { HeadingProps } from './components/Heading';
 export { Link } from './components/Link';
 export type { LinkProps } from './components/Link';
+export { Breadcrumb } from './components/Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItemProps } from './components/Breadcrumb';
 export { Stack } from './components/Stack';
 export type { StackProps, LayoutProps, LayoutElement } from './components/Stack';
 export { Inline } from './components/Inline';

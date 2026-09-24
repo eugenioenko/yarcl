@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Alert,
   Badge,
+  Breadcrumb,
   Button,
   ButtonGroup,
   CommandPalette,
@@ -109,6 +110,12 @@ export function App() {
           <div className="product-image" role="img" aria-label="Linen overshirt in natural" />
           <Stack gap="6">
             <Stack gap="2">
+              <Breadcrumb maxItems={3}>
+                <Breadcrumb.Item href="?page=shop">Shop</Breadcrumb.Item>
+                <Breadcrumb.Item href="?page=shop&category=women">Women</Breadcrumb.Item>
+                <Breadcrumb.Item href="?page=shop&category=shirts">Shirts</Breadcrumb.Item>
+                <Breadcrumb.Item>Linen overshirt</Breadcrumb.Item>
+              </Breadcrumb>
               <Inline gap="2">
                 <Badge color="clay">New season</Badge>
                 <Badge color="moss" variant="line">

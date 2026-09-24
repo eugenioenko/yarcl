@@ -63,6 +63,7 @@ export default defineConfig({
   components: {
     Badge: { radius: 'rounded' },
     Drawer: { size: 'sm' },
+    Breadcrumb: { textStyle: 'label' },
   },
   defaults: {
     size: 'md',

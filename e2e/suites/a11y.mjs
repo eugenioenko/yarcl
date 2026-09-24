@@ -35,6 +35,8 @@ export default async function (ctx) {
   const invoices = page.getByRole('navigation', { name: 'Invoice pages' });
   await invoices.getByRole('button', { name: 'Page 12' }).click();
   await audit(ctx, 'pagination on last page', '.yarcl-pagination');
+  await page.getByRole('button', { name: 'Show all breadcrumbs' }).click();
+  await audit(ctx, 'breadcrumb expanded', '.yarcl-breadcrumb');
 
   await page.getByRole('button', { name: 'Actions' }).click();
   await audit(ctx, 'menu open', '.yarcl-floating');
