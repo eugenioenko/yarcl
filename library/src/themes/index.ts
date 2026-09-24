@@ -8,7 +8,7 @@ export type { ThemeContract } from './contract';
 export { brutalist, compact, editorial, bloom };
 
 /**
- * Every bundled theme, keyed by id, including the library defaults as `@yarcl/react`.
+ * Every bundled theme, keyed by id, including the library defaults as `yarcl`.
  * All of them satisfy {@link ThemeContract}, so they're interchangeable.
  *
  * @example
