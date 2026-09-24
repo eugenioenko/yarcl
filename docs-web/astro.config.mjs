@@ -12,9 +12,6 @@ export default defineConfig({
       logo: { src: './src/assets/yarcl.svg' },
       favicon: '/yarcl.svg',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/eugenioenko/yarcl-ui' }],
-      components: {
-        SocialIcons: './src/components/SocialIcons.astro',
-      },
       customCss: ['./src/styles/custom.css'],
       sidebar: [
         { label: 'Getting Started', items: [{ autogenerate: { directory: 'getting-started' } }] },
