@@ -9,10 +9,14 @@
     "test:e2e": "node e2e/run.mjs",
     "docs:api": "typedoc",
     "docs:dev": "pnpm -C docs-web dev",
-    "docs:build": "pnpm -C docs-web build"
+    "docs:build": "pnpm -C docs-web build",
+    "lint": "eslint library/src consumer/src consumer-b/src"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.3",
+    "typescript-eslint": "^8.57.0",
     "axe-core": "^4.13.0",
     "playwright-core": "^1.63.0",
     "typedoc": "^0.28.20",
