@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -6,6 +6,7 @@ import {
   Field,
   Inline,
   Input,
+  Label,
   Radio,
   RadioGroup,
   Select,
@@ -14,6 +15,7 @@ import {
   Switch,
   Text,
   Textarea,
+  ToggleGroup,
   type SelectOption,
 } from 'yarcl';
 
@@ -28,6 +30,56 @@ export function FieldDemo() {
       <Field label="Email" error={invalid ? 'Enter a valid email address.' : undefined}>
         <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </Field>
+    </Stack>
+  );
+}
+
+export function LabelDemo() {
+  const id = useId();
+  return (
+    <Stack className="demo-form">
+      <Inline gap="sm" wrap={false}>
+        <Label htmlFor={`${id}-city`} className="demo-label" required>
+          City
+        </Label>
+        <Input id={`${id}-city`} placeholder="Zurich" required className="demo-grow" />
+      </Inline>
+      <Inline gap="sm" wrap={false}>
+        <Label htmlFor={`${id}-nickname`} className="demo-label" disabled>
+          Nickname
+        </Label>
+        <Input id={`${id}-nickname`} placeholder="Unavailable" disabled className="demo-grow" />
+      </Inline>
+    </Stack>
+  );
+}
+
+export function LabelGroupDemo() {
+  const id = useId();
+  return (
+    <Stack gap="sm" className="demo-form">
+      <Label id={`${id}-birth`}>Date of birth</Label>
+      <Inline role="group" aria-labelledby={`${id}-birth`} gap="sm" wrap={false}>
+        <Input aria-label="Day" placeholder="DD" className="demo-part" inputMode="numeric" />
+        <Input aria-label="Month" placeholder="MM" className="demo-part" inputMode="numeric" />
+        <Input aria-label="Year" placeholder="YYYY" className="demo-part" inputMode="numeric" />
+      </Inline>
+    </Stack>
+  );
+}
+
+export function LabelCustomDemo() {
+  const id = useId();
+  return (
+    <Stack gap="sm">
+      <Label id={`${id}-frequency`} color="primary">
+        Digest frequency
+      </Label>
+      <ToggleGroup type="single" defaultValue="weekly" aria-labelledby={`${id}-frequency`}>
+        <ToggleGroup.Item value="daily">Daily</ToggleGroup.Item>
+        <ToggleGroup.Item value="weekly">Weekly</ToggleGroup.Item>
+        <ToggleGroup.Item value="monthly">Monthly</ToggleGroup.Item>
+      </ToggleGroup>
     </Stack>
   );
 }

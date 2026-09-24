@@ -171,6 +171,24 @@ defineConfig({
   },
 });
 
+defineConfig({ ...defaults, components: { Label: { textStyle: 'caption', color: 'neutral' } } });
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Label: { textStyle: 'tiny' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Label: { size: 'sm' },
+  },
+});
+
 defineConfig({
   ...defaults,
   // @ts-expect-error

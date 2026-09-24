@@ -2,6 +2,7 @@ import { useId, type ComponentProps, type ReactNode } from 'react';
 import { cx, typeClass } from '../classes';
 import { FieldContext } from '../field-context';
 import { useConfig } from '../runtime';
+import { Label } from './Label';
 
 /** Props for {@link Field}. */
 export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
@@ -40,14 +41,9 @@ export function Field({ label, description, error, required, children, className
       value={{ id, labelId: `${id}-label`, describedBy: cx(descriptionId, errorId) || undefined, invalid: errorId != null, required }}
     >
       <div className={cx('yarcl-field', className)} {...props}>
-        <label id={`${id}-label`} className={cx('yarcl-field-label', typeClass(config.defaults.labelStyle))} htmlFor={id}>
+        <Label id={`${id}-label`} htmlFor={id} required={required}>
           {label}
-          {required && (
-            <span className="yarcl-field-required" aria-hidden="true">
-              {' *'}
-            </span>
-          )}
-        </label>
+        </Label>
         {children}
         {descriptionId && (
           <p className={cx('yarcl-field-description', typeClass(config.defaults.helperStyle))} id={descriptionId}>

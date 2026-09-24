@@ -12,6 +12,7 @@ import {
   IconButton,
   Inline,
   Input,
+  Label,
   Link,
   Radio,
   RadioGroup,
@@ -122,6 +123,19 @@ const groups: Record<string, Item[]> = {
         <Field label="Email" error="Enter a valid email." className="gallery-fill">
           <Input size="sm" defaultValue="ada@" />
         </Field>
+      ),
+    },
+    {
+      name: 'Label',
+      href: '/components/forms/label/',
+      description: 'A standalone form label, for controls beside it or grouped.',
+      preview: (
+        <Inline gap="sm" wrap={false} className="gallery-fill">
+          <Label htmlFor="gallery-label-city" required>
+            City
+          </Label>
+          <Input id="gallery-label-city" size="sm" placeholder="Zurich" required className="demo-grow" />
+        </Inline>
       ),
     },
     {

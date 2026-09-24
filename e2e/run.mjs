@@ -10,6 +10,7 @@ import floating from './suites/floating.mjs';
 import focusBrandB from './suites/focus-brand-b.mjs';
 import focus from './suites/focus.mjs';
 import groups from './suites/groups.mjs';
+import label from './suites/label.mjs';
 import overlays from './suites/overlays.mjs';
 import slider from './suites/slider.mjs';
 
@@ -29,6 +30,7 @@ const suites = [
   ['consumer', 'feedback', feedback],
   ['consumer', 'groups', groups],
   ['consumer', 'slider', slider],
+  ['consumer', 'label', label],
   ['fixture', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
   ['fixture', 'a11y-brand-b', a11yBrandB],

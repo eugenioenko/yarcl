@@ -18,7 +18,7 @@ sidebar:
 | `softVariant` | badges, alerts, unselected toggle items |
 | `errorColor` | invalid fields and error messages |
 | `textStyle` | `Text` |
-| `labelStyle`, `helperStyle` | form labels, helper and error text |
+| `labelStyle`, `helperStyle` | `Label` and form legends, helper and error text |
 | `gap`, `padding` | layout components, cards, overlays |
 | `floatingShadow` | popovers, menus, dialogs, toasts |
 | `density` | `Table` |
@@ -71,7 +71,7 @@ For any token prop, the first value found wins:
 | `Tabs` | `size`, `color` |
 | `Table` | `density` |
 | `Stack`, `Inline` | `gap` |
-| `Text` | `textStyle`, `color` |
+| `Text`, `Label` | `textStyle`, `color` |
 | `Link`, `Toast` | `color` |
 | `Spinner` | `size`, `color` |
 | `Skeleton` | `size`, `radius` |

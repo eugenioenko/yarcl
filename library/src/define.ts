@@ -123,6 +123,7 @@ export interface ComponentTokenProps {
   Stack: 'gap';
   Inline: 'gap';
   Text: 'textStyle' | 'color';
+  Label: 'textStyle' | 'color';
   Link: 'color';
   Spinner: 'size' | 'color';
   Skeleton: 'size' | 'radius';

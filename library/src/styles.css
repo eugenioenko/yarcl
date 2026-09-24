@@ -323,6 +323,24 @@
   }
 }
 
+/* Label */
+
+.yarcl-label {
+  color: var(--yarcl-neutral-text);
+}
+
+.yarcl-label-colored {
+  color: var(--yarcl-c-text);
+}
+
+.yarcl-label-disabled {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-label-required {
+  color: var(--yarcl-error);
+}
+
 /* Field */
 
 .yarcl-field {
@@ -333,10 +351,6 @@
 
 .yarcl-field-label {
   color: var(--yarcl-neutral-text);
-}
-
-.yarcl-field-required {
-  color: var(--yarcl-error);
 }
 
 .yarcl-field-description,

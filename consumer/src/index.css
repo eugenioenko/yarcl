@@ -12,11 +12,17 @@ body {
 }
 
 .label {
+  flex: none;
   width: 7.5rem;
 }
 
 .form {
   max-width: 24rem;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
 }
 
 .narrow {

@@ -25,6 +25,8 @@ export { Slider } from './components/Slider';
 export type { SliderProps, SliderValue } from './components/Slider';
 export { Field } from './components/Field';
 export type { FieldProps } from './components/Field';
+export { Label } from './components/Label';
+export type { LabelProps } from './components/Label';
 export { Text } from './components/Text';
 export type { TextProps, TextElement } from './components/Text';
 export { Heading } from './components/Heading';

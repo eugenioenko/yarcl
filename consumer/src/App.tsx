@@ -10,6 +10,7 @@ import {
   IconButton,
   Inline,
   Input,
+  Label,
   Link,
   Radio,
   RadioGroup,
@@ -216,6 +217,41 @@ export function App() {
               <Field label="Terms" error="You must accept the terms.">
                 <Checkbox>I accept the terms</Checkbox>
               </Field>
+            </Stack>
+          </Section>
+
+          <Section title="Labels">
+            <Stack className="form">
+              <Inline gap="tight" wrap={false}>
+                <Label htmlFor="label-city" className="label" required>
+                  City
+                </Label>
+                <Input id="label-city" placeholder="Zurich" required className="grow" />
+              </Inline>
+              <Stack gap="tight">
+                <Label id="label-birth">Date of birth</Label>
+                <Inline role="group" aria-labelledby="label-birth" gap="tight" wrap={false}>
+                  <Input aria-label="Day" placeholder="DD" className="grow" inputMode="numeric" />
+                  <Input aria-label="Month" placeholder="MM" className="grow" inputMode="numeric" />
+                  <Input aria-label="Year" placeholder="YYYY" className="grow" inputMode="numeric" />
+                </Inline>
+              </Stack>
+              <Stack gap="tight">
+                <Label id="label-frequency" color="brand">
+                  Digest frequency
+                </Label>
+                <ToggleGroup type="single" defaultValue="weekly" aria-labelledby="label-frequency">
+                  <ToggleGroup.Item value="daily">Daily</ToggleGroup.Item>
+                  <ToggleGroup.Item value="weekly">Weekly</ToggleGroup.Item>
+                  <ToggleGroup.Item value="monthly">Monthly</ToggleGroup.Item>
+                </ToggleGroup>
+              </Stack>
+              <Inline gap="tight" wrap={false}>
+                <Label htmlFor="label-nickname" className="label" disabled>
+                  Nickname
+                </Label>
+                <Input id="label-nickname" placeholder="Unavailable" disabled className="grow" />
+              </Inline>
             </Stack>
           </Section>
 

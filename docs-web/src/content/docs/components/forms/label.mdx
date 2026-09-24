@@ -1,0 +1,85 @@
+---
+title: "Label"
+description: "A standalone form label for layouts Field doesn't cover."
+sidebar:
+  order: 1.5
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { LabelCustomDemo, LabelDemo, LabelGroupDemo } from '@/demos/forms';
+
+```tsx
+import { Label } from 'yarcl';
+```
+
+`Label` is the label [Field](/components/forms/field/) renders, available on its own for layouts `Field` doesn't cover: a label beside its control, one label for several controls, or a custom control.
+
+<Preview>
+  <LabelDemo client:visible />
+</Preview>
+
+```tsx
+<Inline gap="sm">
+  <Label htmlFor="city" required>City</Label>
+  <Input id="city" required />
+</Inline>
+
+<Inline gap="sm">
+  <Label htmlFor="nickname" disabled>Nickname</Label>
+  <Input id="nickname" disabled />
+</Inline>
+```
+
+## One label for several controls
+
+Give the label an `id` and point a group's `aria-labelledby` at it. Each control inside keeps its own name.
+
+<Preview>
+  <LabelGroupDemo client:visible />
+</Preview>
+
+```tsx
+<Label id="birth">Date of birth</Label>
+<Inline role="group" aria-labelledby="birth">
+  <Input aria-label="Day" />
+  <Input aria-label="Month" />
+  <Input aria-label="Year" />
+</Inline>
+```
+
+## Custom controls
+
+Controls that aren't native form elements, like [ToggleGroup](/components/buttons/toggle-group/), are named with `aria-labelledby` the same way.
+
+<Preview>
+  <LabelCustomDemo client:visible />
+</Preview>
+
+```tsx
+<Label id="frequency" color="primary">Digest frequency</Label>
+<ToggleGroup type="single" defaultValue="weekly" aria-labelledby="frequency">
+  <ToggleGroup.Item value="daily">Daily</ToggleGroup.Item>
+  <ToggleGroup.Item value="weekly">Weekly</ToggleGroup.Item>
+  <ToggleGroup.Item value="monthly">Monthly</ToggleGroup.Item>
+</ToggleGroup>
+```
+
+## Styling
+
+- The text style is `defaults.labelStyle`; `textStyle` picks another from `typography.styles`.
+- The color is the neutral text color; `color` uses a semantic color's text shade, and `disabled` uses the muted color.
+- The required marker uses `defaults.errorColor`.
+- `textStyle` and `color` can be set for every label in `components.Label`.
+
+## Accessibility
+
+- Renders a native `<label>`. With `htmlFor`, clicking it focuses or toggles the control, and its text becomes the control's accessible name.
+- The label is not a tab stop; keyboard users reach the control directly.
+- The required marker is hidden from screen readers. Set `required` (or `aria-required`) on the control too, so it is announced.
+
+## Props
+
+Accepts every native `<label>` attribute except `color`.
+
+<Props of="LabelProps" />

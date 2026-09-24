@@ -27,6 +27,9 @@ export default async function (ctx) {
   await page.getByRole('slider', { name: 'Price range Maximum' }).focus();
   await page.keyboard.press('Home');
   await audit(ctx, 'sliders after keyboard input', '.yarcl-slider');
+  const labels = page.locator('section', { has: page.getByRole('heading', { name: 'Labels', exact: true }) });
+  await labels.locator('input').first().focus();
+  await audit(ctx, 'labels with focused control', 'section:has(#label-city)');
 
   await page.getByRole('button', { name: 'Actions' }).click();
   await audit(ctx, 'menu open', '.yarcl-floating');
