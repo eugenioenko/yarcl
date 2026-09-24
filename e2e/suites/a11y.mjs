@@ -30,6 +30,8 @@ export default async function (ctx) {
   const labels = page.locator('section', { has: page.getByRole('heading', { name: 'Labels', exact: true }) });
   await labels.locator('input').first().focus();
   await audit(ctx, 'labels with focused control', 'section:has(#label-city)');
+  await page.getByRole('button', { name: 'Start upload' }).click();
+  await audit(ctx, 'progress bars', '.progress-demo');
 
   await page.getByRole('button', { name: 'Actions' }).click();
   await audit(ctx, 'menu open', '.yarcl-floating');

@@ -1,3 +1,5 @@
+import { progressContrast } from './feedback.mjs';
+
 /** @param {import('../run.mjs').SuiteContext} ctx */
 export default async function ({ page, check }) {
   await page.evaluate(() => document.fonts.ready);
@@ -47,6 +49,29 @@ export default async function ({ page, check }) {
   check('size error clears', (await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).count()) === 0);
   await add.click();
   check('toast confirms', await page.getByRole('status').filter({ hasText: 'Added to bag' }).isVisible());
+
+  const shipping = page.getByRole('progressbar', { name: '€ 15 away from free express shipping' });
+  const progress = await shipping.evaluate((el) => {
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--yarcl-color-moss)';
+    el.append(probe);
+    const moss = getComputedStyle(probe).color;
+    probe.remove();
+    const track = el.querySelector('.yarcl-progress-track');
+    const bar = el.querySelector('.yarcl-progress-bar');
+    return {
+      moss,
+      bar: getComputedStyle(bar).backgroundColor,
+      radius: getComputedStyle(track).borderRadius,
+      height: track.getBoundingClientRect().height,
+      ratio: bar.getBoundingClientRect().width / track.getBoundingClientRect().width,
+    };
+  });
+  check('component default: progress bar is moss', progress.bar === progress.moss, `${progress.bar} vs ${progress.moss}`);
+  check('progress uses global radius (hairline)', progress.radius === '2px', progress.radius);
+  check('progress track from talla-m icon size', Math.abs(progress.height - 8) < 0.5, String(progress.height));
+  check('progress bar at 185 of 200', Math.abs(progress.ratio - 0.925) < 0.01, String(progress.ratio));
+  await progressContrast({ check }, page.locator('body'));
 
   await page.getByRole('button', { name: 'Size guide' }).click();
   const guide = page.getByRole('dialog', { name: 'Size guide' });

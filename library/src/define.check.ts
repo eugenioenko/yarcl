@@ -199,3 +199,16 @@ defineConfig({
   ...defaults,
   colors: { ...defaults.colors, primary: { light: '#2d4bb8', dark: '#8aa2ff', text: { light: '#1e3480', dark: '#c3cfff' } } },
 });
+
+defineConfig({
+  ...defaults,
+  components: { Progress: { size: 'lg', color: 'success', radius: 'rounded' } },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Progress: { variant: 'solid' },
+  },
+});

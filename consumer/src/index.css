@@ -47,3 +47,7 @@ body {
 .skeleton-card {
   width: 20rem;
 }
+
+.progress-demo {
+  width: min(24rem, 100%);
+}

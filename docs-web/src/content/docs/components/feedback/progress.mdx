@@ -1,0 +1,34 @@
+---
+title: "Progress"
+description: "Determinate and indeterminate progress bars, sized and colored from the config."
+sidebar:
+  order: 5
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { ProgressDemo } from '@/demos/feedback';
+
+```tsx
+import { Progress } from 'yarcl';
+```
+
+<Preview>
+  <ProgressDemo client:visible />
+</Preview>
+
+```tsx
+<Progress value={uploaded} max={total} label="Uploading photos" showValue />
+<Progress value={3} max={8} label="Steps completed" showValue formatValue={(v, max) => `${v} of ${max}`} />
+<Progress label="Syncing" />
+```
+
+Set `value` for a determinate bar; leave it undefined and the bar slides back and forth until the work is measurable. Values are clamped between 0 and `max`.
+
+The bar uses `color`, the track height scales with the size's icon size, and both corners use `radius`. Set per-component defaults with `components.Progress` in the config. The track is a light wash of the text color, so the bar keeps at least 3:1 contrast against it for typical brand colors.
+
+It renders `role="progressbar"`. Determinate bars set `aria-valuenow`, `aria-valuemin` and `aria-valuemax`, and `aria-valuetext` when `formatValue` is set; indeterminate bars omit them. The `label` names the bar; without one, pass `aria-label`. With reduced motion, the indeterminate bar pulses in place instead of sliding.
+
+## Props
+
+<Props of="ProgressProps" />

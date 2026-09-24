@@ -75,3 +75,4 @@ For any token prop, the first value found wins:
 | `Link`, `Toast` | `color` |
 | `Spinner` | `size`, `color` |
 | `Skeleton` | `size`, `radius` |
+| `Progress` | `size`, `color`, `radius` |

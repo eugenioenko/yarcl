@@ -11,6 +11,7 @@ import {
   RadioGroup,
   ToggleGroup,
   Combobox,
+  Progress,
   Skeleton,
   Spinner,
   Dialog,
@@ -87,6 +88,8 @@ export const contract = (
     <Spinner size="xl" color="danger" />
     <Skeleton shape="control" size="lg" radius="lg" />
     <Skeleton textStyle="display" lines={3} />
+    <Progress value={40} max={80} label="Upload" showValue formatValue={(v, max) => `${v}/${max}`} size="lg" color="success" radius="rounded" />
+    <Progress aria-label="Loading" radius="size" />
     <Button loading />
     <Heading level={3} />
     <RadioGroup label="L" size="sm" color="success" orientation="horizontal" defaultValue="a">
@@ -193,6 +196,14 @@ export const contract = (
     <Spinner size="huge" />
     {/* @ts-expect-error */}
     <Skeleton shape="triangle" />
+    {/* @ts-expect-error */}
+    <Progress size="huge" />
+    {/* @ts-expect-error */}
+    <Progress color="primary" />
+    {/* @ts-expect-error */}
+    <Progress radius="hairline" />
+    {/* @ts-expect-error */}
+    <Progress value="50" />
     {/* @ts-expect-error */}
     <Skeleton textStyle="heading" />
     {/* @ts-expect-error */}
