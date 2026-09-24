@@ -63,13 +63,17 @@ export function Badge({
       {...props}
     >
       {children}
-      {onRemove && (
-        <button type="button" className="yarcl-badge-remove" aria-label={removeLabel} onClick={onRemove}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-            <path d="M7 7l10 10M17 7 7 17" />
-          </svg>
-        </button>
-      )}
+      {onRemove && <BadgeRemove aria-label={removeLabel} onClick={onRemove} />}
     </span>
+  );
+}
+
+export function BadgeRemove(props: Omit<ComponentProps<'button'>, 'children'>) {
+  return (
+    <button type="button" className="yarcl-badge-remove" {...props}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+        <path d="M7 7l10 10M17 7 7 17" />
+      </svg>
+    </button>
   );
 }

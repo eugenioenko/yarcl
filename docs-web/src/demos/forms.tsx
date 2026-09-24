@@ -166,6 +166,15 @@ export function ComboboxFreeDemo() {
   );
 }
 
+export function ComboboxMultipleDemo() {
+  const [visited, setVisited] = useState<string[]>(['sweden', 'japan']);
+  return (
+    <Field label="Countries visited" description={`Value: ${visited.join(', ') || 'none'}`} className="demo-form">
+      <Combobox multiple options={countries} value={visited} onValueChange={setVisited} name="visited" placeholder="Add countries" />
+    </Field>
+  );
+}
+
 export function ComboboxAsyncDemo() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SelectOption[]>([]);

@@ -1,19 +1,19 @@
 ---
 title: "Combobox"
-description: "A text input with a filtered list of suggestions: searchable select, typeahead or async search."
+description: "A text input with a filtered list of suggestions: searchable select, typeahead, async search or multi-select."
 sidebar:
   order: 5
 ---
 
 import Preview from '@/components/Preview.astro';
 import Props from '@/components/Props.astro';
-import { ComboboxAsyncDemo, ComboboxFreeDemo, ComboboxSearchDemo } from '@/demos/forms';
+import { ComboboxAsyncDemo, ComboboxFreeDemo, ComboboxMultipleDemo, ComboboxSearchDemo } from '@/demos/forms';
 
 ```tsx
 import { Combobox } from 'yarcl';
 ```
 
-One component covers three modes.
+One component covers four modes.
 
 ## Searchable select
 
@@ -57,19 +57,49 @@ Filter on the server: set `filter={false}`, update `options` from `onInputValueC
 />
 ```
 
+## Multiple
+
+`multiple` makes the value an array. Each pick becomes a removable chip before the input; the list stays open and the input clears so you can keep going. Picking a selected option again removes it. `maxSelected` caps the count, and `name` submits one hidden input per value.
+
+It works with the other modes: add `allowCustomValue` to turn typed text into a chip on <kbd>Enter</kbd>, or `filter={false}` with `onInputValueChange` for async search.
+
+<Preview>
+  <ComboboxMultipleDemo client:visible />
+</Preview>
+
+```tsx
+const [visited, setVisited] = useState<string[]>([]);
+
+<Combobox multiple options={countries} value={visited} onValueChange={setVisited} name="visited" />
+```
+
+Chips are [Badges](/components/feedback/badge/) in the control's `size` and `color`, with the Badge's variant (by default `defaults.softVariant`). The control keeps the input height on one line and grows as chips wrap.
+
 ## Keyboard
 
 | Key | Action |
 |---|---|
 | typing | filters and opens the list, highlighting the first match |
 | <kbd>↑</kbd> <kbd>↓</kbd> | moves the highlight (focus stays in the input) |
-| <kbd>Enter</kbd> | chooses the highlighted option |
+| <kbd>Enter</kbd> | chooses the highlighted option; with `multiple`, toggles it |
 | <kbd>Esc</kbd> | closes the list |
+| <kbd>Backspace</kbd> | with `multiple` and an empty input, removes the last chip |
+| <kbd>←</kbd> <kbd>→</kbd> | with `multiple`, at the start of the input, moves focus across the chips and back |
+| <kbd>Backspace</kbd> <kbd>Delete</kbd> <kbd>Enter</kbd> | on a chip, removes it and returns focus to the input |
 
-The input has `role="combobox"` and points at the highlighted option with `aria-activedescendant`.
+The input has `role="combobox"` and points at the highlighted option with `aria-activedescendant`. With `multiple`, the listbox has `aria-multiselectable` and selected options have `aria-selected`. Chips are a list named "Selected", and each remove button is labelled with the option, like "Remove Sweden". Chips are not tab stops, so <kbd>Tab</kbd> goes straight to the input.
 
 ## Props
 
-Accepts every native `<input>` attribute except `color`, `size`, `value`, `defaultValue` and `onChange`.
+Accepts every native `<input>` attribute except `color`, `size`, `value`, `defaultValue`, `onChange` and `multiple`.
 
-<Props of="ComboboxProps" />
+Plus the value props, typed by `multiple`:
+
+| Prop | Single (default) | `multiple` |
+|---|---|---|
+| `value` | `V \| null` | `V[]` |
+| `defaultValue` | `V \| null` | `V[]` |
+| `onValueChange` | `(value: V \| null) => void` | `(value: V[]) => void` |
+| `maxSelected` | not allowed | `number` |
+
+<Props of="ComboboxBaseProps" />

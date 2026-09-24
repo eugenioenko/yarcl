@@ -192,7 +192,7 @@ const groups: Record<string, Item[]> = {
     {
       name: 'Combobox',
       href: '/components/forms/combobox/',
-      description: 'A text input with filtered suggestions, including async search.',
+      description: 'A text input with filtered suggestions, including async search and multi-select.',
       preview: (
         <Stack gap="xs" className="gallery-fill">
           <Input size="sm" defaultValue="sw" aria-label="Country" />

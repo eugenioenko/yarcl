@@ -8,6 +8,7 @@ import {
   ButtonGroup,
   CommandPalette,
   DatePicker,
+  Combobox,
   Dialog,
   Divider,
   Heading,
@@ -29,6 +30,7 @@ import {
 import { DesignReference } from 'yarcl/reference';
 
 const garmentSizes = ['XS', 'S', 'M', 'L', 'XL'];
+const occasions = ['Office', 'Weekend', 'Travel', 'Evening'].map((label) => ({ value: label.toLowerCase(), label }));
 const shades = [
   { value: 'natural', label: 'Natural linen' },
   { value: 'charcoal', label: 'Charcoal' },
@@ -192,6 +194,8 @@ export function App() {
             </Stack>
 
             <Select options={shades} value={shade} onValueChange={setShade} aria-label="Shade" />
+
+            <Combobox multiple options={occasions} defaultValue={['office']} aria-label="Occasions" placeholder="Add occasions" />
 
             <Stack gap="2">
               <Text textStyle="label" id="sleeve-label">

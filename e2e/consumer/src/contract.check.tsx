@@ -1,4 +1,4 @@
-import { Accordion, Badge, Breadcrumb, Button, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
+import { Accordion, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -17,6 +17,7 @@ export const contract = (
       <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
     </Breadcrumb>
     <Accordion type="multiple" size="talla-s" radius="hairline" color="moss" />
+    <Combobox multiple options={[]} size="talla-s" color="clay" radius="square" maxSelected={2} onValueChange={(v: string[]) => v} />
 
     {/* consumer A's keys are not valid here */}
     {/* @ts-expect-error */}
@@ -75,5 +76,11 @@ export const contract = (
     <Accordion type="single" color="primary" />
     {/* @ts-expect-error */}
     <Accordion type="single" radius="md" />
+    {/* @ts-expect-error */}
+    <Combobox multiple options={[]} size="md" />
+    {/* @ts-expect-error */}
+    <Combobox multiple options={[]} color="brand" />
+    {/* @ts-expect-error */}
+    <Combobox multiple options={[]} value="natural" />
   </>
 );

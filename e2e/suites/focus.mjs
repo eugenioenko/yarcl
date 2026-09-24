@@ -12,7 +12,7 @@ const snapshot = (page) =>
     const el = document.activeElement;
     if (!el || el === document.body) return null;
     el.dataset.focusProbe ??= String(Math.random()).slice(2);
-    const s = getComputedStyle(el);
+    const s = getComputedStyle(el.closest('.yarcl-combobox-control') ?? el);
     return {
       id: el.dataset.focusProbe,
       label: `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 20)}"`,
@@ -23,7 +23,8 @@ const snapshot = (page) =>
 
 const lookOf = (page, id) =>
   page.evaluate((id) => {
-    const s = getComputedStyle(document.querySelector(`[data-focus-probe="${id}"]`));
+    const el = document.querySelector(`[data-focus-probe="${id}"]`);
+    const s = getComputedStyle(el.closest('.yarcl-combobox-control') ?? el);
     return [s.outlineStyle, s.outlineWidth, s.outlineColor, s.boxShadow, s.borderColor, s.backgroundColor].join('|');
   }, id);
 
@@ -87,6 +88,12 @@ export default async function (ctx) {
   await highlightContrast(ctx, 'Select', async () => {
     await page.getByRole('combobox', { name: 'Plan' }).focus();
     await page.keyboard.press('Enter');
+    await page.keyboard.press('ArrowDown');
+  });
+  await highlightContrast(ctx, 'Multiple combobox', async () => {
+    const visited = page.getByRole('combobox', { name: 'Countries visited' });
+    await visited.focus();
+    await visited.fill('s');
     await page.keyboard.press('ArrowDown');
   });
   await highlightContrast(ctx, 'Combobox', async () => {

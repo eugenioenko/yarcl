@@ -54,7 +54,7 @@ export type { MenuProps, MenuTriggerProps, MenuContentProps, MenuItemProps } fro
 export { Select } from './components/Select';
 export type { SelectProps, SelectOption } from './components/Select';
 export { Combobox } from './components/Combobox';
-export type { ComboboxProps } from './components/Combobox';
+export type { ComboboxBaseProps, ComboboxProps } from './components/Combobox';
 export { DatePicker } from './components/DatePicker';
 export type {
   DatePickerProps,

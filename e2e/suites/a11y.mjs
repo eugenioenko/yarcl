@@ -64,6 +64,16 @@ export default async function (ctx) {
   await audit(ctx, 'date picker with disabled days open', '.yarcl-floating');
   await page.keyboard.press('Escape');
 
+  const visited = page.getByRole('combobox', { name: 'Countries visited' });
+  await visited.click();
+  await visited.fill('nor');
+  await page.keyboard.press('Enter');
+  await audit(ctx, 'multiple combobox open with chips');
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('ArrowLeft');
+  await audit(ctx, 'multiple combobox chip focused', '.yarcl-combobox-control');
+  await page.keyboard.press('Escape');
+
   await page.getByRole('button', { name: 'Filters' }).click();
   await audit(ctx, 'popover open', '.yarcl-floating');
   await page.keyboard.press('Escape');

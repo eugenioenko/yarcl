@@ -20,6 +20,21 @@ export default async function ({ page, check }) {
   const shade = page.getByRole('combobox', { name: 'Shade' });
   check('global default: other controls hairline', (await shade.evaluate((el) => getComputedStyle(el).borderRadius)) === '2px');
 
+  const occasions = page.locator('.yarcl-combobox-control', { has: page.getByRole('combobox', { name: 'Occasions' }) });
+  const chip = await occasions.locator('.yarcl-badge').evaluate((el) => {
+    const probe = document.createElement('span');
+    probe.className = 'yarcl-badge yarcl-color-ink yarcl-variant-wash yarcl-size-talla-m';
+    document.body.append(probe);
+    const expected = getComputedStyle(probe);
+    const s = getComputedStyle(el);
+    const result = { bg: s.backgroundColor === expected.backgroundColor, fg: s.color === expected.color, fs: s.fontSize === expected.fontSize };
+    probe.remove();
+    return result;
+  });
+  check('multiple combobox: chips use the soft variant and control size', chip.bg && chip.fg && chip.fs, JSON.stringify(chip));
+  check('multiple combobox: height matches talla-m controls', Math.abs((await occasions.boundingBox()).height - (await shade.boundingBox()).height) < 0.5);
+  check('multiple combobox: global radius hairline', (await occasions.evaluate((el) => getComputedStyle(el).borderRadius)) === '2px');
+
   const sleeve = page.getByRole('slider', { name: 'SLEEVE LENGTH Minimum' });
   check('slider: labelled by aria-labelledby plus thumb name', (await sleeve.count()) === 1);
   await sleeve.focus();

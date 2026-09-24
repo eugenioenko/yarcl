@@ -114,6 +114,19 @@ export const contract = (
       variant="subtle"
     />
     <DatePicker mode="range" defaultValue={{ from: new Date(), to: null }} onValueChange={(r: DateRange | null) => r} />
+    <Combobox options={[{ value: 'a', label: 'A' }]} defaultValue="a" onValueChange={(v: string | null) => v} />
+    <Combobox
+      multiple
+      options={[{ value: 'a', label: 'A' }]}
+      defaultValue={['a']}
+      onValueChange={(v: string[]) => v}
+      maxSelected={3}
+      allowCustomValue
+      name="tags"
+      size="lg"
+      radius="rounded"
+      color="success"
+    />
     <Dialog title="T" radius="xl" size="lg" />
     <Drawer title="T" side="left" />
     <CommandPalette
@@ -263,6 +276,20 @@ export const contract = (
     <DatePicker value={{ from: new Date(), to: null }} />
     {/* @ts-expect-error */}
     <DatePicker weekStartsOn={7} />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} multiple size="huge" />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} multiple defaultValue="a" />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} multiple onValueChange={(v: string | null) => v} />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} defaultValue={['a']} />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} onValueChange={(v: string[]) => v} />
+    {/* @ts-expect-error */}
+    <Combobox options={[]} maxSelected={2} />
+    {/* @ts-expect-error */}
+    <Combobox options={[{ value: 'a' as const, label: 'A' }]} multiple defaultValue={['b']} />
     {/* @ts-expect-error */}
     <Card radius="size" />
     {/* @ts-expect-error */}

@@ -61,6 +61,7 @@ export function FloatingDemo() {
   const [plan, setPlan] = useState<Plan | null>('pro');
   const [country, setCountry] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
+  const [visited, setVisited] = useState<string[]>(['sweden']);
   const [query, setQuery] = useState('');
   const [log, setLog] = useState('Nothing selected yet');
   const search = useFakeSearch(query);
@@ -152,6 +153,12 @@ export function FloatingDemo() {
             emptyMessage="No countries found"
             placeholder="Search remotely"
           />
+        </Field>
+        <Field label="Countries visited" description={`Pick up to 4. Value: ${visited.join(', ') || 'none'}`}>
+          <Combobox multiple options={countries} value={visited} onValueChange={setVisited} maxSelected={4} name="visited" placeholder="Add countries" />
+        </Field>
+        <Field label="Skills" description="Pick or type your own, then press Enter">
+          <Combobox multiple allowCustomValue options={frameworks} defaultValue={['React']} placeholder="Add skills" />
         </Field>
       </Inline>
     </Stack>

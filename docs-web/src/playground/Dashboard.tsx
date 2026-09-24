@@ -170,6 +170,9 @@ function SettingsForm() {
       <Field label="Country">
         <Combobox options={countries} placeholder="Search countries" />
       </Field>
+      <Field label="Data regions">
+        <Combobox multiple options={countries} defaultValue={['germany', 'sweden']} placeholder="Add regions" />
+      </Field>
       <Field label="Seats" description="Between 5 and 50 seats.">
         <Slider defaultValue={12} min={5} max={50} />
       </Field>

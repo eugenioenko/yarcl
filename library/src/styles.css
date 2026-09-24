@@ -46,6 +46,11 @@
   outline-offset: var(--yarcl-focus-offset);
 }
 
+.yarcl-combobox-control:has(> .yarcl-combobox-input:focus-visible) {
+  outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
+  outline-offset: var(--yarcl-focus-offset);
+}
+
 :where(.yarcl-tabs-trigger, .yarcl-tabs-panel, .yarcl-accordion-trigger):focus-visible {
   outline-offset: calc(var(--yarcl-focus-width) * -1);
 }
@@ -712,6 +717,78 @@ p.yarcl-text {
   width: var(--yarcl-icon);
   height: var(--yarcl-icon);
   color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-combobox-control {
+  --yarcl-combobox-pad: calc(var(--yarcl-h) * 0.2);
+  --yarcl-combobox-row: calc(var(--yarcl-h) - 2 * var(--yarcl-border-width) - 2 * var(--yarcl-combobox-pad));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--yarcl-combobox-pad) / 2);
+  min-width: 10rem;
+  height: auto;
+  min-height: var(--yarcl-h);
+  padding: var(--yarcl-combobox-pad) var(--yarcl-px);
+  cursor: text;
+}
+
+.yarcl-combobox-control:has(> .yarcl-combobox-chips) {
+  padding-inline-start: var(--yarcl-combobox-pad);
+}
+
+.yarcl-combobox-control:focus-within {
+  border-color: var(--yarcl-c);
+}
+
+.yarcl-combobox-control:has(> .yarcl-combobox-input[aria-invalid='true']) {
+  border-color: var(--yarcl-error);
+}
+
+.yarcl-combobox-control:has(> .yarcl-combobox-input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.yarcl-combobox-chips {
+  display: contents;
+}
+
+.yarcl-combobox-chips > li {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.yarcl-combobox-chips .yarcl-badge {
+  height: var(--yarcl-combobox-row);
+  padding-block: 0;
+}
+
+.yarcl-combobox-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yarcl-combobox-input {
+  flex: 1 1 4ch;
+  min-width: 4ch;
+  height: var(--yarcl-combobox-row);
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+.yarcl-combobox-input::placeholder {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-combobox-input:disabled {
+  cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
