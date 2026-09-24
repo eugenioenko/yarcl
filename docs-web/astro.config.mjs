@@ -11,6 +11,10 @@ export default defineConfig({
       description: 'A React component library where your config file is the design system.',
       logo: { src: './src/assets/yarcl.svg' },
       favicon: '/yarcl.svg',
+      head: [
+        { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
+      ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/eugenioenko/yarcl' }],
       customCss: ['./src/styles/custom.css'],
       sidebar: [
