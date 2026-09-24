@@ -23,6 +23,7 @@ export default async function ({ page, check }) {
   await page.getByRole('button', { name: 'Size guide' }).click();
   const guide = page.getByRole('dialog', { name: 'Size guide' });
   check('size guide dialog with table', await guide.getByRole('table', { name: 'Chest and length' }).isVisible());
+  check("dialog uses the consumer's modal size (regular = 34rem)", Math.abs((await guide.boundingBox()).width - 34 * 16) < 2, String((await guide.boundingBox()).width));
   await page.keyboard.press('Escape');
 
   await page.getByRole('link', { name: 'Design reference' }).click();

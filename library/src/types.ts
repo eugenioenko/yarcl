@@ -16,6 +16,8 @@ export type Spacing = keyof Config['spacing'] & string;
 export type Shadow = keyof Config['shadows'] & string;
 /** A key of the consumer's `density` config. */
 export type Density = keyof Config['density'] & string;
+/** A key of the consumer's `modalSizes` config. */
+export type ModalSize = keyof Config['modalSizes'] & string;
 /** A key of the consumer's `typography.styles` config. */
 export type TextStyle = keyof Config['typography']['styles'] & string;
 

@@ -19,6 +19,7 @@ import {
   toast,
   config,
   type Color,
+  type ModalSize,
 } from 'yarcl';
 import { PlusIcon, SearchIcon, TrashIcon } from './icons';
 
@@ -49,7 +50,7 @@ export function DialogControlledDemo() {
         onOpenChange={setOpen}
         title="Delete project?"
         description="This removes the project and all of its data. It can't be undone."
-        width="26rem"
+        size="sm"
         footer={
           <>
             <Button variant="outline" color="neutral" onClick={() => setOpen(false)}>
@@ -61,6 +62,31 @@ export function DialogControlledDemo() {
           </>
         }
       />
+    </>
+  );
+}
+
+const modalSizes = Object.keys(config.modalSizes) as ModalSize[];
+
+export function DialogSizesDemo() {
+  return (
+    <>
+      {modalSizes.map((size) => (
+        <Dialog
+          key={size}
+          size={size}
+          trigger={
+            <Button variant="outline" color="neutral">
+              {size}
+            </Button>
+          }
+          title={`size="${size}"`}
+          description={`${config.modalSizes[size]} wide, from modalSizes in the config.`}
+          footer={<Button>Done</Button>}
+        >
+          <Text as="p">The height follows the content, up to the height of the screen.</Text>
+        </Dialog>
+      ))}
     </>
   );
 }

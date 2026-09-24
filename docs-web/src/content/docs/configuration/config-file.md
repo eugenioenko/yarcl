@@ -33,6 +33,7 @@ export default defineConfig({
 | `spacing` | open | `gap`, `padding` | [Spacing, shadows, density](/configuration/spacing-shadows-density/) |
 | `shadows` | open | `shadow`, floating panels | [Spacing, shadows, density](/configuration/spacing-shadows-density/) |
 | `density` | open | `Table` density | [Spacing, shadows, density](/configuration/spacing-shadows-density/) |
+| `modalSizes` | open | `Dialog` and `Drawer` width | [Sizes and radii](/configuration/sizes-and-radii/#modal-sizes) |
 | `typography` | `fontFaces`, `families`, `styles` (open), `headings` | `Text`, `Heading`, labels | [Typography](/configuration/typography/) |
 | `zIndex` | `dropdown`, `tooltip`, `dialog`, `toast` + any | stacking of floating layers | [Motion, layers and focus](/configuration/motion-layers-focus/) |
 | `motion` | `fast`, `base`, `easing` + any | transitions | [Motion, layers and focus](/configuration/motion-layers-focus/) |

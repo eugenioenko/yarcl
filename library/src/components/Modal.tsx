@@ -4,14 +4,13 @@ import {
   useEffect,
   useId,
   useRef,
-  type CSSProperties,
   type MouseEvent,
   type ReactElement,
   type ReactNode,
 } from 'react';
 import { cx, radiusClass, typeClass } from '../classes';
 import { useControllable } from '../hooks';
-import type { Radius } from '../types';
+import type { ModalSize, Radius } from '../types';
 
 /** Props shared by {@link Dialog} and {@link Drawer}. */
 export interface ModalProps {
@@ -39,8 +38,25 @@ export interface ModalProps {
    * @default true
    */
   closeOnBackdrop?: boolean;
-  /** Width as a CSS length, e.g. `'40rem'`. */
-  width?: string;
+  /**
+   * Width, from the `modalSizes` config. Height follows the content, up to the viewport.
+   * @default config.defaults.modalSize (Drawer: its component default, `sm` in the library defaults)
+   */
+  size?: ModalSize;
+}
+
+const openModals: HTMLDialogElement[] = [];
+
+function syncBackdrops() {
+  openModals.forEach((dialog, i) => dialog.toggleAttribute('data-yarcl-covered', i < openModals.length - 1));
+}
+
+function removeOpenModal(dialog: HTMLDialogElement) {
+  const index = openModals.indexOf(dialog);
+  if (index === -1) return;
+  openModals.splice(index, 1);
+  dialog.removeAttribute('data-yarcl-covered');
+  syncBackdrops();
 }
 
 function CloseIcon() {
@@ -61,7 +77,7 @@ export function Modal({
   defaultOpen = false,
   onOpenChange,
   closeOnBackdrop = true,
-  width,
+  size,
   className,
   radius,
 }: ModalProps & { className: string; radius?: Radius }) {
@@ -73,9 +89,22 @@ export function Modal({
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    else if (!open && dialog.open) dialog.close();
+    if (open && !dialog.open) {
+      dialog.showModal();
+      openModals.push(dialog);
+      syncBackdrops();
+    } else if (!open) {
+      if (dialog.open) dialog.close();
+      removeOpenModal(dialog);
+    }
   }, [open]);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    return () => {
+      if (dialog) removeOpenModal(dialog);
+    };
+  }, []);
 
   return (
     <>
@@ -88,12 +117,11 @@ export function Modal({
         })}
       <dialog
         ref={ref}
-        className={cx('yarcl-modal', radiusClass(radius), className)}
+        className={cx('yarcl-modal', `yarcl-modal-size-${size ?? config.defaults.modalSize}`, radiusClass(radius), className)}
         aria-labelledby={titleId}
         aria-describedby={description != null ? descriptionId : undefined}
-        style={width ? ({ '--yarcl-modal-width': width } as CSSProperties) : undefined}
-        onClose={() => {
-          if (open) setOpen(false);
+        onClose={(event) => {
+          if (event.target === event.currentTarget && open) setOpen(false);
         }}
         onClick={(event) => {
           if (closeOnBackdrop && event.target === event.currentTarget) setOpen(false);

@@ -107,7 +107,8 @@ export interface ComponentTokenProps {
   Card: 'radius' | 'padding' | 'shadow';
   Popover: 'radius' | 'padding';
   HoverCard: 'radius' | 'padding';
-  Dialog: 'radius';
+  Dialog: 'radius' | 'size';
+  Drawer: 'size';
   Menu: 'size';
   Tabs: 'size' | 'color';
   Table: 'density';
@@ -126,7 +127,7 @@ export type ComponentName = keyof ComponentTokenProps;
 /**
  * The structure every yarcl config must satisfy.
  *
- * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `typography`) take any keys;
+ * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `modalSizes`, `typography`) take any keys;
  * those keys become the valid prop values. Groups with required keys (`neutrals`, `zIndex`,
  * `motion`, `borders`) must include the keys the library depends on, and accept any extra
  * keys, which are emitted as CSS variables for the consumer's own styles.
@@ -163,6 +164,11 @@ export interface YarclShape {
   shadows: Record<string, string>;
   /** Table densities. Keys become the valid values of the `density` prop. */
   density: Record<string, DensityToken>;
+  /**
+   * Widths of `Dialog` and `Drawer`, e.g. `{ sm: '24rem', md: '32rem', full: '100vw' }`.
+   * Keys become the valid values of their `size` prop. Separate from `sizes`, which sets control heights.
+   */
+  modalSizes: Record<string, string>;
   /** Font files, font families, named text styles and heading levels. */
   typography: {
     /** Font files to load. Reference their `family` names in `families`. */
@@ -229,6 +235,8 @@ export interface YarclShape {
     density: string;
     /** Variant for low-emphasis components such as `Badge` and `Alert`. A key of `variants`. */
     softVariant: string;
+    /** Width of `Dialog` and `Drawer`. A key of `modalSizes`. */
+    modalSize: string;
   };
 }
 
@@ -255,7 +263,15 @@ interface TokenKeys<T extends YarclShape> {
 
 type ComponentChecks<T extends YarclShape> = {
   [C in keyof T['components']]: C extends ComponentName
-    ? { [P in keyof T['components'][C]]: P extends ComponentTokenProps[C] ? TokenKeys<T>[P] : never }
+    ? {
+        [P in keyof T['components'][C]]: P extends ComponentTokenProps[C]
+          ? C extends 'Dialog' | 'Drawer'
+            ? P extends 'size'
+              ? keyof T['modalSizes']
+              : TokenKeys<T>[P]
+            : TokenKeys<T>[P]
+          : never;
+      }
     : { error: `Unknown component "${C & string}"` };
 };
 
@@ -272,6 +288,7 @@ type Checks<T extends YarclShape> = {
   spacing: KeyCheck<T['spacing']>;
   shadows: KeyCheck<T['shadows']>;
   density: KeyCheck<T['density']>;
+  modalSizes: KeyCheck<T['modalSizes']>;
   typography: {
     families: KeyCheck<T['typography']['families']>;
     styles: KeyCheck<T['typography']['styles']> & {
@@ -294,6 +311,7 @@ type Checks<T extends YarclShape> = {
     floatingShadow: keyof T['shadows'];
     density: keyof T['density'];
     softVariant: keyof T['variants'];
+    modalSize: keyof T['modalSizes'];
   };
 };
 

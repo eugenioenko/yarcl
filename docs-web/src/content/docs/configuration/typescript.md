@@ -24,7 +24,7 @@ Because `@yarcl/config` resolves to your file (through `paths` in your `tsconfig
 Use them to type your own components:
 
 ```ts
-import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from 'yarcl';
+import type { Color, Density, ModalSize, Radius, Shadow, Size, Spacing, TextStyle, Variant } from 'yarcl';
 
 interface PriceTagProps {
   tone?: Color;

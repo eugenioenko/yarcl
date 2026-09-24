@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Inline, Input, Stack, Table, Text } from 'yarcl';
+import { Badge, Button, Dialog, Heading, Inline, Input, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -25,5 +25,7 @@ export const contract = (
     <Badge variant="subtle" />
     {/* @ts-expect-error */}
     <Table density="regular" />
+    {/* @ts-expect-error */}
+    <Dialog title="T" size="md" />
   </>
 );

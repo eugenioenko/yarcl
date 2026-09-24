@@ -116,7 +116,7 @@ export function App() {
                   }
                   title="Size guide"
                   description="Body measurements in centimetres."
-                  width="34rem"
+                  size="regular"
                 >
                   <Table caption="Chest and length">
                     <Table.Head>

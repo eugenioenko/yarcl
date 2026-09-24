@@ -149,6 +149,12 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     root.push([`--yarcl-shadow-${k}`, value]);
     rules.push(rule(`.yarcl-shadow-${k}`, [['box-shadow', `var(--yarcl-shadow-${k})`]]));
   }
+  for (const [key, value] of Object.entries(config.modalSizes)) {
+    const k = ident(key);
+    root.push([`--yarcl-modal-${k}`, value]);
+    rules.push(rule(`.yarcl-modal-size-${k}`, [['--yarcl-modal-width', `var(--yarcl-modal-${k})`]]));
+  }
+
   for (const [key, density] of Object.entries(config.density)) {
     rules.push(
       rule(`.yarcl-density-${ident(key)}`, [

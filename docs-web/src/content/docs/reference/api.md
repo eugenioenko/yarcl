@@ -35,6 +35,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 |---|---|
 | `Size`, `Radius`, `Color`, `Variant` | keys of `sizes`, `radii`, `colors`, `variants` in your config |
 | `Spacing`, `Shadow`, `Density`, `TextStyle` | keys of `spacing`, `shadows`, `density`, `typography.styles` |
+| `ModalSize` | keys of `modalSizes` |
 | `TokenProps`, `VariantProps` | the shared `size` / `radius` / `color` and `variant` props |
 | `SelectOption` | `{ value, label, disabled? }` for `Select` and `Combobox` |
 | `YarclShape`, `ColorToken`, `SizeToken`, `VariantToken`, … | the config schema, from `yarcl/define` |

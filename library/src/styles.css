@@ -597,7 +597,12 @@ html:has(.yarcl-modal[open]) {
   animation: yarcl-fade var(--yarcl-motion-base) var(--yarcl-motion-easing);
 }
 
+.yarcl-modal[data-yarcl-covered]::backdrop {
+  background: transparent;
+}
+
 .yarcl-dialog {
+  margin: auto;
   width: min(var(--yarcl-modal-width, 32rem), calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
   border-radius: min(var(--yarcl-r), 1rem);

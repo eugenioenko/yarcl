@@ -9,6 +9,15 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   check('dialog has description', (await invite.getAttribute('aria-describedby')) !== null);
   check('focus moves into dialog', await focused(invite));
   check('page scroll locked', (await htmlOverflow()) === 'hidden');
+  const backdrop = (locator) => locator.evaluate((el) => getComputedStyle(el, '::backdrop').backgroundColor);
+  await invite.getByRole('button', { name: 'Open nested dialog' }).click();
+  const nested = page.getByRole('dialog', { name: 'Nested dialog' });
+  check('nested dialog opens', await nested.isVisible());
+  const [under, top] = [await backdrop(invite), await backdrop(nested)];
+  check('only the top dialog shows a backdrop', under === 'rgba(0, 0, 0, 0)' && top !== 'rgba(0, 0, 0, 0)', `${under} / ${top}`);
+  await page.keyboard.press('Escape');
+  check('Esc closes only the top dialog', !(await nested.isVisible()) && (await invite.isVisible()));
+  check('lower dialog backdrop restored', (await backdrop(invite)) !== 'rgba(0, 0, 0, 0)', await backdrop(invite));
   await page.getByRole('button', { name: 'Toast from dialog' }).click();
   const inner = page.getByRole('status').filter({ hasText: 'From inside the dialog' });
   check('toast shows above modal dialog', await inner.isVisible());
@@ -40,8 +49,15 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   await page.getByRole('button', { name: 'Controlled dialog' }).click();
   const confirm = page.getByRole('dialog', { name: 'Delete project?' });
   check('controlled dialog opens', await confirm.isVisible());
+  await page.addStyleTag({ content: '* { margin: 0 }' });
+  const dialogBox = await confirm.boundingBox();
+  const viewport = page.viewportSize();
+  const centered =
+    Math.abs(dialogBox.x - (viewport.width - dialogBox.x - dialogBox.width)) < 2 &&
+    Math.abs(dialogBox.y - (viewport.height - dialogBox.y - dialogBox.height)) < 2;
+  check('dialog stays centered under a CSS reset', centered, JSON.stringify(dialogBox));
   const width = (await confirm.boundingBox()).width;
-  check('width prop applied', Math.abs(width - 26 * 16) < 2, String(width));
+  check('size prop applied (sm = 24rem)', Math.abs(width - 24 * 16) < 2, String(width));
   await confirm.getByRole('button', { name: 'Delete' }).click();
   check('controlled dialog closes', !(await confirm.isVisible()));
   const deleted = page.getByRole('status').filter({ hasText: 'Project deleted' });

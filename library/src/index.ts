@@ -77,6 +77,7 @@ export type {
   Shadow,
   TextStyle,
   Density,
+  ModalSize,
   Align,
   Justify,
   TokenProps,

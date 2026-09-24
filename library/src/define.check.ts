@@ -156,3 +156,23 @@ defineConfig({
 });
 
 defineConfig({ ...defaults, defaults: { ...defaults.defaults, radius: 'square' } });
+
+defineConfig({
+  ...defaults,
+  modalSizes: { ...defaults.modalSizes, huge: '80rem' },
+  components: { Dialog: { size: 'huge' }, Drawer: { size: 'sm' } },
+});
+
+defineConfig({
+  ...defaults,
+  components: {
+    // @ts-expect-error
+    Dialog: { size: 'giant' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error
+  defaults: { ...defaults.defaults, modalSize: 'giant' },
+});

@@ -46,6 +46,11 @@ export default defineConfig({
   density: {
     cozy: { paddingX: '1rem', paddingY: '0.75rem', fontSize: '0.8125rem' },
   },
+  modalSizes: {
+    narrow: '22rem',
+    regular: '34rem',
+    wide: '52rem',
+  },
   typography: {
     fontFaces: [{ family: 'Fraunces', src: '/fonts/fraunces.woff2', weight: '100 900' }],
     families: {
@@ -71,6 +76,7 @@ export default defineConfig({
     Button: { radius: 'square' },
     IconButton: { radius: 'square' },
     ToggleGroup: { radius: 'square' },
+    Drawer: { size: 'narrow' },
   },
   defaults: {
     size: 'talla-m',
@@ -86,5 +92,6 @@ export default defineConfig({
     floatingShadow: 'float',
     density: 'cozy',
     softVariant: 'wash',
+    modalSize: 'regular',
   },
 });

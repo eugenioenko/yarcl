@@ -49,6 +49,13 @@ export default defineConfig({
     compact: { paddingX: '0.5rem', paddingY: '0.25rem', fontSize: '0.8125rem' },
     comfortable: { paddingX: '0.75rem', paddingY: '0.625rem', fontSize: '0.875rem' },
   },
+  modalSizes: {
+    sm: '24rem',
+    md: '32rem',
+    lg: '48rem',
+    xl: '64rem',
+    full: '100vw',
+  },
   typography: {
     families: {
       sans: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
@@ -83,5 +90,9 @@ export default defineConfig({
     floatingShadow: 'md',
     density: 'comfortable',
     softVariant: 'soft',
+    modalSize: 'md',
+  },
+  components: {
+    Drawer: { size: 'sm' },
   },
 });

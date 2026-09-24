@@ -62,6 +62,7 @@ export default defineConfig({
   focusRing: { ...defaults.focusRing, color: 'brand' },
   components: {
     Badge: { radius: 'rounded' },
+    Drawer: { size: 'sm' },
   },
   defaults: {
     size: 'md',
@@ -77,5 +78,6 @@ export default defineConfig({
     floatingShadow: 'md',
     density: 'regular',
     softVariant: 'subtle',
+    modalSize: 'md',
   },
 });

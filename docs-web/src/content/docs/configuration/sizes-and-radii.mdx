@@ -61,6 +61,24 @@ components: { Button: { radius: 'square' } } // except buttons
 
 See [component defaults](/configuration/component-defaults/) for per-component overrides.
 
+## Modal sizes
+
+`modalSizes` is a separate open group for the widths of [dialogs](/components/overlays/dialog/) and [drawers](/components/overlays/drawer/). It's separate from `sizes` because the two scales measure different things: control sizes set a button's height, modal sizes set a panel's width.
+
+```ts
+modalSizes: {
+  sm: '24rem',
+  md: '32rem',
+  lg: '48rem',
+  xl: '64rem',
+  full: '100vw',
+},
+defaults: { modalSize: 'md' },
+components: { Drawer: { size: 'sm' } },
+```
+
+Widths are capped to the screen, so `full` leaves a small margin around dialogs.
+
 ### Matching radius to size (opt-in)
 
 Set `defaults.radius: 'size'` to give each control the radius named like its size: an `lg` button gets `radii.lg`, an `sm` input gets `radii.sm`. Components without a size use the radius of `defaults.size`. `size` is reserved and can't be used as a radius key.

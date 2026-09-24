@@ -57,6 +57,16 @@ export function OverlaysDemo() {
             <Text textStyle="caption" muted>
               Press Esc or click outside to close.
             </Text>
+            <Dialog
+              trigger={
+                <Button variant="outline" color="neutral" size="sm">
+                  Open nested dialog
+                </Button>
+              }
+              title="Nested dialog"
+              description="Only this dialog's backdrop is visible."
+              size="sm"
+            />
           </Stack>
         </Dialog>
 
@@ -68,7 +78,7 @@ export function OverlaysDemo() {
           onOpenChange={setConfirmOpen}
           title="Delete project?"
           description="This removes the project and all of its data. It can't be undone."
-          width="26rem"
+          size="sm"
           footer={
             <>
               <Button variant="outline" color="neutral" onClick={() => setConfirmOpen(false)}>

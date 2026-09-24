@@ -72,7 +72,7 @@ export const contract = (
     </Menu>
     <Select options={[{ value: 'a', label: 'A' }]} size="lg" radius="rounded" color="success" />
     <Combobox options={[]} filter={false} allowCustomValue size="xs" />
-    <Dialog title="T" radius="xl" width="40rem" />
+    <Dialog title="T" radius="xl" size="lg" />
     <Drawer title="T" side="left" />
     <Tabs defaultValue="a" size="sm" color="success" />
     <Tabs value="a" onValueChange={() => {}} />
@@ -141,6 +141,10 @@ export const contract = (
     <Dialog />
     {/* @ts-expect-error */}
     <Drawer title="T" side="top" />
+    {/* @ts-expect-error */}
+    <Dialog title="T" size="huge" />
+    {/* @ts-expect-error */}
+    <Dialog title="T" width="40rem" />
     {/* @ts-expect-error */}
     <Tabs />
     {/* @ts-expect-error */}

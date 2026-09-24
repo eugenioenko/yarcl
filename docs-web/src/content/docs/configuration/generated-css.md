@@ -25,6 +25,7 @@ Components never set inline styles. They render class names, and all values come
 | `--yarcl-space-{key}` | `spacing` |
 | `--yarcl-shadow-{key}` | `shadows` |
 | `--yarcl-font-{key}` | `typography.families` |
+| `--yarcl-modal-{key}` | `modalSizes` |
 | `--yarcl-z-{key}` | `zIndex` |
 | `--yarcl-motion-{key}` | `motion` |
 | `--yarcl-border-{key}` | `borders` |
@@ -46,6 +47,7 @@ One class per key, shared by every component:
 | `yarcl-gap-{key}`, `yarcl-padding-{key}` | `gap`, `padding` |
 | `yarcl-shadow-{key}` | `box-shadow` |
 | `yarcl-density-{key}` | table cell padding and font size |
+| `yarcl-modal-size-{key}` | `--yarcl-modal-width` |
 | `yarcl-type-{key}` | font family, size, weight, line height, letter spacing |
 
 A button renders like this:

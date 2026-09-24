@@ -7,7 +7,7 @@ sidebar:
 
 import Preview from '@/components/Preview.astro';
 import Props from '@/components/Props.astro';
-import { DialogControlledDemo, DialogDemo } from '@/demos/overlays';
+import { DialogControlledDemo, DialogDemo, DialogSizesDemo } from '@/demos/overlays';
 
 ```tsx
 import { Dialog } from 'yarcl';
@@ -37,8 +37,22 @@ import { Dialog } from 'yarcl';
 ```tsx
 const [open, setOpen] = useState(false);
 
-<Dialog open={open} onOpenChange={setOpen} title="Delete project?" width="26rem" footer={…} />
+<Dialog open={open} onOpenChange={setOpen} title="Delete project?" size="sm" footer={…} />
 ```
+
+## Sizes
+
+`size` sets the width and accepts the keys of your config's [`modalSizes`](/configuration/sizes-and-radii/#modal-sizes). The default is `defaults.modalSize`. The height always follows the content, up to the height of the screen, and the body scrolls when it doesn't fit.
+
+<Preview>
+  <DialogSizesDemo client:visible />
+</Preview>
+
+```tsx
+<Dialog size="lg" title="Edit invoice">…</Dialog>
+```
+
+There's no free-form width: every dialog width in your app comes from the config.
 
 ## Behavior
 
@@ -50,6 +64,12 @@ Built on `<dialog>` with `showModal()`, so the browser handles the hard parts:
 - focus returns to the element that opened it
 
 `title` is the dialog's accessible name; `description` its accessible description.
+
+## Nested dialogs
+
+A dialog can open another dialog. Only the topmost one shows a backdrop, so the page and the dialogs below are dimmed once, not once per dialog. <kbd>Esc</kbd> closes only the top dialog, and the one below gets its backdrop back.
+
+Dialogs center themselves with `margin: auto` rather than relying on the browser's default, so CSS resets like `* { margin: 0 }` don't push them into the corner.
 
 ## Props
 

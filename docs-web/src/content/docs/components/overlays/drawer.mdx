@@ -29,6 +29,18 @@ import { Drawer } from 'yarcl';
 
 Same behavior as [Dialog](/components/overlays/dialog/). The drawer fills the screen height; its body scrolls while the header and footer stay in place.
 
+## Sizes
+
+`size` sets the width, from the same [`modalSizes`](/configuration/sizes-and-radii/#modal-sizes) as dialogs. Drawers are usually narrower than dialogs, so the library defaults set a component default:
+
+```ts
+components: { Drawer: { size: 'sm' } }
+```
+
+```tsx
+<Drawer size="lg" title="Order details">…</Drawer>
+```
+
 ## Props
 
 <Props of="DrawerProps" />

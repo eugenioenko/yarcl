@@ -22,6 +22,7 @@ sidebar:
 | `gap`, `padding` | layout components, cards, overlays |
 | `floatingShadow` | popovers, menus, dialogs, toasts |
 | `density` | `Table` |
+| `modalSize` | `Dialog`, `Drawer` |
 
 ## Per-component defaults
 
@@ -64,7 +65,8 @@ For any token prop, the first value found wins:
 | `Alert` | `radius`, `color`, `variant` |
 | `Card` | `radius`, `padding`, `shadow` |
 | `Popover`, `HoverCard` | `radius`, `padding` |
-| `Dialog` | `radius` |
+| `Dialog` | `radius`, `size` (from `modalSizes`) |
+| `Drawer` | `size` (from `modalSizes`) |
 | `Menu` | `size` |
 | `Tabs` | `size`, `color` |
 | `Table` | `density` |

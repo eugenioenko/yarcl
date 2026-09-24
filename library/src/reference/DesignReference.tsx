@@ -316,6 +316,13 @@ export function DesignReference({ title = 'Design reference' }: DesignReferenceP
         />
       </Section>
 
+      <Section title="Modal sizes" description="Widths of dialogs and drawers.">
+        <KeyValues
+          caption="Modal sizes"
+          rows={Object.entries(shape.modalSizes).map(([key, value]): [string, ReactNode] => [key, <Code>{value}</Code>])}
+        />
+      </Section>
+
       <Section title="Density">
         <KeyValues
           caption="Table density"

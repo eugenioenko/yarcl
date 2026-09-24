@@ -74,6 +74,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 | `spacing` | open | `gap`, `padding` |
 | `shadows` | open | `shadow` prop, floating panels |
 | `density` | open, `{ paddingX, paddingY, fontSize }` | `Table` |
+| `modalSizes` | open, widths | `Dialog` and `Drawer` `size` |
 | `typography` | `fontFaces`, `families`, `styles` (open), `headings` h1–h6 | `Text`, `Heading`, labels |
 | `zIndex`, `motion`, `borders` | required keys + any | layering, transitions |
 | `focusRing`, `defaults` | references to keys above | focus outline, omitted props |
