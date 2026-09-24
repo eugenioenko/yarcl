@@ -1,5 +1,5 @@
 import { defineConfig } from '../define';
-import defaults from '../yarcl.default.config';
+import defaults from '../yarcl.config';
 import type { ThemeContract } from './contract';
 
 const ink = 'light-dark(#000000, #ffffff)';

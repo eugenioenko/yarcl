@@ -17,7 +17,7 @@ export interface YarclPluginOptions {
 
 const VIRTUAL_CSS = 'virtual:yarcl.css';
 const RESOLVED_CSS = '\0' + VIRTUAL_CSS;
-const defaultConfig = fileURLToPath(new URL('./yarcl.default.config.ts', import.meta.url));
+const defaultConfig = fileURLToPath(new URL('./yarcl.config.ts', import.meta.url));
 
 /**
  * Vite plugin that connects the library to the consumer's config.

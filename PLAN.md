@@ -66,7 +66,7 @@ A component library where the **consumer's config is the design system**. The li
 
 ## Config schema
 
-Implemented in `library/src/define.ts`. Library defaults in `library/src/yarcl.default.config.ts`; consumers spread `yarcl/defaults` to extend instead of replace.
+Implemented in `library/src/define.ts`. Library defaults in `library/src/yarcl.config.ts`, the same filename a consumer uses; consumers spread `yarcl/defaults` to extend instead of replace.
 
 ```ts
 import { defineConfig } from 'yarcl/define';
@@ -186,7 +186,7 @@ Contract tests: `library/src/define.check.ts`, `consumer/src/contract.check.tsx`
 4. **Floating** ✅ — `Popover` → `Listbox` → `Menu`, `Select`, `Combobox`, `Tooltip`, `HoverCard`
 5. **Overlays, navigation, data** ✅ — `Dialog`, `Drawer`, `Toast`, `Tabs`, `Table` (+ `density`)
 6. **Feedback** ✅ — `Badge`, `Alert`, `Spinner`, `Skeleton`
-7. **Showcase** ✅ — `DesignReference` from config; `consumer-b` (Maison Talla) with a different brand, web font and keys; TypeDoc API docs (`pnpm docs:api`); ADR 0001 (alias vs augmentation vs codegen); README; e2e suites in repo (`pnpm test:e2e`)
+7. **Showcase** ✅ — `DesignReference` from config; `e2e/consumer` (Maison Talla, originally `consumer-b`) with a different brand, web font and keys; TypeDoc API docs (`pnpm docs:api`); ADR 0001 (alias vs augmentation vs codegen); README; e2e suites in repo (`pnpm test:e2e`)
    - Also added: `typography.fontFaces`, `typography.headings`, `defaults.labelStyle` / `helperStyle`, `ButtonGroup`, `ToggleGroup`, `RadioGroup`
 
 ## Out of scope

@@ -1,5 +1,5 @@
 import { defineConfig } from '../define';
-import defaults from '../yarcl.default.config';
+import defaults from '../yarcl.config';
 import type { ThemeContract } from './contract';
 
 /** Calm and considered: terracotta on cream, light grotesque type, square corners, flat surfaces, generous spacing. */

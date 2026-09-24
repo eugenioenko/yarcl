@@ -21,17 +21,17 @@ import overlays from './suites/overlays.mjs';
  */
 
 const root = resolve(fileURLToPath(import.meta.url), '../..');
-const apps = { consumer: 'consumer', 'consumer-b': 'consumer-b' };
+const apps = { consumer: 'consumer', fixture: 'e2e/consumer' };
 const suites = [
   ['consumer', 'floating', floating],
   ['consumer', 'overlays', overlays],
   ['consumer', 'feedback', feedback],
   ['consumer', 'groups', groups],
-  ['consumer-b', 'brand-b', brandB],
+  ['fixture', 'brand-b', brandB],
   ['consumer', 'a11y', a11y],
-  ['consumer-b', 'a11y-brand-b', a11yBrandB],
+  ['fixture', 'a11y-brand-b', a11yBrandB],
   ['consumer', 'focus', focus],
-  ['consumer-b', 'focus-brand-b', focusBrandB],
+  ['fixture', 'focus-brand-b', focusBrandB],
 ];
 const only = process.argv[2];
 

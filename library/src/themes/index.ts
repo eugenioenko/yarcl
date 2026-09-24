@@ -1,4 +1,4 @@
-import defaults from '../yarcl.default.config';
+import defaults from '../yarcl.config';
 import { brutalist } from './brutalist';
 import { compact } from './compact';
 import { editorial } from './editorial';

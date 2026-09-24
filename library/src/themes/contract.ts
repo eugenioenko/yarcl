@@ -1,5 +1,5 @@
 import type { ColorToken, DensityToken, SizeToken, TextStyleToken, VariantToken } from '../define';
-import type defaults from '../yarcl.default.config';
+import type defaults from '../yarcl.config';
 
 type Defaults = typeof defaults;
 

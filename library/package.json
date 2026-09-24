@@ -6,7 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./define": "./src/define.ts",
-    "./defaults": "./src/yarcl.default.config.ts",
+    "./defaults": "./src/yarcl.config.ts",
     "./plugin": "./src/plugin.ts",
     "./reference": "./src/reference/index.ts",
     "./themes": "./src/themes/index.ts",

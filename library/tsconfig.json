@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "types": ["vite/client", "node"],
     "paths": {
-      "@yarcl/config": ["./src/yarcl.default.config.ts"]
+      "@yarcl/config": ["./src/yarcl.config.ts"]
     }
   },
   "include": ["src"]
