@@ -16,6 +16,7 @@ import {
   ToggleGroup,
   type Radius,
   type Size,
+  type Spacing,
 } from 'yarcl';
 
 const palettes = {
@@ -29,6 +30,7 @@ type Palette = keyof typeof palettes;
 
 const radii = ['square', 'sm', 'md', 'lg', 'xl'] as const;
 const allSizes = ['sm', 'md', 'lg'] as const;
+const spacings = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 const usedSize = 'lg';
 
 function readableOn(hex: string) {
@@ -50,6 +52,8 @@ export function ConfigPlayground() {
   const [sizes, setSizes] = useState<string[]>([...allSizes]);
   const [defaultSize, setDefaultSize] = useState<string>('md');
   const [scheme, setScheme] = useState<string>('light');
+  const [padding, setPadding] = useState<Spacing>('lg');
+  const [gap, setGap] = useState<Spacing>('md');
 
   const color = palettes[palette];
   const errors: string[] = [];
@@ -80,6 +84,8 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
     ...defaults.defaults,
     size: '${defaultSize}',
     radius: '${radius}',
+    padding: '${padding}',
+    gap: '${gap}',
   },
 });`;
 
@@ -131,6 +137,26 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </ToggleGroup>
         </Stack>
         <Stack gap="xs">
+          <Text textStyle="label">defaults.padding</Text>
+          <ToggleGroup type="single" required value={padding} onValueChange={(v) => v && setPadding(v as Spacing)} size="sm" aria-label="Default padding">
+            {spacings.map((key) => (
+              <ToggleGroup.Item key={key} value={key}>
+                {key}
+              </ToggleGroup.Item>
+            ))}
+          </ToggleGroup>
+        </Stack>
+        <Stack gap="xs">
+          <Text textStyle="label">defaults.gap</Text>
+          <ToggleGroup type="single" required value={gap} onValueChange={(v) => v && setGap(v as Spacing)} size="sm" aria-label="Default gap">
+            {spacings.map((key) => (
+              <ToggleGroup.Item key={key} value={key}>
+                {key}
+              </ToggleGroup.Item>
+            ))}
+          </ToggleGroup>
+        </Stack>
+        <Stack gap="xs">
           <Text textStyle="label">Color scheme</Text>
           <ToggleGroup type="single" required value={scheme} onValueChange={(v) => v && setScheme(v)} size="sm" aria-label="Preview color scheme">
             <ToggleGroup.Item value="light">light</ToggleGroup.Item>
@@ -140,8 +166,8 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
       </Stack>
 
       <div className="playground-preview" style={preview}>
-        <Card radius={r} shadow="md" className="playground-card">
-          <Stack>
+        <Card radius={r} padding={padding} shadow="md" className="playground-card">
+          <Stack gap={gap}>
             <Inline justify="between">
               <Heading level={3}>Create workspace</Heading>
               <Badge radius={r} size={size}>
