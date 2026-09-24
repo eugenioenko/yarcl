@@ -46,6 +46,15 @@ const plans = [
   { value: 'business', label: 'Business' },
 ];
 
+function ControlLabel({ label, configKey }: { label: string; configKey?: string }) {
+  return (
+    <Inline gap="xs" align="baseline">
+      <Text textStyle="label">{label}</Text>
+      {configKey && <code className="playground-key">{configKey}</code>}
+    </Inline>
+  );
+}
+
 export function ConfigPlayground() {
   const [palette, setPalette] = useState<Palette>('blue');
   const [radius, setRadius] = useState<(typeof radii)[number]>('md');
@@ -93,7 +102,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
     <div className="playground">
       <Stack className="playground-controls">
         <Stack gap="xs">
-          <Text textStyle="label">Brand color</Text>
+          <ControlLabel label="Brand color" configKey="colors.primary" />
           <ToggleGroup type="single" required value={palette} onValueChange={(v) => v && setPalette(v as Palette)} size="sm" attached={false} aria-label="Brand color">
             {(Object.keys(palettes) as Palette[]).map((key) => (
               <ToggleGroup.Item key={key} value={key} icon aria-label={key}>
@@ -103,7 +112,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </ToggleGroup>
         </Stack>
         <Stack gap="xs">
-          <Text textStyle="label">defaults.radius</Text>
+          <ControlLabel label="Default radius" configKey="defaults.radius" />
           <ToggleGroup type="single" required value={radius} onValueChange={(v) => v && setRadius(v as typeof radius)} size="sm" aria-label="Default radius">
             {radii.map((key) => (
               <ToggleGroup.Item key={key} value={key}>
@@ -113,7 +122,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </ToggleGroup>
         </Stack>
         <Stack gap="xs">
-          <Text textStyle="label">Keys in sizes</Text>
+          <ControlLabel label="Available sizes" configKey="sizes" />
           <Inline gap="md">
             {allSizes.map((key) => (
               <Checkbox
@@ -127,7 +136,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </Inline>
         </Stack>
         <Stack gap="xs">
-          <Text textStyle="label">defaults.size</Text>
+          <ControlLabel label="Default size" configKey="defaults.size" />
           <ToggleGroup type="single" required value={defaultSize} onValueChange={(v) => v && setDefaultSize(v)} size="sm" aria-label="Default size">
             {allSizes.map((key) => (
               <ToggleGroup.Item key={key} value={key}>
@@ -137,7 +146,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </ToggleGroup>
         </Stack>
         <Stack gap="xs">
-          <Text textStyle="label">defaults.padding</Text>
+          <ControlLabel label="Default padding" configKey="defaults.padding" />
           <ToggleGroup type="single" required value={padding} onValueChange={(v) => v && setPadding(v as Spacing)} size="sm" aria-label="Default padding">
             {spacings.map((key) => (
               <ToggleGroup.Item key={key} value={key}>
@@ -147,7 +156,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </ToggleGroup>
         </Stack>
         <Stack gap="xs">
-          <Text textStyle="label">defaults.gap</Text>
+          <ControlLabel label="Default gap" configKey="defaults.gap" />
           <ToggleGroup type="single" required value={gap} onValueChange={(v) => v && setGap(v as Spacing)} size="sm" aria-label="Default gap">
             {spacings.map((key) => (
               <ToggleGroup.Item key={key} value={key}>
@@ -157,7 +166,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
           </ToggleGroup>
         </Stack>
         <Stack gap="xs">
-          <Text textStyle="label">Color scheme</Text>
+          <ControlLabel label="Color scheme" />
           <ToggleGroup type="single" required value={scheme} onValueChange={(v) => v && setScheme(v)} size="sm" aria-label="Preview color scheme">
             <ToggleGroup.Item value="light">light</ToggleGroup.Item>
             <ToggleGroup.Item value="dark">dark</ToggleGroup.Item>
@@ -221,7 +230,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
               <Badge color="success" variant="solid" size="sm">
                 tsc
               </Badge>{' '}
-              No errors. Uncheck <code>lg</code> in the sizes to see what the compiler says.
+              No errors. Uncheck <code>lg</code> under Available sizes to see what the compiler says.
             </div>
           )}
         </div>

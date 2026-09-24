@@ -143,6 +143,7 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--yarcl-neutral-surface);
 }
 
 .playground-code {
@@ -319,4 +320,9 @@
   .gallery-card {
     transition: none;
   }
+}
+
+.playground-key {
+  font-size: 0.75rem;
+  color: var(--yarcl-neutral-muted);
 }
