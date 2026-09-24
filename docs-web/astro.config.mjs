@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 import { yarcl } from 'yarcl/plugin';
 
 export default defineConfig({
+  site: 'https://yarcl.dev',
   integrations: [
     starlight({
       title: 'yarcl',
