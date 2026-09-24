@@ -15,6 +15,10 @@ export default async function (ctx) {
   await audit(ctx, 'size guide dialog', 'dialog[open]');
   await page.keyboard.press('Escape');
 
+  await page.getByRole('button', { name: 'Search' }).click();
+  await audit(ctx, 'command palette open', 'dialog[open]');
+  await page.keyboard.press('Escape');
+
   await page.getByRole('link', { name: 'Design reference' }).click();
   await page.waitForURL(/page=reference/);
   await audit(ctx, 'design reference page');

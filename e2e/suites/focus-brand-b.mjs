@@ -9,4 +9,8 @@ export default async function (ctx) {
     await page.keyboard.press('Enter');
     await page.keyboard.press('ArrowDown');
   });
+  await highlightContrast(ctx, 'CommandPalette', async () => {
+    await page.getByRole('button', { name: 'Search' }).focus();
+    await page.keyboard.press('Control+k');
+  });
 }

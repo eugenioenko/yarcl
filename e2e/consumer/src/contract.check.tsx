@@ -1,4 +1,4 @@
-import { Badge, Button, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
+import { Badge, Button, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, Pagination, Progress, Slider, Stack, Table, Text } from 'yarcl';
 
 export const contract = (
   <>
@@ -12,6 +12,7 @@ export const contract = (
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
     <Pagination count={8} size="talla-s" color="clay" radius="square" variant="text" selectedVariant="filled" />
     <DatePicker size="talla-s" color="clay" variant="wash" radius="hairline" />
+    <CommandPalette commands={[]} size="talla-s" color="moss" radius="square" />
 
     {/* consumer A's keys are not valid here */}
     {/* @ts-expect-error */}
@@ -56,5 +57,9 @@ export const contract = (
     <DatePicker variant="solid" />
     {/* @ts-expect-error */}
     <DatePicker color="primary" />
+    {/* @ts-expect-error */}
+    <CommandPalette commands={[]} size="md" />
+    {/* @ts-expect-error */}
+    <CommandPalette commands={[]} color="brand" />
   </>
 );

@@ -439,6 +439,35 @@ const groups: Record<string, Item[]> = {
       ),
     },
     {
+      name: 'CommandPalette',
+      href: '/components/overlays/command-palette/',
+      description: 'A searchable command menu opened with a keyboard shortcut.',
+      preview: (
+        <div className="yarcl-panel yarcl-size-sm yarcl-color-primary gallery-mock-palette">
+          <div className="gallery-mock-palette-search">
+            <Text textStyle="caption" muted>
+              Search commands…
+            </Text>
+            <span className="yarcl-command-palette-shortcut">
+              <kbd>⌘</kbd>
+              <kbd>K</kbd>
+            </span>
+          </div>
+          <div className="yarcl-listbox">
+            <div className="yarcl-command-palette-heading">Create</div>
+            <div className="yarcl-option" data-active>
+              New document
+              <span className="yarcl-command-palette-shortcut">
+                <kbd>⌘</kbd>
+                <kbd>N</kbd>
+              </span>
+            </div>
+            <div className="yarcl-option">Invite teammate</div>
+          </div>
+        </div>
+      ),
+    },
+    {
       name: 'Menu',
       href: '/components/overlays/menu/',
       description: 'A list of actions with keyboard navigation and typeahead.',

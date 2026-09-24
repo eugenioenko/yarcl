@@ -67,6 +67,8 @@ export type { DialogProps } from './components/Dialog';
 export { Drawer } from './components/Drawer';
 export type { DrawerProps } from './components/Drawer';
 export type { ModalProps } from './components/Modal';
+export { CommandPalette } from './components/CommandPalette';
+export type { CommandPaletteProps, CommandPaletteCommand } from './components/CommandPalette';
 export { Toaster, toast } from './components/Toast';
 export type { ToasterProps, ToastOptions } from './components/Toast';
 export { Tabs } from './components/Tabs';

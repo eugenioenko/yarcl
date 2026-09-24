@@ -4,6 +4,7 @@ import {
   Badge,
   Button,
   ButtonGroup,
+  CommandPalette,
   DatePicker,
   Dialog,
   Divider,
@@ -70,6 +71,20 @@ export function App() {
           <Link href="?page=reference" underline="hover" color="ink">
             Design reference
           </Link>
+          <CommandPalette
+            trigger={
+              <Button variant="text" size="talla-s">
+                Search
+              </Button>
+            }
+            placeholder="Search the shop…"
+            commands={[
+              { id: 'shop', label: 'Shop', group: 'Pages', onSelect: () => location.assign('?page=shop') },
+              { id: 'reference', label: 'Design reference', group: 'Pages', onSelect: () => location.assign('?page=reference') },
+              { id: 'bag', label: 'Add to bag', group: 'Actions', shortcut: 'Mod+B', onSelect: addToBag },
+              { id: 'wishlist', label: 'Save to wishlist', group: 'Actions', onSelect: () => toast({ title: 'Saved to wishlist', color: 'clay' }) },
+            ]}
+          />
           <ToggleGroup
             type="single"
             required

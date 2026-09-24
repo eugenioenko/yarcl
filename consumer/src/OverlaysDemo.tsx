@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Button,
+  CommandPalette,
   Dialog,
   Drawer,
   Field,
@@ -16,6 +17,7 @@ import {
   config,
   toast,
   type Color,
+  type CommandPaletteCommand,
   type Density,
 } from 'yarcl';
 
@@ -27,6 +29,24 @@ const invoices = [
   { id: 'INV-1043', customer: 'Grace Hopper', status: 'Pending', amount: 860.5 },
   { id: 'INV-1044', customer: 'Alan Turing', status: 'Overdue', amount: 45 },
   { id: 'INV-1045', customer: 'Katherine Johnson', status: 'Paid', amount: 13075.25 },
+];
+
+const ran = (title: string) => () => toast({ title });
+
+const commands: CommandPaletteCommand[] = [
+  { id: 'dashboard', label: 'Go to dashboard', group: 'Navigation', shortcut: 'G D', onSelect: ran('Opened dashboard') },
+  { id: 'projects', label: 'Go to projects', group: 'Navigation', onSelect: ran('Opened projects') },
+  { id: 'settings', label: 'Open settings', group: 'Navigation', keywords: ['preferences'], shortcut: 'Mod+,', onSelect: ran('Opened settings') },
+  { id: 'new-project', label: 'New project', group: 'Actions', shortcut: 'Mod+Shift+N', onSelect: ran('Project created') },
+  { id: 'invite', label: 'Invite teammate', group: 'Actions', keywords: ['member', 'user'], onSelect: ran('Invite sent') },
+  { id: 'theme', label: 'Toggle dark mode', group: 'Actions', keywords: ['theme', 'appearance'], onSelect: ran('Theme toggled') },
+  { id: 'archive', label: 'Archive project', group: 'Actions', disabled: true },
+  ...Array.from({ length: 12 }, (_, i) => ({
+    id: `recent-${i}`,
+    label: `Recent file ${i + 1}`,
+    group: 'Recent files',
+    onSelect: ran(`Opened recent file ${i + 1}`),
+  })),
 ];
 
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
@@ -98,6 +118,8 @@ export function OverlaysDemo() {
             </>
           }
         />
+
+        <CommandPalette commands={commands} trigger={<Button variant="outline">Command palette</Button>} />
 
         <Drawer side="left" trigger={<Button variant="outline">Left drawer</Button>} title="Navigation">
           <Stack as="nav" gap="tight">

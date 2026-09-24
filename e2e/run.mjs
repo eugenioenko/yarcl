@@ -6,6 +6,7 @@ import a11yBrandB from './suites/a11y-brand-b.mjs';
 import a11y from './suites/a11y.mjs';
 import brandB from './suites/brand-b.mjs';
 import datePicker from './suites/date-picker.mjs';
+import commandPalette from './suites/command-palette.mjs';
 import feedback from './suites/feedback.mjs';
 import floating from './suites/floating.mjs';
 import focusBrandB from './suites/focus-brand-b.mjs';
@@ -28,6 +29,7 @@ const apps = { consumer: 'consumer', fixture: 'e2e/consumer' };
 const suites = [
   ['consumer', 'floating', floating],
   ['consumer', 'overlays', overlays],
+  ['consumer', 'command-palette', commandPalette],
   ['consumer', 'feedback', feedback],
   ['consumer', 'groups', groups],
   ['consumer', 'slider', slider],

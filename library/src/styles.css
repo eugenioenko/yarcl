@@ -830,6 +830,119 @@ html:has(.yarcl-modal[open]) {
   height: 1.125rem;
 }
 
+/* CommandPalette */
+
+.yarcl-command-palette {
+  margin-top: min(15dvh, 8rem);
+  max-height: calc(100dvh - min(15dvh, 8rem) - 1rem);
+  font-size: var(--yarcl-fs);
+}
+
+.yarcl-command-palette-content {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.yarcl-command-palette-search {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0 var(--yarcl-px);
+  color: var(--yarcl-neutral-muted);
+  border-bottom: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  transition: border-color var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-command-palette-search:focus-within {
+  border-bottom-color: var(--yarcl-c);
+}
+
+.yarcl-command-palette-search svg {
+  flex-shrink: 0;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+
+.yarcl-command-palette-input {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--yarcl-h) + 0.5rem);
+  padding: 0;
+  font: inherit;
+  color: var(--yarcl-neutral-text);
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+.yarcl-command-palette-input::placeholder {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-command-palette-list {
+  gap: 0.25rem;
+  max-height: min(24rem, 60dvh);
+  overscroll-behavior: contain;
+}
+
+.yarcl-command-palette-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.yarcl-command-palette-heading {
+  padding: 0.375rem calc(var(--yarcl-px) - 0.25rem) 0.25rem;
+  font-size: 0.8125em;
+  font-weight: 600;
+  color: var(--yarcl-neutral-muted);
+  user-select: none;
+}
+
+.yarcl-command-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625em;
+  min-width: 0;
+}
+
+.yarcl-command-palette-shortcut {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 0.25em;
+  font-size: 0.8125em;
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-command-palette-shortcut kbd {
+  box-sizing: border-box;
+  min-width: 1.75em;
+  padding: 0.125em 0.375em;
+  font: inherit;
+  line-height: 1.2;
+  text-align: center;
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: min(var(--yarcl-r), 0.25rem);
+}
+
+.yarcl-option[data-active] .yarcl-command-palette-shortcut {
+  color: inherit;
+}
+
+.yarcl-option[data-active] .yarcl-command-palette-shortcut kbd {
+  border-color: color-mix(in oklab, currentColor 45%, transparent);
+}
+
+.yarcl-command-palette-empty {
+  padding-block: 1.25rem;
+  text-align: center;
+}
+
+.yarcl-command-palette-empty:empty {
+  display: none;
+}
+
 /* Toast */
 
 @keyframes yarcl-toast-in {

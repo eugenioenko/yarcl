@@ -95,7 +95,7 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 **Controls**: Button, IconButton, ButtonGroup, ToggleGroup, Input, Textarea, Checkbox, Radio, RadioGroup, Switch, Slider, Select, Combobox, DatePicker, Field, Label
 **Typography & layout**: Text, Heading, Link, Stack, Inline, Card, Divider
 **Floating**: Tooltip, HoverCard, Popover, Menu
-**Overlays**: Dialog, Drawer, Toast
+**Overlays**: Dialog, Drawer, CommandPalette, Toast
 **Data & navigation**: Tabs, Table, Pagination
 **Feedback**: Badge, Alert, Spinner, Skeleton, Progress
 **Reference**: `DesignReference` from `yarcl/reference` renders your whole design system from your config.

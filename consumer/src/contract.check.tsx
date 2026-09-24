@@ -19,6 +19,7 @@ import {
   Spinner,
   Dialog,
   Drawer,
+  CommandPalette,
   Table,
   Tabs,
   toast,
@@ -100,6 +101,26 @@ export const contract = (
     <DatePicker mode="range" defaultValue={{ from: new Date(), to: null }} onValueChange={(r: DateRange | null) => r} />
     <Dialog title="T" radius="xl" size="lg" />
     <Drawer title="T" side="left" />
+    <CommandPalette
+      commands={[
+        { id: 'a', label: 'A', group: 'G', keywords: ['k'], shortcut: 'Mod+A', icon: null, disabled: true, onSelect: () => {} },
+      ]}
+      open
+      defaultOpen={false}
+      onOpenChange={() => {}}
+      shortcut={false}
+      trigger={<Button />}
+      onSelect={(command) => command.id}
+      inputValue=""
+      onInputValueChange={() => {}}
+      filter={(command, text) => command.label.includes(text)}
+      placeholder="Search"
+      label="Commands"
+      emptyMessage="Nothing"
+      size="lg"
+      radius="rounded"
+      color="success"
+    />
     <Tabs defaultValue="a" size="sm" color="success" />
     <Tabs value="a" onValueChange={() => {}} />
     <Table density="dense" striped interactive />
@@ -229,6 +250,16 @@ export const contract = (
     <Dialog />
     {/* @ts-expect-error */}
     <Drawer title="T" side="top" />
+    {/* @ts-expect-error */}
+    <CommandPalette />
+    {/* @ts-expect-error */}
+    <CommandPalette commands={[{ id: 'a' }]} />
+    {/* @ts-expect-error */}
+    <CommandPalette commands={[]} size="huge" />
+    {/* @ts-expect-error */}
+    <CommandPalette commands={[]} color="primary" />
+    {/* @ts-expect-error */}
+    <CommandPalette commands={[]} shortcut />
     {/* @ts-expect-error */}
     <Dialog title="T" size="huge" />
     {/* @ts-expect-error */}

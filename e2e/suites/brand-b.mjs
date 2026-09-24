@@ -1,4 +1,5 @@
 import { progressContrast } from './feedback.mjs';
+import { resolveColor } from './command-palette.mjs';
 
 /** @param {import('../run.mjs').SuiteContext} ctx */
 export default async function ({ page, check }) {
@@ -98,6 +99,22 @@ export default async function ({ page, check }) {
   check('pagination: component default radius square', other.r === '0px' && active.r === '0px', `${other.r} / ${active.r}`);
   check('pagination: component default variants (text, line)', other.bg === 'rgba(0, 0, 0, 0)' && other.border === 'rgba(0, 0, 0, 0)' && active.border !== 'rgba(0, 0, 0, 0)', JSON.stringify({ other, active }));
   check('pagination: current page marked', (await reviewCurrent.getAttribute('aria-current')) === 'page');
+  await page.keyboard.press('Control+k');
+  const palette = page.getByRole('dialog', { name: 'Command palette' });
+  check('command palette opens with the shortcut', await palette.isVisible());
+  const look = await palette.evaluate((el) => ({
+    radius: getComputedStyle(el).borderTopLeftRadius,
+    width: el.getBoundingClientRect().width,
+    fontSize: getComputedStyle(el.querySelector('input')).fontSize,
+    activeBg: getComputedStyle(el.querySelector('.yarcl-option[data-active]')).backgroundColor,
+  }));
+  check('component default: palette square', look.radius === '0px', look.radius);
+  check('component default: palette uses clay', look.activeBg === (await resolveColor(page, 'var(--yarcl-color-clay)')), look.activeBg);
+  check("palette uses the consumer's size scale (talla-m = 13px)", look.fontSize === '13px', look.fontSize);
+  check("palette uses the consumer's modal size (regular = 34rem)", Math.abs(look.width - 34 * 16) < 2, String(look.width));
+  await palette.getByRole('combobox').fill('wish');
+  await page.keyboard.press('Enter');
+  check('palette command runs', await page.getByRole('status').filter({ hasText: 'Saved to wishlist' }).last().isVisible());
 
   await page.getByRole('link', { name: 'Design reference' }).click();
   await page.waitForURL(/page=reference/);
