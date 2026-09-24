@@ -10,6 +10,7 @@ import {
   Inline,
   Input,
   Label,
+  NumberInput,
   Radio,
   RadioGroup,
   Select,
@@ -98,6 +99,25 @@ export function InputDemo() {
       <Inline gap="sm">
         <Input placeholder="Search" aria-label="Search" className="demo-grow" />
         <Button>Search</Button>
+      </Inline>
+    </Stack>
+  );
+}
+
+export function NumberInputDemo() {
+  const [price, setPrice] = useState<number | null>(12.5);
+  return (
+    <Stack className="demo-form">
+      <Field label="Guests" description="Between 1 and 12 people.">
+        <NumberInput min={1} max={12} defaultValue={2} />
+      </Field>
+      <Field label="Price" description={price === null ? 'No price set.' : `Saved as ${price.toFixed(2)}.`}>
+        <NumberInput value={price} onValueChange={setPrice} min={0} step={0.5} />
+      </Field>
+      <Inline gap="sm">
+        <NumberInput size="sm" defaultValue={1} aria-label="Small" />
+        <NumberInput size="lg" color="success" defaultValue={1} aria-label="Large" />
+        <NumberInput disabled defaultValue={3} aria-label="Disabled" />
       </Inline>
     </Stack>
   );

@@ -131,6 +131,75 @@
   cursor: not-allowed;
 }
 
+/* NumberInput */
+
+.yarcl-number-input {
+  position: relative;
+  display: inline-flex;
+  --yarcl-stepper-w: calc(var(--yarcl-icon) + var(--yarcl-px) / 2);
+}
+
+.yarcl-number-input-field {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding-right: calc(var(--yarcl-px) + var(--yarcl-stepper-w));
+  font-variant-numeric: tabular-nums;
+}
+
+.yarcl-number-input-steppers {
+  position: absolute;
+  top: var(--yarcl-border-width);
+  right: var(--yarcl-border-width);
+  bottom: var(--yarcl-border-width);
+  display: flex;
+  flex-direction: column;
+  width: var(--yarcl-stepper-w);
+  overflow: hidden;
+  border-left: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: 0 max(0px, var(--yarcl-r) - var(--yarcl-border-width)) max(0px, var(--yarcl-r) - var(--yarcl-border-width)) 0;
+}
+
+.yarcl-number-input-stepper {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  color: var(--yarcl-neutral-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition-property: background-color, color;
+  transition-duration: var(--yarcl-motion-fast);
+  transition-timing-function: var(--yarcl-motion-easing);
+}
+
+.yarcl-number-input-stepper + .yarcl-number-input-stepper {
+  border-top: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
+.yarcl-number-input-stepper:hover:not(:disabled) {
+  color: var(--yarcl-c-text);
+  background: var(--yarcl-neutral-bg);
+}
+
+.yarcl-number-input-stepper:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.yarcl-number-input-stepper svg {
+  width: calc(var(--yarcl-icon) * 0.75);
+  height: calc(var(--yarcl-icon) * 0.75);
+}
+
+.yarcl-number-input-increment svg {
+  transform: rotate(180deg);
+}
+
 /* Checkbox, Radio, Switch */
 
 .yarcl-checkbox,
@@ -380,6 +449,7 @@
   .yarcl-button,
   .yarcl-input,
   .yarcl-textarea,
+  .yarcl-number-input-stepper,
   .yarcl-checkbox-input,
   .yarcl-radio-input,
   .yarcl-switch-input,

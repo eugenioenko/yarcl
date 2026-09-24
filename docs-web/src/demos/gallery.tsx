@@ -17,6 +17,7 @@ import {
   Input,
   Label,
   Link,
+  NumberInput,
   Radio,
   RadioGroup,
   Select,
@@ -171,6 +172,12 @@ const groups: Record<string, Item[]> = {
           <Input size="sm" defaultValue="Ada Lovelace" aria-label="Name" />
         </Stack>
       ),
+    },
+    {
+      name: 'NumberInput',
+      href: '/components/forms/number-input/',
+      description: 'A numeric input with increment and decrement buttons.',
+      preview: <NumberInput size="sm" defaultValue={2} min={1} aria-label="Guests" className="gallery-fill" />,
     },
     {
       name: 'Textarea',

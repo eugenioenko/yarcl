@@ -84,6 +84,7 @@ export default defineConfig({
     CommandPalette: { radius: 'square', color: 'clay' },
     Breadcrumb: { textStyle: 'fine' },
     Accordion: { size: 'talla-s', radius: 'square' },
+    NumberInput: { radius: 'square' },
   },
   defaults: {
     size: 'talla-m',

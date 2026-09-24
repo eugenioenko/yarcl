@@ -104,6 +104,7 @@ export interface ComponentTokenProps {
   ToggleGroup: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';
   Input: 'size' | 'radius' | 'color';
   Textarea: 'size' | 'radius' | 'color';
+  NumberInput: 'size' | 'radius' | 'color';
   Select: 'size' | 'radius' | 'color';
   Combobox: 'size' | 'radius' | 'color';
   DatePicker: 'size' | 'radius' | 'color' | 'variant';

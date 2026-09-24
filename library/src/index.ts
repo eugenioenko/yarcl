@@ -13,6 +13,8 @@ export { Input } from './components/Input';
 export type { InputProps } from './components/Input';
 export { Textarea } from './components/Textarea';
 export type { TextareaProps } from './components/Textarea';
+export { NumberInput } from './components/NumberInput';
+export type { NumberInputProps } from './components/NumberInput';
 export { Checkbox } from './components/Checkbox';
 export type { CheckboxProps } from './components/Checkbox';
 export { Radio } from './components/Radio';
