@@ -1,7 +1,7 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
-import config from '@yarcl/config';
 import { cx, typeClass } from '../classes';
 import { FieldContext } from '../field-context';
+import { useConfig } from '../runtime';
 
 /** Props for {@link Field}. */
 export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
@@ -30,6 +30,7 @@ export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
  * ```
  */
 export function Field({ label, description, error, required, children, className, ...props }: FieldProps) {
+  const config = useConfig();
   const id = useId();
   const descriptionId = description != null ? `${id}-description` : undefined;
   const errorId = error != null && error !== false ? `${id}-error` : undefined;

@@ -10,12 +10,12 @@ import {
   type Placement,
 } from '@floating-ui/react';
 import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode } from 'react';
-import { cx, defaultsFor, paddingClass, radiusClass } from '../classes';
+import { cx, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
 import type { Radius, Spacing } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Popover');
 
 type PopoverContextValue = ReturnType<typeof usePopoverState>;
 
@@ -101,6 +101,7 @@ export interface PopoverContentProps extends ComponentProps<'div'> {
 }
 
 function PopoverContent({ padding, radius, className, style, ...props }: PopoverContentProps) {
+  const own = useDefaults('Popover');
   const { open, modal, refs, floatingStyles, context, getFloatingProps } = usePopoverContext('Popover.Content');
   if (!open) return null;
   return (

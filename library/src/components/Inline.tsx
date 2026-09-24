@@ -1,7 +1,7 @@
-import { cx, defaultsFor, gapClass } from '../classes';
+import { cx, gapClass } from '../classes';
 import type { LayoutProps } from './Stack';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Inline');
 
 /** Props for {@link Inline}. */
 export interface InlineProps extends LayoutProps {
@@ -24,6 +24,7 @@ export interface InlineProps extends LayoutProps {
  * ```
  */
 export function Inline({ as = 'div', gap, align = 'center', justify, wrap = true, className, ...props }: InlineProps) {
+  const own = useDefaults('Inline');
   const Tag = as as 'div';
   return (
     <Tag

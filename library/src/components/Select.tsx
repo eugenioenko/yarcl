@@ -11,13 +11,13 @@ import {
   useTypeahead,
 } from '@floating-ui/react';
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
-import { colorClass, cx, defaultsFor, radiusClass, sizeClass } from '../classes';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import { CheckIcon, ChevronIcon, floatingMiddleware } from '../floating';
 import { useControllable } from '../hooks';
 import type { TokenProps } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Select');
 
 /** An option of a {@link Select} or {@link Combobox}. */
 export interface SelectOption<V extends string = string> {
@@ -68,6 +68,7 @@ export interface SelectProps<V extends string = string>
  * ```
  */
 export function Select<V extends string = string>(props: SelectProps<V>) {
+  const own = useDefaults('Select');
   const {
     options,
     value: valueProp,

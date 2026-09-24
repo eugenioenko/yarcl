@@ -1,7 +1,7 @@
-import config from '@yarcl/config';
 import type { ComponentProps } from 'react';
 import { colorClass, cx, typeClass } from '../classes';
 import type { Color, TextStyle } from '../types';
+import { useConfig } from '../runtime';
 
 /** Props for {@link Heading}. */
 export interface HeadingProps extends Omit<ComponentProps<'h2'>, 'color'> {
@@ -28,6 +28,7 @@ export interface HeadingProps extends Omit<ComponentProps<'h2'>, 'color'> {
  * ```
  */
 export function Heading({ level, textStyle, color, className, ...props }: HeadingProps) {
+  const config = useConfig();
   const Tag = `h${level}` as 'h2';
   const style: TextStyle = textStyle ?? config.typography.headings[`h${level}`];
   return (

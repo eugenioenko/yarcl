@@ -102,7 +102,7 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 
 ## Themes
 
-`yarcl/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Soft**, **Compact** and **Editorial**.
+`yarcl/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Bloom**, **Compact** and **Editorial**.
 
 ```ts title="src/yarcl.config.ts"
 export { editorial as default } from 'yarcl/themes';

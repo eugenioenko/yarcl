@@ -22,12 +22,12 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
+import { colorClass, cx, sizeClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, Size } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Menu');
 
 type MenuContextValue = ReturnType<typeof useMenuState>;
 
@@ -118,6 +118,7 @@ function MenuTrigger({ children }: MenuTriggerProps) {
 export interface MenuContentProps extends ComponentProps<'div'> {}
 
 function MenuContent({ className, style, children, ...props }: MenuContentProps) {
+  const own = useDefaults('Menu');
   const { open, size, refs, floatingStyles, context, getFloatingProps, elementsRef, labelsRef } =
     useMenuContext('Menu.Content');
   if (!open) return null;

@@ -1,8 +1,8 @@
 import { createContext, useContext, useId, type ComponentProps, type ReactNode } from 'react';
-import config from '@yarcl/config';
 import { cx, typeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, Size } from '../types';
+import { useConfig } from '../runtime';
 
 interface RadioGroupContextValue {
   name: string;
@@ -80,6 +80,7 @@ export function RadioGroup({
   children,
   ...props
 }: RadioGroupProps) {
+  const config = useConfig();
   const id = useId();
   const [value, setValue] = useControllable<string | null>(valueProp, defaultValue, (v) => v != null && onValueChange?.(v));
   const descriptionId = description != null ? `${id}-description` : undefined;

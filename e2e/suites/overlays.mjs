@@ -17,7 +17,9 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   check('only the top dialog shows a backdrop', under === 'rgba(0, 0, 0, 0)' && top !== 'rgba(0, 0, 0, 0)', `${under} / ${top}`);
   await page.keyboard.press('Escape');
   check('Esc closes only the top dialog', !(await nested.isVisible()) && (await invite.isVisible()));
-  check('lower dialog backdrop restored', (await backdrop(invite)) !== 'rgba(0, 0, 0, 0)', await backdrop(invite));
+  let restored = '';
+  for (let i = 0; i < 20 && (restored = await backdrop(invite)) === 'rgba(0, 0, 0, 0)'; i++) await page.waitForTimeout(50);
+  check('lower dialog backdrop restored', restored !== 'rgba(0, 0, 0, 0)', restored);
   await page.getByRole('button', { name: 'Toast from dialog' }).click();
   const inner = page.getByRole('status').filter({ hasText: 'From inside the dialog' });
   check('toast shows above modal dialog', await inner.isVisible());

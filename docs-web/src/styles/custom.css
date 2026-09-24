@@ -113,10 +113,15 @@
   display: grid;
   grid-template-columns: minmax(14rem, 17rem) 1fr;
   grid-template-areas:
+    'themes themes'
     'controls preview'
     'code code';
   gap: 1.25rem;
   width: 100%;
+}
+
+.playground-themes {
+  grid-area: themes;
 }
 
 .playground-controls {
@@ -125,6 +130,8 @@
 
 .playground-preview {
   grid-area: preview;
+  font-family: var(--yarcl-font-sans);
+  color: var(--yarcl-neutral-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -185,7 +192,7 @@
 @media (max-width: 50rem) {
   .playground {
     grid-template-columns: 1fr;
-    grid-template-areas: 'controls' 'preview' 'code';
+    grid-template-areas: 'themes' 'controls' 'preview' 'code';
   }
 }
 

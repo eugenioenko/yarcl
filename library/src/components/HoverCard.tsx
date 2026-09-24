@@ -10,11 +10,11 @@ import {
   type Placement,
 } from '@floating-ui/react';
 import { useState, type ReactElement, type ReactNode } from 'react';
-import { cx, defaultsFor, paddingClass, radiusClass } from '../classes';
+import { cx, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import type { Radius, Spacing } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('HoverCard');
 
 /** Props for {@link HoverCard}. */
 export interface HoverCardProps {
@@ -69,6 +69,7 @@ export function HoverCard({
   padding,
   radius,
 }: HoverCardProps) {
+  const own = useDefaults('HoverCard');
   const [open, setOpen] = useState(false);
   const { refs, floatingStyles, context } = useFloating({
     open,

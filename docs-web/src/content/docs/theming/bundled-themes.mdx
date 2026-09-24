@@ -10,10 +10,10 @@ yarcl ships with four themes that each change everything a theme can change: col
 | Theme | Import | Color | Shape and type | Density and depth |
 |---|---|---|---|---|
 | **yarcl** | `yarcl/defaults` | blue | 6px corners, system sans | 40px controls, light shadows |
-| **Brutalist** | `brutalist` | yellow on black and white | square corners, 2px borders, monospace | hard offset shadows, dashed focus ring |
-| **Soft** | `soft` | violet on lavender | pill controls, round cards, rounded sans | large 44px controls, airy spacing, soft tinted shadows |
+| **Brutalist** | `brutalist` | red on black and white | square corners, 2px borders, monospace | hard offset shadows, dashed focus ring |
+| **Bloom** | `bloom` | violet on lavender | pill controls, round cards, rounded sans | large 44px controls, airy spacing, soft tinted shadows |
 | **Compact** | `compact` | teal on cool gray | 2px corners, 13px sans | 28px controls, tight spacing, compact tables, nearly flat |
-| **Editorial** | `editorial` | terracotta on cream | square corners, serif throughout | generous spacing, flat cards, double focus ring |
+| **Editorial** | `editorial` | terracotta on cream | square corners, light grotesque sans | generous spacing, flat cards, double focus ring |
 
 See them all in the [theme playground](/theming/playground/).
 
@@ -22,7 +22,7 @@ See them all in the [theme playground](/theming/playground/).
 As is:
 
 ```ts title="src/yarcl.config.ts"
-export { soft as default } from 'yarcl/themes';
+export { bloom as default } from 'yarcl/themes';
 ```
 
 As a starting point:
@@ -33,7 +33,7 @@ import { brutalist } from 'yarcl/themes';
 
 export default defineConfig({
   ...brutalist,
-  colors: { ...brutalist.colors, primary: { light: '#00e5ff', dark: '#00e5ff' } },
+  colors: { ...brutalist.colors, primary: { light: '#2f6bff', dark: '#7aa2ff' } },
 });
 ```
 
@@ -44,7 +44,7 @@ Every bundled theme satisfies `ThemeContract`: the same keys as the library defa
 | Group | Keys |
 |---|---|
 | `colors` | `primary`, `neutral`, `success`, `warning`, `danger`, `info` |
-| `sizes` | `sm`, `md`, `lg` |
+| `sizes` | `xs`, `sm`, `md`, `lg`, `xl` |
 | `radii` | `square`, `sm`, `md`, `lg`, `xl`, `rounded` |
 | `variants` | `solid`, `soft`, `outline`, `ghost` |
 | `spacing` | `xs`, `sm`, `md`, `lg`, `xl` |
@@ -55,4 +55,4 @@ Every bundled theme satisfies `ThemeContract`: the same keys as the library defa
 
 ## Fonts
 
-Themes name their font families (JetBrains Mono, Nunito, IBM Plex Sans, Iowan Old Style) but don't ship font files. Without them, each stack falls back to a similar system font. To load them, add `typography.fontFaces` with your own files, or load them from a font service in your HTML.
+Themes name their font families (JetBrains Mono, Nunito, IBM Plex Sans, Helvetica Neue) but don't ship font files. Without them, each stack falls back to a similar system font. To load them, add `typography.fontFaces` with your own files, or load them from a font service in your HTML.

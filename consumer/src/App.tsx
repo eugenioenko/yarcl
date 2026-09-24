@@ -108,7 +108,6 @@ export function App() {
           ))}
         </Inline>
       </Inline>
-
       {reference ? (
         <DesignReference title="Consumer A design system" />
       ) : (
@@ -132,7 +131,6 @@ export function App() {
               </Row>
             ))}
           </Section>
-
           <Section title="Variants × colors">
             {colors.map((color) => (
               <Row key={color} label={color}>

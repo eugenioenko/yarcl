@@ -45,27 +45,31 @@ Remember the matching `paths` entry in `tsconfig.json`; with a shared contract, 
 
 ## At runtime
 
-`yarcl/css` exports `generateCss`, the same function the plugin runs at build time. Call it in the browser and put the result in a `<style>` element to switch themes without a rebuild:
+`applyTheme` from `yarcl/css` switches the whole app to another theme without a rebuild:
 
 ```ts
-import { generateCss } from 'yarcl/css';
+import { applyTheme, resetTheme } from 'yarcl/css';
 import { themes } from 'yarcl/themes';
 
-function applyTheme(theme: keyof typeof themes) {
-  let style = document.getElementById('yarcl-theme');
-  if (!style) {
-    style = document.createElement('style');
-    style.id = 'yarcl-theme';
-    document.head.append(style);
-  }
-  style.textContent = generateCss(themes[theme]);
-}
+applyTheme(themes.editorial);
+// later
+resetTheme(); // back to the build-time config
 ```
 
-This is how the [theme playground](/theming/playground/) works. Two things to keep in mind:
+It does two things:
 
-- The themes must share keys (a contract), because the types come from the build-time config.
-- The generated stylesheet replaces the build-time one for the whole page, so dialogs, menus and toasts switch too. To theme only part of a page, use the CSS variables instead (next section).
+1. **Replaces the styles.** It runs `generateCss`, the same generator the Vite plugin uses at build time, and puts the result in a `<style>` element that overrides the build-time stylesheet. Dialogs, menus and toasts switch too.
+2. **Switches the defaults.** Components read `defaults`, per-component `components` defaults and heading levels from the applied theme, and re-render. A theme with `components: { Button: { radius: 'rounded' } }` gets pill buttons, and one with `defaults: { density: 'compact' }` gets compact tables.
+
+The theme must define the keys your app uses, because prop types still come from the build-time config. The bundled themes share the defaults' keys (the contract above), so any of them can replace another.
+
+Pass `onWarning` to receive contrast warnings, and use `useConfig()` from `yarcl` when your own components need the active theme's values:
+
+```ts
+applyTheme(theme, { onWarning: (message) => console.warn(message) });
+```
+
+This is how the [theme playground](/theming/playground/) and the demo on the home page work. `generateCss` is exported from `yarcl/css` as well, if you only need the stylesheet.
 
 ## Light and dark
 

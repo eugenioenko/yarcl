@@ -1,4 +1,3 @@
-import config from '@yarcl/config';
 import {
   createContext,
   useContext,
@@ -8,12 +7,12 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { cx, defaultsFor } from '../classes';
+import { cx } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, Radius, Size, Variant } from '../types';
 import { Button } from './Button';
+import { useConfig, useDefaults } from '../runtime';
 
-const own = defaultsFor('ToggleGroup');
 
 interface ToggleGroupContextValue {
   selected: string[];
@@ -88,6 +87,8 @@ export type ToggleGroupProps = ToggleGroupBaseProps &
 const toArray = (value: string | string[] | null | undefined) => (value == null ? [] : Array.isArray(value) ? value : [value]);
 
 function ToggleGroupRoot(props: ToggleGroupProps) {
+  const config = useConfig();
+  const own = useDefaults('ToggleGroup');
   const {
     type,
     value,

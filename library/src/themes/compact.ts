@@ -21,9 +21,11 @@ export const compact = defineConfig({
     border: { light: '#cbd2d9', dark: '#2a333d' },
   },
   sizes: {
+    xs: { height: '1.25rem', paddingX: '0.375rem', fontSize: '0.6875rem', iconSize: '0.75rem' },
     sm: { height: '1.5rem', paddingX: '0.5rem', fontSize: '0.75rem', iconSize: '0.75rem' },
     md: { height: '1.75rem', paddingX: '0.625rem', fontSize: '0.8125rem', iconSize: '0.875rem' },
     lg: { height: '2.25rem', paddingX: '0.875rem', fontSize: '0.875rem', iconSize: '1rem' },
+    xl: { height: '2.75rem', paddingX: '1rem', fontSize: '1rem', iconSize: '1.125rem' },
   },
   radii: { square: '0', sm: '2px', md: '3px', lg: '4px', xl: '6px', rounded: '9999px' },
   variants: {

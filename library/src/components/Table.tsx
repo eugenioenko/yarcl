@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { cx, defaultsFor, densityClass } from '../classes';
+import { cx, densityClass } from '../classes';
 import type { Density } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Table');
 
 /** Props for {@link Table}. */
 export interface TableProps extends ComponentProps<'table'> {
@@ -20,6 +20,7 @@ export interface TableProps extends ComponentProps<'table'> {
 }
 
 function TableRoot({ density, striped, interactive, caption, className, children, ...props }: TableProps) {
+  const own = useDefaults('Table');
   return (
     <div className="yarcl-table-wrap">
       <table

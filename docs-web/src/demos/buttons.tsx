@@ -29,9 +29,11 @@ export function ButtonColors() {
 export function ButtonSizes() {
   return (
     <>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
+      <Button size="xs">xs</Button>
+      <Button size="sm">sm</Button>
+      <Button size="md">md</Button>
+      <Button size="lg">lg</Button>
+      <Button size="xl">xl</Button>
     </>
   );
 }

@@ -9,36 +9,44 @@ hero:
     - text: Get Started
       link: /getting-started/introduction/
       icon: right-arrow
+    - text: Playground
+      link: /theme-playground/
+      icon: seti:config
+      variant: secondary
     - text: GitHub
       link: https://github.com/eugenioenko/yarcl
       icon: github
-      variant: secondary
+      variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import Preview from '@/components/Preview.astro';
 import { ConfigPlayground } from '@/demos/playground';
 
-## Try it: change the config, watch the app and the compiler
+## Try it: pick a theme, change the config
 
 <Preview>
   <ConfigPlayground client:load />
 </Preview>
 
-The form on the right is built with yarcl components. The brand color is a value, so it's applied through the same CSS variables the build generates. Radius and size are keys, so they flow in exactly like `defaults.radius` and `defaults.size` do. Uncheck a size that the code still uses and you get the error TypeScript would report.
+The form is built with yarcl components that take no styling props at all. Everything comes from the config: pick a theme, then override the brand color or any default, and every yarcl component on this page follows, the controls included. For a whole app, open the [theme playground](/theme-playground/).
 
 ## Why yarcl exists
 
-The same production bug keeps showing up under different names: a feature flag typo that silently disables a paywall, a translation key that renders a blank label, a component variant that was renamed in the design system but still referenced in code. Each one looks different. Structurally, they're identical: **code assumes a configuration key exists, and nothing enforces that it does.**
+Picking a component library usually means adopting its design system. You get its sizes, its variants, its idea of what a button or a table looks like, and a theming layer that lets you change colors, fonts and spacing. Everything else is fixed.
 
-Component libraries have the same problem in a quieter form. The library decides that buttons come in `sm`, `md` and `lg`, and your design system has to conform. Your options are all bad:
+So when your design has an `xs` button, a `quiet` variant, square inputs next to pill-shaped buttons, or a table denser than the library's, you're fighting the framework: overriding its CSS, wrapping its components, or passing strings its types can't check. The product ends up looking like the framework with a new paint job, because the framework decided what exists and how it looks.
 
-- **Hardcoded unions** fit one team and nobody else.
-- **`string` props** accept `"meduim"` and `"gigantic"` without complaint.
-- **Generics** reflect whatever the caller passes instead of validating it.
-- **A hand-written list of types** next to the real values drifts the moment someone adds a size.
+That's backwards. Your design system is yours: your designers decide which sizes exist, what each variant looks like, how dense a table is, how focus is shown. A component library should provide the hard mechanics (accessibility, keyboard support, positioning, state) and let you define everything else.
 
-The library can't know which values are valid. That's the consumer's decision. So yarcl moves the contract to where the decision is made: **your config defines the design system, and the library derives its API from it.**
+yarcl works that way. Your config doesn't just theme the library, it **defines** it:
+
+- **What exists**: which sizes, colors, radii, variants, spacing steps and densities there are, not only their values.
+- **The API**: `size` accepts exactly your sizes. Remove a key and every place that uses it stops compiling.
+- **The look**: fonts, borders, shadows, focus rings and how each variant is drawn.
+- **The defaults**: globally and per component, so buttons can be square while cards are round.
+
+The same components can become [four completely different products](/theming/bundled-themes/), as the demo above shows.
 
 ## The injection point
 

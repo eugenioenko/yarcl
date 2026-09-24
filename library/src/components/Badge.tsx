@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, defaultsFor, radiusClass, sizeClass, softVariantClass } from '../classes';
+import { colorClass, cx, radiusClass, sizeClass, softVariantClass } from '../classes';
 import type { Color, Radius, Size, Variant } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Badge');
 
 /** Props for {@link Badge}. */
 export interface BadgeProps extends Omit<ComponentProps<'span'>, 'color'> {
@@ -56,6 +56,7 @@ export function Badge({
   children,
   ...props
 }: BadgeProps) {
+  const own = useDefaults('Badge');
   return (
     <span
       className={cx('yarcl-badge', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant), sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), className)}

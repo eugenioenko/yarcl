@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'react';
-import { cx, defaultsFor, gapClass } from '../classes';
+import { cx, gapClass } from '../classes';
 import type { Align, Justify, Spacing } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Stack');
 
 /** Elements layout components can render as. */
 export type LayoutElement = 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'main' | 'nav' | 'form' | 'ul' | 'ol';
@@ -40,6 +40,7 @@ export type StackProps = LayoutProps;
  * ```
  */
 export function Stack({ as = 'div', gap, align, justify, className, ...props }: StackProps) {
+  const own = useDefaults('Stack');
   const Tag = as as 'div';
   return (
     <Tag

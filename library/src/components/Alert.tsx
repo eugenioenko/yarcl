@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, defaultsFor, radiusClass, softVariantClass } from '../classes';
+import { colorClass, cx, radiusClass, softVariantClass } from '../classes';
 import type { Color, Radius, Variant } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Alert');
 
 /** Props for {@link Alert}. */
 export interface AlertProps extends Omit<ComponentProps<'div'>, 'color' | 'title'> {
@@ -60,6 +60,7 @@ export function Alert({
   children,
   ...props
 }: AlertProps) {
+  const own = useDefaults('Alert');
   return (
     <div
       role={live === 'assertive' ? 'alert' : live === 'polite' ? 'status' : undefined}

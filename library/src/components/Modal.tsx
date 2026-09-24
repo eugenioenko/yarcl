@@ -1,4 +1,3 @@
-import config from '@yarcl/config';
 import {
   cloneElement,
   useEffect,
@@ -11,6 +10,7 @@ import {
 import { cx, radiusClass, typeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { ModalSize, Radius } from '../types';
+import { useConfig } from '../runtime';
 
 /** Props shared by {@link Dialog} and {@link Drawer}. */
 export interface ModalProps {
@@ -81,6 +81,7 @@ export function Modal({
   className,
   radius,
 }: ModalProps & { className: string; radius?: Radius }) {
+  const config = useConfig();
   const [open, setOpen] = useControllable(openProp, defaultOpen, onOpenChange);
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();

@@ -1,9 +1,9 @@
 import { useEffect, useImperativeHandle, useRef, type ComponentProps, type ReactNode } from 'react';
-import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
+import { colorClass, cx, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import type { Color, Size } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Checkbox');
 
 /** Props for {@link Checkbox}. Accepts all native `<input>` attributes except `type`, `color` and `size`. */
 export interface CheckboxProps extends Omit<ComponentProps<'input'>, 'type' | 'color' | 'size' | 'children'> {
@@ -32,6 +32,7 @@ export interface CheckboxProps extends Omit<ComponentProps<'input'>, 'type' | 'c
  * ```
  */
 export function Checkbox(props: CheckboxProps) {
+  const own = useDefaults('Checkbox');
   const { children, size, color, indeterminate = false, className, style, ref, ...rest } = useFieldProps(props);
   const inner = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => inner.current!, []);

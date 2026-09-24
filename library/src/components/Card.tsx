@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'react';
-import { cx, defaultsFor, paddingClass, radiusClass, shadowClass } from '../classes';
+import { cx, paddingClass, radiusClass, shadowClass } from '../classes';
 import type { Radius, Shadow, Spacing } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Card');
 
 /** Props for {@link Card}. */
 export interface CardProps extends ComponentProps<'div'> {
@@ -39,6 +39,7 @@ export interface CardProps extends ComponentProps<'div'> {
  * ```
  */
 export function Card({ as = 'div', padding, radius, shadow, className, ...props }: CardProps) {
+  const own = useDefaults('Card');
   const Tag = as as 'div';
   return (
     <Tag

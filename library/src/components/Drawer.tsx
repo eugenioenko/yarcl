@@ -1,8 +1,7 @@
-import { defaultsFor } from '../classes';
 import type { ModalSize } from '../types';
 import { Modal, type ModalProps } from './Modal';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Drawer');
 
 /** Props for {@link Drawer}. */
 export interface DrawerProps extends ModalProps {
@@ -25,6 +24,7 @@ export interface DrawerProps extends ModalProps {
  * ```
  */
 export function Drawer({ side = 'right', ...props }: DrawerProps) {
+  const own = useDefaults('Drawer');
   return (
     <Modal {...props} size={props.size ?? (own.size as ModalSize | undefined)} className={`yarcl-drawer yarcl-drawer-${side}`} />
   );

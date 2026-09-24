@@ -18,9 +18,11 @@ export default defineConfig({
     border: { light: '#d0d5dd', dark: '#2e333d' },
   },
   sizes: {
+    xs: { height: '1.75rem', paddingX: '0.625rem', fontSize: '0.75rem', iconSize: '0.75rem' },
     sm: { height: '2rem', paddingX: '0.75rem', fontSize: '0.8125rem', iconSize: '0.875rem' },
     md: { height: '2.5rem', paddingX: '1rem', fontSize: '0.875rem', iconSize: '1rem' },
     lg: { height: '3rem', paddingX: '1.25rem', fontSize: '1rem', iconSize: '1.25rem' },
+    xl: { height: '3.5rem', paddingX: '1.5rem', fontSize: '1.125rem', iconSize: '1.5rem' },
   },
   radii: {
     square: '0',

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { colorClass, cx, defaultsFor } from '../classes';
+import { colorClass, cx } from '../classes';
 import type { Color } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Toast');
 
 /** Options for {@link toast}. */
 export interface ToastOptions {
@@ -143,6 +143,7 @@ export function Toaster({ placement = 'bottom-right', limit = 4, label = 'Notifi
 }
 
 function ToastItem({ entry }: { entry: ToastEntry }) {
+  const own = useDefaults('Toast');
   const { id, title, description, color, duration = 5000, action, urgent } = entry;
   const [paused, setPaused] = useState(false);
 

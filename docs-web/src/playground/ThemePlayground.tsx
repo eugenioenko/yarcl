@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Button, Drawer, Inline, Link, Select, Stack, Text, Textarea, Toaster, ToggleGroup, toast } from 'yarcl';
-import { generateCss } from 'yarcl/css';
+import { applyTheme } from 'yarcl/css';
 import type { YarclShape } from 'yarcl/define';
 import { themeNames, themes } from 'yarcl/themes';
 import { Dashboard } from './Dashboard';
@@ -59,14 +59,7 @@ export function ThemePlayground() {
 
   useEffect(() => {
     const found: string[] = [];
-    const css = generateCss(active, (message) => found.push(message));
-    let style = document.getElementById('yarcl-theme');
-    if (!style) {
-      style = document.createElement('style');
-      style.id = 'yarcl-theme';
-    }
-    document.head.appendChild(style);
-    style.textContent = css;
+    applyTheme(active, { onWarning: (message) => found.push(message) });
     setWarnings(found);
   }, [active]);
 

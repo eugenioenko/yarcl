@@ -4,15 +4,15 @@ import type { ThemeContract } from './contract';
 
 const ink = 'light-dark(#000000, #ffffff)';
 
-/** Loud and flat: yellow on black and white, square corners, thick borders, hard offset shadows, monospace type. */
+/** Loud and flat: red on black and white, square corners, thick borders, hard offset shadows, monospace type. */
 export const brutalist = defineConfig({
   ...defaults,
   colors: {
-    primary: { light: '#ffd400', dark: '#ffd400' },
+    primary: { light: '#ff3d2e', dark: '#ff5a4d' },
     neutral: { light: '#1a1a1a', dark: '#f5f5f5' },
     success: { light: '#00b862', dark: '#3dfc9a' },
     warning: { light: '#ff8a00', dark: '#ffb14a' },
-    danger: { light: '#ff3b30', dark: '#ff6b61' },
+    danger: { light: '#c2005a', dark: '#ff5ca1' },
     info: { light: '#2f6bff', dark: '#7aa2ff' },
   },
   neutrals: {
@@ -23,9 +23,11 @@ export const brutalist = defineConfig({
     border: { light: '#000000', dark: '#ffffff' },
   },
   sizes: {
+    xs: { height: '1.75rem', paddingX: '0.625rem', fontSize: '0.75rem', iconSize: '0.75rem' },
     sm: { height: '2rem', paddingX: '0.75rem', fontSize: '0.8125rem', iconSize: '0.875rem' },
     md: { height: '2.5rem', paddingX: '1rem', fontSize: '0.875rem', iconSize: '1rem' },
     lg: { height: '3rem', paddingX: '1.25rem', fontSize: '1rem', iconSize: '1.25rem' },
+    xl: { height: '3.5rem', paddingX: '1.5rem', fontSize: '1.125rem', iconSize: '1.5rem' },
   },
   radii: { square: '0', sm: '0', md: '0', lg: '0', xl: '0', rounded: '9999px' },
   variants: {

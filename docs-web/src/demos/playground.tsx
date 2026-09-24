@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Badge,
@@ -14,10 +14,14 @@ import {
   Switch,
   Text,
   ToggleGroup,
-  type Radius,
-  type Size,
-  type Spacing,
+  config as buildConfig,
 } from 'yarcl';
+import { applyTheme, resetTheme } from 'yarcl/css';
+import type { YarclShape } from 'yarcl/define';
+import { themeNames, themes } from 'yarcl/themes';
+
+type ThemeId = keyof typeof themes;
+const themeIds = Object.keys(themes) as ThemeId[];
 
 const palettes = {
   blue: { light: '#2d4bb8', dark: '#8aa2ff' },
@@ -26,19 +30,11 @@ const palettes = {
   orange: { light: '#c2410c', dark: '#fdba74' },
   pink: { light: '#be185d', dark: '#f9a8d4' },
 } as const;
-type Palette = keyof typeof palettes;
+type Palette = keyof typeof palettes | 'theme';
 
 const radii = ['square', 'sm', 'md', 'lg', 'xl'] as const;
-const allSizes = ['sm', 'md', 'lg'] as const;
+const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 const spacings = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
-const usedSize = 'lg';
-
-function readableOn(hex: string) {
-  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
-  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-  const l = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-  return (1.05 / (l + 0.05) >= (l + 0.05) / 0.05) ? '#ffffff' : '#000000';
-}
 
 const plans = [
   { value: 'starter', label: 'Starter' },
@@ -46,156 +42,164 @@ const plans = [
   { value: 'business', label: 'Business' },
 ];
 
+interface Overrides {
+  radius: string | null;
+  size: string | null;
+  padding: string | null;
+  gap: string | null;
+}
+
+const none: Overrides = { radius: null, size: null, padding: null, gap: null };
+
+function baseOf(id: ThemeId): YarclShape {
+  return (id === 'yarcl' ? buildConfig : themes[id]) as unknown as YarclShape;
+}
+
+function compose(base: YarclShape, palette: Palette, overrides: Overrides): YarclShape {
+  const defaults = { ...base.defaults };
+  for (const [key, value] of Object.entries(overrides)) if (value) (defaults as Record<string, string>)[key] = value;
+  const components = Object.fromEntries(
+    Object.entries(base.components ?? {}).map(([name, values]) => {
+      if (!overrides.radius || !values) return [name, values];
+      const { radius: _dropped, ...rest } = values as Record<string, string>;
+      return [name, rest];
+    }),
+  );
+  return {
+    ...base,
+    colors: palette === 'theme' ? base.colors : { ...base.colors, primary: palettes[palette] },
+    components,
+    defaults,
+  } as YarclShape;
+}
+
+function Choice<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: readonly T[];
+  onChange: (value: T) => void;
+}) {
+  return (
+    <Stack gap="xs">
+      <Text textStyle="label">{label}</Text>
+      <ToggleGroup type="single" required value={value} onValueChange={(v) => v && onChange(v as T)} size="sm" aria-label={label}>
+        {options.map((option) => (
+          <ToggleGroup.Item key={option} value={option}>
+            {option}
+          </ToggleGroup.Item>
+        ))}
+      </ToggleGroup>
+    </Stack>
+  );
+}
+
 export function ConfigPlayground() {
-  const [palette, setPalette] = useState<Palette>('blue');
-  const [radius, setRadius] = useState<(typeof radii)[number]>('md');
-  const [sizes, setSizes] = useState<string[]>([...allSizes]);
-  const [defaultSize, setDefaultSize] = useState<string>('md');
-  const [scheme, setScheme] = useState<string>('light');
-  const [padding, setPadding] = useState<Spacing>('lg');
-  const [gap, setGap] = useState<Spacing>('md');
+  const [themeId, setThemeId] = useState<ThemeId>('yarcl');
+  const [palette, setPalette] = useState<Palette>('theme');
+  const [overrides, setOverrides] = useState<Overrides>(none);
+  const [scheme, setScheme] = useState('light');
 
-  const color = palettes[palette];
-  const errors: string[] = [];
-  const union = sizes.map((s) => `"${s}"`).join(' | ') || 'never';
-  if (!sizes.includes(defaultSize)) errors.push(`yarcl.config.ts: Type '"${defaultSize}"' is not assignable to type '${union}'.`);
-  if (!sizes.includes(usedSize)) errors.push(`App.tsx: Type '"${usedSize}"' is not assignable to type '${union}'.`);
+  const base = baseOf(themeId);
+  const composed = useMemo(() => compose(base, palette, overrides), [base, palette, overrides]);
+  const untouched = themeId === 'yarcl' && palette === 'theme' && Object.values(overrides).every((v) => !v);
 
-  const size = (sizes.includes(defaultSize) ? defaultSize : (sizes[0] ?? 'md')) as Size;
-  const r = radius as Radius;
+  useEffect(() => {
+    if (untouched) resetTheme();
+    else applyTheme(composed);
+  }, [composed, untouched]);
 
-  const preview = {
-    colorScheme: scheme,
-    '--yarcl-color-primary': `light-dark(${color.light}, ${color.dark})`,
-    '--yarcl-color-primary-on': `light-dark(${readableOn(color.light)}, ${readableOn(color.dark)})`,
-    '--yarcl-focus-color': `light-dark(${color.light}, ${color.dark})`,
-  } as CSSProperties;
+  useEffect(() => resetTheme, []);
 
-  const config = `export default defineConfig({
-  ...defaults,
-  colors: {
-    ...defaults.colors,
-    primary: { light: '${color.light}', dark: '${color.dark}' },
-  },
-  sizes: {
-${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
-  },
-  defaults: {
-    ...defaults.defaults,
-    size: '${defaultSize}',
-    radius: '${radius}',
-    padding: '${padding}',
-    gap: '${gap}',
-  },
-});`;
+  function chooseTheme(id: ThemeId) {
+    setThemeId(id);
+    setPalette('theme');
+    setOverrides(none);
+  }
+
+  const set = (key: keyof Overrides) => (value: string) => setOverrides((current) => ({ ...current, [key]: value }));
+  const current = composed.defaults;
+
+  const spread = themeId === 'yarcl' ? 'defaults' : themeId;
+  const changed = (Object.entries(overrides) as [keyof Overrides, string | null][]).filter(([, value]) => value);
+  const code = [
+    themeId === 'yarcl' ? "import defaults from 'yarcl/defaults';" : `import { ${spread} } from 'yarcl/themes';`,
+    '',
+    'export default defineConfig({',
+    `  ...${spread},`,
+    ...(palette === 'theme'
+      ? []
+      : [
+          '  colors: {',
+          `    ...${spread}.colors,`,
+          `    primary: { light: '${palettes[palette].light}', dark: '${palettes[palette].dark}' },`,
+          '  },',
+        ]),
+    ...(changed.length
+      ? ['  defaults: {', `    ...${spread}.defaults,`, ...changed.map(([key, value]) => `    ${key}: '${value}',`), '  },']
+      : []),
+    '});',
+  ].join('\n');
 
   return (
     <div className="playground">
+      <Stack gap="xs" className="playground-themes">
+        <Text textStyle="label">Theme</Text>
+        <ToggleGroup type="single" required value={themeId} onValueChange={(v) => v && chooseTheme(v as ThemeId)} attached={false} aria-label="Theme">
+          {themeIds.map((id) => (
+            <ToggleGroup.Item key={id} value={id}>
+              {id === 'yarcl' ? 'yarcl' : themeNames[id]}
+            </ToggleGroup.Item>
+          ))}
+        </ToggleGroup>
+      </Stack>
+
       <Stack className="playground-controls">
         <Stack gap="xs">
           <Text textStyle="label">Brand color</Text>
           <ToggleGroup type="single" required value={palette} onValueChange={(v) => v && setPalette(v as Palette)} size="sm" attached={false} aria-label="Brand color">
-            {(Object.keys(palettes) as Palette[]).map((key) => (
+            <ToggleGroup.Item value="theme">Theme</ToggleGroup.Item>
+            {(Object.keys(palettes) as (keyof typeof palettes)[]).map((key) => (
               <ToggleGroup.Item key={key} value={key} icon aria-label={key}>
                 <span className="playground-dot" style={{ background: palettes[key].light }} />
               </ToggleGroup.Item>
             ))}
           </ToggleGroup>
         </Stack>
-        <Stack gap="xs">
-          <Text textStyle="label">Default radius</Text>
-          <ToggleGroup type="single" required value={radius} onValueChange={(v) => v && setRadius(v as typeof radius)} size="sm" aria-label="Default radius">
-            {radii.map((key) => (
-              <ToggleGroup.Item key={key} value={key}>
-                {key}
-              </ToggleGroup.Item>
-            ))}
-          </ToggleGroup>
-        </Stack>
-        <Stack gap="xs">
-          <Text textStyle="label">Available sizes</Text>
-          <Inline gap="md">
-            {allSizes.map((key) => (
-              <Checkbox
-                key={key}
-                checked={sizes.includes(key)}
-                onChange={(e) => setSizes(e.target.checked ? allSizes.filter((s) => s === key || sizes.includes(s)) : sizes.filter((s) => s !== key))}
-              >
-                {key}
-              </Checkbox>
-            ))}
-          </Inline>
-        </Stack>
-        <Stack gap="xs">
-          <Text textStyle="label">Default size</Text>
-          <ToggleGroup type="single" required value={defaultSize} onValueChange={(v) => v && setDefaultSize(v)} size="sm" aria-label="Default size">
-            {allSizes.map((key) => (
-              <ToggleGroup.Item key={key} value={key}>
-                {key}
-              </ToggleGroup.Item>
-            ))}
-          </ToggleGroup>
-        </Stack>
-        <Stack gap="xs">
-          <Text textStyle="label">Default padding</Text>
-          <ToggleGroup type="single" required value={padding} onValueChange={(v) => v && setPadding(v as Spacing)} size="sm" aria-label="Default padding">
-            {spacings.map((key) => (
-              <ToggleGroup.Item key={key} value={key}>
-                {key}
-              </ToggleGroup.Item>
-            ))}
-          </ToggleGroup>
-        </Stack>
-        <Stack gap="xs">
-          <Text textStyle="label">Default gap</Text>
-          <ToggleGroup type="single" required value={gap} onValueChange={(v) => v && setGap(v as Spacing)} size="sm" aria-label="Default gap">
-            {spacings.map((key) => (
-              <ToggleGroup.Item key={key} value={key}>
-                {key}
-              </ToggleGroup.Item>
-            ))}
-          </ToggleGroup>
-        </Stack>
-        <Stack gap="xs">
-          <Text textStyle="label">Color scheme</Text>
-          <ToggleGroup type="single" required value={scheme} onValueChange={(v) => v && setScheme(v)} size="sm" aria-label="Preview color scheme">
-            <ToggleGroup.Item value="light">light</ToggleGroup.Item>
-            <ToggleGroup.Item value="dark">dark</ToggleGroup.Item>
-          </ToggleGroup>
-        </Stack>
+        <Choice label="Default radius" value={current.radius} options={radii} onChange={set('radius')} />
+        <Choice label="Default size" value={current.size} options={sizes} onChange={set('size')} />
+        <Choice label="Default padding" value={current.padding} options={spacings} onChange={set('padding')} />
+        <Choice label="Default gap" value={current.gap} options={spacings} onChange={set('gap')} />
+        <Choice label="Color scheme" value={scheme} options={['light', 'dark'] as const} onChange={setScheme} />
       </Stack>
 
-      <div className="playground-preview" style={preview}>
-        <Card radius={r} padding={padding} shadow="md" className="playground-card">
-          <Stack gap={gap}>
-            <Inline justify="between" gap={gap}>
+      <div className="playground-preview" style={{ colorScheme: scheme }}>
+        <Card shadow="md" className="playground-card">
+          <Stack>
+            <Inline justify="between">
               <Heading level={3}>Create workspace</Heading>
-              <Badge radius={r} size={size}>
-                Beta
-              </Badge>
+              <Badge>Beta</Badge>
             </Inline>
             <Field label="Workspace name">
-              <Input size={size} radius={r} placeholder="Acme Inc." />
+              <Input placeholder="Acme Inc." />
             </Field>
             <Field label="Plan">
-              <Select size={size} radius={r} options={plans} defaultValue="team" />
+              <Select options={plans} defaultValue="team" />
             </Field>
-            <Inline justify="between" gap={gap}>
-              <Checkbox size={size} defaultChecked>
-                Invite my team
-              </Checkbox>
-              <Switch size={size} defaultChecked aria-label="Email updates" />
+            <Inline justify="between">
+              <Checkbox defaultChecked>Invite my team</Checkbox>
+              <Switch defaultChecked aria-label="Email updates" />
             </Inline>
-            <Alert radius={r} title="14-day trial">
-              No card needed until the trial ends.
-            </Alert>
-            <Inline justify="end" gap={gap}>
-              <Button size={size} radius={r} variant="outline" color="neutral">
+            <Alert title="14-day trial">No card needed until the trial ends.</Alert>
+            <Inline justify="end">
+              <Button variant="outline" color="neutral">
                 Cancel
               </Button>
-              <Button size={size} radius={r}>
-                Submit
-              </Button>
+              <Button>Submit</Button>
             </Inline>
           </Stack>
         </Card>
@@ -203,28 +207,7 @@ ${sizes.map((s) => `    ${s}: { … },`).join('\n') || '    // no sizes'}
 
       <div className="playground-code">
         <div className="playground-file">yarcl.config.ts</div>
-        <pre>{config}</pre>
-        <div className="playground-file">App.tsx</div>
-        <pre>{`<Button size="${usedSize}">Continue</Button>`}</pre>
-        <div className={`playground-diagnostics ${errors.length ? 'has-errors' : ''}`} role="status">
-          {errors.length ? (
-            errors.map((error) => (
-              <div key={error}>
-                <Badge color="danger" variant="solid" size="sm">
-                  error
-                </Badge>{' '}
-                {error}
-              </div>
-            ))
-          ) : (
-            <div>
-              <Badge color="success" variant="solid" size="sm">
-                tsc
-              </Badge>{' '}
-              No errors. Uncheck <code>lg</code> under Available sizes to see what the compiler says.
-            </div>
-          )}
-        </div>
+        <pre>{code}</pre>
       </div>
     </div>
   );

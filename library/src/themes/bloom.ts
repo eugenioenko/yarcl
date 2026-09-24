@@ -6,7 +6,7 @@ const glow = (geometry: string, alpha: number) =>
   `${geometry} light-dark(rgb(91 33 182 / ${alpha}), rgb(0 0 0 / ${Math.min(alpha * 5, 0.7)}))`;
 
 /** Friendly and airy: violet on lavender, pill-shaped controls, rounded cards, large targets, soft tinted shadows. */
-export const soft = defineConfig({
+export const bloom = defineConfig({
   ...defaults,
   colors: {
     primary: { light: '#7c3aed', dark: '#c4b5fd' },
@@ -24,9 +24,11 @@ export const soft = defineConfig({
     border: { light: '#e6dff7', dark: '#342c4d' },
   },
   sizes: {
+    xs: { height: '2rem', paddingX: '0.875rem', fontSize: '0.8125rem', iconSize: '0.875rem' },
     sm: { height: '2.25rem', paddingX: '1rem', fontSize: '0.875rem', iconSize: '1rem' },
     md: { height: '2.75rem', paddingX: '1.25rem', fontSize: '0.9375rem', iconSize: '1.125rem' },
     lg: { height: '3.25rem', paddingX: '1.625rem', fontSize: '1.0625rem', iconSize: '1.25rem' },
+    xl: { height: '3.75rem', paddingX: '2rem', fontSize: '1.1875rem', iconSize: '1.5rem' },
   },
   radii: { square: '0', sm: '0.75rem', md: '1rem', lg: '1.5rem', xl: '2rem', rounded: '9999px' },
   spacing: { xs: '0.375rem', sm: '0.75rem', md: '1.25rem', lg: '1.75rem', xl: '2.5rem' },

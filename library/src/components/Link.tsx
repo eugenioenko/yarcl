@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, defaultsFor } from '../classes';
+import { colorClass, cx } from '../classes';
 import type { Color } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Link');
 
 /** Props for {@link Link}. Accepts all native `<a>` attributes except `color`. */
 export interface LinkProps extends Omit<ComponentProps<'a'>, 'color'> {
@@ -30,6 +30,7 @@ export interface LinkProps extends Omit<ComponentProps<'a'>, 'color'> {
  * ```
  */
 export function Link({ color, underline = 'always', external, className, ...props }: LinkProps) {
+  const own = useDefaults('Link');
   return (
     <a
       className={cx('yarcl-link', `yarcl-link-underline-${underline}`, colorClass(color ?? own.color), className)}

@@ -10,7 +10,7 @@
     "./plugin": "./src/plugin.ts",
     "./reference": "./src/reference/index.ts",
     "./themes": "./src/themes/index.ts",
-    "./css": "./src/css.ts"
+    "./css": "./src/apply.ts"
   },
   "peerDependencies": {
     "react": ">=18",

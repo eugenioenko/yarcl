@@ -83,5 +83,6 @@ export type {
   TokenProps,
   VariantProps,
 } from './types';
-/** The resolved design system config: the consumer's, or the library default. */
+/** The build-time design system config: the consumer's, or the library default. */
 export { default as config } from '@yarcl/config';
+export { useConfig } from './runtime';

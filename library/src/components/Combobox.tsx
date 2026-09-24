@@ -17,14 +17,14 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, defaultsFor, radiusClass, sizeClass } from '../classes';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import { CheckIcon, floatingMiddleware } from '../floating';
 import { useControllable } from '../hooks';
 import type { TokenProps } from '../types';
 import type { SelectOption } from './Select';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Combobox');
 
 /** Props for {@link Combobox}. */
 export interface ComboboxProps<V extends string = string>
@@ -86,6 +86,7 @@ const contains = (option: SelectOption, text: string) => option.label.toLowerCas
  * ```
  */
 export function Combobox<V extends string = string>(props: ComboboxProps<V>) {
+  const own = useDefaults('Combobox');
   const {
     options,
     value: valueProp,

@@ -1200,6 +1200,10 @@ html:has(.yarcl-modal[open]) {
   align-items: stretch;
 }
 
+.yarcl-button-group:not(.yarcl-button-group-attached) {
+  flex-wrap: wrap;
+}
+
 .yarcl-button-group-attached {
   gap: 0;
 }

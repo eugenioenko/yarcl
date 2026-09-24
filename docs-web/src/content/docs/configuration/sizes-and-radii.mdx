@@ -14,9 +14,11 @@ Each entry in `sizes` describes one step of the control scale:
 
 ```ts
 sizes: {
-  sm: { height: '2rem',   paddingX: '0.75rem', fontSize: '0.8125rem', iconSize: '0.875rem' },
-  md: { height: '2.5rem', paddingX: '1rem',    fontSize: '0.875rem',  iconSize: '1rem' },
-  lg: { height: '3rem',   paddingX: '1.25rem', fontSize: '1rem',      iconSize: '1.25rem' },
+  xs: { height: '1.75rem', paddingX: '0.625rem', fontSize: '0.75rem',   iconSize: '0.75rem' },
+  sm: { height: '2rem',    paddingX: '0.75rem',  fontSize: '0.8125rem', iconSize: '0.875rem' },
+  md: { height: '2.5rem',  paddingX: '1rem',     fontSize: '0.875rem',  iconSize: '1rem' },
+  lg: { height: '3rem',    paddingX: '1.25rem',  fontSize: '1rem',      iconSize: '1.25rem' },
+  xl: { height: '3.5rem',  paddingX: '1.5rem',   fontSize: '1.125rem',  iconSize: '1.5rem' },
 },
 ```
 
@@ -36,6 +38,14 @@ Buttons, icon buttons, inputs, selects, comboboxes, tabs, menus, checkboxes, rad
 Use `rem`, so controls scale with the user's browser font size. Keep `px` for borders and focus rings.
 
 `defaults.size` is the size every control uses when `size` is omitted. Set it to `sm` and the whole app becomes compact.
+
+### Sizes and spacing are different scales
+
+`sizes` is for **controls**: how big a button or input is to click and read. `spacing` is for **layout**: the padding inside cards and dialogs (`defaults.padding`) and the gap between items (`defaults.gap`). They're separate so a dense app can have small controls with generous spacing, or the other way around. Their keys are independent too.
+
+### A theme must define every size your app uses
+
+If `<Button size="xl">` is rendered with a theme that has no `xl`, the button gets the class `yarcl-size-xl` but no CSS for it, so it collapses. With a config, that's a type error. For themes switched at runtime, check them against a shared contract (see [switching themes](/theming/switching-themes/#the-theme-contract)).
 
 ## Radius scale
 

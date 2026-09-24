@@ -6,11 +6,11 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, defaultsFor, sizeClass } from '../classes';
+import { colorClass, cx, sizeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, Size } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Tabs');
 
 interface TabsContextValue {
   value: string;
@@ -50,6 +50,7 @@ export type TabsProps = TabsBaseProps &
   );
 
 function TabsRoot({ value: valueProp, defaultValue, onValueChange, size, color, className, ...props }: TabsProps) {
+  const own = useDefaults('Tabs');
   const [value, select] = useControllable(valueProp, defaultValue ?? '', onValueChange);
   const baseId = useId();
   const idFor = (kind: 'tab' | 'panel', v: string) => `${baseId}-${kind}-${v.replace(/[^\w-]/g, '_')}`;

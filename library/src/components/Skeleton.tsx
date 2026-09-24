@@ -1,8 +1,8 @@
 import type { ComponentProps, CSSProperties } from 'react';
-import { cx, defaultsFor, radiusClass, sizeClass, typeClass } from '../classes';
+import { cx, radiusClass, sizeClass, typeClass } from '../classes';
 import type { Radius, Size, TextStyle } from '../types';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Skeleton');
 
 /** Props for {@link Skeleton}. */
 export interface SkeletonProps extends Omit<ComponentProps<'span'>, 'children'> {
@@ -60,6 +60,7 @@ export function Skeleton({
   style,
   ...props
 }: SkeletonProps) {
+  const own = useDefaults('Skeleton');
   const dimensions = { width, height, ...style } as CSSProperties;
 
   if (shape === 'text') {

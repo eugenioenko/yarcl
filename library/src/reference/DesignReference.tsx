@@ -1,4 +1,3 @@
-import config from '@yarcl/config';
 import type { ReactNode } from 'react';
 import { contrast, parseHex, readableOn } from '../color';
 import type { ColorPair, ColorToken, YarclShape } from '../define';
@@ -21,9 +20,9 @@ import {
   type TextStyle,
   type Variant,
 } from '../index';
+import { useConfig } from '../runtime';
 import './reference.css';
 
-const shape = config as YarclShape;
 const keys = <T extends string>(group: object) => Object.keys(group) as T[];
 
 function ratio(background: string, token: ColorToken, mode: keyof ColorPair): string {
@@ -53,6 +52,7 @@ function Code({ children }: { children: ReactNode }) {
 }
 
 function KeyValues({ caption, rows }: { caption: string; rows: [string, ReactNode][] }) {
+  const config = useConfig();
   return (
     <Table caption={caption} density={config.defaults.density}>
       <Table.Body>
@@ -96,6 +96,8 @@ export interface DesignReferenceProps {
  * ```
  */
 export function DesignReference({ title = 'Design reference' }: DesignReferenceProps) {
+  const config = useConfig();
+  const shape = config as unknown as YarclShape;
   const colors = keys<Color>(config.colors);
   const variants = keys<Variant>(config.variants);
   const { typography } = shape;

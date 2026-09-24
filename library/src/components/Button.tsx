@@ -1,10 +1,10 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, defaultsFor, radiusClass, sizeClass, variantClass } from '../classes';
+import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
 import type { TokenProps, VariantProps } from '../types';
 import { useButtonGroup } from './ButtonGroup';
 import { Spinner } from './Spinner';
+import { useDefaults } from '../runtime';
 
-const own = defaultsFor('Button');
 
 /** Props for {@link Button}. Accepts all native `<button>` attributes except `color`. */
 export interface ButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps, VariantProps {
@@ -34,6 +34,7 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
+  const own = useDefaults('Button');
   const group = useButtonGroup();
   return (
     <button
