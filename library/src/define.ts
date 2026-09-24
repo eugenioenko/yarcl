@@ -106,6 +106,7 @@ export interface ComponentTokenProps {
   Textarea: 'size' | 'radius' | 'color';
   Select: 'size' | 'radius' | 'color';
   Combobox: 'size' | 'radius' | 'color';
+  DatePicker: 'size' | 'radius' | 'color' | 'variant';
   Checkbox: 'size' | 'color';
   Radio: 'size' | 'color';
   Switch: 'size' | 'color';

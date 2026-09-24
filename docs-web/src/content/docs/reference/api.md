@@ -22,7 +22,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Group | Exports |
 |---|---|
 | Buttons | `Button`, `IconButton`, `ButtonGroup`, `ToggleGroup` |
-| Forms | `Field`, `Label`, `Input`, `Textarea`, `Select`, `Combobox`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
+| Forms | `Field`, `Label`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `Stack`, `Inline`, `Card`, `Divider` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `Toaster`, `toast` |
@@ -38,4 +38,5 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | `ModalSize` | keys of `modalSizes` |
 | `TokenProps`, `VariantProps` | the shared `size` / `radius` / `color` and `variant` props |
 | `SelectOption` | `{ value, label, disabled? }` for `Select` and `Combobox` |
+| `DateRange` | `{ from, to }` for `DatePicker` in range mode |
 | `YarclShape`, `ColorToken`, `SizeToken`, `VariantToken`, … | the config schema, from `yarcl/define` |

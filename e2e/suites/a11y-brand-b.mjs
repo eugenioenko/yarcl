@@ -7,6 +7,10 @@ export default async function (ctx) {
   await audit(ctx, 'shop page');
   await audit(ctx, 'pagination', '.yarcl-pagination');
 
+  await page.getByRole('button', { name: 'Delivery date' }).click();
+  await audit(ctx, 'date picker open', '.yarcl-floating');
+  await page.keyboard.press('Escape');
+
   await page.getByRole('button', { name: 'Size guide' }).click();
   await audit(ctx, 'size guide dialog', 'dialog[open]');
   await page.keyboard.press('Escape');

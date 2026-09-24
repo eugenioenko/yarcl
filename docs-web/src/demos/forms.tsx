@@ -1,8 +1,11 @@
+import { addDays, format, isWeekend, startOfToday } from 'date-fns';
+import { de } from 'date-fns/locale/de';
 import { useEffect, useId, useState } from 'react';
 import {
   Button,
   Checkbox,
   Combobox,
+  DatePicker,
   Field,
   Inline,
   Input,
@@ -16,6 +19,7 @@ import {
   Text,
   Textarea,
   ToggleGroup,
+  type DateRange,
   type SelectOption,
 } from 'yarcl';
 
@@ -253,5 +257,53 @@ export function SliderDemo() {
       <Slider size="lg" defaultValue={30} aria-label="Large" />
       <Slider disabled defaultValue={50} aria-label="Disabled" />
     </Stack>
+  );
+}
+
+const iso = (date: Date | null | undefined) => (date ? format(date, 'yyyy-MM-dd') : 'none');
+
+export function DatePickerDemo() {
+  const [date, setDate] = useState<Date | null>(null);
+  return (
+    <Stack className="demo-form">
+      <Field label="Appointment" description={`Value: ${iso(date)}`}>
+        <DatePicker value={date} onValueChange={setDate} placeholder="Pick a date" />
+      </Field>
+      <Field label="Large, success">
+        <DatePicker size="lg" color="success" radius="lg" placeholder="Pick a date" />
+      </Field>
+      <DatePicker size="sm" disabled placeholder="Disabled" aria-label="Disabled" />
+    </Stack>
+  );
+}
+
+export function DatePickerRangeDemo() {
+  const [stay, setStay] = useState<DateRange | null>(null);
+  return (
+    <Field label="Stay" description={`From ${iso(stay?.from)} to ${iso(stay?.to)}`} className="demo-form">
+      <DatePicker mode="range" value={stay} onValueChange={setStay} placeholder="Check-in and check-out" />
+    </Field>
+  );
+}
+
+export function DatePickerLimitsDemo() {
+  const [today] = useState(startOfToday);
+  return (
+    <Field label="Delivery day" description="Weekdays in the next 30 days." className="demo-form">
+      <DatePicker min={addDays(today, 1)} max={addDays(today, 30)} isDateDisabled={isWeekend} placeholder="Pick a weekday" />
+    </Field>
+  );
+}
+
+export function DatePickerLocaleDemo() {
+  return (
+    <Field label="Termin" description="German locale: week starts on Monday." className="demo-form">
+      <DatePicker
+        locale={de}
+        displayFormat="P"
+        placeholder="Datum wählen"
+        labels={{ dialog: 'Datum wählen', previousMonth: 'Vorheriger Monat', nextMonth: 'Nächster Monat' }}
+      />
+    </Field>
   );
 }

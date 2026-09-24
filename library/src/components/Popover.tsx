@@ -9,7 +9,7 @@ import {
   useRole,
   type Placement,
 } from '@floating-ui/react';
-import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode } from 'react';
+import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode, type RefObject } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
@@ -98,15 +98,20 @@ export interface PopoverContentProps extends ComponentProps<'div'> {
    * @default config.defaults.radius
    */
   radius?: Radius;
+  /**
+   * Element focused when the content opens: an index into its tabbable elements, or a ref.
+   * @default 0
+   */
+  initialFocus?: number | RefObject<HTMLElement | null>;
 }
 
-function PopoverContent({ padding, radius, className, style, ...props }: PopoverContentProps) {
+function PopoverContent({ padding, radius, initialFocus, className, style, ...props }: PopoverContentProps) {
   const own = useDefaults('Popover');
   const { open, modal, refs, floatingStyles, context, getFloatingProps } = usePopoverContext('Popover.Content');
   if (!open) return null;
   return (
     <FloatingPortal>
-      <FloatingFocusManager context={context} modal={modal}>
+      <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
         <div
           ref={refs.setFloating}
           style={{ ...floatingStyles, ...style }}

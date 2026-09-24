@@ -50,6 +50,18 @@ export default async function (ctx) {
   await audit(ctx, 'combobox open');
   await page.keyboard.press('Escape');
 
+  await page.getByRole('button', { name: 'Appointment' }).click();
+  await audit(ctx, 'date picker open', '.yarcl-floating');
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: 'Stay' }).click();
+  await audit(ctx, 'date range picker open', '.yarcl-floating');
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: 'Delivery day' }).click();
+  await audit(ctx, 'date picker with disabled days open', '.yarcl-floating');
+  await page.keyboard.press('Escape');
+
   await page.getByRole('button', { name: 'Filters' }).click();
   await audit(ctx, 'popover open', '.yarcl-floating');
   await page.keyboard.press('Escape');
