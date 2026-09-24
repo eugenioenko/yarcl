@@ -321,8 +321,3 @@
     transition: none;
   }
 }
-
-.playground-key {
-  font-size: 0.75rem;
-  color: var(--yarcl-neutral-muted);
-}
