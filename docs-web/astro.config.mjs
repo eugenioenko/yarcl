@@ -11,7 +11,7 @@ export default defineConfig({
       description: 'A React component library where your config file is the design system.',
       logo: { src: './src/assets/yarcl.svg' },
       favicon: '/yarcl.svg',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/eugenioenko/yarcl-ui' }],
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/eugenioenko/yarcl' }],
       customCss: ['./src/styles/custom.css'],
       sidebar: [
         { label: 'Getting Started', items: [{ autogenerate: { directory: 'getting-started' } }] },
