@@ -412,6 +412,23 @@
   color: var(--yarcl-c-text);
 }
 
+.yarcl-label-variant {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 0.125em 0.5em;
+  color: var(--yarcl-v-fg);
+  background: var(--yarcl-v-bg);
+  border: var(--yarcl-border-width) solid var(--yarcl-v-border);
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-label-sized {
+  font-size: var(--yarcl-fs);
+}
+
 .yarcl-label-disabled {
   color: var(--yarcl-neutral-muted);
 }

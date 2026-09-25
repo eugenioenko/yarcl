@@ -5,7 +5,6 @@ import {
   Checkbox,
   Divider,
   Field,
-  Label,
   Alert,
   Badge,
   ButtonGroup,
@@ -33,6 +32,7 @@ import {
   IconButton,
   Inline,
   Input,
+  Label,
   Link,
   Breadcrumb,
   NumberInput,
@@ -62,6 +62,7 @@ export const contract = (
     <Field label="Name">
       <Input />
     </Field>
+    <Label htmlFor="name" required variant="subtle" color="brand" size="sm" radius="rounded" textStyle="label" />
     <Text textStyle="caption" color="danger" truncate={2} />
     <Label htmlFor="name" textStyle="caption" color="neutral" required disabled>
       Name
@@ -259,6 +260,10 @@ export const contract = (
     <Label textStyle="heading" />
     {/* @ts-expect-error */}
     <Label color="primary" />
+    {/* @ts-expect-error */}
+    <Label size="gigantic" />
+    {/* @ts-expect-error */}
+    <Label variant="ghost" />
     {/* @ts-expect-error */}
     <Heading textStyle="title" />
     {/* @ts-expect-error */}

@@ -152,13 +152,18 @@ const groups: Record<string, Item[]> = {
     {
       name: 'Label',
       href: '/components/forms/label/',
-      description: 'A standalone form label, for controls beside it or grouped.',
+      description: 'A form label in your label text style, or a filled label with a variant.',
       preview: (
-        <Inline gap="sm" wrap={false} className="gallery-fill">
-          <Label htmlFor="gallery-label-city" required>
-            City
+        <Inline gap="xs">
+          <Label size="sm" required>
+            Email
           </Label>
-          <Input id="gallery-label-city" size="sm" placeholder="Zurich" required className="demo-grow" />
+          <Label size="sm" variant="soft" color="success">
+            Active
+          </Label>
+          <Label size="sm" variant="solid" color="primary">
+            New
+          </Label>
         </Inline>
       ),
     },

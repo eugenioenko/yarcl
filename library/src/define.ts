@@ -128,7 +128,7 @@ export interface ComponentTokenProps {
   Stack: 'gap';
   Inline: 'gap';
   Text: 'textStyle' | 'color';
-  Label: 'textStyle' | 'color';
+  Label: 'textStyle' | 'color' | 'variant' | 'size' | 'radius';
   Link: 'color';
   Breadcrumb: 'textStyle' | 'color';
   Spinner: 'size' | 'color';

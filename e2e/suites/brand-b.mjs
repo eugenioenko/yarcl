@@ -13,6 +13,15 @@ export default async function ({ page, check }) {
   check('breadcrumb collapses to first and last two', (await trail.locator('> ol > li').count()) === 4 && (await trail.getByRole('link', { name: 'Women' }).count()) === 0);
   check('breadcrumb marks the current page', (await trail.locator('[aria-current="page"]').textContent()) === 'Linen overshirt');
 
+  const labelEl = page.locator('.yarcl-label').first();
+  check('label renders a <label> element', (await labelEl.evaluate((el) => el.tagName)) === 'LABEL');
+  const linen = page.getByText('Linen', { exact: true });
+  check('label uses talla-s font (12px)', (await linen.evaluate((el) => getComputedStyle(el).fontSize)) === '12px');
+  check('label uses hairline radius', (await linen.evaluate((el) => getComputedStyle(el).borderTopLeftRadius)) === '2px');
+  check('label wash variant fills the background', (await linen.evaluate((el) => getComputedStyle(el).backgroundColor)) !== 'rgba(0, 0, 0, 0)');
+  const required = page.locator('.yarcl-label-required');
+  check('label required marker hidden from screen readers', (await required.count()) === 1 && (await required.getAttribute('aria-hidden')) === 'true');
+
   const add = page.getByRole('button', { name: 'Add to bag' });
   const save = page.getByRole('button', { name: 'Save' });
   check('talla-l buttons share height', (await add.boundingBox()).height === (await save.boundingBox()).height);
