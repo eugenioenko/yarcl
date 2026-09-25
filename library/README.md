@@ -20,7 +20,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 {
   "compilerOptions": {
     "paths": {
-      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/dist/yarcl.config.d.ts"]
     }
   }
 }

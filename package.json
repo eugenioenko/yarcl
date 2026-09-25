@@ -4,14 +4,15 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm -C consumer dev",
-    "build": "pnpm -C consumer build && pnpm -C e2e/consumer build",
+    "build": "pnpm -C library build && pnpm -C consumer build && pnpm -C e2e/consumer build",
     "typecheck": "tsc -p library && tsc -p consumer && tsc -p e2e/consumer",
     "test": "vitest run",
+    "test:package": "node test-utils/package-consumer.mjs",
     "test:watch": "vitest",
     "docs:api": "typedoc",
     "docs:dev": "pnpm -C docs-web dev",
     "docs:build": "pnpm -C docs-web build",
-    "lint": "eslint library/src library/tests library/vitest.config.ts consumer/src e2e/consumer/src"
+    "lint": "eslint library/src library/scripts/build.mjs library/tests library/vite.config.ts library/vitest.config.ts consumer/src e2e/consumer/src e2e/package-consumer/src e2e/package-consumer/vite.config.ts test-utils/package-consumer.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

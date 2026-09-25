@@ -20,4 +20,3 @@ export const shadowClass = (shadow?: Shadow) => shadow && `yarcl-shadow-${shadow
 export const typeClass = (style: TextStyle) => `yarcl-type-${style}`;
 export const densityClass = (density: Density = activeConfig().defaults.density) => `yarcl-density-${density}`;
 export const softVariantClass = (variant: Variant = activeConfig().defaults.softVariant) => `yarcl-variant-${variant}`;
-

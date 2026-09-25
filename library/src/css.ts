@@ -1,5 +1,5 @@
-import { contrast, mix, parseHex, readableOn, readableText, toHex } from './color.ts';
-import type { ColorPair, ColorToken, FontFaceToken, VariantToken, YarclShape } from './define.ts';
+import { contrast, mix, parseHex, readableOn, readableText, toHex } from './color';
+import type { ColorPair, ColorToken, FontFaceToken, VariantToken, YarclShape } from './define';
 
 const MIN_CONTRAST = 4.5;
 
