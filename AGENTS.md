@@ -61,6 +61,7 @@ Run from the root with pnpm:
 pnpm typecheck
 pnpm lint
 pnpm build
+pnpm size
 pnpm test
 pnpm test <suite>
 pnpm docs:dev

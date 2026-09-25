@@ -21,6 +21,10 @@
     "typescript"
   ],
   "type": "module",
+  "sideEffects": [
+    "./dist/index.js",
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
