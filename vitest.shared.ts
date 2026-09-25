@@ -50,7 +50,7 @@ export function browserTests(name: string): ViteUserConfig {
     },
     test: {
       name,
-      include: ['tests/**/*.test.ts'],
+      include: ['tests/**/*.test.{ts,tsx}'],
       testTimeout: 120_000,
       browser: {
         enabled: true,

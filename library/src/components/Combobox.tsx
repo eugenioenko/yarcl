@@ -241,6 +241,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
     color,
     className,
     onBlur,
+    name,
     multiple: _multiple,
     maxSelected: _maxSelected,
     ...rest
@@ -296,10 +297,12 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
     else close();
   }
 
+  const referenceRef = useMergeRefs([refs.setReference, (rest as { ref?: React.Ref<HTMLInputElement> }).ref]);
+
   return (
     <>
       <input
-        ref={refs.setReference}
+        ref={referenceRef}
         className={cx('yarcl-input yarcl-combobox', sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), colorClass(color ?? own.color), className)}
         autoComplete="off"
         aria-autocomplete="list"
@@ -316,6 +319,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
           },
         })}
       />
+      {name && <input type="hidden" name={name} value={value ?? ''} />}
       {list}
     </>
   );
@@ -415,7 +419,7 @@ function MultipleCombobox<V extends string>(props: MultipleProps<V>) {
   });
 
   const controlRefs = useMergeRefs([controlRef, refs.setPositionReference]);
-  const inputRefs = useMergeRefs([inputRef, refs.setReference]);
+  const inputRefs = useMergeRefs([inputRef, refs.setReference, (rest as { ref?: React.Ref<HTMLInputElement> }).ref]);
   const chipButtons = () => [...(chipsRef.current?.querySelectorAll<HTMLButtonElement>('.yarcl-badge-remove') ?? [])];
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
