@@ -58,6 +58,7 @@ export const contract = (
     <Checkbox size="sm" color="success" indeterminate />
     <Radio size="lg" color="neutral" />
     <Switch size="xl" color="brand" />
+    <Slider.Range aria-label="Price" size="sm" color="success" radius="rounded" defaultValue={[10, 90]} />
     <Field label="Name">
       <Input />
     </Field>
@@ -244,6 +245,8 @@ export const contract = (
     <Slider defaultValue={[1, 2]} onValueChange={(v: number) => v} />
     {/* @ts-expect-error */}
     <Slider defaultValue={[1, 2, 3]} />
+    {/* @ts-expect-error */}
+    <Slider.Range aria-label="Price" defaultValue={50} />
     {/* @ts-expect-error */}
     <Checkbox color="primary" />
     {/* @ts-expect-error */}

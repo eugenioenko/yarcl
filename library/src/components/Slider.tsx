@@ -117,6 +117,9 @@ export interface SliderProps<V extends SliderValue = number>
   thumbLabels?: readonly [string, string];
 }
 
+/** Props for `Slider.Range`. */
+export type SliderRangeProps = SliderProps<[number, number]>;
+
 const clamp = (value: number, low: number, high: number) => Math.min(Math.max(value, low), high);
 
 function decimals(value: number): number {
@@ -140,7 +143,7 @@ const DEFAULT_THUMB_LABELS = ['Minimum', 'Maximum'] as const;
  * </Field>
  * ```
  */
-export function Slider<V extends SliderValue = number>(props: SliderProps<V>) {
+function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
   const own = useDefaults('Slider');
   const field = useContext(FieldContext);
   const uid = useId();
@@ -313,3 +316,13 @@ export function Slider<V extends SliderValue = number>(props: SliderProps<V>) {
     </div>
   );
 }
+
+function SliderRange(props: SliderRangeProps) {
+  return <SliderRoot<[number, number]> {...props} />;
+}
+
+/**
+ * Picks a number, or a range with two thumbs, by dragging along a track.
+ * Use `Slider.Range` for an explicitly range-only API.
+ */
+export const Slider = Object.assign(SliderRoot, { Range: SliderRange });
