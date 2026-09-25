@@ -263,7 +263,7 @@ const groups: Record<string, Item[]> = {
       preview: (
         <Stack gap="sm" className="gallery-fill">
           <Slider size="sm" defaultValue={60} aria-label="Volume" />
-          <Slider size="sm" defaultValue={[25, 75]} aria-label="Price" />
+          <Slider.Range size="sm" defaultValue={[25, 75]} aria-label="Price" />
         </Stack>
       ),
     },

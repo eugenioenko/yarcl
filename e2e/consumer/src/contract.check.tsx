@@ -9,6 +9,7 @@ export const contract = (
     <Heading level={1} />
     <Table density="cozy" />
     <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} />
+    <Slider.Range aria-label="Price" size="talla-s" color="clay" radius="hairline" defaultValue={[10, 90]} />
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
     <Pagination count={8} size="talla-s" color="clay" radius="square" variant="text" selectedVariant="filled" />
     <DatePicker size="talla-s" color="clay" variant="wash" radius="hairline" />
@@ -57,6 +58,8 @@ export const contract = (
     <Slider size="md" />
     {/* @ts-expect-error */}
     <Slider color="brand" />
+    {/* @ts-expect-error */}
+    <Slider.Range aria-label="Price" size="md" defaultValue={[10, 90]} />
     {/* @ts-expect-error */}
     <Pagination count={8} size="sm" />
     {/* @ts-expect-error */}

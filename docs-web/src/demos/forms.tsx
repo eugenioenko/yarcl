@@ -280,7 +280,7 @@ export function SliderDemo() {
         <Slider value={volume} onValueChange={setVolume} formatValue={(v) => `${v}%`} />
       </Field>
       <Field label="Price" description={`$${price[0]} to $${price[1]}`}>
-        <Slider value={price} onValueChange={setPrice} min={0} max={1000} step={50} formatValue={(v) => `$${v}`} />
+        <Slider.Range value={price} onValueChange={setPrice} min={0} max={1000} step={50} formatValue={(v) => `$${v}`} />
       </Field>
       <Slider size="sm" color="success" radius="rounded" defaultValue={70} aria-label="Brightness" />
       <Slider size="lg" defaultValue={30} aria-label="Large" />

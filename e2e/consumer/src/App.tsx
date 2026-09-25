@@ -210,6 +210,16 @@ export function App() {
             </Stack>
             <DatePicker aria-label="Delivery date" defaultValue={new Date(2026, 9, 5)} min={new Date(2026, 9, 1)} />
 
+            <Stack gap="2">
+              <Text textStyle="label">Hem length</Text>
+              <Slider aria-label="Hem length" size="talla-m" defaultValue={50} />
+            </Stack>
+
+            <Stack gap="2">
+              <Text textStyle="label">Fit range</Text>
+              <Slider.Range aria-label="Fit range" size="talla-m" defaultValue={[30, 70]} step={10} color="clay" />
+            </Stack>
+
             <ButtonGroup attached={false} size="talla-l">
               <Button onClick={addToBag} className="grow">
                 Add to bag

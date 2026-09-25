@@ -187,7 +187,7 @@ export function App() {
               {sizes.map((size) => (
                 <Slider key={size} size={size} defaultValue={40} aria-label={`Volume ${size}`} />
               ))}
-              <Slider defaultValue={[20, 80]} step={5} aria-label="Price" formatValue={(v) => `$${v}`} />
+              <Slider.Range defaultValue={[20, 80]} step={5} aria-label="Price" formatValue={(v) => `$${v}`} />
               <Slider color="success" radius="rounded" defaultValue={60} aria-label="Brightness" />
               <Slider disabled defaultValue={30} aria-label="Disabled volume" />
             </Stack>

@@ -58,6 +58,9 @@ export default async function ({ page, check }) {
     return [getComputedStyle(document.querySelector('.yarcl-slider-range')).backgroundColor, ink];
   });
   check('slider: default color ink', fill === ink, `${fill} vs ${ink}`);
+  const fitThumb = page.getByRole('slider', { name: 'Fit range Minimum' });
+  check('Slider.Range renders two thumbs', (await fitThumb.count()) === 1 && (await page.getByRole('slider', { name: 'Fit range Maximum' }).count()) === 1);
+  check('Slider.Range uses its color', (await fitThumb.evaluate((el) => getComputedStyle(el).getPropertyValue('--yarcl-c'))) === 'light-dark(#a4441f, #f0a07a)');
   const delivery = page.getByRole('button', { name: 'Delivery date', includeHidden: true });
   check('date picker matches Select height', (await delivery.boundingBox()).height === (await shade.boundingBox()).height);
   check('component default: date picker square', (await delivery.evaluate((el) => getComputedStyle(el).borderRadius)) === '0px');
