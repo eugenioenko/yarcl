@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { contrast, parseHex, readableOn } from '../color.js';
-import type { ColorPair, ColorToken, YarclShape } from '../define.js';
+import { contrast, parseHex, readableOn } from '../color';
+import type { ColorPair, ColorToken, YarclShape } from '../define';
 import {
   Button,
   Card,
@@ -19,8 +19,8 @@ import {
   type Spacing,
   type TextStyle,
   type Variant,
-} from '../index.js';
-import { useConfig } from '../runtime.js';
+} from '../index';
+import { useConfig } from '../runtime';
 import './reference.css';
 
 const keys = <T extends string>(group: object) => Object.keys(group) as T[];

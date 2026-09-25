@@ -1,6 +1,6 @@
-import { defineConfig } from '../define.js';
-import defaults from '../yarcl.config.js';
-import type { ThemeContract } from './contract.js';
+import { defineConfig } from '../define';
+import defaults from '../yarcl.config';
+import type { ThemeContract } from './contract';
 
 /** Dense and businesslike: teal on cool gray, small 28px controls, tight spacing, 13px text, compact tables, nearly flat. */
 export const compact = defineConfig({

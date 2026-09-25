@@ -7,11 +7,11 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { cx } from '../classes.js';
-import { useControllable } from '../hooks.js';
-import type { Color, Radius, Size, Variant } from '../types.js';
-import { Button } from './Button.js';
-import { useConfig, useDefaults } from '../runtime.js';
+import { cx } from '../classes';
+import { useControllable } from '../hooks';
+import type { Color, Radius, Size, Variant } from '../types';
+import { Button } from './Button';
+import { useConfig, useDefaults } from '../runtime';
 
 
 interface ToggleGroupContextValue {

@@ -1,8 +1,8 @@
 import { createContext, useContext, useId, type ComponentProps, type ReactNode } from 'react';
-import { cx, typeClass } from '../classes.js';
-import { useControllable } from '../hooks.js';
-import type { Color, Size } from '../types.js';
-import { useConfig } from '../runtime.js';
+import { cx, typeClass } from '../classes';
+import { useControllable } from '../hooks';
+import type { Color, Size } from '../types';
+import { useConfig } from '../runtime';
 
 interface RadioGroupContextValue {
   name: string;

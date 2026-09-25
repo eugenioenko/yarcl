@@ -1,8 +1,8 @@
 import { useEffect, useImperativeHandle, useRef, type ComponentProps, type ReactNode } from 'react';
-import { colorClass, cx, sizeClass } from '../classes.js';
-import { useFieldProps } from '../field-context.js';
-import type { Color, Size } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx, sizeClass } from '../classes';
+import { useFieldProps } from '../field-context';
+import type { Color, Size } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Props for {@link Checkbox}. Accepts all native `<input>` attributes except `type`, `color` and `size`. */

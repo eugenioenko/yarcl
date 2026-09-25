@@ -6,11 +6,11 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
-import { ChevronIcon } from '../floating.js';
-import { useControllable } from '../hooks.js';
-import type { Color, Radius, Size } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { ChevronIcon } from '../floating';
+import { useControllable } from '../hooks';
+import type { Color, Radius, Size } from '../types';
+import { useDefaults } from '../runtime';
 
 interface AccordionContextValue {
   open: string[];

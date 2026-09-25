@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { access, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { access, cp, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
 import { platform, tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -38,6 +38,16 @@ try {
     access(join(installed, 'dist/yarcl.config.js')),
     access(join(installed, 'dist/yarcl.config.d.ts')),
   ]);
+
+  const installedReal = await realpath(installed);
+  const { yarcl } = await import(pathToFileURL(join(installedReal, 'dist/plugin.js')).href);
+  const plugin = yarcl({ config: 'src/missing.config.ts' });
+  if (typeof plugin.config !== 'function') throw new Error('The packed plugin has no config hook');
+  const pluginConfig = plugin.config({ root: consumer });
+  const fallback = pluginConfig?.resolve?.alias?.['@yarcl/config'];
+  if (fallback !== join(installedReal, 'dist/yarcl.config.js')) {
+    throw new Error('The packed plugin did not resolve its compiled default config');
+  }
 
   try {
     await access(join(installed, 'src'));

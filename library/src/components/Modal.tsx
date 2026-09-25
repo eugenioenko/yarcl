@@ -8,10 +8,10 @@ import {
   type ReactNode,
   type SyntheticEvent,
 } from 'react';
-import { cx, radiusClass, typeClass } from '../classes.js';
-import { useControllable } from '../hooks.js';
-import type { ModalSize, Radius } from '../types.js';
-import { useConfig } from '../runtime.js';
+import { cx, radiusClass, typeClass } from '../classes';
+import { useControllable } from '../hooks';
+import type { ModalSize, Radius } from '../types';
+import { useConfig } from '../runtime';
 
 /** Props shared by {@link Dialog} and {@link Drawer}. */
 export interface ModalProps {

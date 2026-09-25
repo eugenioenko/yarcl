@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": false,
     "declaration": true,
-    "allowImportingTsExtensions": false,
+    "emitDeclarationOnly": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "rootDir": "src",

@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { cx, densityClass } from '../classes.js';
-import type { Density } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { cx, densityClass } from '../classes';
+import type { Density } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Props for {@link Table}. */

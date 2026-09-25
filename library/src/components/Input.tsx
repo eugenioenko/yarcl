@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
-import { useFieldProps } from '../field-context.js';
-import type { TokenProps } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { useFieldProps } from '../field-context';
+import type { TokenProps } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /**

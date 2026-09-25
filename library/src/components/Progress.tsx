@@ -1,7 +1,7 @@
 import { useId, type ComponentProps, type CSSProperties, type ReactNode } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
-import type { Color, Radius, Size } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import type { Color, Radius, Size } from '../types';
+import { useDefaults } from '../runtime';
 
 /** Props for {@link Progress}. */
 export interface ProgressProps extends Omit<ComponentProps<'div'>, 'color' | 'children'> {

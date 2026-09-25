@@ -79,7 +79,7 @@ pnpm docs:build
 - The package is published as `@yarcl/react`. Pre-1.0 APIs may change without deprecation paths or compatibility shims.
 - React 19 only: `ref` is a regular prop that components spread onto their element. Don't use `forwardRef`.
 - Accessibility is required: roles, keyboard support, focus management, and a clean axe audit.
-- The package runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing library source, run `pnpm -C library build`. Relative source imports use `.js` extensions so emitted ESM and declarations resolve the same paths.
+- The package runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing library source, run `pnpm -C library build`. Vite bundles the JavaScript and TypeScript emits declarations.
 - Releases: bump `library/package.json` `version`, then push a matching tag (`v0.2.0`); `.github/workflows/publish.yml` publishes to npm.
 - Don't commit, push, or open PRs unless asked.
 

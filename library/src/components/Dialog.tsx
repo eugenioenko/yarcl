@@ -1,6 +1,6 @@
-import { Modal, type ModalProps } from './Modal.js';
-import type { ModalSize, Radius } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { Modal, type ModalProps } from './Modal';
+import type { ModalSize, Radius } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Props for {@link Dialog}. */

@@ -18,12 +18,12 @@ import {
 } from 'date-fns';
 import { enUS } from 'date-fns/locale/en-US';
 import { useContext, useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
-import { colorClass, cx, radiusClass, sizeClass, softVariantClass, variantClass } from '../classes.js';
-import { FieldContext, useFieldProps } from '../field-context.js';
-import { useControllable } from '../hooks.js';
-import { useDefaults } from '../runtime.js';
-import type { TokenProps, VariantProps } from '../types.js';
-import { Popover } from './Popover.js';
+import { colorClass, cx, radiusClass, sizeClass, softVariantClass, variantClass } from '../classes';
+import { FieldContext, useFieldProps } from '../field-context';
+import { useControllable } from '../hooks';
+import { useDefaults } from '../runtime';
+import type { TokenProps, VariantProps } from '../types';
+import { Popover } from './Popover';
 
 /** A date range picked with a {@link DatePicker} in `mode="range"`. `to` is `null` while only the start is picked. */
 export interface DateRange {

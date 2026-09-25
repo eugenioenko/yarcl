@@ -1,10 +1,10 @@
 import type { ComponentProps, KeyboardEvent } from 'react';
-import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes.js';
-import { useControllable } from '../hooks.js';
-import type { Color, Radius, Size, Variant } from '../types.js';
-import { Button } from './Button.js';
-import { IconButton } from './IconButton.js';
-import { useConfig, useDefaults } from '../runtime.js';
+import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
+import { useControllable } from '../hooks';
+import type { Color, Radius, Size, Variant } from '../types';
+import { Button } from './Button';
+import { IconButton } from './IconButton';
+import { useConfig, useDefaults } from '../runtime';
 
 /** Props for {@link Pagination}. */
 export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'color' | 'onChange'> {

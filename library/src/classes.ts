@@ -1,5 +1,5 @@
-import { activeConfig } from './runtime.js';
-import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types.js';
+import { activeConfig } from './runtime';
+import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types';
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
   return parts.filter(Boolean).join(' ');

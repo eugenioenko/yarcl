@@ -1,10 +1,10 @@
 import { useId, useState, type ComponentProps, type KeyboardEvent, type FocusEvent } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
-import { useFieldProps } from '../field-context.js';
-import { ChevronIcon } from '../floating.js';
-import { useControllable } from '../hooks.js';
-import type { TokenProps } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { useFieldProps } from '../field-context';
+import { ChevronIcon } from '../floating';
+import { useControllable } from '../hooks';
+import type { TokenProps } from '../types';
+import { useDefaults } from '../runtime';
 
 /**
  * Props for {@link NumberInput}. Native `<input>` attributes go to the inner input;

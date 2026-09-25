@@ -1,6 +1,6 @@
-import { generateCss } from './css.js';
-import type { YarclShape } from './define.js';
-import { setActiveConfig } from './runtime.js';
+import { generateCss } from './css';
+import type { YarclShape } from './define';
+import { setActiveConfig } from './runtime';
 
 export { generateCss };
 

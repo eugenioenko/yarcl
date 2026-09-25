@@ -1,7 +1,7 @@
 import type { ComponentProps, CSSProperties } from 'react';
-import { cx, radiusClass, sizeClass, typeClass } from '../classes.js';
-import type { Radius, Size, TextStyle } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { cx, radiusClass, sizeClass, typeClass } from '../classes';
+import type { Radius, Size, TextStyle } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Props for {@link Skeleton}. */

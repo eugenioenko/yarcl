@@ -8,10 +8,10 @@ import {
   type ComponentProps,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, typeClass } from '../classes.js';
-import type { Color, TextStyle } from '../types.js';
-import { useConfig, useDefaults } from '../runtime.js';
-import type { LinkProps } from './Link.js';
+import { colorClass, cx, typeClass } from '../classes';
+import type { Color, TextStyle } from '../types';
+import { useConfig, useDefaults } from '../runtime';
+import type { LinkProps } from './Link';
 
 interface BreadcrumbItemContextValue {
   current: boolean;

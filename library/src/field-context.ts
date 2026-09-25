@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { cx } from './classes.js';
+import { cx } from './classes';
 
 export interface FieldContextValue {
   id: string;

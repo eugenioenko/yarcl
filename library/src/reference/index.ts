@@ -1,2 +1,2 @@
-export { DesignReference } from './DesignReference.js';
-export type { DesignReferenceProps } from './DesignReference.js';
+export { DesignReference } from './DesignReference';
+export type { DesignReferenceProps } from './DesignReference';

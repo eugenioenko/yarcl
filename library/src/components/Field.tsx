@@ -1,8 +1,8 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
-import { cx, typeClass } from '../classes.js';
-import { FieldContext } from '../field-context.js';
-import { useConfig } from '../runtime.js';
-import { Label } from './Label.js';
+import { cx, typeClass } from '../classes';
+import { FieldContext } from '../field-context';
+import { useConfig } from '../runtime';
+import { Label } from './Label';
 
 /** Props for {@link Field}. */
 export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {

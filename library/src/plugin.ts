@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runnerImport, type Plugin } from 'vite';
-import { generateCss } from './css.js';
-import type { YarclShape } from './define.js';
+import { generateCss } from './css';
+import type { YarclShape } from './define';
 
 /** Options for the yarcl Vite plugin. */
 export interface YarclPluginOptions {
@@ -18,7 +18,7 @@ export interface YarclPluginOptions {
 const VIRTUAL_CSS = 'virtual:yarcl.css';
 const RESOLVED_CSS = '\0' + VIRTUAL_CSS;
 const PACKAGE = '@yarcl/react';
-const defaultConfig = fileURLToPath(new URL('./yarcl.config.js', import.meta.url));
+const defaultConfig = resolve(dirname(fileURLToPath(import.meta.url)), 'yarcl.config.js');
 
 /**
  * Vite plugin that connects the library to the consumer's config.

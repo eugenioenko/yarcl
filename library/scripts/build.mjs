@@ -9,13 +9,15 @@ const dist = join(root, 'dist');
 
 await rm(dist, { recursive: true, force: true });
 
-const result = spawnSync(platform() === 'win32' ? 'tsc.cmd' : 'tsc', ['-p', 'tsconfig.build.json'], {
-  cwd: root,
-  stdio: 'inherit',
-});
+function run(command, args) {
+  const executable = platform() === 'win32' ? `${command}.cmd` : command;
+  const result = spawnSync(executable, args, { cwd: root, stdio: 'inherit' });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(`${command} failed with status ${result.status ?? 'unknown'}`);
+}
 
-if (result.error) throw result.error;
-if (result.status !== 0) throw new Error(`TypeScript build failed with status ${result.status ?? 'unknown'}`);
+run('tsc', ['-p', 'tsconfig.build.json']);
+run('vite', ['build']);
 
 await mkdir(join(dist, 'reference'), { recursive: true });
 await Promise.all([

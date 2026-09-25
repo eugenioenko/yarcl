@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, sizeClass } from '../classes.js';
-import type { Color, Size } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx, sizeClass } from '../classes';
+import type { Color, Size } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Props for {@link Spinner}. */

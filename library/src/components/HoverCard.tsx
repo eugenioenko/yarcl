@@ -10,10 +10,10 @@ import {
   type Placement,
 } from '@floating-ui/react';
 import { useState, type ReactElement, type ReactNode } from 'react';
-import { cx, paddingClass, radiusClass } from '../classes.js';
-import { floatingMiddleware, useTrigger } from '../floating.js';
-import type { Radius, Spacing } from '../types.js';
-import { useConfig, useDefaults } from '../runtime.js';
+import { cx, paddingClass, radiusClass } from '../classes';
+import { floatingMiddleware, useTrigger } from '../floating';
+import type { Radius, Spacing } from '../types';
+import { useConfig, useDefaults } from '../runtime';
 
 
 /** Props for {@link HoverCard}. */

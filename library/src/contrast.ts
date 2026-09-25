@@ -1,5 +1,5 @@
-import { contrast, parseHex, readableOn } from './color.js';
-import type { ColorPair, YarclShape } from './define.js';
+import { contrast, parseHex, readableOn } from './color';
+import type { ColorPair, YarclShape } from './define';
 
 /** A color combination in a config that falls below the required contrast. */
 export interface ContrastIssue {

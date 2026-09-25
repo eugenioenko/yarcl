@@ -11,11 +11,11 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
-import { useControllable } from '../hooks.js';
-import { useConfig, useDefaults } from '../runtime.js';
-import type { TokenProps } from '../types.js';
-import { useModalDialog } from './Modal.js';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
+import { useControllable } from '../hooks';
+import { useConfig, useDefaults } from '../runtime';
+import type { TokenProps } from '../types';
+import { useModalDialog } from './Modal';
 
 /** A command shown in a {@link CommandPalette}. */
 export interface CommandPaletteCommand {

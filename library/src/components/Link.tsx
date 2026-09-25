@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx } from '../classes.js';
-import type { Color } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { colorClass, cx } from '../classes';
+import type { Color } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Props for {@link Link}. Accepts all native `<a>` attributes except `color`. */

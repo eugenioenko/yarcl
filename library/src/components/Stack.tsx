@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
-import { cx, gapClass } from '../classes.js';
-import type { Align, Justify, Spacing } from '../types.js';
-import { useDefaults } from '../runtime.js';
+import { cx, gapClass } from '../classes';
+import type { Align, Justify, Spacing } from '../types';
+import { useDefaults } from '../runtime';
 
 
 /** Elements layout components can render as. */
