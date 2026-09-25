@@ -11,7 +11,7 @@
     "docs:api": "typedoc",
     "docs:dev": "pnpm -C docs-web dev",
     "docs:build": "pnpm -C docs-web build",
-    "lint": "eslint library/src consumer/src e2e/consumer/src"
+    "lint": "eslint library/src library/tests library/vitest.config.ts consumer/src e2e/consumer/src"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

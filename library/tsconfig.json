@@ -15,5 +15,5 @@
       "@yarcl/config": ["./src/yarcl.config.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "tests", "vitest.config.ts"]
 }
