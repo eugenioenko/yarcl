@@ -39,7 +39,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "prepare": "tsc -p tsconfig.build.json"
+    "prepare": "tsc -p tsconfig.build.json",
+    "test": "vitest run --config vitest.config.ts"
   },
   "publishConfig": {
     "access": "public",
