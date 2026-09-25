@@ -1,9 +1,9 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
-import type { TokenProps, VariantProps } from '../types';
-import { useButtonGroup } from './ButtonGroup';
-import { Spinner } from './Spinner';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes.js';
+import type { TokenProps, VariantProps } from '../types.js';
+import { useButtonGroup } from './ButtonGroup.js';
+import { Spinner } from './Spinner.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props for {@link Button}. Accepts all native `<button>` attributes except `color`. */

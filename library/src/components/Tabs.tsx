@@ -6,10 +6,10 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
-import { useControllable } from '../hooks';
-import type { Color, Size } from '../types';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, sizeClass } from '../classes.js';
+import { useControllable } from '../hooks.js';
+import type { Color, Size } from '../types.js';
+import { useDefaults } from '../runtime.js';
 
 
 interface TabsContextValue {

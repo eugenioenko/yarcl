@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import { cx } from '../classes';
+import { cx } from '../classes.js';
 
 /** Props for {@link Divider}. */
 export interface DividerProps extends Omit<ComponentProps<'hr'>, 'children'> {

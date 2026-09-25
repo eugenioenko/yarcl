@@ -1,6 +1,6 @@
 import { createContext, useContext, type ComponentProps } from 'react';
-import { cx } from '../classes';
-import type { TokenProps, VariantProps } from '../types';
+import { cx } from '../classes.js';
+import type { TokenProps, VariantProps } from '../types.js';
 
 const ButtonGroupContext = createContext<(TokenProps & VariantProps) | null>(null);
 

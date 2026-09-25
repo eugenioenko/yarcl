@@ -11,8 +11,8 @@ import {
   type Placement,
 } from '@floating-ui/react';
 import { useRef, useState, type ReactElement, type ReactNode } from 'react';
-import { floatingMiddleware, useTrigger } from '../floating';
-import { useConfig } from '../runtime';
+import { floatingMiddleware, useTrigger } from '../floating.js';
+import { useConfig } from '../runtime.js';
 
 /** Props for {@link Tooltip}. */
 export interface TooltipProps {

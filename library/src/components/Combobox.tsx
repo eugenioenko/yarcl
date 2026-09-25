@@ -20,14 +20,14 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes';
-import { useFieldProps } from '../field-context';
-import { CheckIcon, floatingMiddleware } from '../floating';
-import { useControllable } from '../hooks';
-import type { Color, Size, TokenProps } from '../types';
-import { Badge, BadgeRemove } from './Badge';
-import type { SelectOption } from './Select';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
+import { useFieldProps } from '../field-context.js';
+import { CheckIcon, floatingMiddleware } from '../floating.js';
+import { useControllable } from '../hooks.js';
+import type { Color, Size, TokenProps } from '../types.js';
+import { Badge, BadgeRemove } from './Badge.js';
+import type { SelectOption } from './Select.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props shared by both forms of {@link ComboboxProps}. */

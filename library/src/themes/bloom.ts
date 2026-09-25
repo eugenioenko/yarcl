@@ -1,6 +1,6 @@
-import { defineConfig } from '../define';
-import defaults from '../yarcl.config';
-import type { ThemeContract } from './contract';
+import { defineConfig } from '../define.js';
+import defaults from '../yarcl.config.js';
+import type { ThemeContract } from './contract.js';
 
 const glow = (geometry: string, alpha: number) =>
   `${geometry} light-dark(rgb(91 33 182 / ${alpha}), rgb(0 0 0 / ${Math.min(alpha * 5, 0.7)}))`;

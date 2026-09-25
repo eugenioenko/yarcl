@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
-import { colorClass, cx, typeClass } from '../classes';
-import type { Color, TextStyle } from '../types';
-import { useConfig } from '../runtime';
+import { colorClass, cx, typeClass } from '../classes.js';
+import type { Color, TextStyle } from '../types.js';
+import { useConfig } from '../runtime.js';
 
 /** Props for {@link Heading}. */
 export interface HeadingProps extends Omit<ComponentProps<'h2'>, 'color'> {

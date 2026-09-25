@@ -1,10 +1,10 @@
-import defaults from '../yarcl.config';
-import { brutalist } from './brutalist';
-import { compact } from './compact';
-import { editorial } from './editorial';
-import { bloom } from './bloom';
+import defaults from '../yarcl.config.js';
+import { brutalist } from './brutalist.js';
+import { compact } from './compact.js';
+import { editorial } from './editorial.js';
+import { bloom } from './bloom.js';
 
-export type { ThemeContract } from './contract';
+export type { ThemeContract } from './contract.js';
 export { brutalist, compact, editorial, bloom };
 
 /**

@@ -56,7 +56,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 {
   "compilerOptions": {
     "paths": {
-      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/dist/yarcl.config.d.ts"]
     }
   }
 }
@@ -135,4 +135,3 @@ pnpm docs:api     # API reference from JSDoc → docs/api
 - **Vite only.** The alias works the same way in webpack, Rollup, esbuild and Turbopack; adapters aren't written yet.
 - **One config per build.** Two brands in one bundle would need a Provider for the runtime values.
 - **Types are a development-time guarantee.** Keep config changes and deploys in the same build.
-- **The package ships TypeScript source.** Publishing it needs a compiled plugin (Node won't strip types inside `node_modules`).

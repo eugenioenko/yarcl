@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
-import { cx, paddingClass, radiusClass, shadowClass } from '../classes';
-import type { Radius, Shadow, Spacing } from '../types';
-import { useDefaults } from '../runtime';
+import { cx, paddingClass, radiusClass, shadowClass } from '../classes.js';
+import type { Radius, Shadow, Spacing } from '../types.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props for {@link Card}. */

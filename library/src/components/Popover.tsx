@@ -10,11 +10,11 @@ import {
   type Placement,
 } from '@floating-ui/react';
 import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode, type RefObject } from 'react';
-import { cx, paddingClass, radiusClass } from '../classes';
-import { floatingMiddleware, useTrigger } from '../floating';
-import { useControllable } from '../hooks';
-import type { Radius, Spacing } from '../types';
-import { useDefaults } from '../runtime';
+import { cx, paddingClass, radiusClass } from '../classes.js';
+import { floatingMiddleware, useTrigger } from '../floating.js';
+import { useControllable } from '../hooks.js';
+import type { Radius, Spacing } from '../types.js';
+import { useDefaults } from '../runtime.js';
 
 
 type PopoverContextValue = ReturnType<typeof usePopoverState>;

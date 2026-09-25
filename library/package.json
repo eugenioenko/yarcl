@@ -22,24 +22,41 @@
   ],
   "type": "module",
   "files": [
-    "src",
     "dist"
   ],
   "exports": {
-    ".": "./src/index.ts",
-    "./define": "./src/define.ts",
-    "./defaults": "./src/yarcl.config.ts",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./define": {
+      "types": "./dist/define.d.ts",
+      "default": "./dist/define.js"
+    },
+    "./defaults": {
+      "types": "./dist/yarcl.config.d.ts",
+      "default": "./dist/yarcl.config.js"
+    },
     "./plugin": {
       "types": "./dist/plugin.d.ts",
       "default": "./dist/plugin.js"
     },
-    "./reference": "./src/reference/index.ts",
-    "./themes": "./src/themes/index.ts",
-    "./css": "./src/apply.ts"
+    "./reference": {
+      "types": "./dist/reference/index.d.ts",
+      "default": "./dist/reference/index.js"
+    },
+    "./themes": {
+      "types": "./dist/themes/index.d.ts",
+      "default": "./dist/themes/index.js"
+    },
+    "./css": {
+      "types": "./dist/apply.d.ts",
+      "default": "./dist/apply.js"
+    }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "prepare": "tsc -p tsconfig.build.json",
+    "build": "node scripts/build.mjs",
+    "prepare": "node scripts/build.mjs",
     "test": "vitest run --config vitest.config.ts"
   },
   "publishConfig": {

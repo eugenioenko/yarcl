@@ -1,6 +1,6 @@
-import { cx, gapClass } from '../classes';
-import type { LayoutProps } from './Stack';
-import { useDefaults } from '../runtime';
+import { cx, gapClass } from '../classes.js';
+import type { LayoutProps } from './Stack.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props for {@link Inline}. */

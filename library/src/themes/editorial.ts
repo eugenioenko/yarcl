@@ -1,6 +1,6 @@
-import { defineConfig } from '../define';
-import defaults from '../yarcl.config';
-import type { ThemeContract } from './contract';
+import { defineConfig } from '../define.js';
+import defaults from '../yarcl.config.js';
+import type { ThemeContract } from './contract.js';
 
 /** Calm and considered: terracotta on cream, light grotesque type, square corners, flat surfaces, generous spacing. */
 export const editorial = defineConfig({

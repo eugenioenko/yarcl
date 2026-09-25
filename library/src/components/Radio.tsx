@@ -1,8 +1,8 @@
 import type { ChangeEvent, ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, sizeClass } from '../classes';
-import type { Color, Size } from '../types';
-import { useRadioGroup } from './RadioGroup';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, sizeClass } from '../classes.js';
+import type { Color, Size } from '../types.js';
+import { useRadioGroup } from './RadioGroup.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props for {@link Radio}. Accepts all native `<input>` attributes except `type`, `color` and `size`. */

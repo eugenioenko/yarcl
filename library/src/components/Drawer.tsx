@@ -1,6 +1,6 @@
-import type { ModalSize } from '../types';
-import { Modal, type ModalProps } from './Modal';
-import { useDefaults } from '../runtime';
+import type { ModalSize } from '../types.js';
+import { Modal, type ModalProps } from './Modal.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props for {@link Drawer}. */

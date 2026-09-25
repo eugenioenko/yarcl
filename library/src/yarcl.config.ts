@@ -1,4 +1,4 @@
-import { defineConfig } from './define';
+import { defineConfig } from './define.js';
 
 /** The library's default design system, used when the consumer provides no config. */
 export default defineConfig({

@@ -1,7 +1,7 @@
 import type { ComponentProps, CSSProperties } from 'react';
-import { colorClass, cx, typeClass } from '../classes';
-import type { Color, TextStyle } from '../types';
-import { useConfig, useDefaults } from '../runtime';
+import { colorClass, cx, typeClass } from '../classes.js';
+import type { Color, TextStyle } from '../types.js';
+import { useConfig, useDefaults } from '../runtime.js';
 
 
 /** Elements {@link Text} can render as. */

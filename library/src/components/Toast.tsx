@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { colorClass, cx } from '../classes';
-import type { Color } from '../types';
-import { useConfig, useDefaults } from '../runtime';
+import { colorClass, cx } from '../classes.js';
+import type { Color } from '../types.js';
+import { useConfig, useDefaults } from '../runtime.js';
 
 
 /** Options for {@link toast}. */

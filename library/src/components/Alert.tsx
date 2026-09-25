@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, radiusClass, softVariantClass } from '../classes';
-import type { Color, Radius, Variant } from '../types';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, radiusClass, softVariantClass } from '../classes.js';
+import type { Color, Radius, Variant } from '../types.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** Props for {@link Alert}. */

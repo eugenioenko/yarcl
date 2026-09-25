@@ -44,7 +44,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 {
   "compilerOptions": {
     "paths": {
-      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
+      "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/dist/yarcl.config.d.ts"]
     }
   }
 }
@@ -103,7 +103,7 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
 ## Working in a yarcl project
 
 - Start by reading `src/yarcl.config.ts` (or the file passed to the Vite plugin): it lists every valid size, color, variant, spacing step and text style.
-- Props and JSDoc for every component ship as TypeScript source: `node_modules/@yarcl/react/src/components/<Name>.tsx`.
+- Props and JSDoc for every component ship as declarations: `node_modules/@yarcl/react/dist/components/<Name>.d.ts`.
 - To type your own components with the same tokens: `import type { Size, Color, Variant, Radius, Spacing, TextStyle } from '@yarcl/react'`. They are the keys of the project's config.
 - Config values at runtime: `config` from `@yarcl/react`, or `useConfig()` inside components (follows runtime theme switches).
 - Icons are plain `<svg>` children, sized from the size's `iconSize`. `IconButton` requires `aria-label`.

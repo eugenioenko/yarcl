@@ -1,7 +1,7 @@
 import buildConfig from '@yarcl/config';
 import { useSyncExternalStore } from 'react';
-import type { ComponentName, YarclShape } from './define';
-import type { ComponentDefaults } from './types';
+import type { ComponentName, YarclShape } from './define.js';
+import type { ComponentDefaults } from './types.js';
 
 type Config = typeof buildConfig;
 

@@ -1,5 +1,5 @@
-import { defineConfig } from './define';
-import defaults from './yarcl.config';
+import { defineConfig } from './define.js';
+import defaults from './yarcl.config.js';
 
 defineConfig({ ...defaults, colors: { ...defaults.colors, brand: { light: '#000', dark: '#fff' } } });
 

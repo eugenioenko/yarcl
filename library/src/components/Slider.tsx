@@ -7,11 +7,11 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes';
-import { FieldContext, useFieldProps } from '../field-context';
-import { useControllable } from '../hooks';
-import type { TokenProps } from '../types';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
+import { FieldContext, useFieldProps } from '../field-context.js';
+import { useControllable } from '../hooks.js';
+import type { TokenProps } from '../types.js';
+import { useDefaults } from '../runtime.js';
 
 /** A {@link Slider} value: one number, or a `[start, end]` pair for a range. */
 export type SliderValue = number | [number, number];

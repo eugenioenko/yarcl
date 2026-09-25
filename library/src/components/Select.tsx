@@ -12,12 +12,12 @@ import {
   useTypeahead,
 } from '@floating-ui/react';
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
-import { colorClass, cx, radiusClass, sizeClass } from '../classes';
-import { useFieldProps } from '../field-context';
-import { CheckIcon, ChevronIcon, floatingMiddleware } from '../floating';
-import { useControllable } from '../hooks';
-import type { TokenProps } from '../types';
-import { useDefaults } from '../runtime';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes.js';
+import { useFieldProps } from '../field-context.js';
+import { CheckIcon, ChevronIcon, floatingMiddleware } from '../floating.js';
+import { useControllable } from '../hooks.js';
+import type { TokenProps } from '../types.js';
+import { useDefaults } from '../runtime.js';
 
 
 /** An option of a {@link Select} or {@link Combobox}. */

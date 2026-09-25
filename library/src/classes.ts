@@ -1,5 +1,5 @@
-import { activeConfig } from './runtime';
-import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types';
+import { activeConfig } from './runtime.js';
+import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types.js';
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
   return parts.filter(Boolean).join(' ');
@@ -20,4 +20,3 @@ export const shadowClass = (shadow?: Shadow) => shadow && `yarcl-shadow-${shadow
 export const typeClass = (style: TextStyle) => `yarcl-type-${style}`;
 export const densityClass = (density: Density = activeConfig().defaults.density) => `yarcl-density-${density}`;
 export const softVariantClass = (variant: Variant = activeConfig().defaults.softVariant) => `yarcl-variant-${variant}`;
-

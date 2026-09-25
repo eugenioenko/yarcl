@@ -18,13 +18,13 @@ In `tsconfig.json`, for types:
 
 ```json
 "paths": {
-  "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/src/yarcl.config.ts"]
+  "@yarcl/config": ["./src/yarcl.config.ts", "./node_modules/@yarcl/react/dist/yarcl.config.d.ts"]
 }
 ```
 
 What each side does:
 
-- **Vite plugin** (`library/src/plugin.ts`): sets a `resolve.alias` from `@yarcl/config` to the consumer's file. If that file doesn't exist, it points to the library's own `library/src/yarcl.config.ts`. It also loads the config in Node and serves the generated CSS as `virtual:yarcl.css`, and invalidates that CSS when the config or its imports change.
+- **Vite plugin** (`library/src/plugin.ts`): sets a `resolve.alias` from `@yarcl/config` to the consumer's file. If that file doesn't exist, it points to the compiled library default in `library/dist/yarcl.config.js`. It also loads the config in Node and serves the generated CSS as `virtual:yarcl.css`, and invalidates that CSS when the config or its imports change.
 - **tsconfig `paths`**: TypeScript resolves `@yarcl/config` to the same file, so `typeof config` is the consumer's literal config. The second entry falls back to the library defaults.
 - **Library side**:
   - `library/src/types.ts` does `import type config from '@yarcl/config'` and derives prop types from its keys (`keyof Config['sizes']`, and so on). Adding a key to the config makes it a valid prop value with no other changes.
@@ -79,7 +79,7 @@ pnpm docs:build
 - The package is published as `@yarcl/react`. Pre-1.0 APIs may change without deprecation paths or compatibility shims.
 - React 19 only: `ref` is a regular prop that components spread onto their element. Don't use `forwardRef`.
 - Accessibility is required: roles, keyboard support, focus management, and a clean axe audit.
-- The plugin runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing plugin code (`plugin.ts`, `css.ts`, `color.ts`, `define.ts`), run `pnpm -C library build`. Relative imports there keep `.ts` extensions; the build rewrites them.
+- The package runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing library source, run `pnpm -C library build`. Relative source imports use `.js` extensions so emitted ESM and declarations resolve the same paths.
 - Releases: bump `library/package.json` `version`, then push a matching tag (`v0.2.0`); `.github/workflows/publish.yml` publishes to npm.
 - Don't commit, push, or open PRs unless asked.
 
