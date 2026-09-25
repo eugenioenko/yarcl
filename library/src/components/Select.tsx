@@ -7,6 +7,7 @@ import {
   useFloating,
   useInteractions,
   useListNavigation,
+  useMergeRefs,
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
@@ -134,10 +135,12 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
     }),
   ]);
 
+  const buttonRef = useMergeRefs([refs.setReference, (rest as { ref?: React.Ref<HTMLButtonElement> }).ref]);
+
   return (
     <>
       <button
-        ref={refs.setReference}
+        ref={buttonRef}
         type="button"
         disabled={disabled}
         className={cx('yarcl-input yarcl-select', sizeClass(size ?? own.size), radiusClass(radius ?? own.radius, size ?? own.size), colorClass(color ?? own.color), className)}

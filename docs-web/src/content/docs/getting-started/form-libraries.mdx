@@ -1,0 +1,296 @@
+---
+title: Form Libraries Integration
+description: Learn how to integrate yarcl form controls with React Hook Form and TanStack Form, including controlled and uncontrolled usage, validation error mapping, and accessibility.
+sidebar:
+  order: 4
+---
+
+`yarcl` form controls (`Select`, `Combobox`, `RadioGroup`, `Switch`, `Input`, `Textarea`, `Checkbox`, `NumberInput`, `Slider`, `DatePicker`) are built on native HTML element semantics. They work out of the box with popular React form libraries such as **React Hook Form** and **TanStack Form**.
+
+## How `Field` Handles Validation Errors
+
+The `<Field>` component acts as an accessibility and layout wrapper for form controls. When an `error` prop is passed to `<Field>`, it automatically:
+1. Renders an error message below the control with the designated error styling (`defaults.errorColor`).
+2. Generates an `aria-describedby` reference pointing to the error message element ID.
+3. Passes `invalid: true` via context to child controls, setting `aria-invalid="true"` on the underlying `<input>` or `<button>`.
+
+```tsx
+<Field label="Email" error={errors.email?.message}>
+  <Input type="email" />
+</Field>
+```
+
+---
+
+## React Hook Form Integration
+
+### Controlled Controls (`Controller`)
+
+For custom components like `Select`, `Combobox`, `RadioGroup`, and `Switch`, use React Hook Form's `<Controller>`.
+
+```tsx title="src/MyForm.tsx"
+import { useForm, Controller } from 'react-hook-form';
+import { Field, Select, Combobox, RadioGroup, Radio, Switch, Button, Stack } from '@yarcl/react';
+
+interface FormValues {
+  plan: string;
+  country: string;
+  frequency: string;
+  notifications: boolean;
+}
+
+export function MyForm() {
+  const { control, handleSubmit } = useForm<FormValues>({
+    defaultValues: {
+      plan: 'pro',
+      country: 'us',
+      frequency: 'monthly',
+      notifications: true,
+    },
+  });
+
+  const onSubmit = (data: FormValues) => {
+    console.log('Submitted values:', data);
+  };
+
+  return (
+    <Stack as="form" onSubmit={handleSubmit(onSubmit)}>
+      {/* Select */}
+      <Controller
+        name="plan"
+        control={control}
+        rules={{ required: 'Please choose a plan' }}
+        render={({ field, fieldState }) => (
+          <Field label="Plan" error={fieldState.error?.message} required>
+            <Select
+              ref={field.ref}
+              options={[
+                { value: 'free', label: 'Free' },
+                { value: 'pro', label: 'Pro' },
+              ]}
+              value={field.value}
+              onValueChange={field.onChange}
+            />
+          </Field>
+        )}
+      />
+
+      {/* Combobox */}
+      <Controller
+        name="country"
+        control={control}
+        rules={{ required: 'Country is required' }}
+        render={({ field, fieldState }) => (
+          <Field label="Country" error={fieldState.error?.message} required>
+            <Combobox
+              ref={field.ref}
+              options={[
+                { value: 'us', label: 'United States' },
+                { value: 'ca', label: 'Canada' },
+              ]}
+              value={field.value}
+              onValueChange={field.onChange}
+            />
+          </Field>
+        )}
+      />
+
+      {/* RadioGroup */}
+      <Controller
+        name="frequency"
+        control={control}
+        render={({ field, fieldState }) => (
+          <RadioGroup
+            label="Billing Frequency"
+            value={field.value}
+            onValueChange={field.onChange}
+            error={fieldState.error?.message}
+          >
+            <Radio value="monthly">Monthly</Radio>
+            <Radio value="annual">Annual</Radio>
+          </RadioGroup>
+        )}
+      />
+
+      {/* Switch */}
+      <Controller
+        name="notifications"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field label="Notifications" error={fieldState.error?.message}>
+            <Switch
+              ref={field.ref}
+              checked={field.value}
+              onChange={(e) => field.onChange(e.target.checked)}
+            >
+              Enable email updates
+            </Switch>
+          </Field>
+        )}
+      />
+
+      <Button type="submit">Save settings</Button>
+    </Stack>
+  );
+}
+```
+
+### Uncontrolled Usage
+
+For native inputs or uncontrolled components, pass `name`, `defaultValue` (or `defaultChecked`), or use React Hook Form's `register()` method.
+
+```tsx title="src/UncontrolledForm.tsx"
+import { useForm } from 'react-hook-form';
+import { Field, Select, Combobox, RadioGroup, Radio, Switch } from '@yarcl/react';
+
+export function UncontrolledForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  return (
+    <form onSubmit={handleSubmit((data) => console.log(data))}>
+      {/* Native-compatible Switch with register */}
+      <Field label="Email Notifications" error={errors.notifications?.message as string}>
+        <Switch {...register('notifications')}>
+          Receive product updates
+        </Switch>
+      </Field>
+
+      {/* Uncontrolled Select with hidden form input */}
+      <Field label="Plan">
+        <Select name="plan" defaultValue="free" options={[{ value: 'free', label: 'Free' }]} />
+      </Field>
+
+      {/* Uncontrolled RadioGroup */}
+      <RadioGroup label="Frequency" name="frequency" defaultValue="monthly">
+        <Radio value="monthly">Monthly</Radio>
+        <Radio value="annual">Annual</Radio>
+      </RadioGroup>
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+---
+
+## TanStack Form Integration (`@tanstack/react-form`)
+
+TanStack Form uses `form.Field` to render controls. Connect `field.state.value`, `field.handleChange`, and `field.state.meta.errors`.
+
+```tsx title="src/TanStackForm.tsx"
+import { useForm } from '@tanstack/react-form';
+import { Field, Select, Combobox, RadioGroup, Radio, Switch, Button, Stack } from '@yarcl/react';
+
+export function TanStackFormExample() {
+  const form = useForm({
+    defaultValues: {
+      plan: 'pro',
+      country: 'us',
+      frequency: 'monthly',
+      notifications: true,
+    },
+    onSubmit: async ({ value }) => {
+      console.log('Submitted:', value);
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+    >
+      <Stack>
+        {/* Select */}
+        <form.Field
+          name="plan"
+          validators={{
+            onChange: ({ value }) => (!value ? 'Plan is required' : undefined),
+          }}
+          children={(field) => (
+            <Field label="Plan" error={field.state.meta.errors.join(', ')} required>
+              <Select
+                name={field.name}
+                options={[
+                  { value: 'free', label: 'Free' },
+                  { value: 'pro', label: 'Pro' },
+                ]}
+                value={field.state.value}
+                onValueChange={(val) => field.handleChange(val ?? '')}
+              />
+            </Field>
+          )}
+        />
+
+        {/* Combobox */}
+        <form.Field
+          name="country"
+          children={(field) => (
+            <Field label="Country" error={field.state.meta.errors.join(', ')}>
+              <Combobox
+                name={field.name}
+                options={[
+                  { value: 'us', label: 'United States' },
+                  { value: 'ca', label: 'Canada' },
+                ]}
+                value={field.state.value}
+                onValueChange={(val) => field.handleChange(val ?? '')}
+              />
+            </Field>
+          )}
+        />
+
+        {/* RadioGroup */}
+        <form.Field
+          name="frequency"
+          children={(field) => (
+            <RadioGroup
+              label="Billing Frequency"
+              name={field.name}
+              value={field.state.value}
+              onValueChange={(val) => field.handleChange(val)}
+              error={field.state.meta.errors.join(', ')}
+            >
+              <Radio value="monthly">Monthly</Radio>
+              <Radio value="annual">Annual</Radio>
+            </RadioGroup>
+          )}
+        />
+
+        {/* Switch */}
+        <form.Field
+          name="notifications"
+          children={(field) => (
+            <Field label="Notifications" error={field.state.meta.errors.join(', ')}>
+              <Switch
+                name={field.name}
+                checked={field.state.value}
+                onChange={(e) => field.handleChange(e.target.checked)}
+                onBlur={field.handleBlur}
+              >
+                Enable Notifications
+              </Switch>
+            </Field>
+          )}
+        />
+
+        <Button type="submit">Save</Button>
+      </Stack>
+    </form>
+  );
+}
+```
+
+---
+
+## Component Binding Reference
+
+| Component | Controlled Props | Uncontrolled Props | Form Submit Behavior |
+| --- | --- | --- | --- |
+| `<Select>` | `value`, `onValueChange` | `defaultValue`, `name` | Renders `<input type="hidden" name={name} value={value} />` |
+| `<Combobox>` | `value`, `onValueChange` | `defaultValue`, `name` | Renders `<input type="hidden" name={name} value={v} />` (single or multiple) |
+| `<RadioGroup>` | `value`, `onValueChange` | `defaultValue`, `name` | Radios share `name`; native radio input submits value |
+| `<Switch>` | `checked`, `onChange` | `defaultChecked`, `name` | Native `<input type="checkbox" role="switch">` submits value |
