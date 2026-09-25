@@ -76,7 +76,7 @@ pnpm docs:build
 - Minimal to no comments, unless they are JSDoc. Public exports always get JSDoc, which feeds the docs.
 - No em dashes anywhere: code, JSDoc, docs, UI copy, commits, PRs.
 - Demo and docs UI use plain human-readable labels; config keys appear only in code samples.
-- The package is unpublished: change APIs freely, no deprecation paths or compat notes.
+- The package is published as `@yarcl/react`. Pre-1.0 APIs may change without deprecation paths or compatibility shims.
 - React 19 only: `ref` is a regular prop that components spread onto their element. Don't use `forwardRef`.
 - Accessibility is required: roles, keyboard support, focus management, and a clean axe audit.
 - The plugin runs from compiled JS (`library/dist`), built by `pnpm install` (`prepare`). After changing plugin code (`plugin.ts`, `css.ts`, `color.ts`, `define.ts`), run `pnpm -C library build`. Relative imports there keep `.ts` extensions; the build rewrites them.
