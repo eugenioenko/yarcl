@@ -53,6 +53,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Bundle size
+        run: pnpm size
+
       - name: Packed package
         run: pnpm test:package
 

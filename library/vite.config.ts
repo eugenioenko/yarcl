@@ -38,6 +38,8 @@ export default defineConfig({
         );
       },
       output: {
+        preserveModules: true,
+        preserveModulesRoot: entry('./src'),
         entryFileNames: '[name].js',
         chunkFileNames: 'chunks/[name]-[hash].js',
       },
