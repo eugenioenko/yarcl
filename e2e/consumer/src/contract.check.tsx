@@ -7,6 +7,7 @@ export const contract = (
     <Text textStyle="price" />
     <Label htmlFor="size" textStyle="fine" color="clay" required disabled />
     <Heading level={1} />
+    <Label htmlFor="x" required variant="wash" color="clay" size="talla-s" radius="hairline" textStyle="label" />
     <Table density="cozy" />
     <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} />
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
@@ -41,6 +42,14 @@ export const contract = (
     <Label textStyle="label-md" />
     {/* @ts-expect-error */}
     <Label color="danger" />
+    {/* @ts-expect-error */}
+    <Label size="md" />
+    {/* @ts-expect-error */}
+    <Label variant="solid" />
+    {/* @ts-expect-error */}
+    <Label color="brand" />
+    {/* @ts-expect-error */}
+    <Label textStyle="body" />
     {/* @ts-expect-error */}
     <Badge variant="subtle" />
     {/* @ts-expect-error */}

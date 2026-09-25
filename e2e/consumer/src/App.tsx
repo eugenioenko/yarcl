@@ -129,6 +129,17 @@ export function App() {
               </Inline>
               <Heading level={1}>Linen overshirt</Heading>
               <Text textStyle="price">€ 185</Text>
+              <Inline gap="2">
+                <Label variant="wash" color="clay" size="talla-s" radius="hairline">
+                  Linen
+                </Label>
+                <Label variant="line" color="moss">
+                  Free returns
+                </Label>
+                <Label color="alert" required>
+                  Low stock
+                </Label>
+              </Inline>
             </Stack>
             <Text as="p" textStyle="lead" muted>
               Cut from heavyweight Portuguese linen that softens with every wash. Relaxed through the body, with a

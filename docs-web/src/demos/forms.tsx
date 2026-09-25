@@ -55,6 +55,18 @@ export function LabelDemo() {
         </Label>
         <Input id={`${id}-nickname`} placeholder="Unavailable" disabled className="demo-grow" />
       </Inline>
+      <Inline gap="sm">
+        <Label color="success">Active</Label>
+        <Label variant="soft" color="warning" radius="rounded">
+          Pending
+        </Label>
+        <Label variant="outline" color="danger" size="sm" radius="rounded">
+          Failed
+        </Label>
+        <Label variant="solid" color="primary" size="lg">
+          New
+        </Label>
+      </Inline>
     </Stack>
   );
 }
@@ -88,7 +100,6 @@ export function LabelCustomDemo() {
     </Stack>
   );
 }
-
 export function InputDemo() {
   return (
     <Stack className="demo-form">

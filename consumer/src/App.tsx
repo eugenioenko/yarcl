@@ -248,7 +248,7 @@ export function App() {
                 </Inline>
               </Stack>
               <Stack gap="tight">
-                <Label id="label-frequency" color="brand">
+                <Label id="label-frequency" color="brand" variant="subtle" size="lg" radius="rounded">
                   Digest frequency
                 </Label>
                 <ToggleGroup type="single" defaultValue="weekly" aria-labelledby="label-frequency">

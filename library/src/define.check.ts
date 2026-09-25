@@ -125,6 +125,7 @@ defineConfig({
     Pagination: { size: 'sm', variant: 'outline', selectedVariant: 'solid' },
     Breadcrumb: { textStyle: 'caption', color: 'neutral' },
     Accordion: { size: 'sm', radius: 'size', color: 'success' },
+    Label: { textStyle: 'label', color: 'success', variant: 'soft', size: 'sm', radius: 'rounded' },
   },
 });
 
@@ -230,7 +231,7 @@ defineConfig({
   ...defaults,
   components: {
     // @ts-expect-error
-    Label: { size: 'sm' },
+    Label: { size: 'gigantic' },
   },
 });
 
