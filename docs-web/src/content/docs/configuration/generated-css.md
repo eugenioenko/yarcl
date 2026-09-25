@@ -31,6 +31,7 @@ Components never set inline styles. They render class names, and all values come
 | `--yarcl-border-{key}` | `borders` |
 | `--yarcl-focus-width`, `-offset`, `-color`, `-style` | `focusRing` |
 | `--yarcl-error`, `--yarcl-floating-shadow`, `--yarcl-padding`, `--yarcl-gap` | `defaults` |
+| `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon`, `--yarcl-r` | default size and radius |
 
 Colors are emitted as `light-dark(light, dark)`, and `:root` gets `color-scheme: light dark`.
 
@@ -44,7 +45,7 @@ One class per key, shared by every component:
 | `yarcl-size-{key}` | `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon` |
 | `yarcl-radius-{key}` | `--yarcl-r` |
 | `yarcl-variant-{key}` | `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg` |
-| `yarcl-gap-{key}`, `yarcl-padding-{key}` | `gap`, `padding` |
+| `yarcl-gap-{key}`, `yarcl-padding-{key}` | `--yarcl-component-gap`, `--yarcl-component-padding` |
 | `yarcl-shadow-{key}` | `box-shadow` |
 | `yarcl-density-{key}` | table cell padding and font size |
 | `yarcl-modal-size-{key}` | `--yarcl-modal-width` |

@@ -113,7 +113,7 @@ export interface ComponentTokenProps {
   Switch: 'size' | 'color';
   Slider: 'size' | 'radius' | 'color';
   Badge: 'size' | 'radius' | 'color' | 'variant';
-  Alert: 'radius' | 'color' | 'variant';
+  Alert: 'radius' | 'color' | 'variant' | 'gap' | 'padding' | 'textStyle';
   Card: 'radius' | 'padding' | 'shadow';
   Popover: 'radius' | 'padding';
   HoverCard: 'radius' | 'padding';
@@ -124,7 +124,7 @@ export interface ComponentTokenProps {
   Tabs: 'size' | 'color';
   Pagination: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';
   Accordion: 'size' | 'radius' | 'color';
-  Table: 'density';
+  Table: 'density' | 'radius';
   Stack: 'gap';
   Inline: 'gap';
   Text: 'textStyle' | 'color';
@@ -134,7 +134,8 @@ export interface ComponentTokenProps {
   Spinner: 'size' | 'color';
   Skeleton: 'size' | 'radius';
   Progress: 'size' | 'color' | 'radius';
-  Toast: 'color';
+  Tooltip: 'radius' | 'padding' | 'textStyle';
+  Toast: 'radius' | 'color' | 'gap' | 'padding' | 'textStyle';
 }
 
 /** Names of components that accept defaults in `components`. */

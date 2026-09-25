@@ -52,6 +52,15 @@ export default async function (ctx) {
   check('tag removed', JSON.stringify(tags.map((t) => t.trim())) === JSON.stringify(['react', 'typescript', 'css']), JSON.stringify(tags));
 
   const trial = section.getByText('Trial ends in 3 days');
+  const alertStyle = await trial.locator('xpath=..').locator('xpath=..').evaluate((el) => {
+    const style = getComputedStyle(el);
+    return { radius: style.borderRadius, gap: style.gap, padding: style.padding, fontSize: style.fontSize };
+  });
+  check(
+    'alert uses component radius, spacing and text defaults',
+    alertStyle.radius === '6px' && alertStyle.gap === '12px' && alertStyle.padding === '14px 16px' && alertStyle.fontSize === '14px',
+    JSON.stringify(alertStyle),
+  );
   await section.getByRole('button', { name: 'Dismiss' }).click();
   check('alert dismissed', !(await trial.isVisible()));
   check('static alerts have no live role', (await section.locator('.yarcl-alert[role]').count()) === 0);

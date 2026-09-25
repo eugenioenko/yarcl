@@ -86,7 +86,7 @@ export const contract = (
     <Inline gap="tight" justify="between" wrap={false} />
     <Card padding="tight" radius="rounded" shadow="lg" as="article" />
     <Divider orientation="vertical" />
-    <Tooltip content="Hi">
+    <Tooltip content="Hi" radius="rounded" padding="tight" textStyle="caption">
       <Button />
     </Tooltip>
     <HoverCard content="Hi" padding="tight" radius="xl">
@@ -167,9 +167,9 @@ export const contract = (
     </Accordion>
     <Accordion type="single" value={null} onValueChange={(v: string | null) => v} />
     <Accordion type="multiple" value={['a']} onValueChange={(v: string[]) => v} />
-    <Table density="dense" striped interactive />
+    <Table density="dense" radius="rounded" striped interactive />
     <Badge color="success" variant="outline" size="sm" radius="rounded" onRemove={() => {}} />
-    <Alert color="warning" variant="solid" radius="md" live="polite" onDismiss={() => {}} />
+    <Alert color="warning" variant="solid" radius="md" gap="tight" padding="normal" textStyle="caption" live="polite" onDismiss={() => {}} />
     <Spinner size="xl" color="danger" />
     <Skeleton shape="control" size="lg" radius="lg" />
     <Skeleton textStyle="display" lines={3} />
@@ -226,6 +226,12 @@ export const contract = (
     <Button color="primary" />
     {/* @ts-expect-error */}
     <Input radius="full" />
+    {/* @ts-expect-error */}
+    <Tooltip content="Hi" padding="compact"><Button /></Tooltip>
+    {/* @ts-expect-error */}
+    <Table radius="full" />
+    {/* @ts-expect-error */}
+    <Alert textStyle="heading" />
     {/* @ts-expect-error */}
     <Button variant="ghost" />
     {/* @ts-expect-error */}
@@ -407,6 +413,8 @@ export const contract = (
   </>
 );
 
-toast({ title: 'ok', color: 'success' });
+toast({ title: 'ok', color: 'success', radius: 'rounded', gap: 'tight', padding: 'normal', textStyle: 'caption' });
 // @ts-expect-error
 toast({ title: 'bad', color: 'primary' });
+// @ts-expect-error
+toast({ title: 'bad', gap: 'compact' });

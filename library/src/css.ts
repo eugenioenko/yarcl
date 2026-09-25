@@ -168,8 +168,8 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     const k = ident(key);
     root.push([`--yarcl-space-${k}`, value]);
     rules.push(
-      rule(`.yarcl-gap-${k}`, [['gap', `var(--yarcl-space-${k})`]]),
-      rule(`.yarcl-padding-${k}`, [['padding', `var(--yarcl-space-${k})`]]),
+      rule(`.yarcl-gap-${k}`, [['--yarcl-component-gap', `var(--yarcl-space-${k})`]]),
+      rule(`.yarcl-padding-${k}`, [['--yarcl-component-padding', `var(--yarcl-space-${k})`]]),
     );
   }
 
@@ -212,6 +212,8 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
   for (const [key, value] of Object.entries(config.motion)) root.push([`--yarcl-motion-${ident(key)}`, value]);
   for (const [key, value] of Object.entries(config.borders)) root.push([`--yarcl-border-${ident(key)}`, value]);
 
+  const defaultSize = ident(config.defaults.size);
+  const defaultRadius = config.defaults.radius === 'size' ? defaultSize : ident(config.defaults.radius);
   root.push(
     ['--yarcl-focus-width', config.focusRing.width],
     ['--yarcl-focus-offset', config.focusRing.offset],
@@ -221,6 +223,11 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     ['--yarcl-floating-shadow', `var(--yarcl-shadow-${ident(config.defaults.floatingShadow)})`],
     ['--yarcl-padding', `var(--yarcl-space-${ident(config.defaults.padding)})`],
     ['--yarcl-gap', `var(--yarcl-space-${ident(config.defaults.gap)})`],
+    ['--yarcl-h', `var(--yarcl-size-${defaultSize}-height)`],
+    ['--yarcl-px', `var(--yarcl-size-${defaultSize}-padding-x)`],
+    ['--yarcl-fs', `var(--yarcl-size-${defaultSize}-font-size)`],
+    ['--yarcl-icon', `var(--yarcl-size-${defaultSize}-icon-size)`],
+    ['--yarcl-r', `var(--yarcl-radius-${defaultRadius}, 0)`],
   );
 
   const faces = (config.typography.fontFaces ?? []).map(fontFace);

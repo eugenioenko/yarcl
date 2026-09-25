@@ -1,4 +1,4 @@
-import { Accordion, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, NumberInput, Pagination, Progress, Slider, Stack, Table, Text } from '@yarcl/react';
+import { Accordion, Alert, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, Heading, Inline, Input, Label, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, toast } from '@yarcl/react';
 
 export const contract = (
   <>
@@ -8,7 +8,9 @@ export const contract = (
     <Label htmlFor="size" textStyle="fine" color="clay" required disabled />
     <Heading level={1} />
     <Label htmlFor="x" required variant="wash" color="clay" size="talla-s" radius="hairline" textStyle="label" />
-    <Table density="cozy" />
+    <Table density="cozy" radius="hairline" />
+    <Tooltip content="Ayuda" radius="hairline" padding="2" textStyle="fine"><Button /></Tooltip>
+    <Alert gap="2" padding="4" textStyle="copy" />
     <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} />
     <Slider.Range aria-label="Price" size="talla-s" color="clay" radius="hairline" defaultValue={[10, 90]} />
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
@@ -56,6 +58,12 @@ export const contract = (
     {/* @ts-expect-error */}
     <Table density="regular" />
     {/* @ts-expect-error */}
+    <Table radius="md" />
+    {/* @ts-expect-error */}
+    <Tooltip content="Ayuda" padding="normal"><Button /></Tooltip>
+    {/* @ts-expect-error */}
+    <Alert textStyle="body" />
+    {/* @ts-expect-error */}
     <Progress size="md" />
     {/* @ts-expect-error */}
     <Progress color="brand" />
@@ -101,3 +109,7 @@ export const contract = (
     <Combobox multiple options={[]} value="natural" />
   </>
 );
+
+toast({ title: 'Guardado', radius: 'hairline', gap: '2', padding: '4', textStyle: 'fine' });
+// @ts-expect-error
+toast({ title: 'Guardado', gap: 'normal' });

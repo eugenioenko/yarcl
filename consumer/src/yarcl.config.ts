@@ -61,9 +61,12 @@ export default defineConfig({
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
   components: {
+    Alert: { gap: 'tight', padding: 'normal', textStyle: 'label' },
     Badge: { radius: 'rounded' },
     Drawer: { size: 'sm' },
     Breadcrumb: { textStyle: 'label' },
+    Tooltip: { radius: 'md', padding: 'tight', textStyle: 'caption' },
+    Toast: { radius: 'lg', gap: 'tight', padding: 'normal', textStyle: 'label' },
   },
   defaults: {
     size: 'md',
