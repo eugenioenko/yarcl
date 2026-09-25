@@ -21,6 +21,9 @@
     "typescript"
   ],
   "type": "module",
+  "bin": {
+    "yarcl": "./dist/cli.js"
+  },
   "sideEffects": [
     "./dist/index.js",
     "**/*.css"
@@ -74,7 +77,8 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.20",
-    "date-fns": "^4.4.0"
+    "date-fns": "^4.4.0",
+    "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

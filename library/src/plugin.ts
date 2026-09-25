@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { runnerImport, type Plugin } from 'vite';
 import { generateCss } from './css';
 import type { YarclShape } from './define';
+import { assertConfigMapping, DEFAULT_CONFIG_PATH } from './setup.ts';
 
 /** Options for the yarcl Vite plugin. */
 export interface YarclPluginOptions {
@@ -42,7 +43,7 @@ const defaultConfig = resolve(dirname(fileURLToPath(import.meta.url)), 'yarcl.co
  * });
  * ```
  */
-export function yarcl({ config = 'src/yarcl.config.ts' }: YarclPluginOptions = {}): Plugin {
+export function yarcl({ config = DEFAULT_CONFIG_PATH }: YarclPluginOptions = {}): Plugin {
   let root = process.cwd();
   let target = defaultConfig;
   let watched = new Set<string>();
@@ -52,6 +53,7 @@ export function yarcl({ config = 'src/yarcl.config.ts' }: YarclPluginOptions = {
 
     config(userConfig) {
       root = resolve(userConfig.root ?? process.cwd());
+      assertConfigMapping(root, config);
       const consumerConfig = resolve(root, config);
       target = existsSync(consumerConfig) ? consumerConfig : defaultConfig;
       return {

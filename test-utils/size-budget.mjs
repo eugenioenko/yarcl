@@ -16,6 +16,7 @@ const entries = {
   '@yarcl/react/reference': 'reference/index.js',
   '@yarcl/react/themes': 'themes/index.js',
   '@yarcl/react/css': 'apply.js',
+  'yarcl CLI': 'cli.js',
 };
 const budgets = {
   '@yarcl/react': { js: 23 * 1024, css: 7 * 1024 },
@@ -25,6 +26,7 @@ const budgets = {
   '@yarcl/react/reference': { js: 5 * 1024, css: 0.6 * 1024 },
   '@yarcl/react/themes': { js: 3.5 * 1024, css: 0 },
   '@yarcl/react/css': { js: 3 * 1024, css: 0 },
+  'yarcl CLI': { js: 3 * 1024, css: 0 },
   Button: { js: 2.1 * 1024, css: 8.5 * 1024 },
   'Button + Input': { js: 2.25 * 1024, css: 8.5 * 1024 },
 };
@@ -32,6 +34,7 @@ const externalPackages = [
   '@floating-ui/react',
   '@yarcl/config',
   'date-fns',
+  'jsonc-parser',
   'react',
   'react-dom',
   'virtual:yarcl.css',
@@ -146,6 +149,10 @@ function check(results) {
 const temporary = await mkdtemp(join(root, '.yarcl-size-'));
 
 try {
+  await writeFile(
+    join(temporary, 'tsconfig.json'),
+    `${JSON.stringify({ compilerOptions: { paths: { '@yarcl/config': ['./src/yarcl.config.ts'] } } }, null, 2)}\n`,
+  );
   const results = [];
   for (const [name, file] of Object.entries(entries)) results.push([name, await measureEntry(file)]);
   const button = await measureConsumer(temporary, 'Button', ['Button']);

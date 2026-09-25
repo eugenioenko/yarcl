@@ -43,6 +43,18 @@ Why an alias instead of module augmentation or codegen: see [ADR 0001](docs/deci
 
 ## Setup
 
+From an existing Vite React project:
+
+```sh
+npx @yarcl/react init
+```
+
+This installs the package, connects Vite and TypeScript to the same config, and creates `src/yarcl.config.ts`. For manual setup:
+
+```sh
+npm install @yarcl/react
+```
+
 ```ts
 // vite.config.ts
 import react from '@vitejs/plugin-react';

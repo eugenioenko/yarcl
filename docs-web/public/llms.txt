@@ -23,10 +23,12 @@ Trade-offs: Vite only for now, and one design system per build.
 Requires React 19+ and Vite 6.1+ (Vite only).
 
 ```sh
-npm install @yarcl/react
+npx @yarcl/react init
 ```
 
-All three wiring steps are required:
+This installs the package, updates Vite and TypeScript, and creates `src/yarcl.config.ts`. Use `pnpm dlx @yarcl/react init` or `yarn dlx @yarcl/react init` with those package managers.
+
+For manual setup, all three wiring steps are required:
 
 1. `vite.config.ts`:
 
@@ -82,9 +84,10 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
   - aliases `@yarcl/config` to your config file, so components read your values at runtime
   - loads the config at build time and generates the stylesheet (`virtual:yarcl.css`): CSS variables and one class per key
   - regenerates the CSS when the config or its imports change
+  - verifies that TypeScript resolves `@yarcl/config` to the same file and reports a clear error when it does not
   - option `config`: path to the config file, relative to the Vite root; default `'src/yarcl.config.ts'`. If the file doesn't exist, it falls back to the library defaults.
 - **tsconfig `paths`**: makes TypeScript resolve `@yarcl/config` to the same file, so prop types are the keys of your config. The second entry is a fallback to the library defaults.
-- Both must point at the same file. If they differ, types and rendered styles disagree.
+- Both must point at the same file. The plugin stops startup if they differ. Re-run `npx @yarcl/react init` to repair the mapping.
 - With Vite's React template, the app's compiler options live in `tsconfig.app.json`: put `paths` there, not in the root `tsconfig.json` that only has `references`. `paths` resolve relative to the tsconfig file; no `baseUrl` needed.
 - Tests with Vitest need the plugin too: add `yarcl()` to the Vitest config, or reuse the Vite config with `mergeConfig`.
 
