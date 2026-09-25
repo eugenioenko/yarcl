@@ -34,6 +34,7 @@ try {
   await Promise.all([
     access(join(installed, 'dist/index.js')),
     access(join(installed, 'dist/index.d.ts')),
+    access(join(installed, 'dist/cli.js')),
     access(join(installed, 'dist/styles.css')),
     access(join(installed, 'dist/yarcl.config.js')),
     access(join(installed, 'dist/yarcl.config.d.ts')),
@@ -41,13 +42,43 @@ try {
 
   const installedReal = await realpath(installed);
   const { yarcl } = await import(pathToFileURL(join(installedReal, 'dist/plugin.js')).href);
+  const fallbackConsumer = join(temporary, 'fallback');
+  await mkdir(fallbackConsumer);
+  await writeFile(
+    join(fallbackConsumer, 'tsconfig.json'),
+    '{"compilerOptions":{"paths":{"@yarcl/config":["./src/missing.config.ts"]}}}\n',
+  );
   const plugin = yarcl({ config: 'src/missing.config.ts' });
   if (typeof plugin.config !== 'function') throw new Error('The packed plugin has no config hook');
-  const pluginConfig = plugin.config({ root: consumer });
+  const pluginConfig = plugin.config({ root: fallbackConsumer });
   const fallback = pluginConfig?.resolve?.alias?.['@yarcl/config'];
   if (fallback !== join(installedReal, 'dist/yarcl.config.js')) {
     throw new Error('The packed plugin did not resolve its compiled default config');
   }
+
+  const initialized = join(temporary, 'initialized');
+  await mkdir(initialized);
+  await Promise.all([
+    writeFile(join(initialized, 'package.json'), '{"name":"yarcl-init-fixture","private":true}\n'),
+    writeFile(
+      join(initialized, 'vite.config.ts'),
+      "import react from '@vitejs/plugin-react';\nimport { defineConfig } from 'vite';\n\nexport default defineConfig({ plugins: [react()] });\n",
+    ),
+    writeFile(join(initialized, 'tsconfig.app.json'), '{"compilerOptions":{"strict":true}}\n'),
+  ]);
+  const yarclBin = join(consumer, 'node_modules/.bin', platform() === 'win32' ? 'yarcl.cmd' : 'yarcl');
+  execFileSync(yarclBin, ['init', '--root', initialized, '--skip-install'], {
+    stdio: 'inherit',
+  });
+  const initializedVite = await readFile(join(initialized, 'vite.config.ts'), 'utf8');
+  const initializedTsconfig = JSON.parse(await readFile(join(initialized, 'tsconfig.app.json'), 'utf8'));
+  if (!initializedVite.includes("yarcl({ config: 'src/yarcl.config.ts' })")) {
+    throw new Error('The packed CLI did not configure Vite');
+  }
+  if (initializedTsconfig.compilerOptions.paths['@yarcl/config'][0] !== './src/yarcl.config.ts') {
+    throw new Error('The packed CLI did not configure TypeScript');
+  }
+  await access(join(initialized, 'src/yarcl.config.ts'));
 
   try {
     await access(join(installed, 'src'));

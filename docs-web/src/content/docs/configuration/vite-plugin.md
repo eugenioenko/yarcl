@@ -19,6 +19,7 @@ export default defineConfig({
 2. **Generates `virtual:yarcl.css`** from your config: CSS variables, one class per key, and `@font-face` rules.
 3. **Checks contrast** of every color's foreground and prints a warning below 4.5:1.
 4. **Hot-reloads** the stylesheet when the config file, or anything it imports, changes.
+5. **Validates the TypeScript mapping** and stops with a clear error if `@yarcl/config` points at a different file.
 
 ## Options
 
@@ -29,6 +30,8 @@ export default defineConfig({
 ## Fallback
 
 If the config file doesn't exist when the dev server starts, the plugin uses the library's default config. Pair it with the fallback entry in `tsconfig.json` so the types fall back the same way. Creating or deleting the file while the server runs needs a restart.
+
+The plugin checks `tsconfig.app.json` first, then `tsconfig.json`. Run `npx @yarcl/react init` to add or repair the matching `paths` entry automatically.
 
 ## Other frameworks built on Vite
 

@@ -2,6 +2,16 @@
 
 Yet another react component library. Your config file is the design system: every key becomes a typed prop and a rendered style.
 
+From an existing Vite React project, run:
+
+```sh
+npx @yarcl/react init
+```
+
+This installs the package, adds the Vite plugin and TypeScript path mapping, and creates `src/yarcl.config.ts`. The equivalent commands are `pnpm dlx @yarcl/react init` and `yarn dlx @yarcl/react init`.
+
+For manual setup:
+
 ```sh
 npm install @yarcl/react
 ```
