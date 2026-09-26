@@ -21,11 +21,12 @@ describe('generateCss', () => {
     expect(css).toContain('.yarcl-size-md {\n  --yarcl-h: var(--yarcl-size-md-height);');
     expect(css).toContain('.yarcl-radius-md {\n  --yarcl-r: var(--yarcl-radius-md);');
     expect(css).toContain('.yarcl-variant-solid {\n  --yarcl-v-bg: var(--yarcl-c);');
-    expect(css).toContain('.yarcl-gap-md {\n  gap: var(--yarcl-space-md);');
-    expect(css).toContain('.yarcl-padding-md {\n  padding: var(--yarcl-space-md);');
+    expect(css).toContain('.yarcl-gap-md {\n  --yarcl-component-gap: var(--yarcl-space-md);');
+    expect(css).toContain('.yarcl-padding-md {\n  --yarcl-component-padding: var(--yarcl-space-md);');
     expect(css).toContain('.yarcl-shadow-md {\n  box-shadow: var(--yarcl-shadow-md);');
     expect(css).toContain('.yarcl-density-comfortable {\n  --yarcl-cell-px: 0.75rem;');
     expect(css).toContain('.yarcl-type-body {\n  font-family: var(--yarcl-font-sans);');
+    expect(css).toContain('--yarcl-r: var(--yarcl-radius-md, 0);');
   });
 
   it('escapes unusual config keys in variables, selectors, and references', () => {

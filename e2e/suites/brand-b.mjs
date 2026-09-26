@@ -100,6 +100,24 @@ export default async function ({ page, check }) {
   check('size error clears', (await page.getByRole('alert').filter({ hasText: 'Choose a size first.' }).count()) === 0);
   await add.click();
   check('toast confirms', await page.getByRole('status').filter({ hasText: 'Added to bag' }).isVisible());
+  const noticeStyles = await page.locator('.yarcl-alert').first().evaluate((el) => {
+    const style = getComputedStyle(el);
+    return { radius: style.borderRadius, gap: style.gap, padding: style.padding, fontSize: style.fontSize };
+  });
+  check(
+    'alert uses Maison Talla component tokens',
+    noticeStyles.radius === '2px' && noticeStyles.gap === '12px' && noticeStyles.padding === '14px 16px' && noticeStyles.fontSize === '15px',
+    JSON.stringify(noticeStyles),
+  );
+  const toastStyles = await page.getByRole('status').filter({ hasText: 'Added to bag' }).evaluate((el) => {
+    const style = getComputedStyle(el);
+    return { radius: style.borderRadius, gap: style.gap, padding: style.padding, fontSize: style.fontSize };
+  });
+  check(
+    'toast uses Maison Talla component tokens',
+    toastStyles.radius === '2px' && toastStyles.gap === '12px' && toastStyles.padding === '12px 8px 12px 16px' && toastStyles.fontSize === '15px',
+    JSON.stringify(toastStyles),
+  );
 
   const shipping = page.getByRole('progressbar', { name: '€ 15 away from free express shipping' });
   const progress = await shipping.evaluate((el) => {

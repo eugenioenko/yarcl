@@ -74,6 +74,7 @@ export default defineConfig({
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '3px', color: 'clay' },
   components: {
+    Alert: { gap: '2', padding: '4', textStyle: 'copy' },
     Button: { radius: 'square' },
     IconButton: { radius: 'square' },
     ToggleGroup: { radius: 'square' },
@@ -86,6 +87,8 @@ export default defineConfig({
     Breadcrumb: { textStyle: 'fine' },
     Accordion: { size: 'talla-s', radius: 'square' },
     NumberInput: { radius: 'square' },
+    Tooltip: { radius: 'hairline', padding: '2', textStyle: 'fine' },
+    Toast: { radius: 'hairline', gap: '2', padding: '4', textStyle: 'copy' },
   },
   defaults: {
     size: 'talla-m',

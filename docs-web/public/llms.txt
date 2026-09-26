@@ -98,7 +98,8 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
 - To add a size, color, variant, spacing step or text style, add a key to its config group. It becomes a valid prop and a rendered style with no other changes.
 - Open groups (any keys): `colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `modalSizes`, `typography.styles`. Groups with required keys: `neutrals`, `zIndex`, `motion`, `timing`, `borders`.
 - Colors are `{ light, dark }` pairs; dark mode follows `color-scheme`. Readable text colors are computed.
-- Global defaults go in `defaults`; per-component defaults in `components`, e.g. `components: { Button: { radius: 'square' } }`. Props override both.
+- Global defaults go in `defaults`; per-component defaults in `components`, e.g. `components: { Button: { radius: 'square' }, Tooltip: { padding: 'sm', textStyle: 'caption' } }`. Props override both.
+- Component spacing, typography and radii come from config tokens. `Alert`, `Tooltip` and `Toast` accept token-backed `gap`, `padding`, `textStyle` and `radius` where applicable; `Table` accepts `radius` for its frame.
 - Style with props and config, not inline styles. Custom CSS can use the generated variables, e.g. `var(--yarcl-color-brand)`, `var(--yarcl-space-md)`.
 - Imports: components and `toast` from `@yarcl/react`; `/define`, `/defaults`, `/plugin`; bundled themes from `@yarcl/react/themes`; `applyTheme` from `@yarcl/react/css`.
 - "Failed to resolve import @yarcl/config" means the Vite plugin is missing. Type errors on `@yarcl/config` mean the tsconfig `paths` entry is missing or points at a different file.
