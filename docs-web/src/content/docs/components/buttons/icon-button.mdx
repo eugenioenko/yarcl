@@ -30,9 +30,16 @@ An `IconButton` is as wide as it is tall. It lines up with a [Button](/component
 - `aria-label` is **required** by the types: without visible text, it's the button's only name.
 - Pair it with a [Tooltip](/components/overlays/tooltip/) so sighted users can see the label too.
 - `loading` swaps the icon for a [Spinner](/components/feedback/spinner/) and disables the button.
+- With `href`, renders a native link that keeps link semantics and anchor attributes. The link still requires `aria-label`.
+
+```tsx
+<IconButton href="/settings" aria-label="Settings"><SettingsIcon /></IconButton>
+```
 
 ## Props
 
-Accepts every native `<button>` attribute except `color`.
+Without `href`, accepts native `<button>` attributes except `color`. With `href`, accepts native anchor attributes except `color` and button-only props.
 
 <Props of="IconButtonProps" />
+
+<Props of="IconButtonLinkProps" />

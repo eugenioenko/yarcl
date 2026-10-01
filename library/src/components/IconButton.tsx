@@ -6,12 +6,24 @@ import { Spinner } from './Spinner';
 import { useDefaults } from '../runtime';
 
 
-/** Props for {@link IconButton}. `aria-label` is required because the button has no visible text. */
+/** Props for the action form of {@link IconButton}. `aria-label` is required. */
 export interface IconButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps<'IconButton'>, VariantProps {
+  href?: never;
   /** Shows a {@link Spinner}, disables the button and sets `aria-busy`. */
   loading?: boolean;
   /** Accessible name, announced by screen readers in place of visible text. */
   'aria-label': string;
+}
+
+/** Props for the link form of {@link IconButton}. `aria-label` is required. */
+export interface IconButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'href' | 'type' | 'disabled'>, TokenProps<'IconButton'>, VariantProps {
+  /** Destination. Renders a native link with the same visual styles as an icon button. */
+  href: string;
+  /** Accessible name, announced by screen readers in place of visible text. */
+  'aria-label': string;
+  type?: never;
+  disabled?: never;
+  loading?: never;
 }
 
 /**
@@ -23,37 +35,23 @@ export interface IconButtonProps extends Omit<ComponentProps<'button'>, 'color'>
  * <IconButton aria-label="Search" variant="ghost"><SearchIcon /></IconButton>
  * ```
  */
-export function IconButton({
-  size,
-  radius,
-  color,
-  variant,
-  loading,
-  disabled,
-  className,
-  type = 'button',
-  children,
-  ...props
-}: IconButtonProps) {
+export function IconButton(props: IconButtonProps | IconButtonLinkProps) {
   const own = useDefaults('IconButton');
   const group = useButtonGroup();
-  return (
-    <button
-      type={type}
-      className={cx(
-        'yarcl-button yarcl-icon-button',
-        sizeClass(size ?? group?.size ?? own.size, 'IconButton'),
-        radiusClass(radius ?? group?.radius ?? own.radius, size ?? group?.size ?? own.size),
-        colorClass(color ?? group?.color ?? own.color),
-        variantClass(variant ?? group?.variant ?? own.variant),
-        className,
-      )}
-      disabled={disabled || loading}
-      aria-busy={loading || undefined}
-      {...props}
-    >
-      {loading && <Spinner label="" aria-hidden="true" />}
-      {!loading && children}
-    </button>
+  const { size, radius, color, variant, className, children, ...elementProps } = props;
+  const classes = cx(
+    'yarcl-button yarcl-icon-button',
+    sizeClass(size ?? group?.size ?? own.size, 'IconButton'),
+    radiusClass(radius ?? group?.radius ?? own.radius, size ?? group?.size ?? own.size),
+    colorClass(color ?? group?.color ?? own.color),
+    variantClass(variant ?? group?.variant ?? own.variant),
+    className,
   );
+  if (elementProps.href !== undefined) return <a className={classes} {...elementProps}>{children}</a>;
+
+  const { loading, disabled, type = 'button', ...buttonProps } = elementProps;
+  return <button type={type} className={classes} disabled={disabled || loading} aria-busy={loading || undefined} {...buttonProps}>
+    {loading && <Spinner label="" aria-hidden="true" />}
+    {!loading && children}
+  </button>;
 }

@@ -69,6 +69,7 @@
   background: var(--yarcl-v-bg);
   border-color: var(--yarcl-v-border);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .yarcl-button:hover:not(:disabled) {

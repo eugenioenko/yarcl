@@ -2,13 +2,13 @@ import '@yarcl/react/styles.css';
 import './styles.css';
 
 export { Button } from './components/Button';
-export type { ButtonProps } from './components/Button';
+export type { ButtonProps, ButtonLinkProps } from './components/Button';
 export { ButtonGroup } from './components/ButtonGroup';
 export type { ButtonGroupProps } from './components/ButtonGroup';
 export { ToggleGroup } from './components/ToggleGroup';
 export type { ToggleGroupProps, ToggleGroupBaseProps, ToggleGroupItemProps } from './components/ToggleGroup';
 export { IconButton } from './components/IconButton';
-export type { IconButtonProps } from './components/IconButton';
+export type { IconButtonProps, IconButtonLinkProps } from './components/IconButton';
 export { Input } from './components/Input';
 export type { InputProps } from './components/Input';
 export { FileDropzone } from './components/FileDropzone';
