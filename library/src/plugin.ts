@@ -113,7 +113,8 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
         const config = await jiti.import<YarclShape>(target, { default: true });
         watched = existsSync(target) ? await configDependencies(target) : new Set([target]);
         watched.forEach((file) => this.addWatchFile(file));
-        const css = generateCss(config, (message) => this.warn(message));
+        const css = generateCss(config, (message) => this.warn(message))
+          .replace(/^@custom-media --yarcl-(?:min|max)-[^\n]+\n/gm, '');
         if (meta.framework === 'rollup') {
           generatedStyles = css;
           return '';
