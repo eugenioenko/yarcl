@@ -131,6 +131,7 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
       config(userConfig) {
         root = resolve(options.root ?? userConfig.root ?? process.cwd());
         return {
+          build: userConfig.build?.cssTarget ? {} : { cssTarget: ['chrome123', 'edge123', 'firefox120', 'safari17.5'] },
           optimizeDeps: {
             exclude: [PACKAGE],
             include: ['@floating-ui/react', 'date-fns', 'date-fns/locale', 'date-fns/locale/en-US'].map((dependency) =>

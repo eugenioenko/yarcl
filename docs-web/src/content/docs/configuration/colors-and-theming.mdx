@@ -81,6 +81,14 @@ Every color is emitted as a CSS `light-dark()` pair, and the generated styleshee
 
 To force a scheme, set `color-scheme` on any element. It applies to everything inside:
 
+The yarcl Vite plugin sets a production CSS target that keeps `light-dark()` intact when you have not set `build.cssTarget`. If you set your own `cssTarget`, include browser versions that support `light-dark()` natively. Older targets can make Vite lower the function to media-query-driven variables, which prevents per-element `color-scheme` overrides in the production build.
+
+```ts
+build: {
+  cssTarget: ['chrome123', 'edge123', 'firefox120', 'safari17.5'],
+},
+```
+
 <Preview column>
   <SchemeDemo client:visible />
 </Preview>
