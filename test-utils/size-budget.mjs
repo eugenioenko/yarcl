@@ -33,7 +33,7 @@ const budgets = {
   '@yarcl/react/rspack': { js: 6 * 1024, css: 0 },
   '@yarcl/react/rollup': { js: 6 * 1024, css: 0 },
   '@yarcl/react/esbuild': { js: 6 * 1024, css: 0 },
-  '@yarcl/react/reference': { js: 6.25 * 1024, css: 0.6 * 1024 },
+  '@yarcl/react/reference': { js: 6.5 * 1024, css: 0.6 * 1024 },
   '@yarcl/react/demo': { js: 28 * 1024, css: 7.75 * 1024 },
   '@yarcl/react/themes': { js: 3.5 * 1024, css: 0 },
   '@yarcl/react/css': { js: 3.75 * 1024, css: 0 },

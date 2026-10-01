@@ -19,6 +19,8 @@ export interface TextProps extends Omit<ComponentProps<'span'>, 'color'> {
    * @default config.defaults.textStyle
    */
   textStyle?: TextStyle;
+  /** Inherits the surrounding font instead of applying the component's default text style. An explicit `textStyle` takes precedence. */
+  inherit?: boolean;
   /** Semantic color, from the `colors` config. Inherits the surrounding color when omitted. */
   color?: Color;
   /** Uses the muted neutral color, for secondary text. */
@@ -38,6 +40,7 @@ export interface TextProps extends Omit<ComponentProps<'span'>, 'color'> {
 export function Text({
   as = 'span',
   textStyle,
+  inherit,
   color,
   muted,
   truncate,
@@ -49,11 +52,13 @@ export function Text({
   const own = useDefaults('Text');
   const Tag = as as 'span';
   const lines = truncate === true ? 1 : truncate || 0;
+  const resolvedTextStyle = inherit && textStyle === undefined ? undefined : textStyle ?? own.textStyle ?? config.defaults.textStyle;
   return (
     <Tag
       className={cx(
         'yarcl-text',
-        typeClass(textStyle ?? own.textStyle ?? config.defaults.textStyle),
+        resolvedTextStyle && typeClass(resolvedTextStyle),
+        !inherit && textStyle === undefined && own.textStyle === undefined && 'yarcl-text-auto-size',
         (color ?? own.color) && cx('yarcl-text-colored', colorClass(color ?? own.color)),
         muted && 'yarcl-text-muted',
         lines === 1 && 'yarcl-text-truncate',

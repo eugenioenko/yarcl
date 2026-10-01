@@ -43,6 +43,7 @@ import { Table } from '@yarcl/react';
 ```
 
 - `density` accepts the keys of your [density](/configuration/spacing-shadows-density/#density) group.
+- `Text` without an explicit text style follows the cell's density font size, so `muted` and `truncate` can be used alongside plain cell text. Use `textStyle` to opt into a specific text style.
 - `radius` accepts the keys of your [radii](/configuration/sizes-and-radii/#radii) group and styles the table frame.
 - `sortable` on `Table.HeaderCell` manages `aria-sort` state and accessible sort triggers.
 - `Table.SelectAllCell` and `Table.SelectionCell` provide accessible row selection checkboxes.

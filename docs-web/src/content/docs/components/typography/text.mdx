@@ -25,6 +25,15 @@ import { Text } from '@yarcl/react';
 
 `textStyle` accepts the keys of your [text styles](/configuration/typography/#text-styles). It defaults to `defaults.textStyle`.
 
+Inside a `Table`, `Text` without an explicit `textStyle` follows the table's density font size when no `Text` component default overrides its style. This lets `muted` and `truncate` match plain cell text. An explicit `textStyle` keeps its configured size.
+
+Use `inherit` to follow the surrounding font in any container, including a table with a `Text` component default. An explicit `textStyle` takes precedence over `inherit`.
+
+```tsx
+<Table.Cell><Text muted>None</Text></Table.Cell>
+<Text inherit muted>Uses the surrounding font</Text>
+```
+
 ## Truncation
 
 <Preview>

@@ -21,6 +21,9 @@ export const contract = (
     {/* @ts-expect-error unknown spacing */}
     <Grid gap="normal" />
     <Button size="talla-l" color="clay" variant="wash" radius="hairline" />
+    <Text inherit muted>Hereda la tipografía</Text>
+    {/* @ts-expect-error inherit must be boolean */}
+    <Text inherit="yes">Inválido</Text>
     <Button href="/lecciones/siguiente" size="talla-l">Siguiente lección</Button>
     <IconButton href="/lecciones/siguiente" aria-label="Siguiente lección"><span>→</span></IconButton>
     {/* @ts-expect-error links cannot use native button types */}
