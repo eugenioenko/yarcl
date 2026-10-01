@@ -48,4 +48,5 @@ await mkdir(join(dist, 'reference'), { recursive: true });
 await Promise.all([
   copyFile(join(root, 'src/styles.css'), join(dist, 'styles.css')),
   copyFile(join(root, 'src/reference/reference.css'), join(dist, 'reference/reference.css')),
+  copyFile(join(root, '../docs-web/public/llms.txt'), join(root, 'llms.txt')),
 ]);

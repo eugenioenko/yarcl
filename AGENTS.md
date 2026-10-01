@@ -40,6 +40,10 @@ Missing wiring fails loudly: an unresolved module or type errors, never silently
 - Components render classes, never inline token values. They read defaults at render time (`useDefaults`, `useConfig`), so `applyTheme` (`library/src/apply.ts`) can swap the config and its CSS at runtime without a rebuild.
 - Themes in `library/src/themes/` must satisfy `ThemeContract`, which is keyed from the library defaults, so any theme can replace any other.
 
+## For consumers
+
+The published package includes `node_modules/@yarcl/react/llms.txt`, copied from `docs-web/public/llms.txt` during the library build. `node_modules/@yarcl/react/AGENTS.md` points to it when an agent inspects the installed package. An agent working from a consumer project's root should be directed to the package guide by that project's own instructions or README; dependency instructions are not guaranteed to load automatically.
+
 ## Layout
 
 | Path | Purpose |

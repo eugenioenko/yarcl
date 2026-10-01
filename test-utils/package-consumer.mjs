@@ -44,7 +44,17 @@ try {
     access(join(installed, 'dist/yarcl.config.js')),
     access(join(installed, 'dist/yarcl.config.d.ts')),
     access(join(installed, 'dist/css.js')),
+    access(join(installed, 'llms.txt')),
+    access(join(installed, 'AGENTS.md')),
+    access(join(installed, 'README.md')),
   ]);
+
+  const installedGuide = await readFile(join(installed, 'llms.txt'), 'utf8');
+  const docsGuide = await readFile(join(root, 'docs-web/public/llms.txt'), 'utf8');
+  if (installedGuide !== docsGuide) throw new Error('The packed agent guide does not match the docs site');
+  if (!(await readFile(join(installed, 'AGENTS.md'), 'utf8')).includes('./llms.txt')) {
+    throw new Error('The packed AGENTS.md does not point to llms.txt');
+  }
 
   execFileSync(
     process.execPath,
