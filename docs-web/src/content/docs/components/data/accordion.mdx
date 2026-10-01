@@ -36,6 +36,22 @@ import { Accordion } from '@yarcl/react';
 
 With `type="single"`, opening an item closes the others. Clicking the open item closes it; set `collapsible={false}` to keep one item open at all times.
 
+## Controls beside the trigger
+
+Wrap the trigger in `Accordion.Header` to place a drag handle, status or menu beside it. These controls are siblings of the trigger button, so they remain independently focusable. Hovering the trigger highlights the whole header row.
+
+```tsx
+<Accordion.Item value="module-1">
+  <Accordion.Header
+    start={<button type="button" aria-label="Reorder module">⋮⋮</button>}
+    end={<span>Published</span>}
+  >
+    <Accordion.Trigger>Introduction</Accordion.Trigger>
+  </Accordion.Header>
+  <Accordion.Content>Lessons in this module</Accordion.Content>
+</Accordion.Item>
+```
+
 ## Multiple open
 
 `type="multiple"` lets items open independently. Here the open items are controlled with `value` and `onValueChange`.
@@ -85,6 +101,10 @@ Plus `type`, and `value` (controlled) or `defaultValue` (uncontrolled). With `ty
 ### Accordion.Item
 
 <Props of="AccordionItemProps" />
+
+### Accordion.Header
+
+<Props of="AccordionHeaderProps" />
 
 ### Accordion.Trigger
 

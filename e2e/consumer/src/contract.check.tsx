@@ -52,7 +52,11 @@ export const contract = (
     <Breadcrumb textStyle="fine" color="clay" underline="always" maxItems={3} separator="/">
       <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
     </Breadcrumb>
-    <Accordion type="multiple" size="talla-s" radius="hairline" color="moss" />
+    <Accordion type="multiple" size="talla-s" radius="hairline" color="moss">
+      <Accordion.Item value="uno">
+        <Accordion.Header end={<button type="button">Acciones</button>}><Accordion.Trigger>Uno</Accordion.Trigger></Accordion.Header>
+      </Accordion.Item>
+    </Accordion>
     <Combobox multiple options={[]} size="talla-s" color="clay" radius="square" maxSelected={2} onValueChange={(v: string[]) => v} />
     <NumberInput size="talla-s" color="moss" radius="square" min={1} />
     <Avatar name="Ada Lovelace" size="talla-l" radius="hairline" color="moss" variant="text" />

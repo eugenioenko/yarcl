@@ -193,6 +193,25 @@ function AccordionItem({ value, disabled, className, ...props }: AccordionItemPr
   );
 }
 
+/** Props for `Accordion.Header`. Controls in `start` and `end` remain outside the trigger button. */
+export interface AccordionHeaderProps extends ComponentProps<'div'> {
+  /** Content before the trigger, such as a drag handle. */
+  start?: ReactNode;
+  /** Content after the trigger, such as a badge or actions menu. */
+  end?: ReactNode;
+}
+
+function AccordionHeader({ start, end, children, className, ...props }: AccordionHeaderProps) {
+  useItemContext('Accordion.Header');
+  return (
+    <div className={cx('yarcl-accordion-header', className)} {...props}>
+      {start}
+      {children}
+      {end}
+    </div>
+  );
+}
+
 /** Props for `Accordion.Trigger`. */
 export interface AccordionTriggerProps extends ComponentProps<'button'> {
   /**
@@ -269,6 +288,7 @@ function AccordionContent({ className, children, ...props }: AccordionContentPro
  */
 export const Accordion = Object.assign(AccordionRoot, {
   Item: AccordionItem,
+  Header: AccordionHeader,
   Trigger: AccordionTrigger,
   Content: AccordionContent,
 });

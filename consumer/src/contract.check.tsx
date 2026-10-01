@@ -192,7 +192,9 @@ export const contract = (
     <Tabs value="a" onValueChange={() => {}} />
     <Accordion type="single" defaultValue="a" collapsible={false} size="lg" radius="size" color="success" disabled>
       <Accordion.Item value="a" disabled>
-        <Accordion.Trigger level={2}>A</Accordion.Trigger>
+        <Accordion.Header start={<span>Start</span>} end={<button type="button">Action</button>}>
+          <Accordion.Trigger level={2}>A</Accordion.Trigger>
+        </Accordion.Header>
         <Accordion.Content>A</Accordion.Content>
       </Accordion.Item>
     </Accordion>
