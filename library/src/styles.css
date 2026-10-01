@@ -1359,6 +1359,31 @@ html:has(.yarcl-modal[open]) {
   font: inherit;
 }
 
+.yarcl-accordion-header {
+  display: flex;
+  align-items: center;
+  gap: var(--yarcl-gap);
+  padding-inline: var(--yarcl-px);
+  transition: background-color var(--yarcl-motion-fast) var(--yarcl-motion-easing);
+}
+
+.yarcl-accordion-header .yarcl-accordion-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.yarcl-accordion-header .yarcl-accordion-trigger {
+  padding-inline: 0;
+}
+
+.yarcl-accordion-header:has(.yarcl-accordion-trigger:hover:not(:disabled)) {
+  background: color-mix(in oklab, var(--yarcl-neutral-text) 4%, transparent);
+}
+
+.yarcl-accordion-header .yarcl-accordion-trigger:hover:not(:disabled) {
+  background: transparent;
+}
+
 .yarcl-accordion-trigger {
   display: flex;
   align-items: center;

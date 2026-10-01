@@ -84,6 +84,7 @@ export type {
   AccordionProps,
   AccordionBaseProps,
   AccordionItemProps,
+  AccordionHeaderProps,
   AccordionTriggerProps,
   AccordionContentProps,
 } from './components/Accordion';

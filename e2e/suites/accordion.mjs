@@ -38,6 +38,11 @@ export default async function ({ page, check, focused }) {
 
   check('disabled item is disabled', await giftCards.isDisabled());
 
+  const actions = faq.getByRole('button', { name: 'Warranty actions' });
+  await actions.click();
+  check('header action does not toggle its trigger', !(await expanded(warranty)));
+  check('header action is outside the trigger heading', (await actions.evaluate((el) => el.parentElement.tagName)) !== 'H3');
+
   await shipping.focus();
   await page.keyboard.press('Enter');
   check('Enter toggles', await expanded(shipping));
