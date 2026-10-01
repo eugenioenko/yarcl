@@ -56,6 +56,8 @@ h1 {
 }
 ```
 
+`fonts` is optional. When omitted, `body` and `heading` use `sans` if present, and `mono` uses `mono` if present. Each role otherwise uses the first family in `families`. Set `fonts` explicitly to choose other mappings.
+
 Use a `--yarcl-font-family-{key}` variable only when the application intentionally depends on that specific family key. The existing `--yarcl-font-{key}` variables remain available, but role names take precedence when a family key is also named `body`, `heading` or `mono`.
 
 ## Text styles

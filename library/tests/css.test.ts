@@ -133,6 +133,22 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-error: var(--yarcl-color-failure);');
   });
 
+  it('uses available families for configs without font roles', () => {
+    const { fonts: _fonts, ...typography } = defaults.typography;
+    const css = generateCss(withConfig({ typography }));
+
+    expect(css).toContain('--yarcl-font-body: var(--yarcl-font-family-sans);');
+    expect(css).toContain('--yarcl-font-heading: var(--yarcl-font-family-sans);');
+    expect(css).toContain('--yarcl-font-mono: var(--yarcl-font-family-mono);');
+
+    const custom = generateCss(withConfig({
+      typography: { ...typography, families: { prose: 'Georgia, serif', code: 'Menlo, monospace' } },
+    }));
+    expect(custom).toContain('--yarcl-font-body: var(--yarcl-font-family-prose);');
+    expect(custom).toContain('--yarcl-font-heading: var(--yarcl-font-family-prose);');
+    expect(custom).toContain('--yarcl-font-mono: var(--yarcl-font-family-prose);');
+  });
+
   it('does not let legacy font aliases overwrite canonical family variables', () => {
     const css = generateCss(
       withConfig({

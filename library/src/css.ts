@@ -232,7 +232,15 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     const alias = `--yarcl-font-${family}`;
     if (!familyVariables.has(alias)) root.push([alias, value]);
   }
-  for (const [role, family] of Object.entries(config.typography.fonts)) {
+  const firstFamily = fontFamilies[0]?.[0];
+  if (!firstFamily) throw new Error('yarcl: typography.families must contain at least one family');
+  const hasFamily = (key: string) => Object.hasOwn(config.typography.families, key);
+  const fonts = config.typography.fonts ?? {
+    body: hasFamily('sans') ? 'sans' : firstFamily,
+    heading: hasFamily('sans') ? 'sans' : firstFamily,
+    mono: hasFamily('mono') ? 'mono' : firstFamily,
+  };
+  for (const [role, family] of Object.entries(fonts)) {
     root.push([`--yarcl-font-${role}`, `var(--yarcl-font-family-${ident(family)})`]);
   }
 
