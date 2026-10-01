@@ -58,6 +58,12 @@ const bodyFont: FontFamily = config.typography.fonts.body;
 const invalidFont: FontFamily = 'missing';
 void [bodyFont, invalidFont];
 
+// @ts-expect-error unknown prose text style
+const invalidProseStyle: typeof config.typography.prose.body = 'missing';
+// @ts-expect-error unknown prose spacing
+const invalidProseGap: typeof config.typography.prose.blockGap = 'missing';
+void [invalidProseStyle, invalidProseGap];
+
 export const contract = (
   <>
     <Grid as="section" columns={3} gap="normal" ref={() => {}} style={{ width: '100%' }} />

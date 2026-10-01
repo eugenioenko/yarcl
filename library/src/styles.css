@@ -545,6 +545,105 @@ p.yarcl-text {
   margin: 0;
 }
 
+.yarcl-prose {
+  color: var(--yarcl-neutral-text);
+  font-family: var(--yarcl-prose-body-family);
+  font-size: var(--yarcl-prose-body-size);
+  font-weight: var(--yarcl-prose-body-weight);
+  line-height: var(--yarcl-prose-body-line-height);
+  letter-spacing: var(--yarcl-prose-body-letter-spacing);
+}
+
+.yarcl-prose :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, table, figure, hr, img) {
+  margin-block: 0;
+}
+
+.yarcl-prose :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, table, figure, hr, img):not(:first-child) {
+  margin-block-start: var(--yarcl-prose-block-gap);
+}
+
+.yarcl-prose :where(h1, h2, h3, h4, h5, h6):not(:first-child) {
+  margin-block-start: var(--yarcl-prose-heading-gap);
+}
+
+.yarcl-prose :where(ul, ol) {
+  padding-inline-start: var(--yarcl-prose-list-indent);
+}
+
+.yarcl-prose :where(ul) {
+  list-style: disc;
+}
+
+.yarcl-prose :where(ol) {
+  list-style: decimal;
+}
+
+.yarcl-prose :where(li + li, li > ul, li > ol) {
+  margin-block-start: calc(var(--yarcl-prose-block-gap) / 2);
+}
+
+.yarcl-prose :where(blockquote) {
+  padding-inline-start: var(--yarcl-prose-block-gap);
+  border-inline-start: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
+.yarcl-prose :where(code, pre) {
+  font-family: var(--yarcl-prose-code-family);
+  font-size: var(--yarcl-prose-code-size);
+  font-weight: var(--yarcl-prose-code-weight);
+  line-height: var(--yarcl-prose-code-line-height);
+  letter-spacing: var(--yarcl-prose-code-letter-spacing);
+}
+
+.yarcl-prose :where(code) {
+  overflow-wrap: anywhere;
+}
+
+.yarcl-prose :where(pre) {
+  overflow-x: auto;
+  padding: var(--yarcl-prose-block-gap);
+  background: var(--yarcl-neutral-surface);
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-prose :where(pre code) {
+  font: inherit;
+  letter-spacing: inherit;
+  overflow-wrap: normal;
+}
+
+.yarcl-prose :where(a) {
+  color: var(--yarcl-accent);
+  text-decoration: underline;
+}
+
+.yarcl-prose :where(a):focus-visible {
+  outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
+  outline-offset: var(--yarcl-focus-offset);
+}
+
+.yarcl-prose :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.yarcl-prose :where(th, td) {
+  padding: calc(var(--yarcl-prose-block-gap) / 2);
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  text-align: start;
+}
+
+.yarcl-prose :where(img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.yarcl-prose :where(hr) {
+  border: 0;
+  border-block-start: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
 .yarcl-text-colored {
   color: var(--yarcl-c-text);
 }

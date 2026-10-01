@@ -252,7 +252,7 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
       [`${name}-weight`, style.weight],
       [`${name}-line-height`, style.lineHeight],
     );
-    if (style.letterSpacing !== undefined) root.push([`${name}-letter-spacing`, style.letterSpacing]);
+    root.push([`${name}-letter-spacing`, style.letterSpacing ?? 'normal']);
     rules.push(
       rule(`.yarcl-type-${ident(key)}`, [
         ['font-family', `var(${name}-family)`],
@@ -263,6 +263,34 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
       ]),
     );
   }
+
+  const textProperties = ['family', 'size', 'weight', 'line-height', 'letter-spacing'] as const;
+  for (const [level, style] of Object.entries(config.typography.headings)) {
+    const name = `--yarcl-h${level.slice(1)}`;
+    const source = `--yarcl-text-${ident(style)}`;
+    for (const property of textProperties) root.push([`${name}-${property}`, `var(${source}-${property})`]);
+    rules.push(rule(`.yarcl-prose :where(${level})`, [
+      ['font-family', `var(${name}-family)`],
+      ['font-size', `var(${name}-size)`],
+      ['font-weight', `var(${name}-weight)`],
+      ['line-height', `var(${name}-line-height)`],
+      ['letter-spacing', `var(${name}-letter-spacing)`],
+    ]));
+  }
+
+  const prose = config.typography.prose;
+  const bodyStyle = prose?.body ?? config.defaults.textStyle;
+  const codeStyle = prose?.code ?? (Object.hasOwn(config.typography.styles, 'code') ? 'code' : bodyStyle);
+  for (const [role, style] of [['body', bodyStyle], ['code', codeStyle]]) {
+    for (const property of textProperties) {
+      root.push([`--yarcl-prose-${role}-${property}`, `var(--yarcl-text-${ident(style)}-${property})`]);
+    }
+  }
+  root.push(
+    ['--yarcl-prose-block-gap', `var(--yarcl-space-${ident(prose?.blockGap ?? config.defaults.gap)})`],
+    ['--yarcl-prose-heading-gap', `var(--yarcl-space-${ident(prose?.headingGap ?? config.defaults.padding)})`],
+    ['--yarcl-prose-list-indent', `var(--yarcl-space-${ident(prose?.listIndent ?? config.defaults.padding)})`],
+  );
 
   for (const [key, value] of Object.entries(config.zIndex)) root.push([`--yarcl-z-${ident(key)}`, value]);
   for (const [key, value] of Object.entries(config.motion)) root.push([`--yarcl-motion-${ident(key)}`, value]);

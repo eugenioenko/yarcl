@@ -26,6 +26,9 @@ Components never set inline styles. They render class names, and all values come
 | `--yarcl-shadow-{key}` | `shadows` |
 | `--yarcl-font-family-{key}`, `--yarcl-font-{key}` | `typography.families` |
 | `--yarcl-font-body`, `--yarcl-font-heading`, `--yarcl-font-mono` | `typography.fonts` |
+| `--yarcl-text-{key}-family`, `-size`, `-weight`, `-line-height`, `-letter-spacing` | `typography.styles` |
+| `--yarcl-h1-*` through `--yarcl-h6-*` | `typography.headings` |
+| `--yarcl-prose-body-*`, `--yarcl-prose-code-*`, `--yarcl-prose-block-gap`, `--yarcl-prose-heading-gap`, `--yarcl-prose-list-indent` | `typography.prose` or config defaults |
 | `--yarcl-modal-{key}` | `modalSizes` |
 | `--yarcl-width-{key}` | `widths` |
 | `--yarcl-z-{key}` | `zIndex` |
@@ -90,6 +93,8 @@ The generated file grows with the number of token keys and configured component 
 Use stable role variables for application semantics. Key variables such as `--yarcl-font-family-serif` are available when a style intentionally targets one config key.
 
 Or reuse the modifier classes on your own elements, for example `class="yarcl-type-caption"`.
+
+For rich HTML whose descendants have no classes, apply `yarcl-prose` to its container. It uses the heading-level and prose variables, so changing the config updates headings and spacing without new element rules.
 
 ## Overriding a component
 
