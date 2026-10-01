@@ -3,6 +3,15 @@ import defaults from './yarcl.config';
 
 defineConfig({ ...defaults, colors: { ...defaults.colors, brand: { light: '#000', dark: '#fff' } } });
 
+defineConfig({
+  ...defaults,
+  typography: {
+    families: defaults.typography.families,
+    styles: defaults.typography.styles,
+    headings: defaults.typography.headings,
+  },
+});
+
 defineConfig({ ...defaults, components: { Grid: { gap: 'sm' } } });
 defineConfig({
   ...defaults,

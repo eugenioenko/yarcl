@@ -218,8 +218,8 @@ export interface YarclShape {
     fontFaces?: readonly FontFaceToken[];
     /** Font stacks, e.g. `{ sans: 'Inter, system-ui, sans-serif' }`. */
     families: Record<string, string>;
-    /** Stable application font roles. Each value must be a key of `families`. */
-    fonts: { body: string; heading: string; mono: string };
+    /** Stable application font roles. Each value must be a key of `families`. Omit to use available family keys. */
+    fonts?: { body: string; heading: string; mono: string };
     /** Named text styles. Keys become the valid text style names. */
     styles: Record<string, TextStyleToken>;
     /** Text style for each heading level, used by `Heading`. Each must be a key of `styles`. */
@@ -383,7 +383,7 @@ type Checks<T extends YarclShape> = {
   breakpoints: KeyCheck<T['breakpoints']>;
   typography: {
     families: KeyCheck<T['typography']['families']>;
-    fonts: Record<'body' | 'heading' | 'mono', keyof T['typography']['families']>;
+    fonts?: Record<'body' | 'heading' | 'mono', keyof T['typography']['families']>;
     styles: KeyCheck<T['typography']['styles']> & {
       [K in keyof T['typography']['styles']]: { family: keyof T['typography']['families'] };
     };
