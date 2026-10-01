@@ -21,6 +21,11 @@ export const contract = (
     {/* @ts-expect-error unknown spacing */}
     <Grid gap="normal" />
     <Button size="talla-l" color="clay" variant="wash" radius="hairline" />
+    <Button size="talla-l" startIcon={<span>✓</span>} endIcon={<span>→</span>}>Continuar</Button>
+    <Button href="/lecciones/siguiente" endIcon={<span>→</span>}>Siguiente lección</Button>
+    <Badge size="talla-s" startIcon={<span>✓</span>} endIcon={<span>✓</span>}>Listo</Badge>
+    {/* @ts-expect-error unknown badge size */}
+    <Badge size="missing" startIcon={<span>✓</span>}>Listo</Badge>
     <Text inherit muted>Hereda la tipografía</Text>
     {/* @ts-expect-error inherit must be boolean */}
     <Text inherit="yes">Inválido</Text>

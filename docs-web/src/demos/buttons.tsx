@@ -53,12 +53,8 @@ export function ButtonRadii() {
 export function ButtonIcons() {
   return (
     <>
-      <Button>
-        <PlusIcon /> New project
-      </Button>
-      <Button variant="outline" color="danger">
-        <TrashIcon /> Delete
-      </Button>
+      <Button startIcon={<PlusIcon />}>New project</Button>
+      <Button variant="outline" color="danger" endIcon={<TrashIcon />}>Delete</Button>
     </>
   );
 }

@@ -24,6 +24,12 @@ import { Badge } from '@yarcl/react';
 
 Badges use the same [variant recipes](/configuration/variants/) as buttons. The default is `defaults.softVariant`.
 
+Use `startIcon` or `endIcon` for a decorative status icon. The icon size and the gap from the label follow the badge's size token.
+
+```tsx
+<Badge color="success" startIcon={<CheckIcon />}>Completed</Badge>
+```
+
 ## Removable tags
 
 <Preview>
