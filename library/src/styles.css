@@ -29,6 +29,8 @@
     .yarcl-switch-input,
     .yarcl-slider-thumb,
     .yarcl-link,
+    .yarcl-nav-item,
+    .yarcl-file-dropzone-files button,
     .yarcl-breadcrumb-ellipsis,
     .yarcl-breadcrumb-text,
     .yarcl-modal-close,
@@ -91,6 +93,61 @@
 .yarcl-icon-button {
   width: var(--yarcl-h);
   padding: 0;
+}
+
+/* Input & Textarea */
+
+.yarcl-file-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--yarcl-gap);
+  padding: var(--yarcl-padding);
+  color: var(--yarcl-neutral-text);
+  background: var(--yarcl-neutral-surface);
+  border: var(--yarcl-border-width) dashed var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-file-dropzone-dragging {
+  border-color: var(--yarcl-accent);
+  background: color-mix(in oklab, var(--yarcl-accent) 5%, var(--yarcl-neutral-surface));
+}
+
+.yarcl-file-dropzone-disabled {
+  opacity: 0.5;
+}
+
+.yarcl-file-dropzone-description,
+.yarcl-file-dropzone-hint {
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-file-dropzone-files {
+  width: 100%;
+}
+
+.yarcl-file-dropzone-files ul {
+  display: grid;
+  gap: var(--yarcl-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yarcl-file-dropzone-files li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--yarcl-gap);
+}
+
+.yarcl-file-dropzone-files button {
+  color: var(--yarcl-accent);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Input & Textarea */
@@ -535,6 +592,47 @@ p.yarcl-text {
 
 .yarcl-link-underline-hover:hover {
   text-decoration-line: underline;
+}
+
+/* Breadcrumb */
+
+.yarcl-nav-item {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--yarcl-px) / 2);
+  box-sizing: border-box;
+  min-height: var(--yarcl-h);
+  padding-inline: var(--yarcl-px);
+  border-radius: var(--yarcl-r);
+  color: var(--yarcl-neutral-text);
+  font-size: var(--yarcl-fs);
+  text-decoration: none;
+}
+
+.yarcl-nav-item:hover {
+  background: color-mix(in oklab, var(--yarcl-neutral-text) 5%, transparent);
+}
+
+.yarcl-nav-item[aria-current='page'] {
+  color: var(--yarcl-accent);
+  background: color-mix(in oklab, var(--yarcl-accent) 10%, transparent);
+  font-weight: 600;
+}
+
+.yarcl-nav-item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+
+.yarcl-nav-item-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.yarcl-nav-item-label {
+  min-width: 0;
 }
 
 /* Breadcrumb */

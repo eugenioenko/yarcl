@@ -1,4 +1,4 @@
-import { Accordion, Alert, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, Grid, Heading, Inline, Input, Label, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, Alert, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, Inline, Input, Label, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 
 type FontFamily = keyof typeof config.typography.families;
@@ -15,6 +15,12 @@ export const contract = (
     {/* @ts-expect-error unknown spacing */}
     <Grid gap="normal" />
     <Button size="talla-l" color="clay" variant="wash" radius="hairline" />
+    <NavItem href="/inicio" active size="talla-s" radius="hairline">Inicio</NavItem>
+    <FileDropzone label="Archivos" accept="image/*" />
+    {/* @ts-expect-error unknown size */}
+    <NavItem href="/inicio" size="sm">Inicio</NavItem>
+    {/* @ts-expect-error label is required */}
+    <FileDropzone />
     {/* @ts-expect-error Button excludes the global talla-m size */}
     <Button size="talla-m" />
     <Stack gap="12" />

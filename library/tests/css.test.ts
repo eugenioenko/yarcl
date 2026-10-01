@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { generateCss } from '../src/css.ts';
 import type { YarclShape } from '../src/define.ts';
 import defaults from '../src/yarcl.config.ts';
+import brandB from '../../e2e/consumer/src/yarcl.config.ts';
 
 function withConfig(overrides: Partial<YarclShape>): YarclShape {
   return { ...defaults, ...overrides };
@@ -33,8 +34,20 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-font-mono: var(--yarcl-font-family-mono);');
     expect(css).toContain('--yarcl-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;');
     expect(css).toContain('--yarcl-accent: var(--yarcl-color-primary);');
-    expect(css).toContain('.yarcl-type-body {\n  font-family: var(--yarcl-font-family-sans);');
+    expect(css).toContain('--yarcl-text-body-family: var(--yarcl-font-family-sans);');
+    expect(css).toContain('--yarcl-text-body-size: 1rem;');
+    expect(css).toContain('--yarcl-text-body-weight: 400;');
+    expect(css).toContain('--yarcl-text-body-line-height: 1.5;');
+    expect(css).toContain('--yarcl-text-display-letter-spacing: -0.02em;');
+    expect(css).toContain('.yarcl-type-body {\n  font-family: var(--yarcl-text-body-family);');
     expect(css).toContain('--yarcl-r: var(--yarcl-radius-md, 0);');
+  });
+
+  it('emits variables for the consumer brand text styles', () => {
+    const css = generateCss(brandB);
+    expect(css).toContain('--yarcl-text-fine-size: 0.75rem;');
+    expect(css).toContain('--yarcl-text-headline-family: var(--yarcl-font-family-serif);');
+    expect(css).toContain('.yarcl-type-headline {\n  font-family: var(--yarcl-text-headline-family);');
   });
 
   it('rejects breakpoint names that cannot be used in media queries', () => {
@@ -90,7 +103,7 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-size-2\\ xl-height: 2.5rem;');
     expect(css).toContain('.yarcl-size-2\\ xl {');
     expect(css).toContain('--yarcl-font-family-display\\.alt: Georgia, serif;');
-    expect(css).toContain('font-family: var(--yarcl-font-family-display\\.alt);');
+    expect(css).toContain('--yarcl-text-hero-family: var(--yarcl-font-family-display\\.alt);');
   });
 
   it('keeps role variables stable when font family and accent color keys change', () => {

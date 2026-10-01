@@ -68,6 +68,17 @@ Use a `--yarcl-font-family-{key}` variable only when the application intentional
 
 Each style is also a class, `yarcl-type-{key}`, for use outside yarcl components.
 
+Each style also emits `--yarcl-text-{key}-family`, `-size`, `-weight`, and `-line-height` variables. Styles with letter spacing emit `--yarcl-text-{key}-letter-spacing`. Use these for rich text whose elements cannot carry yarcl classes:
+
+```css
+.article h2 {
+  font-family: var(--yarcl-text-heading-family);
+  font-size: var(--yarcl-text-heading-size);
+  font-weight: var(--yarcl-text-heading-weight);
+  line-height: var(--yarcl-text-heading-line-height);
+}
+```
+
 ## Heading levels
 
 `headings` maps each level to a text style. `<Heading level={2}>` renders an `<h2>` with the `h2` style, so the document structure and the visual scale are defined once. `textStyle` overrides the look for a single heading without changing its level.

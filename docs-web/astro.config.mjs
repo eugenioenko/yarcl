@@ -8,6 +8,7 @@ const componentSections = [
   ['Buttons', 'buttons'],
   ['Forms', 'forms'],
   ['Typography', 'typography'],
+  ['Navigation', 'navigation'],
   ['Layout', 'layout'],
   ['Overlays', 'overlays'],
   ['Data display', 'data'],

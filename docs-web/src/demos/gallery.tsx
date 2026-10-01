@@ -14,6 +14,7 @@ import {
   Divider,
   EmptyState,
   Field,
+  FileDropzone,
   Heading,
   Grid,
   IconButton,
@@ -21,6 +22,7 @@ import {
   Input,
   Label,
   Link,
+  NavItem,
   NumberInput,
   Radio,
   RadioGroup,
@@ -144,6 +146,12 @@ const groups: Record<string, Item[]> = {
     },
   ],
   forms: [
+    {
+      name: 'File dropzone',
+      href: '/components/forms/file-dropzone/',
+      description: 'Pick or drop files and render the selected list.',
+      preview: <FileDropzone label="Attachments" accept="image/*" className="gallery-fill" />,
+    },
     {
       name: 'Field',
       href: '/components/forms/field/',
@@ -314,6 +322,14 @@ const groups: Record<string, Item[]> = {
           Read the <Link href="#">documentation</Link>
         </Text>
       ),
+    },
+  ],
+  navigation: [
+    {
+      name: 'Nav item',
+      href: '/components/navigation/nav-item/',
+      description: 'A navigation link with an icon and current-page state.',
+      preview: <NavItem href="#overview" active icon={<SearchIcon />}>Overview</NavItem>,
     },
   ],
   layout: [
