@@ -52,6 +52,24 @@ defineConfig({
   ...defaults,
   typography: {
     ...defaults.typography,
+    // @ts-expect-error unknown prose text style
+    prose: { body: 'missing' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  typography: {
+    ...defaults.typography,
+    // @ts-expect-error unknown prose spacing
+    prose: { blockGap: 'missing' },
+  },
+});
+
+defineConfig({
+  ...defaults,
+  typography: {
+    ...defaults.typography,
     // @ts-expect-error
     styles: { body: { family: 'serif', size: '1rem', weight: 400, lineHeight: 1.5 } },
   },

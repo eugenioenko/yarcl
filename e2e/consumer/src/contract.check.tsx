@@ -7,6 +7,12 @@ const headingFont: FontFamily = config.typography.fonts.heading;
 const invalidFont: FontFamily = 'missing';
 void [headingFont, invalidFont];
 
+// @ts-expect-error unknown prose text style
+const invalidProseStyle: typeof config.typography.prose.body = 'missing';
+// @ts-expect-error unknown prose spacing
+const invalidProseGap: typeof config.typography.prose.blockGap = 'missing';
+void [invalidProseStyle, invalidProseGap];
+
 export const contract = (
   <>
     <Grid as="section" columns={3} gap="4" ref={() => {}} style={{ width: '100%' }} />

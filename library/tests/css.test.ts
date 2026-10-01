@@ -39,6 +39,12 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-text-body-weight: 400;');
     expect(css).toContain('--yarcl-text-body-line-height: 1.5;');
     expect(css).toContain('--yarcl-text-display-letter-spacing: -0.02em;');
+    expect(css).toContain('--yarcl-text-body-letter-spacing: normal;');
+    expect(css).toContain('--yarcl-h2-size: var(--yarcl-text-heading-size);');
+    expect(css).toContain('.yarcl-prose :where(h2) {\n  font-family: var(--yarcl-h2-family);');
+    expect(css).toContain('--yarcl-prose-body-size: var(--yarcl-text-body-size);');
+    expect(css).toContain('--yarcl-prose-code-size: var(--yarcl-text-code-size);');
+    expect(css).toContain('--yarcl-prose-block-gap: var(--yarcl-space-md);');
     expect(css).toContain('.yarcl-type-body {\n  font-family: var(--yarcl-text-body-family);');
     expect(css).toContain('--yarcl-r: var(--yarcl-radius-md, 0);');
   });
@@ -48,6 +54,12 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-text-fine-size: 0.75rem;');
     expect(css).toContain('--yarcl-text-headline-family: var(--yarcl-font-family-serif);');
     expect(css).toContain('.yarcl-type-headline {\n  font-family: var(--yarcl-text-headline-family);');
+    expect(css).toContain('--yarcl-h2-size: var(--yarcl-text-title-size);');
+    expect(css).toContain('--yarcl-prose-body-size: var(--yarcl-text-copy-size);');
+    expect(css).toContain('--yarcl-prose-code-size: var(--yarcl-text-fine-size);');
+    expect(css).toContain('--yarcl-prose-block-gap: var(--yarcl-space-3);');
+    expect(css).toContain('--yarcl-prose-heading-gap: var(--yarcl-space-6);');
+    expect(css).toContain('--yarcl-prose-list-indent: var(--yarcl-space-6);');
   });
 
   it('rejects breakpoint names that cannot be used in media queries', () => {

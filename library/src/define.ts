@@ -224,6 +224,19 @@ export interface YarclShape {
     styles: Record<string, TextStyleToken>;
     /** Text style for each heading level, used by `Heading`. Each must be a key of `styles`. */
     headings: { h1: string; h2: string; h3: string; h4: string; h5: string; h6: string };
+    /** Styles and spacing for unclassed HTML inside `.yarcl-prose`. */
+    prose?: {
+      /** Text style for body content. Defaults to `defaults.textStyle`. */
+      body?: string;
+      /** Text style for code. Defaults to `code` when present, otherwise the body style. */
+      code?: string;
+      /** Spacing key between blocks. Defaults to `defaults.gap`. */
+      blockGap?: string;
+      /** Spacing key before headings. Defaults to `defaults.padding`. */
+      headingGap?: string;
+      /** Spacing key for list indentation. Defaults to `defaults.padding`. */
+      listIndent?: string;
+    };
   };
   /** Stacking order of floating layers. Extra keys allowed. */
   zIndex: Record<string, number> & { dropdown: number; tooltip: number; dialog: number; toast: number };
@@ -388,6 +401,13 @@ type Checks<T extends YarclShape> = {
       [K in keyof T['typography']['styles']]: { family: keyof T['typography']['families'] };
     };
     headings: Record<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6', keyof T['typography']['styles']>;
+    prose?: {
+      body?: keyof T['typography']['styles'];
+      code?: keyof T['typography']['styles'];
+      blockGap?: keyof T['spacing'];
+      headingGap?: keyof T['spacing'];
+      listIndent?: keyof T['spacing'];
+    };
   };
   focusRing: { color: keyof T['colors'] };
   defaults: {

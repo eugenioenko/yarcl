@@ -57,6 +57,7 @@ export default defineConfig({
       code: { family: 'mono', size: '0.875rem', weight: 400, lineHeight: 1.5 },
     },
     headings: { h1: 'h1', h2: 'h2', h3: 'title', h4: 'h4', h5: 'label', h6: 'overline' },
+    prose: { body: 'body', code: 'code', blockGap: 'normal', headingGap: 'loose', listIndent: 'loose' },
   },
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },

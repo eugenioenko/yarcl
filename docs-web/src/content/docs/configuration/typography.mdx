@@ -70,7 +70,7 @@ Use a `--yarcl-font-family-{key}` variable only when the application intentional
 
 Each style is also a class, `yarcl-type-{key}`, for use outside yarcl components.
 
-Each style also emits `--yarcl-text-{key}-family`, `-size`, `-weight`, and `-line-height` variables. Styles with letter spacing emit `--yarcl-text-{key}-letter-spacing`. Use these for rich text whose elements cannot carry yarcl classes:
+Each style also emits `--yarcl-text-{key}-family`, `-size`, `-weight`, `-line-height` and `-letter-spacing` variables. Letter spacing is `normal` when the style omits it. Use these variables when styling individual elements outside yarcl components:
 
 ```css
 .article h2 {
@@ -84,6 +84,31 @@ Each style also emits `--yarcl-text-{key}-family`, `-size`, `-weight`, and `-lin
 ## Heading levels
 
 `headings` maps each level to a text style. `<Heading level={2}>` renders an `<h2>` with the `h2` style, so the document structure and the visual scale are defined once. `textStyle` overrides the look for a single heading without changing its level.
+
+Each level also emits `--yarcl-h1-*` through `--yarcl-h6-*` variables for family, size, weight, line height and letter spacing. They follow the configured heading map when a theme changes.
+
+## Rich text without element classes
+
+Put `.yarcl-prose` on the container around sanitized HTML or an editor surface. It styles headings from `typography.headings`, body text from `defaults.textStyle`, and code from the `code` text style when present. It also handles paragraphs, lists, quotes, links, tables, images and rules.
+
+```html
+<div class="yarcl-prose">
+  <h2>Lesson title</h2>
+  <p>Lesson text</p>
+  <ul><li>First point</li></ul>
+</div>
+```
+
+Use `typography.prose` to choose body and code styles or spacing keys for block gaps, heading gaps and list indentation:
+
+```ts
+typography: {
+  ...defaults.typography,
+  prose: { body: 'body', code: 'code', blockGap: 'md', headingGap: 'lg', listIndent: 'lg' },
+}
+```
+
+Without `typography.prose`, block spacing uses `defaults.gap`, and heading spacing and list indentation use `defaults.padding`. The generated `--yarcl-prose-*` variables can be overridden on a particular container.
 
 All six levels are required, and each must be a key of `styles`.
 

@@ -70,6 +70,7 @@ export default defineConfig({
       fine: { family: 'sans', size: '0.75rem', weight: 400, lineHeight: 1.5 },
     },
     headings: { h1: 'headline', h2: 'title', h3: 'title', h4: 'label', h5: 'label', h6: 'label' },
+    prose: { body: 'copy', code: 'fine', blockGap: '3', headingGap: '6', listIndent: '6' },
   },
   zIndex: defaults.zIndex,
   motion: { ...defaults.motion, fast: '160ms', easing: 'cubic-bezier(0.3, 0, 0, 1)' },
