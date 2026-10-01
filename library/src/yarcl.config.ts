@@ -61,6 +61,8 @@ export default defineConfig({
     xl: '64rem',
     full: '100vw',
   },
+  widths: { sidebar: '15rem', reading: '44rem', page: '72rem' },
+  breakpoints: { xs: '30rem', sm: '40rem', md: '48rem', lg: '64rem', xl: '80rem' },
   typography: {
     families: {
       sans: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',

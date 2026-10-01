@@ -1,5 +1,6 @@
 import { Button } from '@yarcl/react';
 import { createRoot } from 'react-dom/client';
+import './layout.css';
 
 const contract = <Button color="packageAccent">Packed package</Button>;
 

@@ -1,0 +1,9 @@
+.package-layout {
+  max-width: var(--yarcl-width-page);
+}
+
+@media (--yarcl-max-md) {
+  .package-layout {
+    max-width: var(--yarcl-width-reading);
+  }
+}

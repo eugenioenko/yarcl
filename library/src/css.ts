@@ -204,6 +204,15 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     root.push([`--yarcl-modal-${k}`, value]);
     rules.push(rule(`.yarcl-modal-size-${k}`, [['--yarcl-modal-width', `var(--yarcl-modal-${k})`]]));
   }
+  for (const [key, value] of Object.entries(config.widths)) root.push([`--yarcl-width-${ident(key)}`, value]);
+  for (const [key, value] of Object.entries(config.breakpoints)) {
+    if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(key)) {
+      throw new Error(`yarcl: breakpoint key "${key}" must start with a letter and contain only letters, numbers, hyphens or underscores`);
+    }
+    const k = key;
+    rules.push(`@custom-media --yarcl-min-${k} (min-width: ${value});`);
+    rules.push(`@custom-media --yarcl-max-${k} (max-width: ${value});`);
+  }
 
   for (const [key, density] of Object.entries(config.density)) {
     rules.push(

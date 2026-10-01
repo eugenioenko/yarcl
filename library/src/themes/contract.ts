@@ -17,6 +17,8 @@ export interface ThemeContract {
   shadows: Record<keyof Defaults['shadows'], string>;
   density: Record<keyof Defaults['density'], DensityToken>;
   modalSizes: Record<keyof Defaults['modalSizes'], string>;
+  widths: Record<keyof Defaults['widths'], string>;
+  breakpoints: Record<keyof Defaults['breakpoints'], string>;
   typography: {
     families: Record<keyof Defaults['typography']['families'], string>;
     fonts: Record<keyof Defaults['typography']['fonts'], keyof Defaults['typography']['families']>;

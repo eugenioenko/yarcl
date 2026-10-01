@@ -16,6 +16,9 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-size-md-height: 2.5rem;');
     expect(css).toContain('--yarcl-radius-md: 0.375rem;');
     expect(css).toContain('--yarcl-space-md: 1rem;');
+    expect(css).toContain('--yarcl-width-page: 72rem;');
+    expect(css).toContain('@custom-media --yarcl-min-md (min-width: 48rem);');
+    expect(css).toContain('@custom-media --yarcl-max-md (max-width: 48rem);');
     expect(css).toContain('--yarcl-shadow-md: 0 4px 12px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.6));');
     expect(css).toContain('.yarcl-color-primary {\n  --yarcl-c: var(--yarcl-color-primary);');
     expect(css).toContain('.yarcl-size-md {\n  --yarcl-h: var(--yarcl-size-md-height);');
@@ -32,6 +35,10 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-accent: var(--yarcl-color-primary);');
     expect(css).toContain('.yarcl-type-body {\n  font-family: var(--yarcl-font-family-sans);');
     expect(css).toContain('--yarcl-r: var(--yarcl-radius-md, 0);');
+  });
+
+  it('rejects breakpoint names that cannot be used in media queries', () => {
+    expect(() => generateCss(withConfig({ breakpoints: { 'small screen': '40rem' } }))).toThrow('breakpoint key');
   });
 
   it('emits component-scoped size overrides without changing the global size class', () => {

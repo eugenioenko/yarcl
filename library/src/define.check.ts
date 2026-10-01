@@ -56,6 +56,12 @@ defineConfig({
 
 defineConfig({
   ...defaults,
+  // @ts-expect-error
+  breakpoints: { ...defaults.breakpoints, 'small screen': '40rem' },
+});
+
+defineConfig({
+  ...defaults,
   zIndex: { ...defaults.zIndex, banner: 900 },
   neutrals: { ...defaults.neutrals, raised: { light: '#fff', dark: '#222' } },
 });

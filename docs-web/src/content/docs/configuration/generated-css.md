@@ -27,6 +27,7 @@ Components never set inline styles. They render class names, and all values come
 | `--yarcl-font-family-{key}`, `--yarcl-font-{key}` | `typography.families` |
 | `--yarcl-font-body`, `--yarcl-font-heading`, `--yarcl-font-mono` | `typography.fonts` |
 | `--yarcl-modal-{key}` | `modalSizes` |
+| `--yarcl-width-{key}` | `widths` |
 | `--yarcl-z-{key}` | `zIndex` |
 | `--yarcl-motion-{key}` | `motion` |
 | `--yarcl-border-{key}` | `borders` |
@@ -35,6 +36,8 @@ Components never set inline styles. They render class names, and all values come
 | `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon`, `--yarcl-r` | default size and radius |
 
 Colors are emitted as `light-dark(light, dark)`, and `:root` gets `color-scheme: light dark`.
+
+Breakpoints generate `@custom-media --yarcl-min-{key}` and `@custom-media --yarcl-max-{key}` definitions. The yarcl plugin expands those names in imported CSS to ordinary `min-width` and `max-width` queries, so the final stylesheet works in browsers without custom media support.
 
 ## Modifier classes
 
