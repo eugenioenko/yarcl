@@ -7,12 +7,14 @@ import {
   Checkbox,
   Divider,
   Field,
+  FileDropzone,
   Heading,
   IconButton,
   Inline,
   Input,
   Label,
   Link,
+  NavItem,
   Breadcrumb,
   NumberInput,
   Radio,
@@ -139,6 +141,13 @@ export function App() {
                 </Switch>
               </Row>
             ))}
+          </Section>
+          <Section title="Files and navigation">
+            <FileDropzone data-testid="feedback-files" label="Attachments" description="Images or PDF files" accept="image/*,.pdf" multiple />
+            <nav aria-label="Demo navigation" data-testid="feedback-nav">
+              <NavItem href="#overview" active icon={<SearchIcon />}>Overview</NavItem>
+              <NavItem href="#settings">Settings</NavItem>
+            </nav>
           </Section>
           <Section title="Variants × colors">
             {colors.map((color) => (

@@ -237,13 +237,21 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
   }
 
   for (const [key, style] of Object.entries(config.typography.styles)) {
+    const name = `--yarcl-text-${ident(key)}`;
+    root.push(
+      [`${name}-family`, `var(--yarcl-font-family-${ident(style.family)})`],
+      [`${name}-size`, style.size],
+      [`${name}-weight`, style.weight],
+      [`${name}-line-height`, style.lineHeight],
+    );
+    if (style.letterSpacing !== undefined) root.push([`${name}-letter-spacing`, style.letterSpacing]);
     rules.push(
       rule(`.yarcl-type-${ident(key)}`, [
-        ['font-family', `var(--yarcl-font-family-${ident(style.family)})`],
-        ['font-size', style.size],
-        ['font-weight', style.weight],
-        ['line-height', style.lineHeight],
-        ...(style.letterSpacing ? [['letter-spacing', style.letterSpacing] as [string, string]] : []),
+        ['font-family', `var(${name}-family)`],
+        ['font-size', `var(${name}-size)`],
+        ['font-weight', `var(${name}-weight)`],
+        ['line-height', `var(${name}-line-height)`],
+        ...(style.letterSpacing !== undefined ? [['letter-spacing', `var(${name}-letter-spacing)`] as [string, string]] : []),
       ]),
     );
   }

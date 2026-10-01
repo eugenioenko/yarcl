@@ -7,6 +7,7 @@ import {
   Divider,
   EmptyState,
   Field,
+  FileDropzone,
   Alert,
   Badge,
   Avatar,
@@ -38,6 +39,7 @@ import {
   Input,
   Label,
   Link,
+  NavItem,
   Breadcrumb,
   NumberInput,
   Radio,
@@ -64,6 +66,14 @@ export const contract = (
     {/* @ts-expect-error unknown spacing */}
     <Grid gap="4" />
     <Button size="xl" color="warning" radius="rounded" variant="subtle" />
+    <NavItem href="/home" active size="sm" radius="md" icon={<span>H</span>}>Home</NavItem>
+    <FileDropzone label="Documents" accept=".pdf" multiple onFilesChange={(files) => files.length}>
+      {(files, removeFile) => <button type="button" onClick={() => removeFile(0)}>{files.length}</button>}
+    </FileDropzone>
+    {/* @ts-expect-error unknown size */}
+    <NavItem href="/home" size="talla-s">Home</NavItem>
+    {/* @ts-expect-error label is required */}
+    <FileDropzone />
     <Input size="xs" color="danger" radius="square" />
     <IconButton aria-label="Add" variant="quiet" />
     <Textarea size="lg" radius="size" />

@@ -14,11 +14,13 @@ import {
   Dialog,
   Divider,
   EmptyState,
+  FileDropzone,
   Heading,
   Grid,
   Inline,
   Label,
   Link,
+  NavItem,
   Progress,
   Pagination,
   NumberInput,
@@ -262,6 +264,12 @@ export function App() {
             <Progress value={185} max={200} label="€ 15 away from free express shipping" />
 
             <Divider />
+
+            <FileDropzone data-testid="feedback-files" label="Attachments" description="Images or PDF files" accept="image/*,.pdf" multiple />
+            <nav aria-label="Demo navigation" data-testid="feedback-nav">
+              <NavItem href="#overview" active icon={<span>✦</span>}>Overview</NavItem>
+              <NavItem href="#settings">Settings</NavItem>
+            </nav>
 
             <Grid columns={3} data-testid="grid-equal">
               {['Materials', 'Origin', 'Care', 'Delivery'].map((label) => <Text key={label}>{label}</Text>)}

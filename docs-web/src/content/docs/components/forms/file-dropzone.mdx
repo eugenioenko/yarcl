@@ -1,0 +1,43 @@
+---
+title: File dropzone
+description: Pick or drop files with a visible list and native keyboard access.
+sidebar:
+  order: 4
+---
+
+import Props from '@/components/Props.astro';
+
+```tsx
+import { FileDropzone } from '@yarcl/react';
+
+<FileDropzone
+  label="Attachments"
+  description="Images or PDF files"
+  accept="image/*,.pdf"
+  multiple
+  onFilesChange={(files) => upload(files)}
+/>
+```
+
+The button opens the native file picker. Files can also be dropped on the bordered area. `accept` filters dropped files as well as picker selections. The default list shows file names with remove buttons. Use the render prop to provide your own list:
+
+```tsx
+<FileDropzone label="Attachments" multiple>
+  {(files, removeFile) => (
+    <ul>
+      {files.map((file, index) => (
+        <li key={`${file.name}-${index}`}>
+          {file.name}
+          <button type="button" onClick={() => removeFile(index)}>Remove</button>
+        </li>
+      ))}
+    </ul>
+  )}
+</FileDropzone>
+```
+
+Use `onFilesChange` to upload or validate the selected files. Upload progress belongs to the upload request, so render it beside this component.
+
+## Props
+
+<Props of="FileDropzoneProps" />

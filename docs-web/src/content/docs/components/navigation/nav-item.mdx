@@ -1,0 +1,23 @@
+---
+title: Nav item
+description: A link for sidebars and application navigation.
+sidebar:
+  order: 1
+---
+
+import Props from '@/components/Props.astro';
+
+```tsx
+import { NavItem } from '@yarcl/react';
+
+<nav aria-label="Main navigation">
+  <NavItem href="/dashboard" active icon={<DashboardIcon />}>Dashboard</NavItem>
+  <NavItem href="/settings" icon={<SettingsIcon />}>Settings</NavItem>
+</nav>
+```
+
+`active` adds `aria-current="page"` and the active style. The icon is decorative; the text supplies the link name. `NavItem` accepts native anchor attributes, so a router can pass its resolved `href` and click handler. See the [router link recipe](/getting-started/router-links/).
+
+## Props
+
+<Props of="NavItemProps" />
