@@ -60,6 +60,8 @@ import { Button } from '@yarcl/react';
 
 Documentation: [yarcl.dev](https://yarcl.dev)
 
+For coding agents working in an installed project, read [`node_modules/@yarcl/react/llms.txt`](./llms.txt). The package copies this guide from the docs site during its build, so it matches the installed version. The package also includes a short [`AGENTS.md`](./AGENTS.md) pointer for agents that inspect dependency directories.
+
 ## License
 
 MIT

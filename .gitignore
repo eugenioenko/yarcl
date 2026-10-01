@@ -5,4 +5,5 @@ docs-web/src/generated
 docs-web/public/api
 docs-web/.astro
 library/LICENSE
+library/llms.txt
 .vitest
