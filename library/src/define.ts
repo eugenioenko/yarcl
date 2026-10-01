@@ -166,7 +166,7 @@ type ComponentConfig<C extends ComponentName> = {
 /**
  * The structure every yarcl config must satisfy.
  *
- * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `modalSizes`, `typography`) take any keys;
+ * Open groups (`colors`, `sizes`, `radii`, `variants`, `spacing`, `shadows`, `density`, `modalSizes`, `widths`, `breakpoints`, `typography`) take any keys;
  * those keys become the valid prop values. Groups with required keys (`neutrals`, `zIndex`,
  * `motion`, `timing`, `borders`) must include the keys the library depends on, and accept any extra
  * keys, which are emitted as CSS variables for the consumer's own styles.
@@ -208,6 +208,10 @@ export interface YarclShape {
    * Keys become the valid values of their `size` prop. Separate from `sizes`, which sets control heights.
    */
   modalSizes: Record<string, string>;
+  /** Page and container widths, emitted as `--yarcl-width-{key}`. */
+  widths: Record<string, string>;
+  /** Named media-query thresholds. Use as `@media (--yarcl-max-{key})` or `@media (--yarcl-min-{key})` in CSS processed by the yarcl plugin. */
+  breakpoints: Record<string, string>;
   /** Font files, font families, stable font roles, named text styles and heading levels. */
   typography: {
     /** Font files to load. Reference their `family` names in `families`. */
@@ -375,6 +379,8 @@ type Checks<T extends YarclShape> = {
   shadows: KeyCheck<T['shadows']>;
   density: KeyCheck<T['density']>;
   modalSizes: KeyCheck<T['modalSizes']>;
+  widths: KeyCheck<T['widths']>;
+  breakpoints: KeyCheck<T['breakpoints']>;
   typography: {
     families: KeyCheck<T['typography']['families']>;
     fonts: Record<'body' | 'heading' | 'mono', keyof T['typography']['families']>;

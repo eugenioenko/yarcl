@@ -74,6 +74,7 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
   let staticStyles = '';
   let referenceStyles = '';
   let watched = new Set<string>();
+  const responsiveStyles = new Set<string>();
 
   const prepare = (): void => {
     assertConfigMapping(root, configPath, meta.framework);
@@ -121,6 +122,27 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
       },
     },
 
+    transform: {
+      filter: { id: /\.css(?:\?.*)?$/ },
+      async handler(code, id) {
+        if (!code.includes('--yarcl-min-') && !code.includes('--yarcl-max-')) return;
+        if (!target) prepare();
+        const jiti = createJiti(resolve(root, 'package.json'), { moduleCache: false });
+        const config = await jiti.import<YarclShape>(target, { default: true });
+        let changed = false;
+        const transformed = code.replace(/\(\s*--yarcl-(min|max)-([a-zA-Z0-9_-]+)\s*\)/g, (_, direction: string, key: string) => {
+          const value = config.breakpoints[key];
+          if (value === undefined) throw new Error(`yarcl: unknown breakpoint "${key}" in ${id}`);
+          changed = true;
+          return `(${direction}-width: ${value})`;
+        });
+        if (!changed) return;
+        responsiveStyles.add(id);
+        this.addWatchFile(target);
+        return transformed;
+      },
+    },
+
     rollup: {
       generateBundle() {
         this.emitFile({ type: 'asset', fileName: 'yarcl.css', source: `${generatedStyles}\n${componentStyles}` });
@@ -144,9 +166,12 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
       handleHotUpdate({ file, server, modules }) {
         if (!watched.has(file)) return;
         const css = server.moduleGraph.getModuleById(RESOLVED_CSS);
-        if (!css) return;
-        server.moduleGraph.invalidateModule(css);
-        return [...modules, css];
+        const responsive = [...responsiveStyles]
+          .map((id) => server.moduleGraph.getModuleById(id))
+          .filter((module) => module !== undefined);
+        if (css) server.moduleGraph.invalidateModule(css);
+        responsive.forEach((module) => server.moduleGraph.invalidateModule(module));
+        return [...modules, ...(css ? [css] : []), ...responsive];
       },
     },
 

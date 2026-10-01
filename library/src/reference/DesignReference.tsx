@@ -333,6 +333,20 @@ export function DesignReference({ title = 'Design reference', headingLevel = 1 }
         />
       </Section>
 
+      <Section title="Layout widths" description="Widths for page and container layouts.">
+        <KeyValues
+          caption="Layout widths"
+          rows={Object.entries(shape.widths).map(([key, value]): [string, ReactNode] => [key, <Code>{value}</Code>])}
+        />
+      </Section>
+
+      <Section title="Breakpoints" description="Named thresholds for responsive media queries.">
+        <KeyValues
+          caption="Breakpoints"
+          rows={Object.entries(shape.breakpoints).map(([key, value]): [string, ReactNode] => [key, <Code>{value}</Code>])}
+        />
+      </Section>
+
       <Section title="Density">
         <KeyValues
           caption="Table density"

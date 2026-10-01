@@ -6,9 +6,15 @@ body {
 }
 
 .page {
-  max-width: 60rem;
+  max-width: var(--yarcl-width-page);
   margin: 0 auto;
   padding: var(--yarcl-space-loose) var(--yarcl-space-normal);
+}
+
+@media (--yarcl-max-md) {
+  .page {
+    padding-inline: var(--yarcl-space-tight);
+  }
 }
 
 .label {
