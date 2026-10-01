@@ -653,6 +653,10 @@ p.yarcl-text {
   color: var(--yarcl-neutral-muted);
 }
 
+.yarcl-table .yarcl-text-auto-size {
+  font-size: inherit;
+}
+
 .yarcl-text-truncate {
   display: block;
   overflow: hidden;
