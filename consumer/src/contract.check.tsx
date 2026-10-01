@@ -72,6 +72,12 @@ export const contract = (
     {/* @ts-expect-error unknown spacing */}
     <Grid gap="4" />
     <Button size="xl" color="warning" radius="rounded" variant="subtle" />
+    <Button href="/lessons/next" target="_blank" rel="noopener noreferrer" size="xl">Next lesson</Button>
+    <IconButton href="/lessons/next" aria-label="Next lesson"><span>→</span></IconButton>
+    {/* @ts-expect-error links cannot use native button types */}
+    <Button href="/lessons/next" type="submit">Next lesson</Button>
+    {/* @ts-expect-error links cannot be disabled like buttons */}
+    <IconButton href="/lessons/next" aria-label="Next lesson" disabled />
     <NavItem href="/home" active size="sm" radius="md" icon={<span>H</span>}>Home</NavItem>
     <FileDropzone label="Documents" accept=".pdf" multiple onFilesChange={(files) => files.length}>
       {(files, removeFile) => <button type="button" onClick={() => removeFile(0)}>{files.length}</button>}

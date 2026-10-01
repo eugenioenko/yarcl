@@ -1,4 +1,4 @@
-import { Accordion, Alert, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, Inline, Input, Label, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, Alert, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 
 type FontFamily = keyof typeof config.typography.families;
@@ -21,6 +21,12 @@ export const contract = (
     {/* @ts-expect-error unknown spacing */}
     <Grid gap="normal" />
     <Button size="talla-l" color="clay" variant="wash" radius="hairline" />
+    <Button href="/lecciones/siguiente" size="talla-l">Siguiente lección</Button>
+    <IconButton href="/lecciones/siguiente" aria-label="Siguiente lección"><span>→</span></IconButton>
+    {/* @ts-expect-error links cannot use native button types */}
+    <Button href="/lecciones/siguiente" type="submit">Siguiente lección</Button>
+    {/* @ts-expect-error icon links need an accessible name */}
+    <IconButton href="/lecciones/siguiente"><span>→</span></IconButton>
     <NavItem href="/inicio" active size="talla-s" radius="hairline">Inicio</NavItem>
     <FileDropzone label="Archivos" accept="image/*" />
     {/* @ts-expect-error unknown size */}

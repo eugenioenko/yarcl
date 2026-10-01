@@ -1,6 +1,6 @@
 ---
 title: Button
-description: Triggers an action. Styled entirely from your config's sizes, colors, radii and variants.
+description: Triggers an action or links to a destination. Styled entirely from your config's sizes, colors, radii and variants.
 sidebar:
   order: 1
 ---
@@ -88,11 +88,18 @@ An `<svg>` inside a button is sized from the size's `iconSize`.
 
 - Renders a native `<button>` with `type="button"` by default, so it never submits a form by accident. Pass `type="submit"` when it should.
 - Disabled buttons use the native `disabled` attribute.
+- With `href`, renders a native `<a>` that keeps link semantics, keyboard behavior, and open-in-new-tab support. Pass `target` and `rel` as native anchor props. `loading`, `disabled` and button `type` apply only to the action form.
 
-For route navigation, use an anchor such as the [router link recipe](/getting-started/router-links/) so users can copy or open the destination in a new tab.
+```tsx
+<Button href="/checkout">Enroll in the course</Button>
+```
+
+For client-side routing, use the [router link recipe](/getting-started/router-links/).
 
 ## Props
 
-Accepts every native `<button>` attribute except `color`.
+Without `href`, accepts native `<button>` attributes except `color`. With `href`, accepts native anchor attributes except `color` and button-only props.
 
 <Props of="ButtonProps" />
+
+<Props of="ButtonLinkProps" />
