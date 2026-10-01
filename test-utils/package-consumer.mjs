@@ -108,8 +108,13 @@ try {
   run(['build'], consumer);
   const assets = join(consumer, 'dist/assets');
   const stylesheet = (await readdir(assets)).find((file) => file.endsWith('.css'));
-  if (!stylesheet || !(await readFile(join(assets, stylesheet), 'utf8')).includes('light-dark(')) {
+  if (!stylesheet) throw new Error('The packed consumer has no stylesheet');
+  const builtCss = await readFile(join(assets, stylesheet), 'utf8');
+  if (!builtCss.includes('light-dark(')) {
     throw new Error('The packed Vite plugin lowered light-dark() in production CSS');
+  }
+  if (!/@media\s*\(\s*(?:width\s*<=|max-width\s*:)\s*48rem\s*\)/.test(builtCss)) {
+    throw new Error('The packed plugin did not expand the configured media query');
   }
 } finally {
   await rm(temporary, { recursive: true, force: true });

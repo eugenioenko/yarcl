@@ -6,9 +6,15 @@ body {
 }
 
 .page {
-  max-width: 72rem;
+  max-width: var(--yarcl-width-page);
   margin: 0 auto;
   padding: var(--yarcl-space-6) var(--yarcl-space-4);
+}
+
+@media (--yarcl-max-md) {
+  .page {
+    padding-inline: var(--yarcl-space-2);
+  }
 }
 
 .product {

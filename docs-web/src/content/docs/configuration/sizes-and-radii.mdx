@@ -123,6 +123,29 @@ components: { Drawer: { size: 'sm' } },
 
 Widths are capped to the screen, so `full` leaves a small margin around dialogs.
 
+## Layout widths and breakpoints
+
+Use `widths` for page and container geometry. These keys do not become valid dialog or drawer sizes.
+
+```ts
+widths: { sidebar: '15rem', reading: '44rem', page: '72rem' },
+breakpoints: { xs: '30rem', sm: '40rem', md: '48rem', lg: '64rem', xl: '80rem' },
+```
+
+The generator emits each width as `--yarcl-width-{key}`. Breakpoints become named media queries. In CSS imported through a yarcl build plugin, write `@media (--yarcl-max-md)` or `@media (--yarcl-min-md)`. The plugin replaces the name with the configured threshold before the browser receives the stylesheet.
+
+Breakpoint names must start with a letter and contain only letters, numbers, hyphens or underscores. Breakpoints are resolved at build time; changing themes at runtime does not change media-query thresholds.
+
+```css
+.page { max-width: var(--yarcl-width-page); }
+
+@media (--yarcl-max-md) {
+  .page { padding-inline: var(--yarcl-space-sm); }
+}
+```
+
+The generated stylesheet also contains `@custom-media` definitions. For app CSS, import the file through the yarcl build plugin so those names are expanded before they reach the browser.
+
 ### Matching radius to size (opt-in)
 
 Set `defaults.radius: 'size'` to give each control the radius named like its size: an `lg` button gets `radii.lg`, an `sm` input gets `radii.sm`. Components without a size use the radius of `defaults.size`. `size` is reserved and can't be used as a radius key.
