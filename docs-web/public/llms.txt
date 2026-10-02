@@ -140,7 +140,7 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
 - Layout: `Stack`, `Inline`, `Card`, `Divider`
 - Overlays: `Dialog`, `Drawer`, `Popover`, `Menu`, `Tooltip`, `HoverCard`, `CommandPalette`, `toast` + one `<Toaster />`
 - Data display: `Tabs`, `Table`, `Accordion`, `Pagination`, `Breadcrumb`
-- Feedback: `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress`
+- Feedback: `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress`, `AudioPlayer` (playback, seeking, optional input level meter)
 - `DesignReference` from `@yarcl/react/reference` renders the whole design system from the config.
 
 Conventions:

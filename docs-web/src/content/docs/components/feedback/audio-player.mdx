@@ -1,0 +1,36 @@
+---
+title: "AudioPlayer"
+description: "Play audio with token-styled controls, seeking and an optional input level meter."
+sidebar:
+  order: 6
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { AudioPlayer } from '@yarcl/react';
+
+```tsx
+import { AudioPlayer } from '@yarcl/react';
+```
+
+<Preview>
+  <AudioPlayer client:visible src="/audio-demo.wav" />
+</Preview>
+
+Pass a URL or a blob URL from a local recording. The player loads metadata, displays elapsed and total time, and lets the listener seek with a slider. It uses an `IconButton`, `Slider` and native audio playback. The audio element remains available through `ref`, and native audio attributes and event handlers pass through to it.
+
+```tsx
+<AudioPlayer src={recordingUrl} onEnded={() => setFinished(true)} />
+```
+
+For a recorder interface, pass a normalized `level` from 0 to 1 to show an input meter. Its `levelLabel` names the meter for screen readers.
+
+```tsx
+<AudioPlayer src={recordingUrl} level={inputLevel} levelLabel="Microphone level" />
+```
+
+The play and pause buttons have accessible labels, and the seek slider announces the current time. Use `playLabel`, `pauseLabel` and `seekLabel` to change their labels.
+
+## Props
+
+<Props of="AudioPlayerProps" />

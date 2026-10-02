@@ -1,4 +1,4 @@
-import { Accordion, Alert, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 
 type FontFamily = keyof typeof config.typography.families;
@@ -78,6 +78,7 @@ export const contract = (
     </Table>
     <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} marks={[{ value: 20, label: 'Low' }]} segments={[{ from: 0, to: 50, color: 'clay', label: 'First' }]} />
     <Slider.Range aria-label="Price" size="talla-s" color="clay" radius="hairline" defaultValue={[10, 90]} />
+    <AudioPlayer src="/grabacion.wav" level={0.5} />
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
     <Pagination count={8} size="talla-s" color="clay" radius="square" variant="text" selectedVariant="filled" />
     <DatePicker size="talla-s" color="clay" variant="wash" radius="hairline" />
@@ -173,6 +174,8 @@ export const contract = (
     <Slider segments={[{ from: 0, to: 10, color: 'brand' }]} />
     {/* @ts-expect-error */}
     <Slider.Range aria-label="Price" size="md" defaultValue={[10, 90]} />
+    {/* @ts-expect-error level is numeric */}
+    <AudioPlayer src="/grabacion.wav" level="high" />
     {/* @ts-expect-error */}
     <Pagination count={8} size="sm" />
     {/* @ts-expect-error */}
