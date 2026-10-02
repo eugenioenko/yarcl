@@ -52,6 +52,11 @@ import {
   VisuallyHidden,
 } from '@yarcl/react';
 import config from './yarcl.config';
+import type { YarclPluginOptions } from '@yarcl/react/vite';
+
+// @ts-expect-error token emission accepts only booleans or filenames
+const invalidTokenOutput: YarclPluginOptions = { emitTokens: 1 };
+void invalidTokenOutput;
 
 type FontFamily = keyof typeof config.typography.families;
 const bodyFont: FontFamily = config.typography.fonts.body;

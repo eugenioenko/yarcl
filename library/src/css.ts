@@ -115,6 +115,21 @@ type ComponentSizing = { sizeOverrides?: Record<string, Partial<SizeToken>> };
  * @param warn Receives contrast warnings.
  */
 export function generateCss(config: YarclShape, warn: (message: string) => void = () => {}): string {
+  return generate(config, warn, false);
+}
+
+/**
+ * Generates only the config's `:root` variables and `color-scheme` declaration.
+ * Excludes modifier classes, component styles, custom media and `@font-face` rules.
+ *
+ * @param config A config from `defineConfig`.
+ * @param warn Receives contrast warnings.
+ */
+export function generateTokensCss(config: YarclShape, warn: (message: string) => void = () => {}): string {
+  return generate(config, warn, true);
+}
+
+function generate(config: YarclShape, warn: (message: string) => void, tokensOnly: boolean): string {
   const root: [string, string | number][] = [['color-scheme', 'light dark']];
   const rules: string[] = [];
 
@@ -315,6 +330,7 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
     ['--yarcl-r', `var(--yarcl-radius-${defaultRadius}, 0)`],
   );
 
+  if (tokensOnly) return `${rule(':root', root)}\n`;
   const faces = (config.typography.fontFaces ?? []).map(fontFace);
   return [...faces, rule(':root', root), ...rules].join('\n\n') + '\n';
 }

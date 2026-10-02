@@ -1,12 +1,35 @@
 import { describe, expect, it, vi } from 'vitest';
-import { generateCss } from '../src/css.ts';
+import { generateCss, generateTokensCss } from '../src/css.ts';
 import type { YarclShape } from '../src/define.ts';
 import defaults from '../src/yarcl.config.ts';
 import brandB from '../../e2e/consumer/src/yarcl.config.ts';
+import brandA from '../../consumer/src/yarcl.config.ts';
 
 function withConfig(overrides: Partial<YarclShape>): YarclShape {
   return { ...defaults, ...overrides };
 }
+
+describe('generateTokensCss', () => {
+  it.each([defaults, brandA, brandB])('matches the complete stylesheet variables without other rules', (config) => {
+    const css = generateTokensCss(config);
+    expect(css.trim()).toBe(generateCss(config).match(/:root \{[^}]+\}/)?.[0]);
+    expect(css).toContain('color-scheme: light dark;');
+    expect(css).not.toContain('.yarcl-');
+    expect(css).not.toContain('@custom-media');
+  });
+
+  it('leaves font loading to the page', () => {
+    const css = generateTokensCss(withConfig({
+      typography: {
+        ...defaults.typography,
+        fontFaces: [{ family: 'Test Sans', src: '/fonts/test.woff2' }],
+      },
+    }));
+    expect(css).toContain('--yarcl-font-body:');
+    expect(css).not.toContain('@font-face');
+    expect(css).not.toContain('/fonts/test.woff2');
+  });
+});
 
 describe('generateCss', () => {
   it('emits root variables and modifier classes', () => {

@@ -58,7 +58,12 @@ try {
 
   execFileSync(
     process.execPath,
-    ['--input-type=module', '-e', "import { generateCss } from '@yarcl/react/generate'; import config from '@yarcl/react/defaults'; if (!generateCss(config).includes('--yarcl-color-primary')) process.exit(1);"],
+    ['--input-type=module', '-e', [
+      "import { generateCss, generateTokensCss } from '@yarcl/react/generate';",
+      "import config from '@yarcl/react/defaults';",
+      'const tokens = generateTokensCss(config);',
+      "if (!generateCss(config).includes('--yarcl-color-primary') || !tokens.includes('--yarcl-color-primary') || tokens.includes('.yarcl-')) process.exit(1);",
+    ].join('\n')],
     { cwd: consumer, stdio: 'inherit' },
   );
 
@@ -116,6 +121,10 @@ try {
   }
 
   run(['build'], consumer);
+  const tokens = await readFile(join(consumer, 'dist/yarcl.tokens.css'), 'utf8');
+  if (!tokens.includes('--yarcl-color-primary') || tokens.includes('.yarcl-')) {
+    throw new Error('The packed Vite plugin did not emit a standalone token stylesheet');
+  }
   const assets = join(consumer, 'dist/assets');
   const stylesheet = (await readdir(assets)).find((file) => file.endsWith('.css'));
   if (!stylesheet) throw new Error('The packed consumer has no stylesheet');

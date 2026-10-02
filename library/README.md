@@ -27,6 +27,8 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 
 For webpack, Rspack, Rollup or esbuild, import the plugin from the matching `@yarcl/react/<build-tool>` entry point.
 
+Every build plugin also emits `yarcl.tokens.css` in the build output directory for server templates and other pages outside the React app. It contains only CSS variables and `color-scheme`, without component styles or font loading. Set `emitTokens: false` or `emitTokens: ''` to disable it, or pass a filename such as `emitTokens: 'styles/tokens.css'` to customize its output-relative path.
+
 ```jsonc
 // tsconfig.json
 {
