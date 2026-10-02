@@ -118,7 +118,6 @@ body {
 .pg-editor {
   width: 100%;
   font-family: var(--yarcl-font-mono);
-  font-size: 0.8125rem;
   white-space: pre;
 }
 
@@ -167,41 +166,47 @@ body {
   min-width: 0;
 }
 
-.pg-editor-section {
-  min-width: 0;
-  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
-  border-radius: var(--yarcl-radius-md);
-}
-
-.pg-editor-section > summary {
-  display: flex;
-  align-items: center;
-  gap: var(--yarcl-space-sm);
-  padding: var(--yarcl-space-sm) var(--yarcl-space-md);
-  font-weight: var(--yarcl-text-label-weight);
-  cursor: pointer;
-}
-
-.pg-editor-section > summary::before {
-  content: '+';
-}
-
-.pg-editor-section[open] > summary::before {
-  content: '−';
-}
-
-.pg-editor-section > summary > span {
-  flex: 1;
-}
-
-.pg-editor-section > summary:focus-visible {
-  outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
-  outline-offset: var(--yarcl-focus-offset);
-}
-
 .pg-editor-fields {
-  padding: var(--yarcl-space-md);
-  border-top: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pg-visual-editor {
+  gap: var(--yarcl-space-md);
+  font-size: var(--yarcl-size-sm-font-size);
+}
+
+.pg-editor-fields > .pg-editor-section,
+.pg-editor-fields > .pg-editor-group,
+.pg-editor-fields > .yarcl-divider,
+.pg-editor-fields > .pg-add-entry {
+  grid-column: 1 / -1;
+}
+
+.pg-editor-section,
+.pg-editor-group {
+  display: grid;
+  gap: var(--yarcl-space-sm);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.pg-editor-section > legend,
+.pg-editor-group > legend {
+  padding: 0;
+  margin-bottom: var(--yarcl-space-sm);
+  font-weight: var(--yarcl-text-label-weight);
+}
+
+.pg-visual-editor > .pg-editor-section > legend {
+  font-size: var(--yarcl-text-label-size);
+  font-weight: var(--yarcl-text-heading-weight);
+}
+
+.pg-editor-section-actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .pg-editor-field,
@@ -223,20 +228,16 @@ body {
 }
 
 .pg-editor-row > input[type='color'] {
-  width: var(--yarcl-size-md-height);
-  height: var(--yarcl-size-md-height);
+  width: var(--yarcl-size-sm-height);
+  height: var(--yarcl-size-sm-height);
   padding: 0;
   border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
   border-radius: var(--yarcl-radius-sm);
   background: var(--yarcl-neutral-surface);
 }
 
-.pg-editor-group {
-  display: grid;
-  gap: var(--yarcl-space-sm);
-  min-width: 0;
-  margin: 0;
-  padding: var(--yarcl-space-sm);
-  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
-  border-radius: var(--yarcl-radius-sm);
+@media (max-width: 30rem) {
+  .pg-editor-fields {
+    grid-template-columns: 1fr;
+  }
 }

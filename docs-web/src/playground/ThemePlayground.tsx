@@ -152,10 +152,10 @@ export function ThemePlayground() {
         description="Change any design system value, then apply to preview. Both editors share the same config."
         footer={
           <>
-            <Button variant="outline" color="neutral" onClick={() => choose(themeId)}>
+            <Button size="sm" variant="outline" color="neutral" onClick={() => choose(themeId)}>
               Reset to {themeNames[themeId]}
             </Button>
-            <Button onClick={apply}>Apply</Button>
+            <Button size="sm" onClick={apply}>Apply</Button>
           </>
         }
       >
@@ -179,7 +179,7 @@ export function ThemePlayground() {
               </ul>
             </Alert>
           )}
-          <Tabs value={tab} onValueChange={setTab}>
+          <Tabs size="sm" value={tab} onValueChange={setTab}>
             <Tabs.List aria-label="Theme editor">
               <Tabs.Trigger value="visual">Visual Editor</Tabs.Trigger>
               <Tabs.Trigger value="code">Code Editor</Tabs.Trigger>
@@ -196,6 +196,7 @@ export function ThemePlayground() {
               <Stack gap="sm">
                 <Text textStyle="caption">Edit the config values below. Comments, single quotes and trailing commas are supported.</Text>
                 <Textarea
+                  size="sm"
                   aria-label="Theme source"
                   className="pg-editor"
                   rows={28}
