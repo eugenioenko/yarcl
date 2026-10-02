@@ -72,7 +72,7 @@ export const contract = (
         )}
       </Table.VirtualBody>
     </Table>
-    <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} />
+    <Slider size="talla-s" color="moss" radius="hairline" defaultValue={[10, 90]} marks={[{ value: 20, label: 'Low' }]} segments={[{ from: 0, to: 50, color: 'clay', label: 'First' }]} />
     <Slider.Range aria-label="Price" size="talla-s" color="clay" radius="hairline" defaultValue={[10, 90]} />
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
     <Pagination count={8} size="talla-s" color="clay" radius="square" variant="text" selectedVariant="filled" />
@@ -165,6 +165,8 @@ export const contract = (
     <Slider size="md" />
     {/* @ts-expect-error */}
     <Slider color="brand" />
+    {/* @ts-expect-error */}
+    <Slider segments={[{ from: 0, to: 10, color: 'brand' }]} />
     {/* @ts-expect-error */}
     <Slider.Range aria-label="Price" size="md" defaultValue={[10, 90]} />
     {/* @ts-expect-error */}

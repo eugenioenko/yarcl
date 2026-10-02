@@ -286,6 +286,8 @@ export const contract = (
       name="volume"
       disabled
       formatValue={(v) => `${v}`}
+      marks={[{ value: 0, label: 'Start' }]}
+      segments={[{ from: 0, to: 5, color: 'success', label: 'Passing' }]}
       aria-label="Volume"
     />
     <Slider defaultValue={[2, 8]} onValueChange={(v: [number, number]) => v} thumbLabels={['From', 'To']} />
@@ -336,6 +338,8 @@ export const contract = (
     <Switch size="huge" />
     {/* @ts-expect-error */}
     <Slider color="primary" />
+    {/* @ts-expect-error */}
+    <Slider segments={[{ from: 0, to: 10, color: 'primary' }]} />
     {/* @ts-expect-error */}
     <Slider radius="full" />
     {/* @ts-expect-error */}
