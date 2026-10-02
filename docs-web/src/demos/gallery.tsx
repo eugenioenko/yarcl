@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import {
   Accordion,
   Alert,
+  AudioPlayer,
   Avatar,
   AvatarGroup,
   Badge,
@@ -705,6 +706,12 @@ const groups: Record<string, Item[]> = {
           <Skeleton lines={2} />
         </Stack>
       ),
+    },
+    {
+      name: 'AudioPlayer',
+      href: '/components/feedback/audio-player/',
+      description: 'Playback and seeking with controls from your design system.',
+      preview: <AudioPlayer src="/audio-demo.wav" className="gallery-fill" />,
     },
     {
       name: 'Progress',

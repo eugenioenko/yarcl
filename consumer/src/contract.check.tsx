@@ -45,6 +45,7 @@ import {
   Radio,
   Stack,
   Slider,
+  AudioPlayer,
   Switch,
   Text,
   Textarea,
@@ -292,6 +293,7 @@ export const contract = (
     />
     <Slider defaultValue={[2, 8]} onValueChange={(v: [number, number]) => v} thumbLabels={['From', 'To']} />
     <Slider value={[2, 8]} />
+    <AudioPlayer src="/recording.wav" level={0.5} playLabel="Play recording" />
     <Pagination
       count={10}
       page={2}
@@ -348,6 +350,8 @@ export const contract = (
     <Slider defaultValue={[1, 2, 3]} />
     {/* @ts-expect-error */}
     <Slider.Range aria-label="Price" defaultValue={50} />
+    {/* @ts-expect-error level is numeric */}
+    <AudioPlayer src="/recording.wav" level="high" />
     {/* @ts-expect-error */}
     <Checkbox color="primary" />
     {/* @ts-expect-error */}
