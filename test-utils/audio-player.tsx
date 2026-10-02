@@ -34,8 +34,8 @@ export function testAudioPlayer() {
       const audio = screen.container.querySelector('audio')!;
       const seek = page.getByRole('slider', { name: 'Seek audio' });
       await expect.poll(() => audio.duration).toBe(2);
-      expect(await seek.getAttribute('aria-disabled')).toBeNull();
-      expect(screen.container.querySelector('.yarcl-audio-player-time')?.textContent).toBe('0:00 / 0:02');
+      await expect.poll(() => seek.getAttribute('aria-disabled')).toBeNull();
+      await expect.poll(() => screen.container.querySelector('.yarcl-audio-player-time')?.textContent).toBe('0:00 / 0:02');
       expect(await page.getByRole('progressbar', { name: 'Input level' }).getAttribute('aria-valuenow')).toBe('40');
 
       await page.getByRole('button', { name: 'Play audio' }).click();
