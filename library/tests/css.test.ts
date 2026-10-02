@@ -10,11 +10,13 @@ function withConfig(overrides: Partial<YarclShape>): YarclShape {
 }
 
 describe('generateTokensCss', () => {
-  it.each([defaults, brandA, brandB])('matches the complete stylesheet variables without other rules', (config) => {
+  it.each([defaults, brandA, brandB])('matches the complete stylesheet variables and text styles', (config) => {
     const css = generateTokensCss(config);
-    expect(css.trim()).toBe(generateCss(config).match(/:root \{[^}]+\}/)?.[0]);
+    const full = generateCss(config);
+    expect(css.match(/:root \{[^}]+\}/)?.[0]).toBe(full.match(/:root \{[^}]+\}/)?.[0]);
+    expect(css.match(/\.yarcl-type-[^{]+\{[^}]+\}/g)).toEqual(full.match(/\.yarcl-type-[^{]+\{[^}]+\}/g));
     expect(css).toContain('color-scheme: light dark;');
-    expect(css).not.toContain('.yarcl-');
+    expect(css.replace(/\.yarcl-type-[^{]+\{[^}]+\}/g, '')).not.toContain('.yarcl-');
     expect(css).not.toContain('@custom-media');
   });
 

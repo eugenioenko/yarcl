@@ -20,7 +20,10 @@ await Promise.all(['webpack', 'rspack', 'rollup', 'esbuild'].map(async (adapter)
   const file = `dist/${adapter}/yarcl.tokens.css`;
   const css = await readFile(new URL(file, import.meta.url), 'utf8');
   if (!css.includes('--yarcl-color-brand')) throw new Error(`${file} does not contain the configured tokens.`);
-  if (css.includes('.yarcl-')) throw new Error(`${file} contains component or modifier classes.`);
+  if (!css.includes('.yarcl-type-body')) throw new Error(`${file} does not contain text-style classes.`);
+  if (css.replace(/\.yarcl-type-[^{]+\{[^}]+\}/g, '').includes('.yarcl-')) {
+    throw new Error(`${file} contains component or other modifier classes.`);
+  }
 }));
 
 await import('./tokens.mjs');

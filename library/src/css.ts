@@ -119,8 +119,8 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
 }
 
 /**
- * Generates only the config's `:root` variables and `color-scheme` declaration.
- * Excludes modifier classes, component styles, custom media and `@font-face` rules.
+ * Generates the config's `:root` variables, `color-scheme` and text-style classes.
+ * Excludes other modifier classes, component styles, custom media and `@font-face` rules.
  *
  * @param config A config from `defineConfig`.
  * @param warn Receives contrast warnings.
@@ -132,6 +132,7 @@ export function generateTokensCss(config: YarclShape, warn: (message: string) =>
 function generate(config: YarclShape, warn: (message: string) => void, tokensOnly: boolean): string {
   const root: [string, string | number][] = [['color-scheme', 'light dark']];
   const rules: string[] = [];
+  const textRules: string[] = [];
 
   for (const [key, token] of Object.entries(config.colors)) {
     const k = ident(key);
@@ -268,7 +269,7 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
       [`${name}-line-height`, style.lineHeight],
     );
     root.push([`${name}-letter-spacing`, style.letterSpacing ?? 'normal']);
-    rules.push(
+    textRules.push(
       rule(`.yarcl-type-${ident(key)}`, [
         ['font-family', `var(${name}-family)`],
         ['font-size', `var(${name}-size)`],
@@ -278,6 +279,7 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
       ]),
     );
   }
+  rules.push(...textRules);
 
   const textProperties = ['family', 'size', 'weight', 'line-height', 'letter-spacing'] as const;
   for (const [level, style] of Object.entries(config.typography.headings)) {
@@ -330,7 +332,7 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
     ['--yarcl-r', `var(--yarcl-radius-${defaultRadius}, 0)`],
   );
 
-  if (tokensOnly) return `${rule(':root', root)}\n`;
+  if (tokensOnly) return [rule(':root', root), ...textRules].join('\n\n') + '\n';
   const faces = (config.typography.fontFaces ?? []).map(fontFace);
   return [...faces, rule(':root', root), ...rules].join('\n\n') + '\n';
 }
