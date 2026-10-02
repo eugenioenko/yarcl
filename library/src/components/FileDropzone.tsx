@@ -1,9 +1,9 @@
-import { useId, useRef, useState, type ComponentProps, type DragEvent, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ComponentProps, type DragEvent, type ReactNode } from 'react';
 import { cx } from '../classes';
 import { Button } from './Button';
 
 /** Props for {@link FileDropzone}. */
-export interface FileDropzoneProps extends Omit<ComponentProps<'div'>, 'children' | 'onDrop' | 'onChange'> {
+export interface FileDropzoneProps extends Omit<ComponentProps<'div'>, 'children' | 'onDrop' | 'onChange' | 'defaultValue'> {
   /** Visible label for the picker and drop area. */
   label: string;
   /** Optional helper text below the label. */
@@ -12,6 +12,18 @@ export interface FileDropzoneProps extends Omit<ComponentProps<'div'>, 'children
   accept?: string;
   /** Allows more than one file. */
   multiple?: boolean;
+  /** Selected file in single-file mode. Use `null` for no file. */
+  value?: File | null;
+  /** Initial file in uncontrolled single-file mode. */
+  defaultValue?: File | null;
+  /** Called with the selected file or `null` when it is removed in single-file mode. */
+  onChange?: (file: File | null) => void;
+  /** Shows a thumbnail when the selected file is an image. */
+  preview?: boolean;
+  /** Image URL for an existing remote file in single-file mode. */
+  previewUrl?: string;
+  /** Name shown for a remote file supplied through `previewUrl`. */
+  previewName?: string;
   /** Disables picking and dropping files. */
   disabled?: boolean;
   /** Called whenever the selected file list changes. */
@@ -37,6 +49,12 @@ export function FileDropzone({
   description,
   accept,
   multiple = false,
+  value,
+  defaultValue,
+  onChange,
+  preview = false,
+  previewUrl,
+  previewName,
   disabled = false,
   onFilesChange,
   children,
@@ -49,10 +67,36 @@ export function FileDropzone({
   const id = useId();
   const input = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
+  const [internalValue, setInternalValue] = useState<File | null>(defaultValue ?? null);
+  const [localPreview, setLocalPreview] = useState<{ file: File; url: string } | null>(null);
+  const [dismissedPreviewUrl, setDismissedPreviewUrl] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const currentFile = value !== undefined ? value : internalValue;
+  const currentFiles = multiple ? files : currentFile ? [currentFile] : [];
+  const remotePreviewUrl = previewUrl === dismissedPreviewUrl ? undefined : previewUrl;
+  const hasCurrent = !multiple && (currentFile != null || remotePreviewUrl != null);
+  const imageUrl = currentFile
+    ? preview && currentFile.type.startsWith('image/') && localPreview?.file === currentFile ? localPreview.url : undefined
+    : remotePreviewUrl;
+
+  useEffect(() => {
+    if (!preview || !currentFile || !currentFile.type.startsWith('image/')) return;
+    const url = URL.createObjectURL(currentFile);
+    setLocalPreview({ file: currentFile, url });
+    return () => URL.revokeObjectURL(url);
+  }, [currentFile, preview]);
+
+  useEffect(() => {
+    if (previewUrl === undefined) setDismissedPreviewUrl(null);
+  }, [previewUrl]);
 
   function update(next: File[]) {
-    setFiles(next);
+    if (multiple) {
+      setFiles(next);
+    } else {
+      if (value === undefined) setInternalValue(next[0] ?? null);
+      onChange?.(next[0] ?? null);
+    }
     onFilesChange?.(next);
   }
 
@@ -63,7 +107,13 @@ export function FileDropzone({
   }
 
   function removeFile(index: number) {
-    update(files.filter((_, i) => i !== index));
+    update(currentFiles.filter((_, i) => i !== index));
+    if (input.current) input.current.value = '';
+  }
+
+  function removeCurrent() {
+    if (previewUrl) setDismissedPreviewUrl(previewUrl);
+    update([]);
     if (input.current) input.current.value = '';
   }
 
@@ -108,15 +158,21 @@ export function FileDropzone({
       />
       <strong id={id}>{label}</strong>
       {description && <span className="yarcl-file-dropzone-description">{description}</span>}
-      <Button disabled={disabled} onClick={() => input.current?.click()}>Choose files</Button>
-      <span className="yarcl-file-dropzone-hint">or drop files here</span>
+      <Button disabled={disabled} onClick={() => input.current?.click()}>{multiple ? 'Choose files' : hasCurrent ? 'Replace file' : 'Choose file'}</Button>
+      <span className="yarcl-file-dropzone-hint">{multiple ? 'or drop files here' : hasCurrent ? 'or drop a replacement here' : 'or drop a file here'}</span>
       <div aria-live="polite" className="yarcl-file-dropzone-files">
-        {children ? children(files, removeFile) : files.length > 0 && (
+        {children ? children(currentFiles, removeFile) : hasCurrent ? (
+          <div className="yarcl-file-dropzone-current">
+            {imageUrl && <img src={imageUrl} alt={`Preview of ${currentFile?.name ?? previewName ?? 'selected image'}`} />}
+            <span>{currentFile?.name ?? previewName ?? 'Current image'}</span>
+            <button type="button" disabled={disabled} onClick={removeCurrent} aria-label={`Remove ${currentFile?.name ?? previewName ?? 'current image'}`}>Remove</button>
+          </div>
+        ) : files.length > 0 && (
           <ul>
             {files.map((file, index) => (
               <li key={`${file.name}-${file.lastModified}-${index}`}>
                 <span>{file.name}</span>
-                <button type="button" onClick={() => removeFile(index)} aria-label={`Remove ${file.name}`}>Remove</button>
+                <button type="button" disabled={disabled} onClick={() => removeFile(index)} aria-label={`Remove ${file.name}`}>Remove</button>
               </li>
             ))}
           </ul>

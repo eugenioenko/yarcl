@@ -159,6 +159,27 @@
   gap: var(--yarcl-gap);
 }
 
+.yarcl-file-dropzone-current {
+  display: flex;
+  align-items: center;
+  gap: var(--yarcl-gap);
+  min-width: 0;
+}
+
+.yarcl-file-dropzone-current img {
+  flex-shrink: 0;
+  width: calc(var(--yarcl-h) * 2);
+  height: calc(var(--yarcl-h) * 2);
+  object-fit: cover;
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-file-dropzone-current span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .yarcl-file-dropzone-files button {
   color: var(--yarcl-accent);
   background: none;
