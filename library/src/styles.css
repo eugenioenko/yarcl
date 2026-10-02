@@ -453,6 +453,80 @@
   background: color-mix(in oklab, var(--yarcl-neutral-muted) 35%, var(--yarcl-neutral-bg));
 }
 
+.yarcl-slider-with-labels {
+  display: block;
+  height: auto;
+  padding-block-start: calc((var(--yarcl-slider-thumb) - var(--yarcl-slider-track)) / 2);
+}
+
+.yarcl-slider-with-labels .yarcl-slider-track {
+  width: 100%;
+}
+
+.yarcl-slider-segment {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--yarcl-slider-segment-start);
+  inset-inline-end: calc(100% - var(--yarcl-slider-segment-end));
+  background: var(--yarcl-c);
+}
+
+.yarcl-slider-with-segments .yarcl-slider-range {
+  background: color-mix(in oklab, var(--yarcl-c) 25%, transparent);
+}
+
+.yarcl-slider-mark {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--yarcl-slider-track) / -2);
+  inset-inline-start: var(--yarcl-slider-position);
+  width: var(--yarcl-border-width);
+  height: calc(var(--yarcl-slider-track) * 2);
+  background: var(--yarcl-neutral-fg);
+}
+
+.yarcl-slider-labels {
+  position: relative;
+  height: var(--yarcl-slider-thumb);
+  margin-block-start: calc((var(--yarcl-slider-thumb) - var(--yarcl-slider-track) + var(--yarcl-gap)) / 2);
+  color: var(--yarcl-neutral-muted);
+  cursor: default;
+}
+
+.yarcl-slider-label {
+  position: absolute;
+  inset-inline-start: var(--yarcl-slider-position);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.yarcl-slider:dir(rtl) .yarcl-slider-label {
+  transform: translateX(50%);
+}
+
+.yarcl-slider-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--yarcl-gap) / 4) var(--yarcl-gap);
+  margin-block-start: calc((var(--yarcl-slider-thumb) - var(--yarcl-slider-track) + var(--yarcl-gap)) / 2);
+  color: var(--yarcl-neutral-muted);
+  cursor: default;
+}
+
+.yarcl-slider-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--yarcl-gap) / 4);
+}
+
+.yarcl-slider-legend-item::before {
+  content: '';
+  width: var(--yarcl-icon);
+  height: var(--yarcl-slider-track);
+  border-radius: var(--yarcl-r);
+  background: var(--yarcl-c);
+}
+
 .yarcl-slider-range {
   position: absolute;
   inset-block: 0;

@@ -10,11 +10,25 @@ import {
 import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { FieldContext, useFieldProps } from '../field-context';
 import { useControllable } from '../hooks';
-import type { TokenProps } from '../types';
+import type { Color, TokenProps } from '../types';
 import { useDefaults } from '../runtime';
 
 /** A {@link Slider} value: one number, or a `[start, end]` pair for a range. */
 export type SliderValue = number | [number, number];
+
+/** A labelled position on a {@link Slider} track. */
+export interface SliderMark {
+  value: number;
+  label?: string;
+}
+
+/** A colored interval on a {@link Slider} track. `color` is a key from the consumer's config. */
+export interface SliderSegment {
+  from: number;
+  to: number;
+  color?: Color;
+  label?: string;
+}
 
 /** Props for {@link Slider}. Accepts all native `<div>` attributes except `color`, `defaultValue`, `onChange` and `children`. */
 export interface SliderProps<V extends SliderValue = number>
@@ -115,6 +129,10 @@ export interface SliderProps<V extends SliderValue = number>
    * ```
    */
   thumbLabels?: readonly [string, string];
+  /** Positions to show as ticks, with optional labels below the track. */
+  marks?: readonly SliderMark[];
+  /** Colored intervals with optional labels below the track. Values are clamped to `min` and `max`. */
+  segments?: readonly SliderSegment[];
 }
 
 /** Props for `Slider.Range`. */
@@ -159,6 +177,8 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
     name,
     formatValue,
     thumbLabels = DEFAULT_THUMB_LABELS,
+    marks,
+    segments,
     size,
     radius,
     color,
@@ -263,6 +283,16 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
   const outerLabelledBy = ariaLabelledBy ?? (field ? field.labelId : undefined);
   const start = range ? percent(values[0]) : 0;
   const end = percent(values[values.length - 1]);
+  const visibleMarks = marks?.filter((mark) => mark.value >= min && mark.value <= max);
+  const visibleSegments = segments?.filter((segment) => segment.to > segment.from && segment.to > min && segment.from < max);
+  const hasMarkLabels = visibleMarks?.some((mark) => mark.label);
+  const hasSegmentLabels = visibleSegments?.some((segment) => segment.label);
+  const hasLabels = hasMarkLabels || hasSegmentLabels;
+  const valueText = (v: number) => {
+    if (formatValue) return formatValue(v);
+    const label = visibleSegments?.find((segment) => segment.label && v >= segment.from && (v < segment.to || (v === max && segment.to === max)))?.label;
+    return label ? `${v}, ${label}` : undefined;
+  };
 
   return (
     <div
@@ -271,6 +301,8 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
         sizeClass(size ?? own.size, 'Slider'),
         radiusClass(radius ?? own.radius, size ?? own.size),
         colorClass(color ?? own.color),
+        hasLabels && 'yarcl-slider-with-labels',
+        Boolean(visibleSegments?.length) && 'yarcl-slider-with-segments',
         className,
       )}
       style={{ ...style, '--yarcl-slider-start': `${start}%`, '--yarcl-slider-end': `${end}%` } as CSSProperties}
@@ -282,7 +314,19 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
       {...rest}
     >
       <div ref={trackRef} className="yarcl-slider-track">
+        {visibleSegments?.map((segment, index) => <div
+          key={index}
+          className={cx('yarcl-slider-segment', segment.color && colorClass(segment.color))}
+          style={{ '--yarcl-slider-segment-start': `${percent(clamp(segment.from, min, max))}%`, '--yarcl-slider-segment-end': `${percent(clamp(segment.to, min, max))}%` } as CSSProperties}
+          aria-hidden="true"
+        />)}
         <div className="yarcl-slider-range" />
+        {visibleMarks?.map((mark, index) => <span
+          key={index}
+          className="yarcl-slider-mark"
+          style={{ '--yarcl-slider-position': `${percent(mark.value)}%` } as CSSProperties}
+          aria-hidden="true"
+        />)}
         {values.map((v, index) => {
           const thumbId = index === 0 && id ? id : `${uid}-thumb-${index}`;
           const thumbLabel = range ? thumbLabels[index] : undefined;
@@ -300,7 +344,7 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
               aria-valuemin={lowerBound(index)}
               aria-valuemax={upperBound(index)}
               aria-valuenow={v}
-              aria-valuetext={formatValue?.(v)}
+              aria-valuetext={valueText(v)}
               aria-orientation="horizontal"
               aria-disabled={disabled || undefined}
               aria-invalid={ariaInvalid}
@@ -312,6 +356,19 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
           );
         })}
       </div>
+      {hasMarkLabels && <div className="yarcl-slider-labels" aria-hidden="true" onPointerDown={(event) => event.stopPropagation()}>
+        {visibleMarks?.filter((mark) => mark.label).map((mark, index) => <span
+          key={`mark-${index}`}
+          className="yarcl-slider-label yarcl-slider-mark-label"
+          style={{ '--yarcl-slider-position': `${percent(mark.value)}%` } as CSSProperties}
+        >{mark.label}</span>)}
+      </div>}
+      {hasSegmentLabels && <div className="yarcl-slider-legend" aria-hidden="true" onPointerDown={(event) => event.stopPropagation()}>
+        {visibleSegments?.filter((segment) => segment.label).map((segment, index) => <span
+          key={index}
+          className={cx('yarcl-slider-legend-item', segment.color && colorClass(segment.color))}
+        >{segment.label}</span>)}
+      </div>}
       {name != null && values.map((v, index) => <input key={index} type="hidden" name={name} value={v} disabled={disabled} />)}
     </div>
   );

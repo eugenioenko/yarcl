@@ -25,9 +25,25 @@ import { Slider } from '@yarcl/react';
 <Field label="Price">
   <Slider.Range defaultValue={[200, 800]} min={0} max={1000} step={50} formatValue={(v) => `$${v}`} />
 </Field>
+
+<Field label="Rubric score">
+  <Slider
+    min={0}
+    max={30}
+    defaultValue={22}
+    marks={[{ value: 0, label: '0' }, { value: 20 }, { value: 26 }, { value: 30, label: '30' }]}
+    segments={[
+      { from: 0, to: 20, color: 'danger', label: 'Developing' },
+      { from: 20, to: 26, color: 'warning', label: 'Proficient' },
+      { from: 26, to: 30, color: 'success', label: 'Exceptional' },
+    ]}
+  />
+</Field>
 ```
 
 `Slider.Range` provides an explicitly range-only API. You can also pass a `[start, end]` pair directly to `Slider`. The type of `onValueChange` follows the value: a number, or a pair. Values snap to `step`, counted from `min`, and the two thumbs of a range can't cross.
+
+Use `marks` for track ticks and optional labels. Use `segments` for colored intervals and labels. Segment colors are keys from your `colors` config. Positions outside `min` and `max` are clipped. A labelled segment is included in the thumb's accessible value text unless you provide `formatValue`.
 
 ## Tokens
 
