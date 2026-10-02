@@ -1,6 +1,6 @@
 ---
 title: File dropzone
-description: Pick or drop files with a visible list and native keyboard access.
+description: Pick or drop one file with a preview, or multiple files with a list.
 sidebar:
   order: 4
 ---
@@ -19,7 +19,7 @@ import { FileDropzone } from '@yarcl/react';
 />
 ```
 
-The button opens the native file picker. Files can also be dropped on the bordered area. `accept` filters dropped files as well as picker selections. The default list shows file names with remove buttons. Use the render prop to provide your own list:
+The button opens the native file picker. Files can also be dropped on the bordered area. `accept` filters dropped files as well as picker selections. `multiple` shows a file list with remove buttons. Use the render prop to provide your own list:
 
 ```tsx
 <FileDropzone label="Attachments" multiple>
@@ -37,6 +37,38 @@ The button opens the native file picker. Files can also be dropped on the border
 ```
 
 Use `onFilesChange` to upload or validate the selected files. Upload progress belongs to the upload request, so render it beside this component.
+
+## Single file and image preview
+
+Without `multiple`, the dropzone shows one current file with Replace and Remove controls. Pass `preview` to show a thumbnail for a selected image. Use `value` with `onChange` for a controlled picker, or `defaultValue` for an uncontrolled initial file.
+
+```tsx
+const [cover, setCover] = useState<File | null>(null);
+
+<FileDropzone
+  label="Course cover"
+  accept="image/*"
+  value={cover}
+  onChange={setCover}
+  preview
+/>
+```
+
+For an existing image hosted by your app, pass `previewUrl` and `previewName`. Clear the URL in your `onChange` handler when the user replaces or removes it:
+
+```tsx
+<FileDropzone
+  label="Course cover"
+  accept="image/*"
+  value={cover}
+  onChange={(file) => { setCover(file); setCoverUrl(undefined); }}
+  preview
+  previewUrl={coverUrl}
+  previewName="Current cover"
+/>
+```
+
+`onFilesChange` still receives an array in either mode for existing upload handlers. In single-file mode, `onChange` receives the file or `null` after removal.
 
 ## Props
 

@@ -90,6 +90,9 @@ export const contract = (
     <FileDropzone label="Documents" accept=".pdf" multiple onFilesChange={(files) => files.length}>
       {(files, removeFile) => <button type="button" onClick={() => removeFile(0)}>{files.length}</button>}
     </FileDropzone>
+    <FileDropzone label="Cover" accept="image/*" value={null} onChange={(file) => file?.name} preview />
+    {/* @ts-expect-error single-file value must be a File or null */}
+    <FileDropzone label="Cover" value="cover.png" />
     {/* @ts-expect-error unknown size */}
     <NavItem href="/home" size="talla-s">Home</NavItem>
     {/* @ts-expect-error label is required */}
