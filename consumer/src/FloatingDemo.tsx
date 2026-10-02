@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+  Avatar,
   Button,
   Checkbox,
   Combobox,
@@ -58,6 +59,7 @@ function useFakeSearch(query: string) {
 }
 
 export function FloatingDemo() {
+  const [appearance, setAppearance] = useState('system');
   const [plan, setPlan] = useState<Plan | null>('pro');
   const [country, setCountry] = useState<string | null>(null);
   const [framework, setFramework] = useState<string | null>(null);
@@ -111,6 +113,26 @@ export function FloatingDemo() {
             <Menu.Item color="danger" onSelect={() => setLog('Delete')}>
               Delete
             </Menu.Item>
+          </Menu.Content>
+        </Menu>
+
+
+        <Menu>
+          <Menu.Trigger>
+            <Button autoHeight variant="outline">
+              <Avatar name="Ada Lovelace" />
+              <Stack gap="tight">
+                <Text>Ada Lovelace</Text>
+                <Text textStyle="caption" muted>ada@example.com</Text>
+              </Stack>
+            </Button>
+          </Menu.Trigger>
+          <Menu.Content>
+            <Menu.RadioGroup aria-label="Color scheme" value={appearance} onValueChange={setAppearance}>
+              <Menu.RadioItem value="light">Light</Menu.RadioItem>
+              <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+              <Menu.RadioItem value="system">System</Menu.RadioItem>
+            </Menu.RadioGroup>
           </Menu.Content>
         </Menu>
 

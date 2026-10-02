@@ -7,7 +7,7 @@ sidebar:
 
 import Preview from '@/components/Preview.astro';
 import Props from '@/components/Props.astro';
-import { MenuDemo } from '@/demos/overlays';
+import { AccountMenuDemo, MenuDemo } from '@/demos/overlays';
 
 ```tsx
 import { Menu } from '@yarcl/react';
@@ -31,7 +31,40 @@ import { Menu } from '@yarcl/react';
 </Menu>
 ```
 
-For choosing a value, use [Select](/components/forms/select/) instead: a menu is for actions (`role="menu"`), a select for values (`role="listbox"`).
+Use [Select](/components/forms/select/) for a form field. For a setting such as color scheme, use `Menu.RadioGroup` and `Menu.RadioItem`. Each item exposes `role="menuitemradio"` and `aria-checked`, with a check indicator beside the current choice. Choosing an item calls `onValueChange` and closes the menu. Keep the group's `value` in state so it persists when the menu closes.
+
+## Account trigger and radio choices
+
+`Menu.Trigger` accepts a single element that passes through its props and ref. Use `Button autoHeight` for an avatar and two lines of text.
+
+<Preview>
+  <AccountMenuDemo client:visible />
+</Preview>
+
+```tsx
+const [scheme, setScheme] = useState('system');
+
+<Menu>
+  <Menu.Trigger>
+    <Button autoHeight variant="ghost">
+      <Avatar name="Ada Lovelace" />
+      <Stack gap="xs">
+        <Text>Ada Lovelace</Text>
+        <Text textStyle="caption" muted>ada@example.com</Text>
+      </Stack>
+    </Button>
+  </Menu.Trigger>
+  <Menu.Content>
+    <Menu.RadioGroup aria-label="Color scheme" value={scheme} onValueChange={setScheme}>
+      <Menu.RadioItem value="light">Light</Menu.RadioItem>
+      <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+      <Menu.RadioItem value="system">System</Menu.RadioItem>
+    </Menu.RadioGroup>
+  </Menu.Content>
+</Menu>
+```
+
+Radio items share action items' arrow-key navigation, typeahead, disabled state, and focus return. Give the group a name with `aria-label` or `aria-labelledby`.
 
 For route navigation from a menu action, see the [router link recipe](/getting-started/router-links/).
 
@@ -54,3 +87,11 @@ For route navigation from a menu action, see the [router link recipe](/getting-s
 ### Menu.Item
 
 <Props of="MenuItemProps" />
+
+### Menu.RadioGroup
+
+<Props of="MenuRadioGroupProps" />
+
+### Menu.RadioItem
+
+<Props of="MenuRadioItemProps" />

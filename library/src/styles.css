@@ -76,6 +76,14 @@
   background: var(--yarcl-v-bg-hover);
 }
 
+.yarcl-button-auto-height {
+  height: auto;
+  min-height: var(--yarcl-h);
+  padding-block: calc(var(--yarcl-px) / 2);
+  line-height: normal;
+  white-space: normal;
+}
+
 .yarcl-button:active:not(:disabled) {
   background: var(--yarcl-v-bg-active);
 }
@@ -1243,8 +1251,13 @@ p.yarcl-text {
 }
 
 .yarcl-combobox-chip-label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.yarcl-combobox-chips .yarcl-badge-label {
+  display: contents;
 }
 
 .yarcl-combobox-input {
@@ -2116,6 +2129,7 @@ html:has(.yarcl-modal[open]) {
   align-items: center;
   gap: calc(var(--yarcl-px) / 4);
   box-sizing: border-box;
+  min-width: 0;
   max-width: 100%;
   padding: calc(var(--yarcl-fs) / 8) calc(var(--yarcl-px) / 2);
   font-size: calc(var(--yarcl-fs) * 0.85);
@@ -2129,8 +2143,20 @@ html:has(.yarcl-modal[open]) {
   border-radius: var(--yarcl-r);
 }
 
+.yarcl-badge-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yarcl-badge-wrap .yarcl-badge-label {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .yarcl-badge-remove {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 1.1em;

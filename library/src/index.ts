@@ -62,7 +62,7 @@ export type { TooltipProps } from './components/Tooltip';
 export { HoverCard } from './components/HoverCard';
 export type { HoverCardProps } from './components/HoverCard';
 export { Menu } from './components/Menu';
-export type { MenuProps, MenuTriggerProps, MenuContentProps, MenuItemProps } from './components/Menu';
+export type { MenuProps, MenuTriggerProps, MenuContentProps, MenuItemProps, MenuRadioGroupProps, MenuRadioItemProps } from './components/Menu';
 export { Select } from './components/Select';
 export type { SelectProps, SelectOption } from './components/Select';
 export { Combobox } from './components/Combobox';

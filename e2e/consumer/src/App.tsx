@@ -20,6 +20,7 @@ import {
   Inline,
   Label,
   Link,
+  Menu,
   NavItem,
   Progress,
   Pagination,
@@ -102,6 +103,25 @@ export function App() {
               { id: 'wishlist', label: 'Save to wishlist', group: 'Actions', onSelect: () => toast({ title: 'Saved to wishlist', color: 'clay' }) },
             ]}
           />
+
+          <Menu>
+            <Menu.Trigger>
+              <Button autoHeight variant="text">
+                <Avatar name="Ada Lovelace" />
+                <Stack gap="2">
+                  <Text>Ada Lovelace</Text>
+                  <Text textStyle="fine" muted>ada@example.com</Text>
+                </Stack>
+              </Button>
+            </Menu.Trigger>
+            <Menu.Content>
+              <Menu.RadioGroup aria-label="Color scheme" value={scheme === 'light dark' ? 'system' : scheme} onValueChange={(value) => applyScheme(value === 'light' || value === 'dark' ? value : 'light dark')}>
+                <Menu.RadioItem value="light">Light</Menu.RadioItem>
+                <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+                <Menu.RadioItem value="system">System</Menu.RadioItem>
+              </Menu.RadioGroup>
+            </Menu.Content>
+          </Menu>
           <ToggleGroup
             type="single"
             required
@@ -138,6 +158,10 @@ export function App() {
                   Organic linen
                 </Badge>
               </Inline>
+              <div style={{ maxWidth: '16rem' }}>
+                <Badge color="moss">Certified organic linen with responsibly sourced materials</Badge>
+                <Badge wrap color="moss">Certified organic linen with responsibly sourced materials</Badge>
+              </div>
               <Inline gap="2" align="center">
                 <Avatar name="Lena Ortiz" />
                 <Text textStyle="fine" muted>

@@ -25,6 +25,10 @@ const sizes = Object.keys(config.sizes) as Size[];
 export function BadgeDemo() {
   return (
     <Stack gap="sm">
+        <div style={{ maxWidth: '16rem' }}>
+          <Badge>Certified Wonderful Enrichment Educator Graduate</Badge>
+          <Badge wrap>Certified Wonderful Enrichment Educator Graduate</Badge>
+        </div>
       {variants.map((variant) => (
         <Inline key={variant} gap="sm">
           {colors.map((color) => (

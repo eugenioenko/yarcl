@@ -56,6 +56,10 @@ export function FeedbackDemo() {
   return (
     <Stack gap="loose">
       <Stack gap="tight">
+        <div style={{ maxWidth: '16rem' }}>
+          <Badge>Certified Wonderful Enrichment Educator Graduate</Badge>
+          <Badge wrap>Certified Wonderful Enrichment Educator Graduate</Badge>
+        </div>
         {variants.map((variant) => (
           <Inline key={variant} gap="tight">
             {colors.map((color) => (

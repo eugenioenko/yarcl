@@ -9,6 +9,8 @@ import { useDefaults } from '../runtime';
 /** Props for the action form of {@link Button}. Accepts native `<button>` attributes except `color`. */
 export interface ButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps<'Button'>, VariantProps {
   href?: never;
+  /** Lets multiline content determine the height, keeping the size token as the minimum height. */
+  autoHeight?: boolean;
   /** Decorative icon before the label, sized from the control size. */
   startIcon?: ReactNode;
   /** Decorative icon after the label, sized from the control size. */
@@ -21,6 +23,8 @@ export interface ButtonProps extends Omit<ComponentProps<'button'>, 'color'>, To
 export interface ButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'href' | 'type' | 'disabled'>, TokenProps<'Button'>, VariantProps {
   /** Destination. Renders a native link with the same visual styles as a button. */
   href: string;
+  /** Lets multiline content determine the height, keeping the size token as the minimum height. */
+  autoHeight?: boolean;
   /** Decorative icon before the label, sized from the control size. */
   startIcon?: ReactNode;
   /** Decorative icon after the label, sized from the control size. */
@@ -43,11 +47,13 @@ export interface ButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'hr
 export function Button(props: ButtonProps | ButtonLinkProps) {
   const own = useDefaults('Button');
   const group = useButtonGroup();
-  const { size, radius, color, variant, startIcon, endIcon, className, children, ...elementProps } = props;
+  const { size, radius, color, variant, autoHeight, startIcon, endIcon, className, children, ...elementProps } = props;
+  const s = size ?? group?.size ?? own.size;
   const classes = cx(
     'yarcl-button',
-    sizeClass(size ?? group?.size ?? own.size, 'Button'),
-    radiusClass(radius ?? group?.radius ?? own.radius, size ?? group?.size ?? own.size),
+    autoHeight && 'yarcl-button-auto-height',
+    sizeClass(s, 'Button'),
+    radiusClass(radius ?? group?.radius ?? own.radius, s),
     colorClass(color ?? group?.color ?? own.color),
     variantClass(variant ?? group?.variant ?? own.variant),
     className,

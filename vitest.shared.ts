@@ -50,6 +50,8 @@ export function browserTests(name: string): ViteUserConfig {
     },
     test: {
       name,
+      maxWorkers: 2,
+      fileParallelism: false,
       include: ['tests/**/*.test.{ts,tsx}'],
       testTimeout: 120_000,
       browser: {

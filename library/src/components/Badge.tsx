@@ -30,6 +30,8 @@ export interface BadgeProps extends Omit<ComponentProps<'span'>, 'color'> {
   startIcon?: ReactNode;
   /** Decorative icon after the label, sized from the badge size. */
   endIcon?: ReactNode;
+  /** Allows the label to wrap onto multiple lines instead of truncating with an ellipsis. */
+  wrap?: boolean;
   /** Shows a remove button, making the badge a removable tag. Called when it is pressed. */
   onRemove?: () => void;
   /**
@@ -56,6 +58,7 @@ export function Badge({
   radius,
   startIcon,
   endIcon,
+  wrap,
   onRemove,
   removeLabel = 'Remove',
   className,
@@ -63,13 +66,14 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const own = useDefaults('Badge');
+  const s = size ?? own.size;
   return (
     <span
-      className={cx('yarcl-badge', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant), sizeClass(size ?? own.size, 'Badge'), radiusClass(radius ?? own.radius, size ?? own.size), className)}
+      className={cx('yarcl-badge', wrap && 'yarcl-badge-wrap', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant), sizeClass(s, 'Badge'), radiusClass(radius ?? own.radius, s), className)}
       {...props}
     >
       {startIcon && <span className="yarcl-badge-icon" aria-hidden="true">{startIcon}</span>}
-      {children}
+      <span className="yarcl-badge-label">{children}</span>
       {endIcon && <span className="yarcl-badge-icon" aria-hidden="true">{endIcon}</span>}
       {onRemove && <BadgeRemove aria-label={removeLabel} onClick={onRemove} />}
     </span>
