@@ -113,7 +113,7 @@ export const contract = (
       <Input />
     </Field>
     <Label htmlFor="name" required variant="subtle" color="brand" size="sm" radius="rounded" textStyle="label" />
-    <Text textStyle="caption" color="danger" truncate={2} />
+    <Text textStyle="caption" color="danger" truncate={2} whiteSpace="pre-wrap" wrap="anywhere" />
     <Label htmlFor="name" textStyle="caption" color="neutral" required disabled>
       Name
     </Label>
@@ -356,6 +356,10 @@ export const contract = (
     </Field>
     {/* @ts-expect-error */}
     <Text textStyle="heading" />
+    {/* @ts-expect-error */}
+    <Text whiteSpace="preserve" />
+    {/* @ts-expect-error */}
+    <Text wrap="break-word" />
     {/* @ts-expect-error */}
     <Label textStyle="heading" />
     {/* @ts-expect-error */}

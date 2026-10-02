@@ -34,6 +34,14 @@ Use `inherit` to follow the surrounding font in any container, including a table
 <Text inherit muted>Uses the surrounding font</Text>
 ```
 
+## Line breaks and long words
+
+Use `whiteSpace="pre-wrap"` to preserve line breaks and spaces in plain text, such as a written submission. `pre-line` preserves line breaks while collapsing repeated spaces. Add `wrap="anywhere"` so long URLs and unbroken words stay inside the container.
+
+```tsx
+<Text as="p" whiteSpace="pre-wrap" wrap="anywhere">{submission}</Text>
+```
+
 ## Truncation
 
 <Preview>
