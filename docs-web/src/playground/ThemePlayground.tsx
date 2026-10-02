@@ -1,40 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Button, Drawer, Inline, Link, Select, Stack, Text, Textarea, Toaster, ToggleGroup, toast } from '@yarcl/react';
+import { Alert, Button, Drawer, Inline, Select, Stack, Tabs, Text, Textarea, Toaster, ToggleGroup, toast } from '@yarcl/react';
 import { applyTheme } from '@yarcl/react/css';
 import type { YarclShape } from '@yarcl/react/define';
 import { themeNames, themes } from '@yarcl/react/themes';
 import { Dashboard } from './Dashboard';
+import { VisualEditor } from './VisualEditor';
+import { checkTheme, parseConfig, serializeConfig, type Value } from './theme-config';
 
 type ThemeId = keyof typeof themes;
 const ids = Object.keys(themes) as ThemeId[];
-const base = themes.yarcl as unknown as YarclShape;
-
-const groups = ['colors', 'sizes', 'radii', 'variants', 'spacing', 'shadows', 'density', 'modalSizes'] as const;
-const required = ['neutrals', 'zIndex', 'motion', 'borders', 'focusRing', 'defaults', 'typography'] as const;
-
-function checkTheme(theme: YarclShape): string[] {
-  const errors: string[] = [];
-  for (const group of required) if (!theme[group]) errors.push(`Missing group "${group}".`);
-  for (const group of groups) {
-    const keys = Object.keys(theme[group] ?? {});
-    for (const key of Object.keys(base[group])) if (!keys.includes(key)) errors.push(`${group}.${key} is missing, but the app uses it.`);
-  }
-  for (const key of Object.keys(base.typography.styles)) {
-    if (!theme.typography?.styles?.[key]) errors.push(`typography.styles.${key} is missing, but the app uses it.`);
-  }
-  for (const [key, color] of Object.entries(theme.colors ?? {})) {
-    if (typeof color?.light !== 'string' || typeof color?.dark !== 'string') errors.push(`colors.${key} needs a light and a dark value.`);
-  }
-  const refs: [string, string | undefined, object | undefined][] = [
-    ['defaults.size', theme.defaults?.size, theme.sizes],
-    ['defaults.color', theme.defaults?.color, theme.colors],
-    ['defaults.variant', theme.defaults?.variant, theme.variants],
-    ['focusRing.color', theme.focusRing?.color, theme.colors],
-  ];
-  for (const [path, value, group] of refs) if (value && group && !(value in group)) errors.push(`${path} is "${value}", which isn't a key of its group.`);
-  return errors;
-}
-
 function initial() {
   const params = new URLSearchParams(location.search);
   const theme = params.get('theme');
@@ -45,15 +19,21 @@ function initial() {
   };
 }
 
+/** Interactive dashboard with synchronized visual and code theme editors. */
 export function ThemePlayground() {
   const start = useMemo(initial, []);
   const [themeId, setThemeId] = useState<ThemeId>(start.theme);
   const [scheme, setScheme] = useState<string>(start.scheme);
   const [custom, setCustom] = useState<YarclShape | null>(null);
-  const [source, setSource] = useState(() => JSON.stringify(themes[start.theme], null, 2));
+  const [source, setSource] = useState(() => serializeConfig(themes[start.theme]));
   const [errors, setErrors] = useState<string[]>([]);
   const [warnings, setWarnings] = useState<string[]>([]);
   const [editorOpen, setEditorOpen] = useState(false);
+  const [tab, setTab] = useState('visual');
+  const draft = useMemo(() => {
+    try { return { value: parseConfig(source), error: null }; }
+    catch (error) { return { value: undefined, error: `Couldn't read the config: ${(error as Error).message}` }; }
+  }, [source]);
 
   const active = custom ?? (themes[themeId] as unknown as YarclShape);
 
@@ -76,33 +56,54 @@ export function ThemePlayground() {
     setThemeId(id);
     setCustom(null);
     setErrors([]);
-    setSource(JSON.stringify(themes[id], null, 2));
+    setSource(serializeConfig(themes[id]));
+  }
+
+  function edit(text: string) {
+    setSource(text);
+    setErrors([]);
+  }
+
+  function validatedDraft(): YarclShape | null {
+    const problems = draft.error ? [draft.error] : checkTheme(draft.value);
+    setErrors(problems);
+    if (problems.length) {
+      setEditorOpen(true);
+      return null;
+    }
+    return draft.value as YarclShape;
   }
 
   function apply() {
-    let theme: YarclShape;
-    try {
-      theme = new Function(`"use strict"; return (${source});`)() as YarclShape;
-    } catch (error) {
-      setErrors([`Couldn't read the theme: ${(error as Error).message}`]);
-      return;
-    }
-    const problems = theme && typeof theme === 'object' ? checkTheme(theme) : ['The theme must be an object.'];
-    setErrors(problems);
-    if (problems.length === 0) {
+    const theme = validatedDraft();
+    if (theme) {
       setCustom(theme);
       toast({ title: 'Custom theme applied', color: 'success' });
     }
   }
 
   async function copy() {
-    const text = custom
-      ? `import { defineConfig } from '@yarcl/react/define';\n\nexport default defineConfig(${JSON.stringify(custom, null, 2)});\n`
-      : themeId === 'yarcl'
-        ? `export { default } from '@yarcl/react/defaults';\n`
-        : `export { ${themeId} as default } from '@yarcl/react/themes';\n`;
-    await navigator.clipboard.writeText(text);
-    toast({ title: 'Config copied', description: 'Paste it into src/yarcl.config.ts.' });
+    const theme = validatedDraft();
+    if (!theme) return;
+    try {
+      await navigator.clipboard.writeText(serializeConfig(theme));
+      toast({ title: 'Config copied', description: 'Paste it into src/yarcl.config.ts.' });
+    } catch {
+      toast({ title: 'Could not copy config', description: 'Download the config instead.', color: 'danger' });
+    }
+  }
+
+  function download() {
+    const theme = validatedDraft();
+    if (!theme) return;
+    const url = URL.createObjectURL(new Blob([serializeConfig(theme)], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'yarcl.config.ts';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
   const options = [
@@ -135,9 +136,9 @@ export function ThemePlayground() {
           <Button size="sm" variant="outline" color="neutral" onClick={copy}>
             Copy config
           </Button>
-          <Link href="/theming/playground/" target="_top" underline="hover" color="neutral">
-            Back to docs
-          </Link>
+          <Button size="sm" variant="outline" color="neutral" onClick={download}>
+            Download config
+          </Button>
         </Inline>
       </div>
 
@@ -148,7 +149,7 @@ export function ThemePlayground() {
         onOpenChange={setEditorOpen}
         size="lg"
         title="Edit theme"
-        description="The whole theme as a config object. Change any value, or start from another theme, then apply."
+        description="Change any design system value, then apply to preview. Both editors share the same config."
         footer={
           <>
             <Button variant="outline" color="neutral" onClick={() => choose(themeId)}>
@@ -166,6 +167,7 @@ export function ThemePlayground() {
                   <li key={error}>{error}</li>
                 ))}
               </ul>
+              {errors.length > 8 && <Text>{errors.length - 8} more settings need a correction.</Text>}
             </Alert>
           )}
           {warnings.length > 0 && (
@@ -177,14 +179,36 @@ export function ThemePlayground() {
               </ul>
             </Alert>
           )}
-          <Textarea
-            aria-label="Theme source"
-            className="pg-editor"
-            rows={28}
-            spellCheck={false}
-            value={source}
-            onChange={(event) => setSource(event.target.value)}
-          />
+          <Tabs value={tab} onValueChange={setTab}>
+            <Tabs.List aria-label="Theme editor">
+              <Tabs.Trigger value="visual">Visual Editor</Tabs.Trigger>
+              <Tabs.Trigger value="code">Code Editor</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Panel value="visual">
+              {draft.error ? (
+                <Alert color="danger" title="The config needs a correction" live="polite">
+                  <Text>{draft.error}</Text>
+                  <Button size="sm" variant="outline" onClick={() => setTab('code')}>Open Code Editor</Button>
+                </Alert>
+              ) : <VisualEditor value={draft.value as Value} onChange={(value) => edit(serializeConfig(value))} />}
+            </Tabs.Panel>
+            <Tabs.Panel value="code">
+              <Stack gap="sm">
+                <Text textStyle="caption">Edit the config values below. Comments, single quotes and trailing commas are supported.</Text>
+                <Textarea
+                  aria-label="Theme source"
+                  className="pg-editor"
+                  rows={28}
+                  spellCheck={false}
+                  value={source}
+                  onChange={(event) => edit(event.target.value)}
+                  aria-invalid={Boolean(draft.error)}
+                  aria-describedby={draft.error ? 'pg-source-error' : undefined}
+                />
+                {draft.error && <Text id="pg-source-error" color="danger" role="status">{draft.error}</Text>}
+              </Stack>
+            </Tabs.Panel>
+          </Tabs>
         </Stack>
       </Drawer>
 

@@ -18,6 +18,7 @@
     "@yarcl/react": "workspace:*",
     "astro": "^7.3.4",
     "date-fns": "^4.4.0",
+    "json5": "^2.2.3",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sharp": "^0.35.3"
