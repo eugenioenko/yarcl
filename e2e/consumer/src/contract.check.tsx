@@ -26,9 +26,13 @@ export const contract = (
     <Badge size="talla-s" startIcon={<span>✓</span>} endIcon={<span>✓</span>}>Listo</Badge>
     {/* @ts-expect-error unknown badge size */}
     <Badge size="missing" startIcon={<span>✓</span>}>Listo</Badge>
-    <Text inherit muted>Hereda la tipografía</Text>
+    <Text inherit muted whiteSpace="pre-line" wrap="anywhere">Hereda la tipografía</Text>
     {/* @ts-expect-error inherit must be boolean */}
     <Text inherit="yes">Inválido</Text>
+    {/* @ts-expect-error unknown whitespace */}
+    <Text whiteSpace="preserve" />
+    {/* @ts-expect-error unknown wrapping */}
+    <Text wrap="break-word" />
     <Button href="/lecciones/siguiente" size="talla-l">Siguiente lección</Button>
     <IconButton href="/lecciones/siguiente" aria-label="Siguiente lección"><span>→</span></IconButton>
     {/* @ts-expect-error links cannot use native button types */}

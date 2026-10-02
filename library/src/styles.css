@@ -768,6 +768,22 @@ p.yarcl-text {
   font-size: inherit;
 }
 
+.yarcl-text-white-space-normal {
+  white-space: normal;
+}
+
+.yarcl-text-white-space-pre-line {
+  white-space: pre-line;
+}
+
+.yarcl-text-white-space-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.yarcl-text-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
 .yarcl-text-truncate {
   display: block;
   overflow: hidden;

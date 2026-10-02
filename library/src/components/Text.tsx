@@ -27,6 +27,10 @@ export interface TextProps extends Omit<ComponentProps<'span'>, 'color'> {
   muted?: boolean;
   /** Truncates with an ellipsis: `true` for one line, a number for that many lines. */
   truncate?: boolean | number;
+  /** How whitespace and line breaks are displayed. `pre-wrap` preserves newlines and spaces. */
+  whiteSpace?: 'normal' | 'pre-line' | 'pre-wrap';
+  /** Allows long unbroken words to wrap at any character. */
+  wrap?: 'normal' | 'anywhere';
 }
 
 /**
@@ -44,6 +48,8 @@ export function Text({
   color,
   muted,
   truncate,
+  whiteSpace,
+  wrap,
   className,
   style,
   ...props
@@ -61,6 +67,8 @@ export function Text({
         !inherit && textStyle === undefined && own.textStyle === undefined && 'yarcl-text-auto-size',
         (color ?? own.color) && cx('yarcl-text-colored', colorClass(color ?? own.color)),
         muted && 'yarcl-text-muted',
+        whiteSpace && `yarcl-text-white-space-${whiteSpace}`,
+        wrap === 'anywhere' && 'yarcl-text-wrap-anywhere',
         lines === 1 && 'yarcl-text-truncate',
         lines > 1 && 'yarcl-text-clamp',
         className,
