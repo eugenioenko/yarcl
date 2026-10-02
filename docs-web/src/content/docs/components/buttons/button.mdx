@@ -66,7 +66,14 @@ components: { Button: { radius: 'square' } }
 
 ## With icons
 
-An `<svg>` inside a button is sized from the size's `iconSize`.
+Use `startIcon` or `endIcon` to place a decorative icon beside the label. The icon is sized from the control size's `iconSize`, and the gap follows its horizontal padding. The label supplies the accessible name.
+
+```tsx
+<Button startIcon={<CheckIcon />}>Mark complete</Button>
+<Button href="/next" endIcon={<ArrowRightIcon />}>Next lesson</Button>
+```
+
+Plain `<svg>` children still use the control size's `iconSize`.
 
 <Preview>
   <ButtonIcons client:load />

@@ -91,6 +91,22 @@
   height: var(--yarcl-icon);
 }
 
+.yarcl-button-icon,
+.yarcl-badge-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+
+.yarcl-button-icon svg,
+.yarcl-badge-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
 .yarcl-icon-button {
   width: var(--yarcl-h);
   padding: 0;
