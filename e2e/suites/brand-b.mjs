@@ -5,6 +5,22 @@ import { resolveColor } from './command-palette.mjs';
 export default async function ({ page, check }) {
   await page.evaluate(() => document.fonts.ready);
   check('web font from fontFaces loaded', await page.evaluate(() => document.fonts.check('500 44px Fraunces')));
+  const initialScheme = await page.evaluate(() => document.documentElement.style.colorScheme);
+  const account = page.getByRole('button', { name: /Ada Lovelace.*ada@example.com/ });
+  const schemeToggle = page.getByRole('group', { name: 'Color scheme' });
+  await account.click();
+  await page.getByRole('menuitemradio', { name: initialScheme === 'dark' ? 'Dark' : 'Light', checked: true }).waitFor();
+  await page.getByRole('menuitemradio', { name: 'Dark' }).click();
+  check('account menu applies the dark scheme', (await page.evaluate(() => document.documentElement.style.colorScheme)) === 'dark');
+  check('account menu updates the existing scheme toggle', (await schemeToggle.getByRole('button', { name: 'Dark' }).getAttribute('aria-pressed')) === 'true');
+  await account.click();
+  await page.getByRole('menuitemradio', { name: 'System' }).click();
+  check('account menu applies the system scheme', (await page.evaluate(() => document.documentElement.style.colorScheme)) === 'light dark');
+  check('system scheme activates Auto in the existing toggle', (await schemeToggle.getByRole('button', { name: 'Auto' }).getAttribute('aria-pressed')) === 'true');
+  await schemeToggle.getByRole('button', { name: initialScheme === 'dark' ? 'Dark' : 'Light' }).click();
+  await account.click();
+  await page.getByRole('menuitemradio', { name: initialScheme === 'dark' ? 'Dark' : 'Light', checked: true }).waitFor();
+  await page.keyboard.press('Escape');
   const h1 = page.getByRole('heading', { level: 1 });
   check('h1 uses the serif family', (await h1.evaluate((el) => getComputedStyle(el).fontFamily)).startsWith('Fraunces'));
 

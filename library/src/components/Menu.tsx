@@ -20,6 +20,7 @@ import {
   useRef,
   useState,
   type ComponentProps,
+  type MouseEvent,
   type ReactElement,
   type ReactNode,
 } from 'react';
@@ -145,7 +146,7 @@ function MenuContent({ className, style, children, ...props }: MenuContentProps)
 
 /** Props for `Menu.Item`. */
 export interface MenuItemProps extends Omit<ComponentProps<'button'>, 'color' | 'onSelect'> {
-  /** Called when the item is chosen by click, Enter or Space. The menu closes afterwards. */
+  /** Called when the item is chosen by click, Enter or Space. The menu closes afterwards. Calling `preventDefault` in `onClick` cancels selection and closing. */
   onSelect?: () => void;
   /** Semantic color for the item, e.g. a destructive action. From the `colors` config. */
   color?: Color;
@@ -153,7 +154,7 @@ export interface MenuItemProps extends Omit<ComponentProps<'button'>, 'color' | 
   textValue?: string;
 }
 
-function MenuItem({ onSelect, color, textValue, disabled, className, children, ref: incomingRef, ...props }: MenuItemProps) {
+function MenuItem({ onSelect, onClick, color, textValue, disabled, className, children, ref: incomingRef, ...props }: MenuItemProps) {
   const { activeIndex, setOpen, getItemProps } = useMenuContext('Menu.Item');
   const { ref, index } = useListItem({
     label: disabled ? null : (textValue ?? (typeof children === 'string' ? children : null)),
@@ -171,7 +172,9 @@ function MenuItem({ onSelect, color, textValue, disabled, className, children, r
       className={cx('yarcl-option', color && cx('yarcl-option-colored', colorClass(color)), className)}
       {...getItemProps({
         ...props,
-        onClick() {
+        onClick(event: MouseEvent<HTMLButtonElement>) {
+          onClick?.(event);
+          if (event.defaultPrevented) return;
           onSelect?.();
           setOpen(false);
         },

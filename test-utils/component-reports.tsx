@@ -15,6 +15,8 @@ export function testComponentReports() {
     const screen = await render(<Combobox aria-label="Region" options={options} value="a" onInputValueChange={onInputValueChange} />);
     const input = screen.container.querySelector('input')!;
     expect(input.value).toBe('Alpha');
+    await page.getByRole('combobox', { name: 'Region' }).fill('Pending search');
+    onInputValueChange.mockClear();
     await screen.rerender(<Combobox aria-label="Region" options={options} value="b" onInputValueChange={onInputValueChange} />);
     expect(input.value).toBe('Beta');
     await screen.rerender(<Combobox aria-label="Region" options={[]} value="b" onInputValueChange={onInputValueChange} />);
@@ -26,15 +28,19 @@ export function testComponentReports() {
     expect(onInputValueChange).not.toHaveBeenCalled();
   });
 
-  test('single Combobox preserves search text on equivalent options and restores the selection on blur', async () => {
+  test('single Combobox preserves searches through option changes and restores the latest label on blur', async () => {
     const screen = await render(<Combobox aria-label="Region" options={options} value="a" />);
     const input = screen.container.querySelector('input')!;
     await page.getByRole('combobox', { name: 'Region' }).fill('Bet');
     await screen.rerender(<Combobox aria-label="Region" options={options.map((option) => ({ ...option }))} value="a" />);
     expect(input.value).toBe('Bet');
+    await screen.rerender(<Combobox aria-label="Region" options={[options[1]]} value="a" />);
+    expect(input.value).toBe('Bet');
+    await screen.rerender(<Combobox aria-label="Region" options={[{ value: 'a', label: 'Updated Alpha' }, options[1]]} value="a" />);
+    expect(input.value).toBe('Bet');
     await page.getByRole('option', { name: 'Beta' }).waitFor();
     input.blur();
-    await expect.poll(() => input.value).toBe('Alpha');
+    await expect.poll(() => input.value).toBe('Updated Alpha');
   });
 
   test('controlled input text takes precedence over selected values and arriving labels', async () => {
@@ -82,6 +88,9 @@ export function testComponentReports() {
   test('radio menu choices expose selection, skip disabled items, close and restore focus', async () => {
     document.documentElement.style.colorScheme = inject('scheme');
     const selected = vi.fn();
+    const clicked = vi.fn();
+    const onSelect = vi.fn();
+    const blockedSelect = vi.fn();
     const radioRef = { current: null as HTMLButtonElement | null };
     function SchemeMenu() {
       const [value, setValue] = useState('light');
@@ -91,8 +100,9 @@ export function testComponentReports() {
           <Menu.RadioGroup aria-label="Color scheme" value={value} onValueChange={(next) => { setValue(next); selected(next); }}>
             <Menu.RadioItem value="light" ref={radioRef}>Light</Menu.RadioItem>
             <Menu.RadioItem value="unavailable" disabled>Unavailable</Menu.RadioItem>
-            <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+            <Menu.RadioItem value="dark" onClick={clicked} onSelect={onSelect}>Dark</Menu.RadioItem>
             <Menu.RadioItem value="system">System</Menu.RadioItem>
+            <Menu.RadioItem value="blocked" onClick={(event) => event.preventDefault()} onSelect={blockedSelect}>Blocked choice</Menu.RadioItem>
           </Menu.RadioGroup>
         </Menu.Content>
       </Menu>;
@@ -110,9 +120,15 @@ export function testComponentReports() {
     await page.keyboard.press('Enter');
     await expect.poll(() => document.querySelector('[role="menu"]')).toBeNull();
     expect(selected).toHaveBeenLastCalledWith('dark');
+    expect(clicked).toHaveBeenCalledOnce();
+    expect(onSelect).toHaveBeenCalledOnce();
     await expect.poll(() => document.activeElement?.textContent).toBe('Appearance');
     await trigger.click();
     await page.getByRole('menuitemradio', { name: 'Dark', checked: true }).waitFor();
+    await page.getByRole('menuitemradio', { name: 'Blocked choice' }).click();
+    await page.getByRole('menuitemradio', { name: 'Dark', checked: true }).waitFor();
+    expect(blockedSelect).not.toHaveBeenCalled();
+    expect(selected).toHaveBeenCalledOnce();
     await page.keyboard.press('s');
     await expect.poll(() => document.activeElement?.textContent).toBe('System');
     await page.keyboard.press('Enter');
@@ -128,6 +144,26 @@ export function testComponentReports() {
     await page.keyboard.press('Space');
     await expect.poll(() => document.querySelector('[role="menu"]')).toBeNull();
     expect(selected).toHaveBeenLastCalledWith('light');
+  });
+
+  test('action menu items call native click handlers and honor cancelled selection', async () => {
+    const clicked = vi.fn();
+    const selected = vi.fn();
+    await render(<Menu>
+      <Menu.Trigger><Button>Actions</Button></Menu.Trigger>
+      <Menu.Content>
+        <Menu.Item onClick={(event) => event.preventDefault()} onSelect={selected}>Cancelled action</Menu.Item>
+        <Menu.Item onClick={clicked} onSelect={selected}>Run action</Menu.Item>
+      </Menu.Content>
+    </Menu>);
+    await page.getByRole('button', { name: 'Actions' }).click();
+    await page.getByRole('menuitem', { name: 'Cancelled action' }).click();
+    await page.getByRole('menuitem', { name: 'Run action' }).waitFor();
+    expect(selected).not.toHaveBeenCalled();
+    await page.getByRole('menuitem', { name: 'Run action' }).click();
+    expect(clicked).toHaveBeenCalledOnce();
+    expect(selected).toHaveBeenCalledOnce();
+    await expect.poll(() => document.querySelector('[role="menu"]')).toBeNull();
   });
 
   test('account triggers grow to contain both lines and remain usable menu triggers', async () => {

@@ -265,7 +265,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
   const [selection, setSelection] = useState({ value, label: selectedLabel, editing: false });
 
   if (selection.value !== value || selection.label !== selectedLabel) {
-    setSelection({ value, label: selectedLabel, editing: false });
+    setSelection({ value, label: selectedLabel, editing: selection.value === value && selection.editing });
   }
   const text = inputValueProp ?? (selection.editing ? inputText : selectedLabel);
 

@@ -55,7 +55,6 @@ export function App() {
     document.documentElement.style.colorScheme = initial;
     return initial;
   });
-  const [appearance, setAppearance] = useState('system');
   const [size, setSize] = useState<string | null>(null);
   const [shade, setShade] = useState<string | null>('natural');
   const [sizeError, setSizeError] = useState(false);
@@ -105,24 +104,24 @@ export function App() {
             ]}
           />
 
-        <Menu>
-          <Menu.Trigger>
-            <Button autoHeight variant="text">
-              <Avatar name="Ada Lovelace" />
-              <Stack gap="2">
-                <Text>Ada Lovelace</Text>
-                <Text textStyle="fine" muted>ada@example.com</Text>
-              </Stack>
-            </Button>
-          </Menu.Trigger>
-          <Menu.Content>
-            <Menu.RadioGroup aria-label="Color scheme" value={appearance} onValueChange={setAppearance}>
-              <Menu.RadioItem value="light">Light</Menu.RadioItem>
-              <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
-              <Menu.RadioItem value="system">System</Menu.RadioItem>
-            </Menu.RadioGroup>
-          </Menu.Content>
-        </Menu>
+          <Menu>
+            <Menu.Trigger>
+              <Button autoHeight variant="text">
+                <Avatar name="Ada Lovelace" />
+                <Stack gap="2">
+                  <Text>Ada Lovelace</Text>
+                  <Text textStyle="fine" muted>ada@example.com</Text>
+                </Stack>
+              </Button>
+            </Menu.Trigger>
+            <Menu.Content>
+              <Menu.RadioGroup aria-label="Color scheme" value={scheme === 'light dark' ? 'system' : scheme} onValueChange={(value) => applyScheme(value === 'light' || value === 'dark' ? value : 'light dark')}>
+                <Menu.RadioItem value="light">Light</Menu.RadioItem>
+                <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+                <Menu.RadioItem value="system">System</Menu.RadioItem>
+              </Menu.RadioGroup>
+            </Menu.Content>
+          </Menu>
           <ToggleGroup
             type="single"
             required
