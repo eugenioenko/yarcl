@@ -159,3 +159,84 @@ body {
     display: none;
   }
 }
+
+.pg-visual-editor,
+.pg-editor-fields {
+  display: grid;
+  gap: var(--yarcl-space-sm);
+  min-width: 0;
+}
+
+.pg-editor-section {
+  min-width: 0;
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-radius-md);
+}
+
+.pg-editor-section > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--yarcl-space-sm);
+  padding: var(--yarcl-space-sm) var(--yarcl-space-md);
+  font-weight: var(--yarcl-text-label-weight);
+  cursor: pointer;
+}
+
+.pg-editor-section > summary::before {
+  content: '+';
+}
+
+.pg-editor-section[open] > summary::before {
+  content: '−';
+}
+
+.pg-editor-section > summary > span {
+  flex: 1;
+}
+
+.pg-editor-section > summary:focus-visible {
+  outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
+  outline-offset: var(--yarcl-focus-offset);
+}
+
+.pg-editor-fields {
+  padding: var(--yarcl-space-md);
+  border-top: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+}
+
+.pg-editor-field,
+.pg-add-entry {
+  display: grid;
+  gap: var(--yarcl-space-xs);
+}
+
+.pg-editor-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--yarcl-space-sm);
+}
+
+.pg-editor-row > .yarcl-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.pg-editor-row > input[type='color'] {
+  width: var(--yarcl-size-md-height);
+  height: var(--yarcl-size-md-height);
+  padding: 0;
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-radius-sm);
+  background: var(--yarcl-neutral-surface);
+}
+
+.pg-editor-group {
+  display: grid;
+  gap: var(--yarcl-space-sm);
+  min-width: 0;
+  margin: 0;
+  padding: var(--yarcl-space-sm);
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-radius-sm);
+}

@@ -17,4 +17,6 @@ Switch between the [bundled themes](/theming/bundled-themes/), toggle light and 
 
 The playground calls `applyTheme` from `@yarcl/react/css` whenever you pick a theme or apply your edits. It regenerates the stylesheet in the browser with the same generator the build plugin runs at build time, and switches the defaults components read, so each theme's per-component choices (like pill buttons) show up too. See [switching themes](/theming/switching-themes/#at-runtime).
 
-**Copy config** copies the current theme as a config file you can paste into `src/yarcl.config.ts`.
+The theme editor has two tabs: **Visual Editor** has forms for all tokens, typography, interaction settings, defaults and component overrides. Optional settings can be added or removed, and token groups accept new entries. **Code Editor** edits the same config file, with support for comments, single quotes and trailing commas. Switching tabs preserves your changes, and **Apply** validates the config before updating the dashboard.
+
+**Copy config** copies the edited config file for `src/yarcl.config.ts`. **Download config** saves the same file as `yarcl.config.ts`. Both include pending edits, even before you apply them.
