@@ -20,7 +20,7 @@ export interface NumberInputProps
    * @default null
    */
   defaultValue?: number | null;
-  /** Called with the new value after a step, or when typed text is committed on blur or Enter. */
+  /** Called with the new value after a step, or when typed text is committed on blur or Enter. The first Enter commits without submitting a form; a second Enter submits it. */
   onValueChange?: (value: number | null) => void;
   /** Lowest allowed value. Typed values are clamped to it, and `Home` jumps to it. */
   min?: number;
@@ -145,7 +145,7 @@ export function NumberInput(props: NumberInputProps) {
     };
     const action = actions[event.key];
     if (!action) return;
-    if (event.key !== 'Enter') event.preventDefault();
+    event.preventDefault();
     action();
   }
 
