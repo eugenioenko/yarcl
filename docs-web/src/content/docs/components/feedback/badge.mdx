@@ -42,6 +42,15 @@ Use `startIcon` or `endIcon` for a decorative status icon. The icon size and the
 </Badge>
 ```
 
+## Long labels
+
+Labels truncate with an ellipsis to stay within their container. The full label remains in the accessible text, and icons and remove buttons keep their space. Use `wrap` for a multiline label, including long words.
+
+```tsx
+<Badge>Certified Wonderful Enrichment Educator Graduate</Badge>
+<Badge wrap>Certified Wonderful Enrichment Educator Graduate</Badge>
+```
+
 ## Props
 
 <Props of="BadgeProps" />

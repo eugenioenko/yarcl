@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Avatar,
   Button,
   Checkbox,
   CommandPalette,
@@ -302,5 +303,30 @@ export function CommandPaletteControlledDemo() {
         Palette is {open ? 'open' : 'closed'}. Last command: {last}
       </Text>
     </Stack>
+  );
+}
+
+export function AccountMenuDemo() {
+  const [appearance, setAppearance] = useState('system');
+  return (
+
+        <Menu>
+          <Menu.Trigger>
+            <Button autoHeight variant="ghost">
+              <Avatar name="Ada Lovelace" />
+              <Stack gap="xs">
+                <Text>Ada Lovelace</Text>
+                <Text textStyle="caption" muted>ada@example.com</Text>
+              </Stack>
+            </Button>
+          </Menu.Trigger>
+          <Menu.Content>
+            <Menu.RadioGroup aria-label="Color scheme" value={appearance} onValueChange={setAppearance}>
+              <Menu.RadioItem value="light">Light</Menu.RadioItem>
+              <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+              <Menu.RadioItem value="system">System</Menu.RadioItem>
+            </Menu.RadioGroup>
+          </Menu.Content>
+        </Menu>
   );
 }

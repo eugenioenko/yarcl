@@ -310,7 +310,7 @@ export function App() {
                 </Accordion.Content>
               </Accordion.Item>
               <Accordion.Item value="warranty">
-                <Accordion.Header end={<button type="button" aria-label="Warranty actions">More</button>}>
+                <Accordion.Header end={<Button variant="outline" aria-label="Warranty actions">More</Button>}>
                   <Accordion.Trigger>Warranty</Accordion.Trigger>
                 </Accordion.Header>
                 <Accordion.Content>

@@ -158,7 +158,17 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
     },
     placement: 'bottom-start',
     transform: false,
-    whileElementsMounted: autoUpdate,
+    whileElementsMounted(reference, floating, update) {
+      let frame = 0;
+      const cleanup = autoUpdate(reference, floating, () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(update);
+      });
+      return () => {
+        cleanup();
+        cancelAnimationFrame(frame);
+      };
+    },
     middleware: floatingMiddleware({ gap: 4, matchWidth: true }),
   });
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
@@ -250,10 +260,18 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useControllable<V | null>(valueProp, defaultValue, onValueChange, inputRef);
   const labelOf = (v: V | null) => options.find((option) => option.value === v)?.label ?? (allowCustomValue ? (v ?? '') : '');
-  const [text, setText] = useControllable(inputValueProp, labelOf(defaultValue), onInputValueChange, inputRef);
+  const selectedLabel = labelOf(value);
+  const [inputText, setText] = useControllable(inputValueProp, labelOf(valueProp !== undefined ? valueProp : defaultValue), onInputValueChange, inputRef);
+  const [selection, setSelection] = useState({ value, label: selectedLabel, editing: false });
+
+  if (selection.value !== value || selection.label !== selectedLabel) {
+    setSelection({ value, label: selectedLabel, editing: false });
+  }
+  const text = inputValueProp ?? (selection.editing ? inputText : selectedLabel);
 
   function choose(option: SelectOption<V>) {
     if (option.disabled) return;
+    setSelection((current) => ({ ...current, editing: false }));
     setValue(option.value);
     setText(option.label);
     close();
@@ -261,6 +279,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
 
   function restore() {
     if (allowCustomValue) return;
+    setSelection((current) => ({ ...current, editing: false }));
     const label = labelOf(value);
     if (text !== label) setText(label);
   }
@@ -283,6 +302,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const next = event.target.value;
+    setSelection((current) => ({ ...current, editing: true }));
     setText(next);
     setOpen(true);
     setActiveIndex(next ? 0 : null);

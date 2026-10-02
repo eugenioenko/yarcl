@@ -1,4 +1,4 @@
-import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 
 type FontFamily = keyof typeof config.typography.families;
@@ -15,6 +15,30 @@ void [invalidProseStyle, invalidProseGap];
 
 export const contract = (
   <>
+    <Button autoHeight size="talla-s"><span>Account</span></Button>
+    <Button href="/account" autoHeight size="talla-s">Account</Button>
+    {/* @ts-expect-error autoHeight must be boolean */}
+    <Button autoHeight="yes" />
+    {/* @ts-expect-error auto height still uses config sizes */}
+    <Button autoHeight size="missing" />
+    <Badge wrap size="talla-s">A long credential title</Badge>
+    {/* @ts-expect-error wrap must be boolean */}
+    <Badge wrap="yes" />
+    <Menu>
+      <Menu.Content>
+        <Menu.RadioGroup value="light" onValueChange={(value: string) => value} aria-label="Color scheme">
+          <Menu.RadioItem value="light" color="clay" textValue="Light" onSelect={() => {}}>Light</Menu.RadioItem>
+        </Menu.RadioGroup>
+      </Menu.Content>
+    </Menu>
+    {/* @ts-expect-error radio items still use config colors */}
+    <Menu.RadioItem value="light" color="missing" />
+    {/* @ts-expect-error radio item values are required */}
+    <Menu.RadioItem />
+    {/* @ts-expect-error radio groups require a controlled value */}
+    <Menu.RadioGroup />
+    {/* @ts-expect-error radio checked state comes from the group */}
+    <Menu.RadioItem value="light" aria-checked />
     <Grid as="section" columns={3} gap="4" ref={() => {}} style={{ width: '100%' }} />
     <Grid columns="16rem minmax(0, 1fr)" />
     <Grid minItemWidth="16rem" />

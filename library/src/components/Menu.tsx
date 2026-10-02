@@ -9,6 +9,7 @@ import {
   useInteractions,
   useListItem,
   useListNavigation,
+  useMergeRefs,
   useRole,
   useTypeahead,
   type Placement,
@@ -23,7 +24,7 @@ import {
   type ReactNode,
 } from 'react';
 import { colorClass, cx, sizeClass } from '../classes';
-import { floatingMiddleware, useTrigger } from '../floating';
+import { CheckIcon, floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, ComponentSize } from '../types';
 import { useDefaults } from '../runtime';
@@ -32,6 +33,8 @@ import { useDefaults } from '../runtime';
 type MenuContextValue = ReturnType<typeof useMenuState>;
 
 const MenuContext = createContext<MenuContextValue | null>(null);
+
+const MenuRadioContext = createContext<{ value: string | null; select: (value: string) => void } | null>(null);
 
 function useMenuContext(component: string) {
   const context = useContext(MenuContext);
@@ -150,15 +153,16 @@ export interface MenuItemProps extends Omit<ComponentProps<'button'>, 'color' | 
   textValue?: string;
 }
 
-function MenuItem({ onSelect, color, textValue, disabled, className, children, ...props }: MenuItemProps) {
+function MenuItem({ onSelect, color, textValue, disabled, className, children, ref: incomingRef, ...props }: MenuItemProps) {
   const { activeIndex, setOpen, getItemProps } = useMenuContext('Menu.Item');
   const { ref, index } = useListItem({
     label: disabled ? null : (textValue ?? (typeof children === 'string' ? children : null)),
   });
   const active = activeIndex === index;
+  const mergedRef = useMergeRefs([ref, incomingRef]);
   return (
     <button
-      ref={ref}
+      ref={mergedRef}
       type="button"
       role="menuitem"
       tabIndex={active ? 0 : -1}
@@ -175,6 +179,54 @@ function MenuItem({ onSelect, color, textValue, disabled, className, children, .
     >
       {children}
     </button>
+  );
+}
+
+/** Props for `Menu.RadioGroup`. */
+export interface MenuRadioGroupProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onChange'> {
+  /** Controlled selected value. `null` means nothing is selected. */
+  value: string | null;
+  /** Called when a radio item is chosen. */
+  onValueChange?: (value: string) => void;
+}
+
+/** A group of mutually exclusive menu choices. Name it with `aria-label` or `aria-labelledby`. */
+function MenuRadioGroup({ value, onValueChange, children, ...props }: MenuRadioGroupProps) {
+  useMenuContext('Menu.RadioGroup');
+  return (
+    <MenuRadioContext.Provider value={{ value, select: (next) => onValueChange?.(next) }}>
+      <div role="group" {...props}>{children}</div>
+    </MenuRadioContext.Provider>
+  );
+}
+
+/** Props for `Menu.RadioItem`. */
+export interface MenuRadioItemProps extends Omit<MenuItemProps, 'value' | 'role' | 'aria-checked'> {
+  /** Value selected when this item is chosen. */
+  value: string;
+  role?: never;
+  'aria-checked'?: never;
+}
+
+/** A menu choice with an accessible checked state and a decorative check indicator. */
+function MenuRadioItem({ value, children, textValue, onSelect, ...props }: MenuRadioItemProps) {
+  const group = useContext(MenuRadioContext);
+  if (!group) throw new Error('yarcl: <Menu.RadioItem> must be inside <Menu.RadioGroup>');
+  const checked = group.value === value;
+  return (
+    <MenuItem
+      {...props}
+      role="menuitemradio"
+      aria-checked={checked}
+      textValue={textValue ?? (typeof children === 'string' ? children : undefined)}
+      onSelect={() => {
+        group.select(value);
+        onSelect?.();
+      }}
+    >
+      <span className="yarcl-option-label">{children}</span>
+      {checked && <CheckIcon />}
+    </MenuItem>
   );
 }
 
@@ -203,5 +255,7 @@ export const Menu = Object.assign(MenuRoot, {
   Trigger: MenuTrigger,
   Content: MenuContent,
   Item: MenuItem,
+  RadioGroup: MenuRadioGroup,
+  RadioItem: MenuRadioItem,
   Separator: MenuSeparator,
 });

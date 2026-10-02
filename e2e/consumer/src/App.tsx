@@ -20,6 +20,7 @@ import {
   Inline,
   Label,
   Link,
+  Menu,
   NavItem,
   Progress,
   Pagination,
@@ -54,6 +55,7 @@ export function App() {
     document.documentElement.style.colorScheme = initial;
     return initial;
   });
+  const [appearance, setAppearance] = useState('system');
   const [size, setSize] = useState<string | null>(null);
   const [shade, setShade] = useState<string | null>('natural');
   const [sizeError, setSizeError] = useState(false);
@@ -102,6 +104,25 @@ export function App() {
               { id: 'wishlist', label: 'Save to wishlist', group: 'Actions', onSelect: () => toast({ title: 'Saved to wishlist', color: 'clay' }) },
             ]}
           />
+
+        <Menu>
+          <Menu.Trigger>
+            <Button autoHeight variant="text">
+              <Avatar name="Ada Lovelace" />
+              <Stack gap="2">
+                <Text>Ada Lovelace</Text>
+                <Text textStyle="fine" muted>ada@example.com</Text>
+              </Stack>
+            </Button>
+          </Menu.Trigger>
+          <Menu.Content>
+            <Menu.RadioGroup aria-label="Color scheme" value={appearance} onValueChange={setAppearance}>
+              <Menu.RadioItem value="light">Light</Menu.RadioItem>
+              <Menu.RadioItem value="dark">Dark</Menu.RadioItem>
+              <Menu.RadioItem value="system">System</Menu.RadioItem>
+            </Menu.RadioGroup>
+          </Menu.Content>
+        </Menu>
           <ToggleGroup
             type="single"
             required
@@ -138,6 +159,10 @@ export function App() {
                   Organic linen
                 </Badge>
               </Inline>
+              <div style={{ maxWidth: '16rem' }}>
+                <Badge color="moss">Certified organic linen with responsibly sourced materials</Badge>
+                <Badge wrap color="moss">Certified organic linen with responsibly sourced materials</Badge>
+              </div>
               <Inline gap="2" align="center">
                 <Avatar name="Lena Ortiz" />
                 <Text textStyle="fine" muted>

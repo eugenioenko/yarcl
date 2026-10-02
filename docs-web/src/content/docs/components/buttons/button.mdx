@@ -45,8 +45,22 @@ import { Button } from '@yarcl/react';
 `size` accepts the keys allowed for Button in your [`sizes` configuration](/configuration/sizes-and-radii/). A button and an [Input](/components/forms/input/) of the same base size have the same height unless either component overrides it.
 
 <Preview>
-  <ButtonSizes />
+<ButtonSizes />
 </Preview>
+
+Use `autoHeight` for multiline content such as an account row. The selected size still determines the minimum height, font, icons and padding. This works for both action buttons and links.
+
+```tsx
+<Button autoHeight variant="ghost">
+  <Avatar name="Ada Lovelace" />
+  <Stack gap="xs">
+    <Text>Ada Lovelace</Text>
+    <Text textStyle="caption" muted>ada@example.com</Text>
+  </Stack>
+</Button>
+```
+
+See the [account menu recipe](/components/overlays/menu/#account-trigger-and-radio-choices).
 
 ## Radius
 
