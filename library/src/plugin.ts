@@ -24,7 +24,8 @@ export interface YarclPluginOptions {
    */
   root?: string;
   /**
-   * Emits only CSS variables as a standalone asset in the build output directory.
+   * Emits CSS variables and text-style classes in the build output directory.
+   * Vite also writes the file during development and updates it with the config.
    * A string sets the output-relative filename. Use `false` or `''` to disable.
    * @default true
    */
@@ -80,6 +81,7 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
     throw new Error('yarcl: emitTokens must be a filename relative to the build output directory.');
   }
   let building = meta.framework !== 'vite';
+  let tokensOutputDir = '';
   let root = resolve(options.root ?? process.cwd());
   let target = '';
   let componentStyles = '';
@@ -112,12 +114,22 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
     return generateTokensCss(config);
   };
 
+  const writeDevTokens = async (watch: (file: string) => void): Promise<void> => {
+    const css = await tokenStyles(watch);
+    const path = resolve(tokensOutputDir, tokensFile);
+    await mkdir(dirname(path), { recursive: true });
+    await writeFile(path, css);
+  };
+
   return {
     name: 'yarcl',
     enforce: 'pre',
 
-    buildStart() {
+    async buildStart() {
       prepare();
+      if (meta.framework === 'vite' && !building && tokensFile) {
+        await writeDevTokens((file) => this.addWatchFile(file));
+      }
     },
 
     async buildEnd(error?: unknown) {
@@ -183,6 +195,7 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
     vite: {
       configResolved(config) {
         building = config.command === 'build';
+        tokensOutputDir = resolve(config.root, config.build.outDir);
       },
       config(userConfig) {
         root = resolve(options.root ?? userConfig.root ?? process.cwd());
@@ -197,8 +210,9 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
           ssr: { noExternal: [PACKAGE] },
         };
       },
-      handleHotUpdate({ file, server, modules }) {
+      async handleHotUpdate({ file, server, modules }) {
         if (!watched.has(file)) return;
+        if (tokensFile) await writeDevTokens((dependency) => server.watcher.add(dependency));
         const css = server.moduleGraph.getModuleById(RESOLVED_CSS);
         const responsive = [...responsiveStyles]
           .map((id) => server.moduleGraph.getModuleById(id))

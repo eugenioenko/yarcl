@@ -27,7 +27,7 @@ export default defineConfig({ plugins: [react(), yarcl({ config: 'src/yarcl.conf
 
 For webpack, Rspack, Rollup or esbuild, import the plugin from the matching `@yarcl/react/<build-tool>` entry point.
 
-Every build plugin also emits `yarcl.tokens.css` in the build output directory for server templates and other pages outside the React app. It contains only CSS variables and `color-scheme`, without component styles or font loading. Set `emitTokens: false` or `emitTokens: ''` to disable it, or pass a filename such as `emitTokens: 'styles/tokens.css'` to customize its output-relative path.
+Every build plugin also emits `yarcl.tokens.css` in the build output directory for server templates and other pages outside the React app. It contains CSS variables, `color-scheme` and `.yarcl-type-{key}` text-style classes, without component styles or font loading. Vite also writes the file to `build.outDir` at dev-server startup and updates it when the config or its local imports change. Set `emitTokens: false` or `emitTokens: ''` to disable it, or pass a filename such as `emitTokens: 'styles/tokens.css'` to customize its output-relative path.
 
 ```jsonc
 // tsconfig.json

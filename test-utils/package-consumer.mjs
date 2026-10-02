@@ -62,7 +62,7 @@ try {
       "import { generateCss, generateTokensCss } from '@yarcl/react/generate';",
       "import config from '@yarcl/react/defaults';",
       'const tokens = generateTokensCss(config);',
-      "if (!generateCss(config).includes('--yarcl-color-primary') || !tokens.includes('--yarcl-color-primary') || tokens.includes('.yarcl-')) process.exit(1);",
+      "if (!generateCss(config).includes('--yarcl-color-primary') || !tokens.includes('--yarcl-color-primary') || !tokens.includes('.yarcl-type-body') || tokens.includes('.yarcl-button')) process.exit(1);",
     ].join('\n')],
     { cwd: consumer, stdio: 'inherit' },
   );
@@ -78,6 +78,7 @@ try {
   const plugin = yarcl({ config: 'src/missing.config.ts' });
   if (typeof plugin.config !== 'function') throw new Error('The packed plugin has no config hook');
   plugin.config({ root: fallbackConsumer });
+  plugin.configResolved({ command: 'build', root: fallbackConsumer, build: { outDir: 'dist' } });
   await plugin.buildStart.call({ addWatchFile() {}, emitFile() {}, getWatchFiles() { return []; }, parse() {} });
   const resolveId = typeof plugin.resolveId === 'function' ? plugin.resolveId : plugin.resolveId.handler;
   const fallback = await resolveId.call({}, '@yarcl/config', undefined, { isEntry: false });
@@ -122,7 +123,7 @@ try {
 
   run(['build'], consumer);
   const tokens = await readFile(join(consumer, 'dist/yarcl.tokens.css'), 'utf8');
-  if (!tokens.includes('--yarcl-color-primary') || tokens.includes('.yarcl-')) {
+  if (!tokens.includes('--yarcl-color-primary') || !tokens.includes('.yarcl-type-body') || tokens.includes('.yarcl-button')) {
     throw new Error('The packed Vite plugin did not emit a standalone token stylesheet');
   }
   const assets = join(consumer, 'dist/assets');

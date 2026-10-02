@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { build, createServer } from 'vite';
 import yarcl from '../src/vite.ts';
 import { generateTokensCss } from '../src/css.ts';
@@ -49,7 +49,8 @@ describe('token asset emission', () => {
     expect(assets).toHaveLength(1);
     expect(assets[0].fileName).toBe(fileName);
     expect(assets[0].source).toContain('--yarcl-color-primary:');
-    expect(assets[0].source).not.toContain('.yarcl-');
+    expect(assets[0].source).toContain('.yarcl-type-body {');
+    expect(assets[0].source).not.toContain('.yarcl-size-');
   });
 
   it.each([
@@ -68,12 +69,66 @@ describe('token asset emission', () => {
     expect(await readFile(join(outDir, 'yarcl.tokens.css'), 'utf8')).toBe(generateTokensCss(config));
   });
 
-  it('does not emit assets when the Vite dev server closes', async () => {
+  it.each([
+    [undefined, 'yarcl.tokens.css'],
+    ['styles/tokens.css', 'styles/tokens.css'],
+    [false, undefined],
+    ['', undefined],
+  ] as const)('writes development tokens with emitTokens=%s before app requests', async (emitTokens, fileName) => {
     const root = await project();
-    const server = await createServer({ configFile: false, root, plugins: [yarcl()], logLevel: 'silent' });
-    await server.pluginContainer.buildStart({});
-    await server.close();
-    await expect(readFile(join(root, 'dist/yarcl.tokens.css'))).rejects.toThrow();
+    const outDir = join(root, 'public-assets');
+    const server = await createServer({
+      configFile: false, root, plugins: [yarcl({ emitTokens })], logLevel: 'silent',
+      build: { outDir },
+      server: { port: 0 },
+    });
+    try {
+      await server.listen();
+      if (fileName) {
+        const css = await readFile(join(outDir, fileName), 'utf8');
+        expect(css).toContain('--yarcl-color-primary:');
+        expect(css).toContain('.yarcl-type-body {');
+      } else {
+        await expect(readFile(join(outDir, 'yarcl.tokens.css'))).rejects.toThrow();
+      }
+    } finally {
+      await server.close();
+    }
+  });
+
+  it.each([brandA, brandB])('refreshes development tokens when the config or its imports change', async (config) => {
+    const root = await project();
+    await writeFile(join(root, 'tsconfig.json'), JSON.stringify({
+      compilerOptions: { paths: { '@yarcl/config': ['./config.ts'] } },
+    }));
+    const source = `
+import custom from './palette.ts';
+const config = ${JSON.stringify(config)};
+export default { ...config, colors: { ...config.colors, custom } };
+`;
+    await writeFile(join(root, 'config.ts'), source);
+    await writeFile(join(root, 'palette.ts'), "export default { light: '#112233', dark: '#112233' };");
+    const server = await createServer({
+      configFile: false, root, plugins: [yarcl({ config: 'config.ts' })], logLevel: 'silent',
+      build: { outDir: 'static' },
+      server: { port: 0, watch: { usePolling: true, interval: 50 } },
+    });
+    const stylesheet = join(root, 'static/yarcl.tokens.css');
+    try {
+      await server.listen();
+      expect(await readFile(stylesheet, 'utf8')).toContain('--yarcl-color-custom: #112233;');
+      await vi.waitFor(() => expect(server.watcher.getWatched()[root]).toContain('palette.ts'));
+      await writeFile(join(root, 'palette.ts'), "export default { light: '#445566', dark: '#445566' };");
+      await vi.waitFor(async () => {
+        expect(await readFile(stylesheet, 'utf8')).toContain('--yarcl-color-custom: #445566;');
+      }, { timeout: 5000 });
+      await writeFile(join(root, 'config.ts'), source.replace('custom }', 'custom, added: custom }'));
+      await vi.waitFor(async () => {
+        expect(await readFile(stylesheet, 'utf8')).toContain('--yarcl-color-added: #445566;');
+      }, { timeout: 5000 });
+    } finally {
+      await server.close();
+    }
   });
 
   it('reloads imported config values when building again', async () => {

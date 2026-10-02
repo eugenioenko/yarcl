@@ -83,7 +83,8 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
 - **Build plugin** (`yarcl()` from `@yarcl/react/vite`, `/webpack`, `/rspack`, `/rollup` or `/esbuild`):
   - aliases `@yarcl/config` to your config file, so components read your values at runtime
   - loads the config at build time and generates the virtual stylesheet (`@yarcl/react/styles.css`): CSS variables and one class per key
-  - emits `yarcl.tokens.css` in the build output directory by default, containing only `:root` variables and `color-scheme`; set `emitTokens: false` or `emitTokens: ''` to disable, or use a string for a custom output-relative filename
+  - emits `yarcl.tokens.css` in the build output directory by default, containing `:root` variables, `color-scheme` and `.yarcl-type-{key}` text-style classes; set `emitTokens: false` or `emitTokens: ''` to disable, or use a string for a custom output-relative filename
+  - with Vite, also writes this file to `build.outDir` on dev-server startup and updates it when the config or its local imports change, so a separate backend can serve it during development
   - regenerates the CSS when the config or its imports change
   - verifies that TypeScript resolves `@yarcl/config` to the same file and reports a clear error when it does not
   - option `config`: path to the config file, relative to the project root; default `'src/yarcl.config.ts'`. If the file doesn't exist, it falls back to the library defaults.

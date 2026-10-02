@@ -75,7 +75,7 @@ await build({
 
 Every adapter emits `yarcl.tokens.css` by default, even when the entry point does not import yarcl. With Vite's default output directory, the file is `dist/yarcl.tokens.css`. Server templates and public pages can link to this fixed filename without depending on the app's hashed CSS bundles.
 
-The file contains only `:root` variables and `color-scheme: light dark`. It excludes modifier classes, component styles, custom media and `@font-face` rules. Load fonts separately on pages that use these variables. The app's stylesheet continues through the normal build-tool CSS pipeline.
+The file contains `:root` variables, `color-scheme: light dark` and `.yarcl-type-{key}` text-style classes. Server templates can use these classes directly, for example `<p class="yarcl-type-body">Hello</p>`. It excludes other modifier classes, component styles, custom media and `@font-face` rules. Load fonts separately on these pages. The app's stylesheet continues through the normal build-tool CSS pipeline.
 
 ```ts
 yarcl();                                  // emits yarcl.tokens.css
@@ -85,7 +85,9 @@ yarcl({ emitTokens: false });              // disables emission
 yarcl({ emitTokens: '' });                 // disables emission
 ```
 
-Paths must stay within the build output directory. Vite development servers do not write this asset. For esbuild, set `outdir` or `outfile`; with `write: false`, the token stylesheet is returned in `outputFiles`.
+Paths must stay within the build output directory. Vite writes the file when its development server starts, before any app requests, and refreshes it when the config or its local imports change. This uses the same `build.outDir` as production, so a separate backend can serve the file during development. For example, `build: { outDir: '../view/static' }` writes `../view/static/yarcl.tokens.css` in both modes. Neither mode writes the file when `emitTokens` is disabled.
+
+For esbuild, set `outdir` or `outfile`; with `write: false`, the token stylesheet is returned in `outputFiles`.
 
 For an independent build script or a destination outside the build directory, import `generateTokensCss` from `@yarcl/react/generate` and write its result to the desired file.
 
