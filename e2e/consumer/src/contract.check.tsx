@@ -1,5 +1,10 @@
 import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
+import type { YarclPluginOptions } from '@yarcl/react/vite';
+
+// @ts-expect-error token emission accepts only booleans or filenames
+const invalidTokenOutput: YarclPluginOptions = { emitTokens: { fileName: 'tokens.css' } };
+void invalidTokenOutput;
 
 type FontFamily = keyof typeof config.typography.families;
 const headingFont: FontFamily = config.typography.fonts.heading;

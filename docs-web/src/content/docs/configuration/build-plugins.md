@@ -69,6 +69,25 @@ await build({
 3. Checks the foreground contrast of every color and warns below 4.5:1.
 4. Watches the config and its local imports so generated styles update during development.
 5. Validates the TypeScript mapping and stops with a clear error when the two config paths differ.
+6. Emits `yarcl.tokens.css` in the build output directory for pages outside the React app.
+
+## Standalone token stylesheet
+
+Every adapter emits `yarcl.tokens.css` by default, even when the entry point does not import yarcl. With Vite's default output directory, the file is `dist/yarcl.tokens.css`. Server templates and public pages can link to this fixed filename without depending on the app's hashed CSS bundles.
+
+The file contains only `:root` variables and `color-scheme: light dark`. It excludes modifier classes, component styles, custom media and `@font-face` rules. Load fonts separately on pages that use these variables. The app's stylesheet continues through the normal build-tool CSS pipeline.
+
+```ts
+yarcl();                                  // emits yarcl.tokens.css
+yarcl({ emitTokens: true });               // emits yarcl.tokens.css
+yarcl({ emitTokens: 'styles/tokens.css' }); // custom output-relative path
+yarcl({ emitTokens: false });              // disables emission
+yarcl({ emitTokens: '' });                 // disables emission
+```
+
+Paths must stay within the build output directory. Vite development servers do not write this asset. For esbuild, set `outdir` or `outfile`; with `write: false`, the token stylesheet is returned in `outputFiles`.
+
+For an independent build script or a destination outside the build directory, import `generateTokensCss` from `@yarcl/react/generate` and write its result to the desired file.
 
 ## Options
 
@@ -76,6 +95,7 @@ await build({
 |---|---|---|
 | `config` | `'src/yarcl.config.ts'` | Config path relative to the project root |
 | `root` | build-tool root | Explicit project root when automatic detection is not suitable |
+| `emitTokens` | `true` | Emits `yarcl.tokens.css`; a string sets an output-relative filename, and `false` or `''` disables emission |
 
 ## TypeScript mapping
 

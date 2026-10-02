@@ -1,10 +1,11 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { dirname, extname, resolve } from 'node:path';
+import { dirname, extname, resolve, win32 } from 'node:path';
 import { createJiti } from 'jiti';
 import { createUnplugin } from 'unplugin';
-import { generateCss } from './css';
+import { generateCss, generateTokensCss } from './css';
 import type { YarclShape } from './define';
 import { assertConfigMapping, DEFAULT_CONFIG_PATH } from './setup.ts';
 
@@ -22,6 +23,12 @@ export interface YarclPluginOptions {
    * @default process.cwd()
    */
   root?: string;
+  /**
+   * Emits only CSS variables as a standalone asset in the build output directory.
+   * A string sets the output-relative filename. Use `false` or `''` to disable.
+   * @default true
+   */
+  emitTokens?: boolean | string;
 }
 
 const VIRTUAL_CSS = '@yarcl/react/styles.css';
@@ -67,6 +74,12 @@ function defaultConfig(): string {
 /** Shared yarcl plugin implementation used by every build-tool adapter. */
 export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((options = {}, meta) => {
   const configPath = options.config ?? DEFAULT_CONFIG_PATH;
+  const emitTokens = options.emitTokens ?? true;
+  const tokensFile = typeof emitTokens === 'string' ? emitTokens.replaceAll('\\', '/') : emitTokens ? 'yarcl.tokens.css' : '';
+  if (tokensFile && (win32.isAbsolute(tokensFile) || tokensFile.split('/').some((part) => !part || part === '.' || part === '..'))) {
+    throw new Error('yarcl: emitTokens must be a filename relative to the build output directory.');
+  }
+  let building = meta.framework !== 'vite';
   let root = resolve(options.root ?? process.cwd());
   let target = '';
   let componentStyles = '';
@@ -85,12 +98,31 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
     referenceStyles = resolve(dirname(fallback), 'reference/reference.css');
   };
 
+  const loadConfig = async (): Promise<YarclShape> => {
+    const jiti = createJiti(resolve(root, 'package.json'), { moduleCache: false });
+    return jiti.import<YarclShape>(target, { default: true });
+  };
+
+  const tokenStyles = async (watch?: (file: string) => void): Promise<string> => {
+    const config = await loadConfig();
+    if (watch) {
+      watched = await configDependencies(target);
+      watched.forEach(watch);
+    }
+    return generateTokensCss(config);
+  };
+
   return {
     name: 'yarcl',
     enforce: 'pre',
 
     buildStart() {
       prepare();
+    },
+
+    async buildEnd(error?: unknown) {
+      if (error || !tokensFile || !building || meta.framework === 'esbuild' || meta.framework === 'webpack' || meta.framework === 'rspack') return;
+      this.emitFile({ type: 'asset', fileName: tokensFile, source: await tokenStyles((file) => this.addWatchFile(file)) });
     },
 
     resolveId: {
@@ -109,8 +141,7 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
           return '';
         }
         if (id !== RESOLVED_CSS) return;
-        const jiti = createJiti(resolve(root, 'package.json'), { moduleCache: false });
-        const config = await jiti.import<YarclShape>(target, { default: true });
+        const config = await loadConfig();
         watched = existsSync(target) ? await configDependencies(target) : new Set([target]);
         watched.forEach((file) => this.addWatchFile(file));
         const css = generateCss(config, (message) => this.warn(message))
@@ -128,8 +159,7 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
       async handler(code, id) {
         if (!code.includes('--yarcl-min-') && !code.includes('--yarcl-max-')) return;
         if (!target) prepare();
-        const jiti = createJiti(resolve(root, 'package.json'), { moduleCache: false });
-        const config = await jiti.import<YarclShape>(target, { default: true });
+        const config = await loadConfig();
         let changed = false;
         const transformed = code.replace(/\(\s*--yarcl-(min|max)-([a-zA-Z0-9_-]+)\s*\)/g, (_, direction: string, key: string) => {
           const value = config.breakpoints[key];
@@ -151,6 +181,9 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
     },
 
     vite: {
+      configResolved(config) {
+        building = config.command === 'build';
+      },
       config(userConfig) {
         root = resolve(options.root ?? userConfig.root ?? process.cwd());
         return {
@@ -178,10 +211,30 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
 
     webpack(compiler) {
       root = resolve(options.root ?? compiler.context);
+      if (!tokensFile) return;
+      compiler.hooks.thisCompilation.tap('yarcl', (compilation) => {
+        compilation.hooks.processAssets.tapPromise({
+          name: 'yarcl',
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+        }, async () => {
+          const css = await tokenStyles((file) => compilation.fileDependencies.add(file));
+          compilation.emitAsset(tokensFile, new compiler.webpack.sources.RawSource(css));
+        });
+      });
     },
 
     rspack(compiler) {
       root = resolve(options.root ?? compiler.context);
+      if (!tokensFile) return;
+      compiler.hooks.thisCompilation.tap('yarcl', (compilation) => {
+        compilation.hooks.processAssets.tapPromise({
+          name: 'yarcl',
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+        }, async () => {
+          const css = await tokenStyles((file) => compilation.fileDependencies.add(file));
+          compilation.emitAsset(tokensFile, new compiler.webpack.sources.RawSource(css));
+        });
+      });
     },
 
     esbuild: {
@@ -191,6 +244,35 @@ export const yarclPlugin = createUnplugin<YarclPluginOptions | undefined>((optio
       },
       setup(build) {
         build.onResolve({ filter: /^@yarcl\/config$/ }, () => ({ path: target }));
+        if (!tokensFile) return;
+        const workingDir = resolve(build.initialOptions.absWorkingDir ?? process.cwd());
+        const { outdir, outfile } = build.initialOptions;
+        if (!outdir && !outfile) throw new Error('yarcl: emitTokens requires esbuild outdir or outfile. Use emitTokens: false for stdout builds.');
+        const outputDir = outdir ? resolve(workingDir, outdir) : dirname(resolve(workingDir, outfile!));
+        const watchModule = '@yarcl/tokens-watch';
+        build.initialOptions.inject = [...(build.initialOptions.inject ?? []), watchModule];
+        build.onResolve({ filter: /^@yarcl\/tokens-watch$/ }, () => ({ path: watchModule, namespace: 'yarcl-tokens' }));
+        build.onLoad({ filter: /.*/, namespace: 'yarcl-tokens' }, async () => ({
+          contents: '',
+          loader: 'js',
+          watchFiles: [...await configDependencies(target)],
+        }));
+        build.onEnd(async (result) => {
+          if (result.errors.length) return;
+          const css = await tokenStyles();
+          const path = resolve(outputDir, tokensFile);
+          if (build.initialOptions.write === false) {
+            result.outputFiles?.push({
+              path,
+              contents: new TextEncoder().encode(css),
+              hash: createHash('sha256').update(css).digest('hex'),
+              get text() { return css; },
+            });
+            return;
+          }
+          await mkdir(dirname(path), { recursive: true });
+          await writeFile(path, css);
+        });
       },
       loader: 'css',
     },

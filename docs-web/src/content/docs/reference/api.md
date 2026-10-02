@@ -20,7 +20,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | `@yarcl/react/rollup` | Rollup plugin |
 | `@yarcl/react/esbuild` | esbuild plugin |
 | `@yarcl/react/reference` | `DesignReference` |
-| `@yarcl/react/generate` | `generateCss` for Node build scripts |
+| `@yarcl/react/generate` | `generateCss` and `generateTokensCss` for Node build scripts |
 
 ## Components
 
