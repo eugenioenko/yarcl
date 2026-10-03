@@ -1,5 +1,5 @@
-import { useId, useState } from 'react';
-import { Button, Input, Text } from '@yarcl/react';
+import { Fragment, useId, useState } from 'react';
+import { Button, Divider, Input, Text } from '@yarcl/react';
 import { choiceIndex, fieldOptions, initialValue, isObject, label, themeSchema, type Schema, type Value } from './theme-config';
 
 type FieldProps = {
@@ -24,11 +24,11 @@ function AddEntry({ schema, value, theme, onAdd }: {
       <label htmlFor={id}>{schema.ref ? 'Size to override' : 'New token name'}</label>
       <div className="pg-editor-row">
         {schema.ref ? (
-          <select id={id} className="yarcl-input" value={name} onChange={(event) => setName(event.target.value)}>
+          <select id={id} className="yarcl-input yarcl-size-sm yarcl-sized-Input" value={name} onChange={(event) => setName(event.target.value)}>
             <option value="">Choose a size</option>
             {available.map((key) => <option key={key} value={key}>{label(key)}</option>)}
           </select>
-        ) : <Input id={id} value={name} onChange={(event) => setName(event.target.value)} />}
+        ) : <Input id={id} size="sm" value={name} onChange={(event) => setName(event.target.value)} />}
         <Button size="sm" variant="outline" disabled={!valid} onClick={() => { onAdd(name); setName(''); }}>Add</Button>
       </div>
     </div>
@@ -58,7 +58,7 @@ function ThemeField({ name, schema, value, theme, onChange, removable }: FieldPr
         <legend>{title}</legend>
         <div className="pg-editor-row">
           <label htmlFor={id}>Value format</label>
-          <select id={id} className="yarcl-input" value={index} onChange={(event) => onChange(initialValue(schema.choices![Number(event.target.value)], theme))}>
+          <select id={id} className="yarcl-input yarcl-size-sm yarcl-sized-Input" value={index} onChange={(event) => onChange(initialValue(schema.choices![Number(event.target.value)], theme))}>
             {schema.labels!.map((text, i) => <option key={text} value={i}>{text}</option>)}
           </select>
           {removeButton}
@@ -85,13 +85,15 @@ function ThemeField({ name, schema, value, theme, onChange, removable }: FieldPr
       }
     }
     return (
-      <details className="pg-editor-section">
-        <summary><span>{title}</span></summary>
+      <fieldset className="pg-editor-section">
+        <legend>{title}</legend>
         <div className="pg-editor-fields">
-          {removeButton}
-          {entries.map(([key, field, entry]) => (
-            <ThemeField key={key} name={list ? `${name === 'fontFaces' ? 'Font file' : name === 'allowedSizes' ? 'Allowed size' : 'Source'} ${Number(key) + 1}` : key} schema={field} value={entry} theme={theme}
-              onChange={(next) => change(key, next)} removable={schema.kind !== 'object' && !schema.required?.includes(key)} />
+          {entries.map(([key, field, entry], index) => (
+            <Fragment key={key}>
+              {index > 0 && entry !== undefined && ['object', 'map', 'array', 'union'].includes(field.kind) && <Divider />}
+              <ThemeField name={list ? `${name === 'fontFaces' ? 'Font file' : name === 'allowedSizes' ? 'Allowed size' : 'Source'} ${Number(key) + 1}` : key} schema={field} value={entry} theme={theme}
+                onChange={(next) => change(key, next)} removable={schema.kind !== 'object' && !schema.required?.includes(key)} />
+            </Fragment>
           ))}
           {schema.kind === 'map' && (
             <AddEntry schema={schema} value={value as Record<string, Value>} theme={theme}
@@ -99,7 +101,8 @@ function ThemeField({ name, schema, value, theme, onChange, removable }: FieldPr
           )}
           {list && <Button size="sm" variant="outline" onClick={() => onChange([...(value as Value[]), initialValue(schema.item!, theme)])}>Add item</Button>}
         </div>
-      </details>
+        {removeButton && <div className="pg-editor-section-actions">{removeButton}</div>}
+      </fieldset>
     );
   }
 
@@ -110,7 +113,7 @@ function ThemeField({ name, schema, value, theme, onChange, removable }: FieldPr
       <label htmlFor={id}>{title}</label>
       <div className="pg-editor-row">
         {schema.ref || schema.options ? (
-          <select id={id} className="yarcl-input" value={String(value)} onChange={(event) => onChange(event.target.value)}>
+          <select id={id} className="yarcl-input yarcl-size-sm yarcl-sized-Input" value={String(value)} onChange={(event) => onChange(event.target.value)}>
             {!choices.includes(String(value)) && <option value={String(value)}>{label(String(value))} (unavailable)</option>}
             {choices.map((key) => <option key={key} value={key}>{key === 'size' && schema.ref === 'radii' ? 'Match control size' : label(key)}</option>)}
           </select>
@@ -119,7 +122,7 @@ function ThemeField({ name, schema, value, theme, onChange, removable }: FieldPr
             {isColor && typeof value === 'string' && /^#[\da-f]{6}$/i.test(value) && (
               <input type="color" aria-label={`${title} color picker`} value={value} onChange={(event) => onChange(event.target.value)} />
             )}
-            <Input id={id} type={schema.kind === 'number' ? 'number' : 'text'} step={schema.kind === 'number' ? 'any' : undefined}
+            <Input id={id} size="sm" type={schema.kind === 'number' ? 'number' : 'text'} step={schema.kind === 'number' ? 'any' : undefined}
               value={String(value)} onChange={(event) => onChange(schema.kind === 'number' && event.target.value !== '' ? Number(event.target.value) : event.target.value)} />
           </>
         )}
@@ -134,13 +137,16 @@ export function VisualEditor({ value, onChange }: { value: Value; onChange: (val
   if (!isObject(value)) return <Text color="danger">The config must be an object. Correct it in the Code Editor.</Text>;
   return (
     <div className="pg-visual-editor">
-      {Object.entries(themeSchema.fields!).map(([key, schema]) => (
-        <ThemeField key={key} name={key} schema={schema} value={value[key]} theme={value} onChange={(next) => {
-          const updated = { ...value };
-          if (next === undefined) delete updated[key];
-          else updated[key] = next;
-          onChange(updated);
-        }} />
+      {Object.entries(themeSchema.fields!).map(([key, schema], index) => (
+        <Fragment key={key}>
+          {index > 0 && <Divider />}
+          <ThemeField name={key} schema={schema} value={value[key]} theme={value} onChange={(next) => {
+            const updated = { ...value };
+            if (next === undefined) delete updated[key];
+            else updated[key] = next;
+            onChange(updated);
+          }} />
+        </Fragment>
       ))}
     </div>
   );
