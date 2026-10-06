@@ -26,12 +26,26 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'color' | '
   /** Called with the new page when the user picks one. */
   onPageChange?: (page: number) => void;
   /**
-   * Pages shown on each side of the current page.
+   * Shows numbered page buttons or a summary with previous and next buttons at the inline end.
+   * @default 'numbered'
+   * @example
+   * ```tsx
+   * <Pagination layout="compact" count={20} defaultPage={3} />
+   * ```
+   */
+  layout?: 'numbered' | 'compact';
+  /**
+   * Text shown in the compact layout. Receives page 0 when there are no pages.
+   * @default (page, count) => `Page ${page} of ${count}`
+   */
+  summaryLabel?: (page: number, count: number) => string;
+  /**
+   * Pages shown on each side of the current page in the numbered layout.
    * @default 1
    */
   siblings?: number;
   /**
-   * Pages always shown at the start and end.
+   * Pages always shown at the start and end in the numbered layout.
    * @default 1
    */
   boundaries?: number;
@@ -47,7 +61,7 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'color' | '
    */
   variant?: Variant;
   /**
-   * Variant of the current page, from the `variants` config.
+   * Variant of the current page in the numbered layout, from the `variants` config.
    * @default config.defaults.variant
    */
   selectedVariant?: Variant;
@@ -107,8 +121,10 @@ const Chevron = ({ d }: { d: string }) => (
 
 /**
  * Navigation between pages of results: previous and next buttons, the pages around the current one,
- * and the first and last pages with an ellipsis for the gaps. Renders a `<nav>` landmark; the current
- * page has `aria-current="page"`. Arrow keys, <kbd>Home</kbd> and <kbd>End</kbd> move focus between buttons.
+ * and the first and last pages with an ellipsis for the gaps. The compact layout shows a page summary
+ * with previous and next buttons at the inline end. Renders a `<nav>` landmark; numbered layouts mark
+ * the current page with `aria-current="page"`. Compact summaries announce updates politely.
+ * Arrow keys, <kbd>Home</kbd> and <kbd>End</kbd> move focus between buttons.
  *
  * @example
  * ```tsx
@@ -120,6 +136,8 @@ export function Pagination({
   page,
   defaultPage = 1,
   onPageChange,
+  layout = 'numbered',
+  summaryLabel = (page, count) => `Page ${page} of ${count}`,
   siblings = 1,
   boundaries = 1,
   size,
@@ -148,7 +166,7 @@ export function Pagination({
   const total = Math.max(0, Math.floor(count));
   const [current, setCurrent] = useControllable(page, defaultPage, onPageChange);
   const active = Math.min(Math.max(1, current), Math.max(1, total));
-  const items = pageItems(active, total, Math.max(0, siblings), Math.max(0, boundaries));
+  const items = layout === 'numbered' ? pageItems(active, total, Math.max(0, siblings), Math.max(0, boundaries)) : [];
 
   const go = (next: number) => {
     if (disabled || next === active || next < 1 || next > total) return;
@@ -157,12 +175,14 @@ export function Pagination({
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     onKeyDown?.(event);
+    if (event.defaultPrevented) return;
     const buttons = [...event.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')];
     const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
     if (index === -1) return;
+    const direction = getComputedStyle(event.currentTarget).direction === 'rtl' ? -1 : 1;
     const next = {
-      ArrowRight: Math.min(index + 1, buttons.length - 1),
-      ArrowLeft: Math.max(index - 1, 0),
+      ArrowRight: Math.max(0, Math.min(index + direction, buttons.length - 1)),
+      ArrowLeft: Math.max(0, Math.min(index - direction, buttons.length - 1)),
       Home: 0,
       End: buttons.length - 1,
     }[event.key];
@@ -188,7 +208,8 @@ export function Pagination({
   };
 
   return (
-    <nav aria-label={ariaLabel} className={cx('yarcl-pagination', sizeClass(resolvedSize, 'Pagination'), className)} onKeyDown={handleKeyDown} {...props}>
+    <nav aria-label={ariaLabel} className={cx('yarcl-pagination', layout === 'compact' && 'yarcl-pagination-compact', sizeClass(resolvedSize, 'Pagination'), className)} onKeyDown={handleKeyDown} {...props}>
+      {layout === 'compact' && <span className="yarcl-pagination-summary" role="status">{summaryLabel(total === 0 ? 0 : active, total)}</span>}
       <div className={cx('yarcl-button-group yarcl-button-group-horizontal', attached && 'yarcl-button-group-attached')}>
         {edge(previousLabel, active - 1, 'm15 18-6-6 6-6')}
         {items.map((item) =>

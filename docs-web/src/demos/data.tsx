@@ -138,6 +138,11 @@ export function PaginationDemo() {
   );
 }
 
+export function PaginationCompactDemo() {
+  const [page, setPage] = useState(3);
+  return <Pagination layout="compact" count={20} page={page} onPageChange={setPage} aria-label="Compact results" />;
+}
+
 export function PaginationStylesDemo() {
   return (
     <Stack>

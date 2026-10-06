@@ -412,9 +412,7 @@ export function Dashboard() {
                         ))}
                       </Table.Body>
                     </Table>
-                    <Inline justify="end">
-                      <Pagination count={8} defaultPage={1} size="sm" aria-label="Invoice pages" />
-                    </Inline>
+                    <Pagination layout="compact" count={8} defaultPage={1} size="sm" aria-label="Invoice pages" />
                   </Stack>
                 </Tabs.Panel>
                 <Tabs.Panel value="customers">

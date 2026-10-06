@@ -1,13 +1,13 @@
 ---
 title: "Pagination"
-description: "Moves between pages of results, with previous and next buttons and an ellipsis for skipped pages."
+description: "Moves between pages with numbered buttons or a compact summary and previous and next controls."
 sidebar:
   order: 3
 ---
 
 import Preview from '@/components/Preview.astro';
 import Props from '@/components/Props.astro';
-import { PaginationDemo, PaginationStylesDemo } from '@/demos/data';
+import { PaginationDemo, PaginationCompactDemo, PaginationStylesDemo } from '@/demos/data';
 
 ```tsx
 import { Pagination } from '@yarcl/react';
@@ -24,6 +24,30 @@ const [page, setPage] = useState(1);
 ```
 
 Pass `page` and `onPageChange` to control it, or `defaultPage` to let it keep its own state. Pages start at 1.
+
+## Compact layout
+
+Set `layout="compact"` to show a page summary at the start and previous and next buttons at the end. The control fills its available width, keeping the buttons at the right edge in left-to-right layouts. Right-to-left layouts mirror the arrangement and arrow direction.
+
+<Preview>
+  <PaginationCompactDemo client:visible />
+</Preview>
+
+```tsx
+const [page, setPage] = useState(3);
+
+<Pagination
+  layout="compact"
+  count={20}
+  page={page}
+  onPageChange={setPage}
+  aria-label="Search results"
+/>
+```
+
+``summaryLabel={(page, count) => `${page} / ${count}`}`` customizes the summary for your language or format. Its status region announces updates politely. With no pages it shows "Page 0 of 0" and both arrows are unavailable. `variant`, `size`, `color`, `radius`, `attached` and `disabled` also apply to compact controls.
+
+The default `layout="numbered"` renders page buttons and ellipses. `siblings`, `boundaries`, `pageLabel` and `selectedVariant` apply to that layout.
 
 ## Siblings and boundaries
 
@@ -45,7 +69,7 @@ Buttons use the shared size scale, so a pagination lines up with a `Button` or `
 
 ## Accessibility
 
-Renders a `<nav>` landmark named by `aria-label` (default "Pagination"); give each pagination on a page its own name. The current page has `aria-current="page"`. Page buttons are announced as "Page 3" and the arrows as "Previous page" and "Next page"; change these with `pageLabel`, `previousLabel` and `nextLabel`. On the first or last page the previous or next button stays focusable with `aria-disabled`, so focus isn't lost. Ellipses are hidden from screen readers.
+Renders a `<nav>` landmark named by `aria-label` (default "Pagination"); give each pagination on a page its own name. In the numbered layout, the current page has `aria-current="page"`. The compact layout exposes its current page in a live status region. Page buttons are announced as "Page 3" and the arrows as "Previous page" and "Next page"; change these with `pageLabel`, `previousLabel` and `nextLabel`. On the first or last page the previous or next button stays focusable with `aria-disabled`, so focus isn't lost. Ellipses are hidden from screen readers.
 
 ## Keyboard
 

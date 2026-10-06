@@ -353,6 +353,7 @@ export function App() {
             </Tabs>
 
             <Pagination count={9} defaultPage={5} color="ink" aria-label="Reviews" />
+            <Pagination count={20} defaultPage={3} layout="compact" color="ink" aria-label="Compact results" />
             <Accordion type="multiple" defaultValue={['fit']} color="moss">
               <Accordion.Item value="fit">
                 <Accordion.Trigger>Fit</Accordion.Trigger>

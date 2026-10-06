@@ -146,6 +146,14 @@ export const contract = (
     <AudioPlayer src="/grabacion.wav" level={0.5} />
     <Progress value={1} max={2} label="L" showValue formatValue={(v) => String(v)} size="talla-s" color="moss" radius="hairline" />
     <Pagination count={8} size="talla-s" color="clay" radius="square" variant="text" selectedVariant="filled" />
+    <Pagination count={20} layout="compact" defaultPage={3} summaryLabel={(page, count) => `${page} / ${count}`} size="talla-s" color="clay" radius="square" variant="text" attached />
+    <Pagination count={8} layout="numbered" />
+    {/* @ts-expect-error unknown pagination layout */}
+    <Pagination count={20} layout="simple" />
+    {/* @ts-expect-error summary labels return text */}
+    <Pagination count={20} layout="compact" summaryLabel={() => 3} />
+    {/* @ts-expect-error compact pagination still uses configured sizes */}
+    <Pagination count={20} layout="compact" size="sm" />
     <DatePicker size="talla-s" color="clay" variant="wash" radius="hairline" />
     <CommandPalette commands={[]} size="talla-s" color="moss" radius="square" />
     <Breadcrumb textStyle="fine" color="clay" underline="always" maxItems={3} separator="/">

@@ -22,6 +22,7 @@ export default async function (ctx) {
 
   await audit(ctx, 'whole demo page');
   await audit(ctx, 'grid layouts', '.yarcl-grid');
+  await audit(ctx, 'compact pagination', '.yarcl-pagination-compact');
   await audit(ctx, 'input content', '[data-testid="input-content-demo"]');
   await page.getByRole('textbox', { name: 'Amount', exact: true }).fill('0');
   await audit(ctx, 'input content with error', '[data-testid="input-content-demo"]');

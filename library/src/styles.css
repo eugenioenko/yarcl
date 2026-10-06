@@ -2569,6 +2569,28 @@ html:has(.yarcl-modal[open]) {
   max-width: 100%;
 }
 
+.yarcl-pagination-compact {
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yarcl-px);
+  font-size: var(--yarcl-fs);
+}
+
+.yarcl-pagination-compact > .yarcl-button-group {
+  flex-shrink: 0;
+}
+
+.yarcl-pagination-summary {
+  min-width: 0;
+  color: var(--yarcl-neutral-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.yarcl-pagination:dir(rtl) .yarcl-icon-button > svg {
+  transform: scaleX(-1);
+}
+
 .yarcl-pagination-page {
   min-width: var(--yarcl-h);
   padding-inline: calc(var(--yarcl-px) / 2);

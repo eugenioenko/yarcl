@@ -77,6 +77,7 @@ export function OverlaysDemo() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [density, setDensity] = useState<Density>(config.defaults.density);
   const [invoicePage, setInvoicePage] = useState(1);
+  const [compactPage, setCompactPage] = useState(3);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set(['INV-1042']));
   const [sortField, setSortField] = useState<'customer' | 'amount' | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection | null>(null);
@@ -311,6 +312,7 @@ export function OverlaysDemo() {
           selectedVariant="solid"
           aria-label="Search results"
         />
+        <Pagination count={20} page={compactPage} onPageChange={setCompactPage} layout="compact" aria-label="Compact results" />
       </Stack>
     </Stack>
   );
