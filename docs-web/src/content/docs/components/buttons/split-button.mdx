@@ -1,0 +1,53 @@
+---
+title: SplitButton
+description: Execute an action with a separate dropdown for switching what the button does.
+sidebar:
+  order: 5
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SplitButtonDemo } from '@/demos/buttons';
+
+```tsx
+import { SplitButton } from '@yarcl/react';
+```
+
+The main button executes the selected action. The arrow opens a menu of choices. Choosing an option updates the button's label and icon without executing anything.
+
+<Preview>
+  <SplitButtonDemo client:visible />
+</Preview>
+
+```tsx
+<SplitButton
+  aria-label="Save actions"
+  defaultValue="draft"
+  options={[
+    { value: 'draft', label: 'Save draft' },
+    { value: 'publish', label: 'Publish' },
+    { value: 'schedule', label: 'Schedule', disabled: true },
+  ]}
+  onAction={(value) => handleSave(value)}
+/>
+```
+
+Use `value` and `onValueChange` to control the selection. Without `defaultValue`, the first enabled option is selected initially. Values must be unique. Empty lists and lists with no enabled options disable both buttons. If the selected option is removed or disabled, the main button is disabled until an enabled action is chosen.
+
+`size`, `color`, `radius` and `variant` come from your config. Both button segments follow `components.SplitButton`, including `allowedSizes` and `sizeOverrides`; menu items follow `components.Menu`. Native attributes, `className`, `style` and `ref` go to the outer group. Both buttons use `type="button"`; use `onAction` to perform an action or submit a form explicitly.
+
+## Accessibility
+
+- Give the group an `aria-label` describing its actions. `dropdownLabel` names the arrow button and the menu choices.
+- Both segments are keyboard focusable. Enter or Space executes the main action or opens the menu; Arrow Down and Arrow Up also open the menu from its trigger.
+- Arrow keys navigate choices, typing finds a label, and Enter or Space selects without executing. Escape closes the menu. Closing returns focus to the arrow button.
+- The selected choice exposes `role="menuitemradio"` and `aria-checked`. Disabled options cannot be selected. Icons are decorative.
+- `disabled` and `loading` disable both buttons and close the menu. Loading shows a spinner and marks the main action busy.
+
+## Props
+
+<Props of="SplitButtonProps" />
+
+## Options
+
+<Props of="SplitButtonOption" />

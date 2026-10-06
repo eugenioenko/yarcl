@@ -9,6 +9,7 @@ import {
   Breadcrumb,
   Button,
   ButtonGroup,
+  SplitButton,
   Card,
   Checkbox,
   DatePicker,
@@ -132,6 +133,12 @@ const groups: Record<string, Item[]> = {
           <Button>Next</Button>
         </ButtonGroup>
       ),
+    },
+    {
+      name: 'SplitButton',
+      href: '/components/buttons/split-button/',
+      description: 'Execute the selected action and switch it from a dropdown.',
+      preview: <SplitButton size="sm" aria-label="Save actions" options={[{ value: 'draft', label: 'Save draft' }, { value: 'publish', label: 'Publish' }]} />,
     },
     {
       name: 'ToggleGroup',

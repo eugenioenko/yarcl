@@ -1,4 +1,4 @@
-import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
 
@@ -20,6 +20,28 @@ void [invalidProseStyle, invalidProseGap];
 
 export const contract = (
   <>
+    <SplitButton<'draft' | 'publish'>
+      options={[{ value: 'draft', label: 'Save draft', icon: <span>✓</span> }, { value: 'publish', label: 'Publish', disabled: true }]}
+      value="draft" defaultValue="draft" onValueChange={(value: 'draft' | 'publish') => value} onAction={(value: 'draft' | 'publish') => value}
+      size="talla-l" color="clay" variant="wash" radius="hairline" loading disabled dropdownLabel="Save options" placeholder="Choose"
+      ref={() => {}} className="save-actions" style={{ width: '100%' }} aria-label="Save actions"
+    />
+    {/* @ts-expect-error unknown split button size */}
+    <SplitButton options={[]} size="missing" />
+    {/* @ts-expect-error split button sizes respect allowedSizes */}
+    <SplitButton options={[]} size="talla-m" />
+    {/* @ts-expect-error unknown split button color */}
+    <SplitButton options={[]} color="missing" />
+    {/* @ts-expect-error unknown split button radius */}
+    <SplitButton options={[]} radius="missing" />
+    {/* @ts-expect-error unknown split button variant */}
+    <SplitButton options={[]} variant="missing" />
+    {/* @ts-expect-error values must match the options */}
+    <SplitButton options={[{ value: 'draft', label: 'Save draft' }]} value="missing" />
+    {/* @ts-expect-error options require a label */}
+    <SplitButton options={[{ value: 'draft' }]} />
+    {/* @ts-expect-error loading must be boolean */}
+    <SplitButton options={[]} loading="yes" />
     <Button autoHeight size="talla-s"><span>Account</span></Button>
     <Button href="/account" autoHeight size="talla-s">Account</Button>
     {/* @ts-expect-error autoHeight must be boolean */}

@@ -62,6 +62,7 @@ export default defineConfig({
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
   components: {
+    SplitButton: { size: 'md', allowedSizes: ['sm', 'md', 'lg'], sizeOverrides: { md: { paddingX: '1.125rem' } } },
     Grid: { gap: 'tight' },
     Avatar: { radius: 'rounded' },
     EmptyState: { color: 'neutral', gap: 'tight', padding: 'normal', textStyle: 'caption' },

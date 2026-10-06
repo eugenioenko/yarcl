@@ -8,6 +8,7 @@ import {
   Breadcrumb,
   Button,
   ButtonGroup,
+  SplitButton,
   CommandPalette,
   DatePicker,
   Combobox,
@@ -58,6 +59,7 @@ export function App() {
   const [size, setSize] = useState<string | null>(null);
   const [shade, setShade] = useState<string | null>('natural');
   const [sizeError, setSizeError] = useState(false);
+  const [splitAction, setSplitAction] = useState('Nothing executed');
   const [quantity, setQuantity] = useState<number | null>(1);
 
   function applyScheme(next: Scheme) {
@@ -187,6 +189,19 @@ export function App() {
               straight hem made to be worn open.
             </Text>
 
+            <Stack as="section" gap="3">
+              <Heading level={2}>Save options</Heading>
+              <SplitButton
+                aria-label="Save actions"
+                options={[
+                  { value: 'wishlist', label: 'Save to wishlist' },
+                  { value: 'share', label: 'Share item' },
+                  { value: 'reserve', label: 'Reserve', disabled: true },
+                ]}
+                onAction={(value) => setSplitAction(value === 'wishlist' ? 'Saved to wishlist' : 'Item shared')}
+              />
+              <Text data-testid="split-button-log">{splitAction}</Text>
+            </Stack>
             <Stack gap="2">
               <Inline justify="between">
                 <Label id="size-label">

@@ -2469,6 +2469,33 @@ html:has(.yarcl-modal[open]) {
   border-block-start-color: color-mix(in oklab, var(--yarcl-v-border), var(--yarcl-v-fg) 30%);
 }
 
+/* SplitButton */
+
+.yarcl-split-button {
+  max-width: 100%;
+}
+
+.yarcl-split-button-action {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yarcl-split-button > .yarcl-icon-button {
+  flex-shrink: 0;
+}
+
+.yarcl-split-button.yarcl-button-group-attached.yarcl-button-group-horizontal > .yarcl-icon-button {
+  border-start-end-radius: var(--yarcl-r);
+  border-end-end-radius: var(--yarcl-r);
+}
+
+.yarcl-split-button-option-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-end: calc(var(--yarcl-px) / 2);
+}
+
 /* Pagination */
 
 .yarcl-pagination {

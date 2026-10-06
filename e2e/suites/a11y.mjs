@@ -22,6 +22,10 @@ export default async function (ctx) {
 
   await audit(ctx, 'whole demo page');
   await audit(ctx, 'grid layouts', '.yarcl-grid');
+  await audit(ctx, 'split button closed', '.yarcl-split-button');
+  await page.getByRole('button', { name: 'Choose action', exact: true }).click();
+  await audit(ctx, 'split button menu open', '.yarcl-floating');
+  await page.keyboard.press('Escape');
   await audit(ctx, 'avatars', '[data-testid="avatar-demo"]');
   await audit(ctx, 'visually hidden accessible name', '[data-testid="visually-hidden-demo"]');
   await audit(ctx, 'empty state', '[data-testid="empty-state-demo"]');

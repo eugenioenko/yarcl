@@ -4,6 +4,10 @@ import { highlightContrast, tabThrough } from './focus.mjs';
 export default async function (ctx) {
   const { page } = ctx;
   await tabThrough(ctx);
+  await highlightContrast(ctx, 'SplitButton', async () => {
+    await page.getByRole('button', { name: 'Choose action', exact: true }).focus();
+    await page.keyboard.press('Enter');
+  });
   await highlightContrast(ctx, 'Select', async () => {
     await page.getByRole('combobox', { name: 'Shade' }).focus();
     await page.keyboard.press('Enter');

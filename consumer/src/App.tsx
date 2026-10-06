@@ -3,6 +3,7 @@ import {
   Accordion,
   Button,
   ButtonGroup,
+  SplitButton,
   Card,
   Checkbox,
   Divider,
@@ -86,6 +87,7 @@ export function App() {
     document.documentElement.style.colorScheme = s;
     return s;
   });
+  const [splitAction, setSplitAction] = useState('Nothing executed');
   const [email, setEmail] = useState('not-an-email');
 
   function applyScheme(next: Scheme) {
@@ -122,6 +124,18 @@ export function App() {
         <DesignReference title="Consumer A design system" />
       ) : (
         <>
+          <Section title="Split button">
+            <SplitButton
+              aria-label="Save actions"
+              options={[
+                { value: 'draft', label: 'Save draft', icon: <PlusIcon /> },
+                { value: 'publish', label: 'Publish' },
+                { value: 'schedule', label: 'Schedule', disabled: true },
+              ]}
+              onAction={(value) => setSplitAction(value === 'draft' ? 'Draft saved' : 'Published')}
+            />
+            <Text data-testid="split-button-log">{splitAction}</Text>
+          </Section>
           <Section title="Sizes">
             {sizes.map((size) => (
               <Row key={size} label={size}>

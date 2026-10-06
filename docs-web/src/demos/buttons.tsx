@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, ButtonGroup, IconButton, ToggleGroup, Tooltip } from '@yarcl/react';
+import { Button, ButtonGroup, SplitButton, Text, Stack, IconButton, ToggleGroup, Tooltip } from '@yarcl/react';
 import { PlusIcon, SearchIcon, TrashIcon } from './icons';
 
 export function ButtonVariants() {
@@ -142,5 +142,23 @@ export function ToggleGroupMultiple() {
         <u>U</u>
       </ToggleGroup.Item>
     </ToggleGroup>
+  );
+}
+
+export function SplitButtonDemo() {
+  const [lastAction, setLastAction] = useState('Nothing executed yet');
+  return (
+    <Stack gap="sm">
+      <SplitButton
+        aria-label="Save actions"
+        options={[
+          { value: 'draft', label: 'Save draft', icon: <PlusIcon /> },
+          { value: 'publish', label: 'Publish' },
+          { value: 'schedule', label: 'Schedule', disabled: true },
+        ]}
+        onAction={(value) => setLastAction(value === 'draft' ? 'Draft saved' : 'Published')}
+      />
+      <Text muted>{lastAction}</Text>
+    </Stack>
   );
 }

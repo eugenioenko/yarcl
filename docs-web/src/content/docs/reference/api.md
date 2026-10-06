@@ -26,7 +26,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 
 | Group | Exports |
 |---|---|
-| Buttons | `Button`, `IconButton`, `ButtonGroup`, `ToggleGroup` |
+| Buttons | `Button`, `IconButton`, `ButtonGroup`, `SplitButton`, `ToggleGroup` |
 | Forms | `Field`, `Label`, `Input`, `NumberInput`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |

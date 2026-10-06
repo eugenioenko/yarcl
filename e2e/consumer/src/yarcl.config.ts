@@ -78,6 +78,7 @@ export default defineConfig({
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '3px', color: 'clay' },
   components: {
+    SplitButton: { size: 'talla-s', radius: 'square', color: 'clay', variant: 'wash', allowedSizes: ['talla-s', 'talla-l'], sizeOverrides: { 'talla-s': { paddingX: '1.125rem', iconSize: '1.125rem' } } },
     Grid: { gap: '4' },
     Avatar: { size: 'talla-s', radius: 'hairline', color: 'clay', variant: 'wash' },
     AvatarGroup: { size: 'talla-s', radius: 'square', color: 'moss', variant: 'wash' },
