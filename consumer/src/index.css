@@ -57,3 +57,14 @@ body {
 .progress-demo {
   width: min(24rem, 100%);
 }
+
+.input-content-inset {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--yarcl-px);
+}
+
+.input-content-inset > svg {
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}

@@ -404,3 +404,14 @@
 .sidebar-content a:not(.large, .sidebar-divider) {
   font-size: 0.9375rem;
 }
+
+.input-content-inset {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--yarcl-px);
+}
+
+.input-content-inset > svg {
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}

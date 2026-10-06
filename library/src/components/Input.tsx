@@ -9,9 +9,9 @@ import { useDefaults } from '../runtime';
  * `className` and `style` go to the outer control.
  */
 export interface InputProps extends Omit<ComponentProps<'input'>, 'color' | 'size' | 'children'>, TokenProps<'Input'> {
-  /** Content before the input, such as an icon, text or a button. Decorative icons should have `aria-hidden`. */
+  /** Content before the input, such as an icon, text or a button. Slot content controls its own spacing. Decorative icons should have `aria-hidden`. */
   startContent?: ReactNode;
-  /** Content after the input, such as an icon, text or a button. Actions keep their own accessible names and disabled state. */
+  /** Content after the input, such as an icon, text or a button. Slot content controls its own spacing. Actions keep their own accessible names and disabled state. */
   endContent?: ReactNode;
 }
 
@@ -19,7 +19,8 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'color' | 'siz
  * A text input with optional content on either side, styled from the consumer's design tokens.
  * Shares the base size scale with {@link Button}; component size overrides can adjust either one.
  * `color` sets the focus border. Inside a {@link Field}, it is labelled and described automatically.
- * Slots share the input's border and inherit its typography and icon size. Buttons keep their own props and focus rings.
+ * Slots share the input's border and inherit its typography and icon size. Padding belongs to the editable input; slots control their own spacing.
+ * Direct buttons attach with square inner corners and the control's outer corners, retaining their focus rings.
  *
  * @example
  * ```tsx
@@ -42,9 +43,9 @@ export function Input(props: InputProps) {
       dir={dir}
       hidden={hidden}
     >
-      {startContent != null && startContent !== false && <span className="yarcl-input-content">{startContent}</span>}
+      {startContent != null && startContent !== false && <span className="yarcl-input-content yarcl-input-start">{startContent}</span>}
       <input className="yarcl-input-field" dir={dir} {...rest} />
-      {endContent != null && endContent !== false && <span className="yarcl-input-content">{endContent}</span>}
+      {endContent != null && endContent !== false && <span className="yarcl-input-content yarcl-input-end">{endContent}</span>}
     </div>
   );
 }

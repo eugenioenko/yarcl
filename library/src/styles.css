@@ -209,7 +209,7 @@
 .yarcl-input-control {
   display: inline-flex;
   align-items: center;
-  gap: calc(var(--yarcl-px) / 2);
+  padding: 0;
   min-width: 0;
   max-width: 100%;
 }
@@ -225,7 +225,7 @@
   min-width: 0;
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 var(--yarcl-px);
   border: 0;
   border-radius: 0;
   font: inherit;
@@ -241,8 +241,8 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  gap: calc(var(--yarcl-px) / 2);
   height: 100%;
+  border-radius: inherit;
   color: var(--yarcl-neutral-muted);
 }
 
@@ -253,7 +253,18 @@
 }
 
 .yarcl-input-content > .yarcl-button {
-  max-height: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.yarcl-input-start > .yarcl-button:first-child {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+.yarcl-input-end > .yarcl-button:last-child {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
 }
 
 .yarcl-textarea {

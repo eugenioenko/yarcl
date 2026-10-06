@@ -8,6 +8,17 @@ export default async function ({ page, check, focused }) {
   await page.keyboard.press('Tab');
   const clear = demo.getByRole('button', { name: 'Clear', exact: true });
   check('end action is a keyboard stop', await focused(clear));
+  check('example uses a solid action with a straight inner edge', await clear.evaluate((button) => {
+    const style = getComputedStyle(button);
+    return style.backgroundColor !== 'rgba(0, 0, 0, 0)' && style.borderStartStartRadius === '0px' && style.borderEndStartRadius === '0px';
+  }));
+  check('solid action fills the shared control without an outer gutter', await clear.evaluate((button) => {
+    const root = button.closest('.yarcl-input-control');
+    const rootRect = root.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    const border = parseFloat(getComputedStyle(root).borderTopWidth);
+    return Math.abs(buttonRect.right - (rootRect.right - border)) < 0.1 && Math.abs(buttonRect.height - (rootRect.height - border * 2)) < 0.1;
+  }));
   await page.keyboard.press('Enter');
   check('clear action updates the input', (await search.inputValue()) === '');
   check('caller controls the action disabled state', await clear.isDisabled());

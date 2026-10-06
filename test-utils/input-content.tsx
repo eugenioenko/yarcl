@@ -139,6 +139,56 @@ export function testInputContent() {
     expect(getComputedStyle(root).display).toBe('none');
   });
 
+  test('attaches buttons without gutters and squares their inner corners in either direction', async () => {
+    const screen = await render(<Input aria-label="Joined actions" style={{ width: '20rem' }} />);
+    for (const dir of ['ltr', 'rtl']) {
+      await screen.rerender(<Input aria-label="Joined actions" dir={dir} style={{ width: '20rem' }} startContent={<Button>Before</Button>} endContent={<><Button>After</Button><Button>Last</Button></>} />);
+      const root = screen.container.querySelector('.yarcl-input-control')!;
+      const input = root.querySelector('input')!;
+      const [before, after, last] = [...root.querySelectorAll('button')];
+      const rootStyle = getComputedStyle(root);
+      const border = parseFloat(rootStyle.borderTopWidth);
+      const rootRect = root.getBoundingClientRect();
+      const inputRect = input.getBoundingClientRect();
+      const beforeRect = before.getBoundingClientRect();
+      const afterRect = after.getBoundingClientRect();
+      const lastRect = last.getBoundingClientRect();
+      expect(dir === 'ltr' ? beforeRect.left : beforeRect.right).toBeCloseTo(dir === 'ltr' ? rootRect.left + border : rootRect.right - border);
+      expect(dir === 'ltr' ? lastRect.right : lastRect.left).toBeCloseTo(dir === 'ltr' ? rootRect.right - border : rootRect.left + border);
+      expect(dir === 'ltr' ? beforeRect.right : beforeRect.left).toBeCloseTo(dir === 'ltr' ? inputRect.left : inputRect.right);
+      expect(dir === 'ltr' ? afterRect.left : afterRect.right).toBeCloseTo(dir === 'ltr' ? inputRect.right : inputRect.left);
+      expect(dir === 'ltr' ? afterRect.right : afterRect.left).toBeCloseTo(dir === 'ltr' ? lastRect.left : lastRect.right);
+      for (const button of [before, after, last]) expect(button.getBoundingClientRect().height).toBeCloseTo(rootRect.height - border * 2);
+      expect(getComputedStyle(before).borderStartStartRadius).toBe(rootStyle.borderStartStartRadius);
+      expect(getComputedStyle(before).borderEndStartRadius).toBe(rootStyle.borderEndStartRadius);
+      expect(getComputedStyle(before).borderStartEndRadius).toBe('0px');
+      expect(getComputedStyle(before).borderEndEndRadius).toBe('0px');
+      expect(getComputedStyle(after).borderRadius).toBe('0px');
+      expect(getComputedStyle(last).borderStartStartRadius).toBe('0px');
+      expect(getComputedStyle(last).borderEndStartRadius).toBe('0px');
+      expect(getComputedStyle(last).borderStartEndRadius).toBe(rootStyle.borderStartEndRadius);
+      expect(getComputedStyle(last).borderEndEndRadius).toBe(rootStyle.borderEndEndRadius);
+      await page.getByRole('button', { name: 'Last', exact: true }).hover();
+      expect(last.getBoundingClientRect().toJSON()).toEqual(lastRect.toJSON());
+    }
+  });
+
+  test('lets caller wrappers own their padding and button corners', async () => {
+    const screen = await render(<Input aria-label="Custom content" startContent={<span style={{ paddingInlineStart: 'var(--yarcl-px)' }}>Prefix</span>} endContent={<span style={{ paddingInlineEnd: 'var(--yarcl-px)' }}><Button>Separate action</Button></span>} />);
+    const root = screen.container.querySelector('.yarcl-input-control')!;
+    const start = root.firstElementChild!;
+    const end = root.lastElementChild!;
+    expect(getComputedStyle(start).paddingInlineStart).toBe('0px');
+    expect(getComputedStyle(end).paddingInlineEnd).toBe('0px');
+    expect(getComputedStyle(start.firstElementChild!).paddingInlineStart).not.toBe('0px');
+    expect(getComputedStyle(end.firstElementChild!).paddingInlineEnd).not.toBe('0px');
+    const button = end.querySelector('button')!;
+    expect(getComputedStyle(button).borderRadius).toBe(pixels(getComputedStyle(button).getPropertyValue('--yarcl-r')));
+    await screen.rerender(<Input aria-label="Custom content" />);
+    expect(getComputedStyle(root.querySelector('input')!).paddingInlineStart).not.toBe('0px');
+    expect(getComputedStyle(root.querySelector('input')!).paddingInlineEnd).not.toBe('0px');
+  });
+
   test('uses the input tokens at every configured size and follows runtime themes', async () => {
     const shape = config as unknown as {
       defaults: { size: string };
@@ -151,8 +201,10 @@ export function testInputContent() {
     for (const [index, root] of [...controls].entries()) {
       const token = { ...shape.sizes[sizes[index]], ...shape.components?.Input?.sizeOverrides?.[sizes[index]] };
       expect(getComputedStyle(root).height).toBe(pixels(token.height));
-      expect(getComputedStyle(root).paddingInlineStart).toBe(pixels(token.paddingX));
-      expect(getComputedStyle(root).gap).toBe(pixels(`calc(${token.paddingX} / 2)`));
+      expect(getComputedStyle(root).paddingInlineStart).toBe('0px');
+      expect(getComputedStyle(root).paddingInlineEnd).toBe('0px');
+      expect(getComputedStyle(root.querySelector('input')!).paddingInlineStart).toBe(pixels(token.paddingX));
+      expect(getComputedStyle(root.querySelector('input')!).paddingInlineEnd).toBe(pixels(token.paddingX));
       expect(getComputedStyle(root.querySelector('input')!).fontSize).toBe(pixels(token.fontSize));
       expect(getComputedStyle(root.querySelector('svg')!).width).toBe(pixels(token.iconSize));
     }

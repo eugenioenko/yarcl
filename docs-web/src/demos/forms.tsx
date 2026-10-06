@@ -359,12 +359,12 @@ export function InputContentDemo() {
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          startContent={<SearchIcon />}
-          endContent={<Button variant="ghost" disabled={!search} onClick={() => setSearch('')}>Clear</Button>}
+          startContent={<span className="input-content-inset"><SearchIcon /></span>}
+          endContent={<Button variant="solid" disabled={!search} onClick={() => setSearch('')}>Clear</Button>}
         />
       </Field>
       <Field label="Amount" description="Amount in US dollars." error={amount !== '' && (!Number.isFinite(Number(amount)) || Number(amount) <= 0) ? 'Enter an amount greater than zero.' : undefined}>
-        <Input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} startContent="$" endContent="USD" />
+        <Input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} startContent={<span className="input-content-inset">$</span>} endContent={<span className="input-content-inset">USD</span>} />
       </Field>
       <Field label="Password">
         <Input
