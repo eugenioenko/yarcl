@@ -25,7 +25,7 @@ const entries = {
   'yarcl CLI': 'cli.js',
 };
 const budgets = {
-  '@yarcl/react': { js: 28.25 * 1024, css: 8.05 * 1024 },
+  '@yarcl/react': { js: 28.5 * 1024, css: 8.25 * 1024 },
   '@yarcl/react/define': { js: 0.2 * 1024, css: 0 },
   '@yarcl/react/defaults': { js: 1.5 * 1024, css: 0 },
   '@yarcl/react/vite': { js: 6.25 * 1024, css: 0 },
@@ -34,7 +34,7 @@ const budgets = {
   '@yarcl/react/rollup': { js: 6.25 * 1024, css: 0 },
   '@yarcl/react/esbuild': { js: 6.25 * 1024, css: 0 },
   '@yarcl/react/reference': { js: 6.75 * 1024, css: 0.6 * 1024 },
-  '@yarcl/react/demo': { js: 29 * 1024, css: 8.3 * 1024 },
+  '@yarcl/react/demo': { js: 29.25 * 1024, css: 8.5 * 1024 },
   '@yarcl/react/themes': { js: 3.5 * 1024, css: 0 },
   '@yarcl/react/css': { js: 3.75 * 1024, css: 0 },
   '@yarcl/react/generate': { js: 4 * 1024, css: 0 },

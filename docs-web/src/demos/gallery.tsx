@@ -633,7 +633,7 @@ const groups: Record<string, Item[]> = {
     {
       name: 'Pagination',
       href: '/components/data/pagination/',
-      description: 'Pages with siblings, boundaries and ellipses.',
+      description: 'Numbered pages or a compact summary with navigation arrows.',
       preview: <Pagination count={10} defaultPage={4} size="sm" siblings={0} aria-label="Gallery example" />,
     },
     {

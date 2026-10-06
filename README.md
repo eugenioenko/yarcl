@@ -108,6 +108,8 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 
 `Input` accepts `startContent` and `endContent` for icons, text and buttons inside its border. Padding belongs to the editable input; slot content controls its own spacing. Direct buttons have square inner corners. Native form attributes and refs target the input; `className` and `style` target the outer control.
 
+`Pagination` supports numbered pages with ellipses and `layout="compact"` for a live page summary with previous and next buttons at the end.
+
 **Controls**: Button, IconButton, ButtonGroup, SplitButton, ToggleGroup, Input, NumberInput, Textarea, Checkbox, Radio, RadioGroup, Switch, Slider, Select, Combobox, DatePicker, Field, Label
 **Typography & layout**: Text, Heading, Link, Stack, Inline, Grid, Card, Divider, VisuallyHidden
 **Floating**: Tooltip, HoverCard, Popover, Menu

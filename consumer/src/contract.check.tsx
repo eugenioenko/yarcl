@@ -378,7 +378,14 @@ export const contract = (
       nextLabel="Forward"
       pageLabel={(p) => `Go to ${p}`}
     />
-    <Pagination count={5} defaultPage={3} />
+    <Pagination count={5} defaultPage={3} layout="numbered" />
+    <Pagination count={20} layout="compact" page={3} onPageChange={(page) => page} summaryLabel={(page, count) => `${page} / ${count}`} size="sm" color="neutral" radius="rounded" variant="quiet" attached />
+    {/* @ts-expect-error unknown pagination layout */}
+    <Pagination count={20} layout="simple" />
+    {/* @ts-expect-error summary labels return text */}
+    <Pagination count={20} layout="compact" summaryLabel={() => 3} />
+    {/* @ts-expect-error compact pagination still uses configured sizes */}
+    <Pagination count={20} layout="compact" size="missing" />
 
     {/* @ts-expect-error */}
     <Button size="gigantic" />
