@@ -59,7 +59,7 @@ export default async function ({ page, check, focused }) {
   const rows = await sizes.locator('.yarcl-number-input').count();
   const mismatched = [];
   for (let i = 0; i < rows; i++) {
-    const input = await sizes.locator('input.yarcl-input:not(.yarcl-number-input-field)').nth(i).boundingBox();
+    const input = await sizes.locator('.yarcl-input-control').nth(i).boundingBox();
     const number = await sizes.locator('.yarcl-number-input').nth(i).boundingBox();
     if (input.height !== number.height) mismatched.push(`${input.height} vs ${number.height}`);
   }

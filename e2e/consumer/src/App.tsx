@@ -37,6 +37,7 @@ import {
   toast,
 } from '@yarcl/react';
 import { DesignReference } from '@yarcl/react/reference';
+import { InputContentDemo } from './InputContentDemo';
 
 const garmentSizes = ['XS', 'S', 'M', 'L', 'XL'];
 const occasions = ['Office', 'Weekend', 'Travel', 'Evening'].map((label) => ({ value: label.toLowerCase(), label }));
@@ -189,6 +190,10 @@ export function App() {
               straight hem made to be worn open.
             </Text>
 
+            <Stack as="section" gap="3">
+              <Heading level={2}>Input content</Heading>
+              <InputContentDemo />
+            </Stack>
             <Stack as="section" gap="3">
               <Heading level={2}>Save options</Heading>
               <SplitButton

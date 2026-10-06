@@ -48,6 +48,7 @@
   outline-offset: var(--yarcl-focus-offset);
 }
 
+.yarcl-input-control:has(> .yarcl-input-field:focus-visible),
 .yarcl-combobox-control:has(> .yarcl-combobox-input:focus-visible) {
   outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
@@ -205,6 +206,56 @@
   border-color: var(--yarcl-neutral-border);
 }
 
+.yarcl-input-control {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--yarcl-px) / 2);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.yarcl-input-control:has(> .yarcl-input-field[type='hidden']),
+.yarcl-input-control[hidden]:not([hidden='until-found']) {
+  display: none;
+}
+
+.yarcl-input-field {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+.yarcl-input-field:focus-visible {
+  outline: none;
+}
+
+.yarcl-input-content {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: calc(var(--yarcl-px) / 2);
+  height: 100%;
+  color: var(--yarcl-neutral-muted);
+}
+
+.yarcl-input-content > svg {
+  flex-shrink: 0;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+
+.yarcl-input-content > .yarcl-button {
+  max-height: 100%;
+}
+
 .yarcl-textarea {
   display: block;
   min-height: var(--yarcl-h);
@@ -213,21 +264,25 @@
   resize: vertical;
 }
 
+.yarcl-input-field::placeholder,
 .yarcl-input::placeholder,
 .yarcl-textarea::placeholder {
   color: var(--yarcl-neutral-muted);
 }
 
+.yarcl-input-control:has(> .yarcl-input-field:focus-visible),
 .yarcl-input:focus-visible,
 .yarcl-textarea:focus-visible {
   border-color: var(--yarcl-c);
 }
 
+.yarcl-input-control:has(> .yarcl-input-field[aria-invalid='true']),
 .yarcl-input[aria-invalid='true'],
 .yarcl-textarea[aria-invalid='true'] {
   border-color: var(--yarcl-error);
 }
 
+.yarcl-input-field:disabled,
 .yarcl-input:disabled,
 .yarcl-textarea:disabled {
   opacity: 0.5;

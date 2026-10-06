@@ -22,6 +22,13 @@ export default async function (ctx) {
 
   await audit(ctx, 'whole demo page');
   await audit(ctx, 'grid layouts', '.yarcl-grid');
+  await audit(ctx, 'input content', '[data-testid="input-content-demo"]');
+  await page.getByRole('textbox', { name: 'Amount', exact: true }).fill('0');
+  await audit(ctx, 'input content with error', '[data-testid="input-content-demo"]');
+  await page.getByRole('textbox', { name: 'Amount', exact: true }).fill('12.50');
+  await page.getByRole('button', { name: 'Show password', exact: true }).click();
+  await audit(ctx, 'input content with visible password', '[data-testid="input-content-demo"]');
+  await page.getByRole('button', { name: 'Hide password', exact: true }).click();
   await audit(ctx, 'split button closed', '.yarcl-split-button');
   await page.getByRole('button', { name: 'Choose action', exact: true }).click();
   await audit(ctx, 'split button menu open', '.yarcl-floating');

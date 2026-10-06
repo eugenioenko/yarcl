@@ -194,7 +194,7 @@ const groups: Record<string, Item[]> = {
       description: 'A single-line text input on the shared size scale.',
       preview: (
         <Stack gap="sm" className="gallery-fill">
-          <Input size="sm" placeholder="Search" aria-label="Search" />
+          <Input size="sm" placeholder="Search" aria-label="Search" startContent={<SearchIcon />} />
           <Input size="sm" defaultValue="Ada Lovelace" aria-label="Name" />
         </Stack>
       ),

@@ -20,6 +20,20 @@ void [invalidProseStyle, invalidProseGap];
 
 export const contract = (
   <>
+    <Input size="talla-l" color="clay" radius="hairline" startContent={<svg aria-hidden="true" />} endContent={<Button onClick={() => {}}>Clear</Button>} name="search" defaultValue="Query" ref={() => {}} style={{ width: '100%' }} className="search-field" />
+    <Input startContent="$" endContent="USD" />
+    {/* @ts-expect-error unknown input size with content */}
+    <Input size="missing" startContent="$" />
+    {/* @ts-expect-error unknown input color with content */}
+    <Input color="missing" endContent="USD" />
+    {/* @ts-expect-error unknown input radius with content */}
+    <Input radius="missing" startContent="$" />
+    {/* @ts-expect-error slot content must be renderable */}
+    <Input startContent={() => 'Search'} />
+    {/* @ts-expect-error slot content must be renderable */}
+    <Input endContent={{ text: 'USD' }} />
+    {/* @ts-expect-error input content belongs in slots */}
+    <Input>Search</Input>
     <SplitButton<'draft' | 'publish'>
       options={[{ value: 'draft', label: 'Save draft', icon: <span>✓</span> }, { value: 'publish', label: 'Publish', disabled: true }]}
       value="draft" defaultValue="draft" onValueChange={(value: 'draft' | 'publish') => value} onAction={(value: 'draft' | 'publish') => value}
