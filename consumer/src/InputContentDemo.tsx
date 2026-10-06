@@ -16,7 +16,7 @@ export function InputContentDemo() {
           endContent={<Button variant="quiet" disabled={!search} onClick={() => setSearch('')}>Clear</Button>}
         />
       </Field>
-      <Field label="Amount" description="Amount in US dollars." error={amount !== '' && Number(amount) <= 0 ? 'Enter an amount greater than zero.' : undefined}>
+      <Field label="Amount" description="Amount in US dollars." error={amount !== '' && (!Number.isFinite(Number(amount)) || Number(amount) <= 0) ? 'Enter an amount greater than zero.' : undefined}>
         <Input inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} startContent="$" endContent="USD" />
       </Field>
       <Field label="Password">

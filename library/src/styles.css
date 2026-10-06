@@ -214,6 +214,7 @@
   max-width: 100%;
 }
 
+.yarcl-input-control:has(> .yarcl-input-field[type='hidden']),
 .yarcl-input-control[hidden]:not([hidden='until-found']) {
   display: none;
 }

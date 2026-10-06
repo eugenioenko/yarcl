@@ -15,7 +15,16 @@ export default async function ({ page, check, focused }) {
   await amount.fill('0');
   check('field marks the inner input invalid', await poll(async () => (await amount.getAttribute('aria-invalid')) === 'true'));
   check('field description and error reach the inner input', (await amount.getAttribute('aria-describedby')).split(' ').length === 2);
-  await amount.fill('12.50');
+  for (const invalid of ['abc', 'Infinity', '1e309', '-1']) {
+    await amount.fill('12.50');
+    check(`amount is valid before checking ${invalid}`, await poll(async () => (await amount.getAttribute('aria-invalid')) !== 'true'));
+    await amount.fill(invalid);
+    check(`amount rejects ${invalid}`, await poll(async () => (await amount.getAttribute('aria-invalid')) === 'true'));
+  }
+  for (const valid of ['', '12.50']) {
+    await amount.fill(valid);
+    check(`amount clears its error for ${valid || 'empty input'}`, await poll(async () => (await amount.getAttribute('aria-invalid')) !== 'true'));
+  }
   const password = demo.locator('input').nth(2);
   await password.fill('Keep this password');
   await demo.getByRole('button', { name: 'Show password' }).click();

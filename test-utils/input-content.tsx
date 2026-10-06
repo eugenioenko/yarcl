@@ -59,6 +59,26 @@ export function testInputContent() {
     expect(new FormData(screen.container.querySelector('form')!).get('amount')).toBe('30');
   });
 
+  test('hidden inputs and their content stay out of layout while retaining form values', async () => {
+    const screen = await render(<form><Input type="hidden" name="token" defaultValue="secret" /></form>);
+    const input = screen.container.querySelector('input')!;
+    const control = input.parentElement!;
+    expect(getComputedStyle(control).display).toBe('none');
+    expect(control.getClientRects()).toHaveLength(0);
+    expect(new FormData(screen.container.querySelector('form')!).get('token')).toBe('secret');
+    await screen.rerender(<form><Input type="hidden" name="token" defaultValue="secret" startContent="Token" endContent={<Button>Token action</Button>} /></form>);
+    expect(screen.container.querySelector('input')).toBe(input);
+    expect(control.getClientRects()).toHaveLength(0);
+    const button = control.querySelector('button')!;
+    button.focus();
+    expect(document.activeElement).not.toBe(button);
+    expect(new FormData(screen.container.querySelector('form')!).get('token')).toBe('secret');
+    await screen.rerender(<form><Input type="text" name="token" defaultValue="secret" aria-label="Token" startContent="Token" /></form>);
+    expect(screen.container.querySelector('input')).toBe(input);
+    expect(control.getClientRects()).toHaveLength(1);
+    expect(input.value).toBe('secret');
+  });
+
   test('actions remain keyboard accessible and independently enabled when the input is disabled', async () => {
     const clicked = vi.fn();
     const screen = await render(<Input aria-label="Search" startContent={icon} endContent={<Button onClick={clicked}>Clear search</Button>} />);
