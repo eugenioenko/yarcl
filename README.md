@@ -106,6 +106,8 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 
 ## Components
 
+`Input` accepts `startContent` and `endContent` for icons, text and buttons inside its border. Native form attributes and refs target the input; `className` and `style` target the outer control.
+
 **Controls**: Button, IconButton, ButtonGroup, SplitButton, ToggleGroup, Input, NumberInput, Textarea, Checkbox, Radio, RadioGroup, Switch, Slider, Select, Combobox, DatePicker, Field, Label
 **Typography & layout**: Text, Heading, Link, Stack, Inline, Grid, Card, Divider, VisuallyHidden
 **Floating**: Tooltip, HoverCard, Popover, Menu

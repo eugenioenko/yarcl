@@ -42,6 +42,7 @@ import { DesignReference } from '@yarcl/react/reference';
 import { DatePickerDemo } from './DatePickerDemo';
 import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
+import { InputContentDemo } from './InputContentDemo';
 import { OverlaysDemo } from './OverlaysDemo';
 import { PlusIcon, SearchIcon } from './icons';
 
@@ -135,6 +136,9 @@ export function App() {
               onAction={(value) => setSplitAction(value === 'draft' ? 'Draft saved' : 'Published')}
             />
             <Text data-testid="split-button-log">{splitAction}</Text>
+          </Section>
+          <Section title="Input content">
+            <InputContentDemo />
           </Section>
           <Section title="Sizes">
             {sizes.map((size) => (

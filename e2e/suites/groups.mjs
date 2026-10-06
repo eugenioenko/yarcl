@@ -81,7 +81,7 @@ export default async function ({ page, check, focused }) {
   const sizes = page.locator('section', { has: page.getByRole('heading', { name: 'Sizes', exact: true }) });
   const xsButton = sizes.getByRole('button', { name: 'Button' }).first();
   const xlButton = sizes.getByRole('button', { name: 'Button' }).last();
-  const input = sizes.getByRole('textbox').first();
+  const input = sizes.locator('.yarcl-input-control').first();
   check('default radius md on every size', (await radius(xsButton)) === 6 && (await radius(xlButton)) === 6 && (await radius(input)) === 6, `${await radius(xsButton)} / ${await radius(xlButton)} / ${await radius(input)}`);
   check('radius prop overrides size', (await radius(page.getByRole('group', { name: 'View' }).getByRole('button').first())) > 100);
   const badge = page.locator('.yarcl-badge').first();
