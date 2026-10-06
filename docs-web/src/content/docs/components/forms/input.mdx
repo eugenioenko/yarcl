@@ -29,7 +29,7 @@ import { Input } from '@yarcl/react';
 
 ## Start and end content
 
-`startContent` and `endContent` accept text, icons, buttons or a combination of them. Both slots sit inside the input's shared border and follow the control's size, spacing and typography. Slots keep their natural width; the input fills the remaining space. Start and end follow the text direction.
+`startContent` and `endContent` accept text, icons, buttons or a combination of them. Both slots sit inside the input's shared border and follow the control's size and typography. Padding is applied to the editable input. The wrapper and slots have no padding or gap, so supplied content controls its own spacing. Slots keep their natural width; the input fills the remaining space. Start and end follow the text direction.
 
 <Preview>
   <InputContentDemo client:visible />
@@ -38,14 +38,35 @@ import { Input } from '@yarcl/react';
 ```tsx
 <Input
   aria-label="Search catalog"
-  startContent={<SearchIcon aria-hidden="true" />}
-  endContent={<Button variant="ghost" onClick={clearSearch}>Clear</Button>}
+  startContent={<span className="input-content-inset"><SearchIcon aria-hidden="true" /></span>}
+  endContent={<Button variant="solid" onClick={clearSearch}>Clear</Button>}
 />
 
 <Field label="Amount" description="Amount in US dollars.">
-  <Input startContent="$" endContent="USD" inputMode="decimal" />
+  <Input
+    startContent={<span className="input-content-inset">$</span>}
+    endContent={<span className="input-content-inset">USD</span>}
+    inputMode="decimal"
+  />
 </Field>
 ```
+
+Give icons or text their desired inset with your own CSS. These variables follow the input's selected size and component overrides:
+
+```css
+.input-content-inset {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--yarcl-px);
+}
+
+.input-content-inset > svg {
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+```
+
+Direct `Button` and `IconButton` children fill the control's inner height and attach with straight inner edges. Only the outside corners are rounded, following the input's radius. Wrap a button in your own element when you want separate spacing and corners.
 
 `className` and `style` apply to the outer control, including when both slots are empty. Native form attributes, handlers and `ref` target the inner `<input>`. Slot changes preserve the input, its uncontrolled value and focus.
 
