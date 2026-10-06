@@ -83,6 +83,10 @@ export async function highlightContrast({ page, check }, name, open) {
 export default async function (ctx) {
   const { page } = ctx;
   await tabThrough(ctx);
+  await highlightContrast(ctx, 'SplitButton', async () => {
+    await page.getByRole('button', { name: 'Choose action', exact: true }).focus();
+    await page.keyboard.press('Enter');
+  });
   await highlightContrast(ctx, 'Menu', async () => {
     await page.getByRole('button', { name: 'Actions' }).focus();
     await page.keyboard.press('Enter');

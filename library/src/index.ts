@@ -2,6 +2,8 @@ import '@yarcl/react/styles.css';
 import './styles.css';
 
 export { Button } from './components/Button';
+export { SplitButton } from './components/SplitButton';
+export type { SplitButtonProps, SplitButtonOption } from './components/SplitButton';
 export type { ButtonProps, ButtonLinkProps } from './components/Button';
 export { ButtonGroup } from './components/ButtonGroup';
 export type { ButtonGroupProps } from './components/ButtonGroup';

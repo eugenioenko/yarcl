@@ -5,6 +5,7 @@ import {
   Badge,
   Breadcrumb,
   Button,
+  SplitButton,
   Card,
   Checkbox,
   Combobox,
@@ -301,9 +302,17 @@ export function Dashboard() {
                 <ToggleGroup.Item value="30d">30d</ToggleGroup.Item>
                 <ToggleGroup.Item value="1y">1y</ToggleGroup.Item>
               </ToggleGroup>
-              <Button variant="outline" color="neutral">
-                <DownloadIcon /> Export
-              </Button>
+              <SplitButton
+                variant="outline"
+                color="neutral"
+                aria-label="Export report"
+                dropdownLabel="Choose export format"
+                options={[
+                  { value: 'csv', label: 'Export CSV', icon: <DownloadIcon /> },
+                  { value: 'pdf', label: 'Export PDF', icon: <DownloadIcon /> },
+                ]}
+                onAction={(value) => toast({ title: value === 'csv' ? 'CSV exported' : 'PDF exported', color: 'success' })}
+              />
               <NewInvoiceDialog />
             </Inline>
           </Inline>

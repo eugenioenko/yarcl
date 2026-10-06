@@ -6,6 +6,10 @@ export default async function (ctx) {
   await page.evaluate(() => document.fonts.ready);
   await audit(ctx, 'shop page');
   await audit(ctx, 'grid layouts', '.yarcl-grid');
+  await audit(ctx, 'split button closed', '.yarcl-split-button');
+  await page.getByRole('button', { name: 'Choose action', exact: true }).click();
+  await audit(ctx, 'split button menu open', '.yarcl-floating');
+  await page.keyboard.press('Escape');
   await audit(ctx, 'avatar group', '[aria-label="Design team"]');
   await audit(ctx, 'empty state', '[data-testid="brand-b-empty-state"]');
   await audit(ctx, 'pagination', '.yarcl-pagination');

@@ -41,6 +41,7 @@ const tokenRefs: Record<string, Schema> = {
 
 const componentProps = {
   Button: ['size', 'radius', 'color', 'variant'],
+  SplitButton: ['size', 'radius', 'color', 'variant'],
   IconButton: ['size', 'radius', 'color', 'variant'],
   ToggleGroup: ['size', 'radius', 'color', 'variant', 'selectedVariant'],
   Input: ['size', 'radius', 'color'],
