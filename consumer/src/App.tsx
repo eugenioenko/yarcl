@@ -43,6 +43,7 @@ import { DatePickerDemo } from './DatePickerDemo';
 import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
+import { RecipesDemo } from './RecipesDemo';
 import { OverlaysDemo } from './OverlaysDemo';
 import { PlusIcon, SearchIcon } from './icons';
 
@@ -140,6 +141,7 @@ export function App() {
           <Section title="Input content">
             <InputContentDemo />
           </Section>
+          <RecipesDemo />
           <Section title="Sizes">
             {sizes.map((size) => (
               <Row key={size} label={size}>
