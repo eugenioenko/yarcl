@@ -120,6 +120,18 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
 - Imports: components and `toast` from `@yarcl/react`; config helpers from `/define` and `/defaults`; build plugins from `/vite`, `/webpack`, `/rspack`, `/rollup` or `/esbuild`; bundled themes from `@yarcl/react/themes`; `applyTheme` from `@yarcl/react/css`.
 - "Failed to resolve import @yarcl/config" means the build plugin is missing. Type errors on `@yarcl/config` mean the tsconfig `paths` entry is missing or points at a different file.
 
+## Component recipes
+
+- Use `defineConfig(baseConfig, (yarcl) => ({ recipes: { ... } }))` to define custom styles. The callback's `yarcl.colors.success`, `yarcl.spacing.sm`, `yarcl.radii.md`, and other groups autocomplete the actual config keys and return serializable CSS variable references.
+- Every recipe has `slots.root`; extra slots are named by the consumer. `variants` maps axes to choices to slot styles. `defaults` selects omitted choices. `compounds` supplies `{ when, slots }` for combinations. Slot names, default choices and compound references are checked at compile time.
+- `createComponent('Action', Button)` adds the config recipe's typed visual props to an existing component, preserves its behavior and refs, and merges root classes. Recipe axes cannot replace inherited props.
+- `createComponent('Status', 'div', ({ rootProps, slots }) => ...)` builds custom markup. Spread `rootProps` onto the root and apply `slots.label`, etc. to declared elements. Only declared recipe names, slots and choices are valid. Recipes do not supply accessibility behavior for arbitrary markup.
+- `useRecipe(name, props)` supports custom behavior and state. Remove your behavior props before spreading its `rootProps`; configured recipe props are consumed automatically. `ExtendedComponentProps<'Status', 'div'>` combines native props with inferred visual props.
+- Style objects use normal CSS property names, token references, literal CSS strings and `var(--external)` expressions. Support `&:hover`, nested `@media` and `@supports`, and custom properties. Dimensional numbers receive px; unitless and custom-property numbers do not.
+- `tokens(baseConfig)` and `defineRecipes(...)` from `/define` support separate recipe modules. Do not import the final config or React entry point inside config definitions. Keep token definitions independent to avoid circular imports.
+- The existing plugin generates recipe CSS. Runtime themes must preserve recipe names, slots, choices and referenced tokens. `applyTheme` updates recipe CSS and defaults; `resetTheme` restores them. Token-only CSS assets exclude component recipes.
+- Full guide: https://yarcl.dev/configuration/component-recipes/
+
 ## Working in a yarcl project
 
 - Start by reading `src/yarcl.config.ts` (or the file passed to the build plugin): it lists every valid size, color, variant, spacing step and text style.
@@ -170,6 +182,7 @@ Conventions:
 - [Sizes and radii](https://yarcl.dev/configuration/sizes-and-radii/)
 - [Variants](https://yarcl.dev/configuration/variants/)
 - [Typography](https://yarcl.dev/configuration/typography/)
+- [Extending components](https://yarcl.dev/configuration/component-recipes/): recipes, typed tokens, custom slots, behavior and themes
 - [Defaults](https://yarcl.dev/configuration/component-defaults/)
 - [Generated CSS](https://yarcl.dev/configuration/generated-css/): CSS variables and classes
 - [Build plugins](https://yarcl.dev/configuration/build-plugins/): Vite, webpack, Rspack, Rollup and esbuild setup, options, fallback and watching

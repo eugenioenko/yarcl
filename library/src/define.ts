@@ -1,3 +1,11 @@
+import { tokens, type TokenAccessor } from './tokens';
+import type { RecipeChecks, RecipeDefinition } from './recipes';
+
+export { tokens } from './tokens';
+export type { TokenAccessor, TokenGroup, TokenReference } from './tokens';
+export { defineRecipes } from './recipes';
+export type { RecipeDefinition, RecipeSlots, RecipeStyle, RecipeVariants } from './recipes';
+
 /** A color with a value for each color scheme. Emitted as CSS `light-dark()`. */
 export interface ColorPair {
   /** Value used when the color scheme is light. */
@@ -173,6 +181,8 @@ type ComponentConfig<C extends ComponentName> = {
  * keys, which are emitted as CSS variables for the consumer's own styles.
  */
 export interface YarclShape {
+  /** Consumer component recipes, generated alongside the built-in component modifiers. */
+  recipes?: Record<string, RecipeDefinition>;
   /** Semantic colors. Keys become the valid values of the `color` prop. */
   colors: Record<string, ColorToken>;
   /** Neutral colors for backgrounds, text and borders. Extra keys allowed. */
@@ -379,6 +389,7 @@ type ComponentChecks<T extends YarclShape> = {
 };
 
 type Checks<T extends YarclShape> = {
+  recipes?: T extends { recipes: infer R extends Record<string, RecipeDefinition> } ? RecipeChecks<R> : never;
   components?: ComponentChecks<T>;
   colors: KeyCheck<T['colors']>;
   neutrals: KeyCheck<T['neutrals']>;
@@ -455,6 +466,12 @@ type Checks<T extends YarclShape> = {
  * });
  * ```
  */
-export function defineConfig<const T extends YarclShape>(config: T & Checks<T>): T {
-  return config;
+export function defineConfig<const T extends YarclShape>(config: T & Checks<T>): T;
+/** Extends a validated base config with recipes using autocompleting CSS token references. */
+export function defineConfig<const T extends YarclShape, const R extends Record<string, RecipeDefinition>>(
+  config: T & Checks<T>,
+  extend: (yarcl: TokenAccessor<T>) => { recipes: R & RecipeChecks<R> },
+): Omit<T, 'recipes'> & { recipes: R };
+export function defineConfig<T extends YarclShape>(config: T, extend?: (yarcl: TokenAccessor<T>) => { recipes: Record<string, RecipeDefinition> }) {
+  return extend ? { ...config, ...extend(tokens(config)) } : config;
 }

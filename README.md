@@ -118,6 +118,35 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 **Feedback**: Badge, Alert, Spinner, Skeleton, Progress, EmptyState
 **Reference**: `DesignReference` from `@yarcl/react/reference` renders your whole design system from your config.
 
+## Extending components
+
+Define component recipes in the config with typed token references, slots, variants and defaults:
+
+```ts
+export default defineConfig(defaults, (yarcl) => ({
+  recipes: {
+    Action: {
+      slots: { root: { borderRadius: yarcl.radii.rounded } },
+      variants: {
+        emphasis: { strong: { root: { fontWeight: 700 } } },
+      },
+      defaults: { emphasis: 'strong' },
+    },
+  },
+}));
+```
+
+```tsx
+import { Button, createComponent } from '@yarcl/react';
+
+const Action = createComponent('Action', Button);
+<Action emphasis="strong">Save changes</Action>
+```
+
+The plugin generates CSS and the recipe adds typed props while preserving Button's behavior.
+Use custom markup with named slots or `useRecipe` for your own behavior. See the
+[component extension guide](https://yarcl.dev/configuration/component-recipes/).
+
 ## Themes
 
 `@yarcl/react/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Bloom**, **Compact** and **Editorial**.

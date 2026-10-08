@@ -1,4 +1,4 @@
-import { defineConfig } from '@yarcl/react/define';
+import { defineConfig, defineRecipes } from '@yarcl/react/define';
 import defaults from '@yarcl/react/defaults';
 
 export default defineConfig({
@@ -120,4 +120,41 @@ export default defineConfig({
     softVariant: 'wash',
     modalSize: 'regular',
   },
-});
+}, (yarcl) => ({
+  recipes: defineRecipes({
+    Action: {
+      slots: { root: { borderRadius: yarcl.radii.hairline } },
+      variants: {
+        emphasis: {
+          subtle: { root: { opacity: 0.8 } },
+          strong: { root: { fontWeight: 700 } },
+        },
+      },
+      defaults: { emphasis: 'subtle' },
+    },
+    OrderStatus: {
+      slots: {
+        root: {
+          display: 'inline-flex', alignItems: 'center',
+          gap: yarcl.spacing['2'], padding: yarcl.spacing['2'],
+          borderRadius: yarcl.radii.hairline, backgroundColor: yarcl.neutrals.surface,
+          color: yarcl.neutrals.text, width: 'var(--status-width, auto)',
+        },
+        icon: { color: yarcl.colors.moss },
+        label: { fontWeight: 500 },
+      },
+      variants: {
+        status: {
+          pending: { icon: { opacity: 0.5 } },
+          paid: { icon: { opacity: 1 } },
+        },
+        emphasis: {
+          subtle: { root: { borderStyle: 'solid', borderWidth: yarcl.borders.width, borderColor: yarcl.neutrals.border } },
+          strong: { label: { fontWeight: 700 } },
+        },
+      },
+      defaults: { status: 'pending', emphasis: 'subtle' },
+      compounds: [{ when: { status: 'paid', emphasis: 'strong' }, slots: { label: { textDecoration: 'underline' } } }],
+    },
+  }),
+}));

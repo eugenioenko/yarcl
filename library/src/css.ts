@@ -1,5 +1,6 @@
 import { contrast, mix, parseHex, readableOn, readableText, toHex } from './color';
 import type { ColorPair, ColorToken, ComponentName, FontFaceToken, SizeToken, VariantToken, YarclShape } from './define';
+import { generateRecipeCss } from './recipe-css';
 
 const MIN_CONTRAST = 4.5;
 
@@ -231,6 +232,11 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
   }
 
   for (const [key, density] of Object.entries(config.density)) {
+    root.push(
+      [`--yarcl-density-${ident(key)}-padding-x`, density.paddingX],
+      [`--yarcl-density-${ident(key)}-padding-y`, density.paddingY],
+      [`--yarcl-density-${ident(key)}-font-size`, density.fontSize],
+    );
     rules.push(
       rule(`.yarcl-density-${ident(key)}`, [
         ['--yarcl-cell-px', density.paddingX],
@@ -334,5 +340,5 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
 
   if (tokensOnly) return [rule(':root', root), ...textRules].join('\n\n') + '\n';
   const faces = (config.typography.fontFaces ?? []).map(fontFace);
-  return [...faces, rule(':root', root), ...rules].join('\n\n') + '\n';
+  return [...faces, rule(':root', root), ...rules, ...generateRecipeCss(config)].join('\n\n') + '\n';
 }

@@ -38,6 +38,7 @@ import {
 } from '@yarcl/react';
 import { DesignReference } from '@yarcl/react/reference';
 import { InputContentDemo } from './InputContentDemo';
+import { RecipesDemo } from './RecipesDemo';
 
 const garmentSizes = ['XS', 'S', 'M', 'L', 'XL'];
 const occasions = ['Office', 'Weekend', 'Travel', 'Evening'].map((label) => ({ value: label.toLowerCase(), label }));
@@ -194,6 +195,7 @@ export function App() {
               <Heading level={2}>Input content</Heading>
               <InputContentDemo />
             </Stack>
+            <RecipesDemo />
             <Stack as="section" gap="3">
               <Heading level={2}>Save options</Heading>
               <SplitButton

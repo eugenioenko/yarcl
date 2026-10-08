@@ -1,6 +1,9 @@
 import '@yarcl/react/styles.css';
 import './styles.css';
 
+export { createComponent, useRecipe } from './create-component';
+export type { ExtendedComponentProps, RecipeName, RecipeRenderContext } from './create-component';
+
 export { Button } from './components/Button';
 export { SplitButton } from './components/SplitButton';
 export type { SplitButtonProps, SplitButtonOption } from './components/SplitButton';

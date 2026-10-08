@@ -25,6 +25,56 @@ async function project(): Promise<string> {
 }
 
 describe('token asset emission', () => {
+  it('generates imported recipes through the existing stylesheet module and rebuilds edited definitions', async () => {
+    const root = await project();
+    await writeFile(join(root, 'tsconfig.json'), JSON.stringify({ compilerOptions: { paths: { '@yarcl/config': ['./config.ts'] } } }));
+    await writeFile(join(root, 'index.js'), "import '@yarcl/react/styles.css';");
+    await writeFile(join(root, 'config.ts'), `
+import { defineConfig } from ${JSON.stringify(resolve(import.meta.dirname, '../src/define.ts'))};
+import defaults from ${JSON.stringify(resolve(import.meta.dirname, '../src/yarcl.config.ts'))};
+import recipes from './recipes.ts';
+export default defineConfig(defaults, (yarcl) => ({ recipes: recipes(yarcl) }));
+`);
+    for (const weight of [700, 800]) {
+      await writeFile(join(root, 'recipes.ts'), `export default (yarcl) => ({ Action: { slots: { root: { color: yarcl.colors.success, fontWeight: ${weight} } } } });`);
+      const result = await build({
+        configFile: false, root, logLevel: 'silent', plugins: [yarcl({ config: 'config.ts' })],
+        build: { write: false, minify: false, cssMinify: false, rollupOptions: { input: join(root, 'index.js') } },
+      });
+      const outputs = (Array.isArray(result) ? result : [result]).flatMap((item) => 'output' in item ? item.output : []);
+      const css = outputs.flatMap((item) => item.type === 'asset' && item.fileName.endsWith('.css') && item.fileName !== 'yarcl.tokens.css' ? [String(item.source)] : []).join('\n');
+      expect(css).toContain('yarcl-recipe-');
+      expect(css).toContain('color: var(--yarcl-color-success);');
+      expect(css).toContain(`font-weight: ${weight};`);
+    }
+  });
+
+  it('invalidates the full generated stylesheet when an imported recipe changes in dev', async () => {
+    const root = await project();
+    await writeFile(join(root, 'tsconfig.json'), JSON.stringify({ compilerOptions: { paths: { '@yarcl/config': ['./config.ts'] } } }));
+    await writeFile(join(root, 'index.js'), "import '@yarcl/react/styles.css';");
+    await writeFile(join(root, 'config.ts'), `
+import defaults from ${JSON.stringify(resolve(import.meta.dirname, '../src/yarcl.config.ts'))};
+import recipes from './recipes.ts';
+export default { ...defaults, recipes };
+`);
+    await writeFile(join(root, 'recipes.ts'), 'export default { Action: { slots: { root: { fontWeight: 700 } } } };');
+    const server = await createServer({
+      configFile: false, root, logLevel: 'silent', plugins: [yarcl({ config: 'config.ts', emitTokens: false })],
+      server: { port: 0, watch: { usePolling: true, interval: 50 } },
+    });
+    const cssUrl = '@yarcl/react/styles.css';
+    try {
+      await server.listen();
+      expect((await server.transformRequest(cssUrl))?.code).toContain('font-weight: 700;');
+      await vi.waitFor(() => expect(server.watcher.getWatched()[root]).toContain('recipes.ts'));
+      await writeFile(join(root, 'recipes.ts'), 'export default { Action: { slots: { root: { fontWeight: 800 } } } };');
+      await vi.waitFor(async () => expect((await server.transformRequest(cssUrl))?.code).toContain('font-weight: 800;'), { timeout: 5000 });
+    } finally {
+      await server.close();
+    }
+  });
+
   it.each([
     [undefined, 'yarcl.tokens.css'],
     [true, 'yarcl.tokens.css'],

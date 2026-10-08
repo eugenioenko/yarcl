@@ -1,3 +1,5 @@
+import { createComponent } from '@yarcl/react';
+import { tokens, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
 import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
@@ -285,3 +287,62 @@ export const contract = (
 toast({ title: 'Guardado', radius: 'hairline', gap: '2', padding: '4', textStyle: 'fine' });
 // @ts-expect-error
 toast({ title: 'Guardado', gap: 'normal' });
+
+
+/** Checks recipe props, inherited semantics, refs, slots and the consumer's token vocabulary. */
+function recipeContract() {
+  const yarcl = tokens(config);
+  const color = yarcl.colors.moss;
+  // @ts-expect-error another consumer's color must not autocomplete here
+  void yarcl.colors.success;
+  // @ts-expect-error unknown token key
+  void yarcl.colors.missing;
+  // @ts-expect-error unknown token group
+  void yarcl.color.moss;
+  // @ts-expect-error token references are not concrete color strings
+  const literal: string = color;
+  const Action = createComponent('Action', Button);
+  const Status = createComponent('OrderStatus', 'div', ({ rootProps, slots }) => {
+    // @ts-expect-error only configured slots exist
+    void slots.missing;
+    return <div {...rootProps}><span className={slots.icon} aria-hidden="true">✓</span><span className={slots.label}>{rootProps.children}</span></div>;
+  });
+  // @ts-expect-error only configured recipe names exist
+  createComponent('Missing', 'div');
+  // @ts-expect-error recipes are selected by name, not arbitrary CSS
+  createComponent('OrderStatus', 'invalid-element');
+  const valid = <><Action emphasis="strong" onClick={() => {}} ref={(element) => { element?.focus(); }}>Save</Action><Action href="/account" emphasis="subtle">Account</Action><Status status="paid" emphasis="strong" ref={(element) => { element?.focus(); }}>Paid</Status></>;
+  // @ts-expect-error only configured variant values exist
+  const invalidStatus = <Status status="refunded" />;
+  // @ts-expect-error variants remain literal unions
+  const invalidEmphasis = <Action emphasis="loud" />;
+  // @ts-expect-error recipe props are not allowed on unrelated recipes
+  const invalidAxis = <Action status="paid" />;
+  // @ts-expect-error native attributes retain their types
+  const invalidDisabled = <Action disabled="yes" />;
+  // @ts-expect-error button link semantics are preserved
+  const invalidLink = <Action href="/account" disabled />;
+  // @ts-expect-error the root's ref type is preserved
+  const invalidRef = <Status ref={(element: HTMLButtonElement | null) => { element?.focus(); }} />;
+  // @ts-expect-error tokens must match the CSS property group
+  const wrongGroup: RecipeStyle = { color: yarcl.spacing[config.defaults.gap] };
+  // @ts-expect-error CSS values retain their value types
+  const wrongCss: RecipeStyle = { display: true };
+  // @ts-expect-error missing root slot
+  defineRecipes({ Invalid: { slots: { label: {} } } });
+  // @ts-expect-error variant styles must refer to declared slots
+  defineRecipes({ Invalid: { slots: { root: {} }, variants: { appearance: { soft: { missing: {} } } } } });
+  // @ts-expect-error defaults must select an existing variant value
+  defineRecipes({ Invalid: { slots: { root: {} }, variants: { appearance: { soft: { root: {} } } }, defaults: { appearance: 'missing' } } });
+  // @ts-expect-error defaults must select an existing axis
+  defineRecipes({ Invalid: { slots: { root: {} }, defaults: { appearance: 'soft' } } });
+  // @ts-expect-error reserved props cannot become variant axes
+  defineRecipes({ Invalid: { slots: { root: {} }, variants: { ref: { soft: { root: {} } } } } });
+  // @ts-expect-error compound conditions must use existing choices
+  defineRecipes({ Invalid: { slots: { root: {} }, variants: { appearance: { soft: { root: {} } } }, compounds: [{ when: { appearance: 'missing' }, slots: { root: {} } }] } });
+  const ConflictingBase = (_props: { status?: string; className?: string }) => null;
+  // @ts-expect-error variant axes cannot consume inherited behavior props
+  createComponent('OrderStatus', ConflictingBase);
+  void [literal, valid, invalidStatus, invalidEmphasis, invalidAxis, invalidDisabled, invalidLink, invalidRef, wrongGroup, wrongCss];
+}
+void recipeContract;
