@@ -26,6 +26,7 @@ export function useFormReset(elementRef: RefObject<HTMLElement | null> | undefin
   }, [elementRef, enabled]);
 }
 
+/** Tracks controlled or internal state and restores uncontrolled defaults after accepted form resets. */
 export function useControllable<T>(
   value: T | undefined,
   defaultValue: T,
