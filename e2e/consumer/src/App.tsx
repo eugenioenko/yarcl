@@ -56,6 +56,7 @@ const shades = [
 
 type Scheme = 'light dark' | 'light' | 'dark';
 
+/** Demonstrates the library with the second consumer design system. */
 export function App() {
   const params = new URLSearchParams(location.search);
   const [scheme, setScheme] = useState<Scheme>(() => {

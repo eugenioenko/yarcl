@@ -55,6 +55,7 @@ export interface TableProps extends ComponentProps<'table'> {
   wrapStyle?: CSSProperties;
 }
 
+/** Renders the table frame and shares its scroll container and density with compound parts. */
 function TableRoot({
   density,
   radius,
@@ -109,6 +110,7 @@ export type CellAlign = 'start' | 'center' | 'end';
 /** Sort direction for a table column. */
 export type SortDirection = 'ascending' | 'descending' | 'none';
 
+/** Displays the current column sort direction. */
 function SortIcon({ direction }: { direction?: SortDirection | false | null }) {
   if (direction === 'ascending') {
     return (
@@ -169,6 +171,7 @@ export interface TableHeaderCellProps extends Omit<ComponentProps<'th'>, 'align'
   sortLabel?: string;
 }
 
+/** Renders a header cell with an optional accessible sort trigger. */
 function TableHeaderCell({
   align = 'start',
   scope = 'col',
@@ -220,6 +223,7 @@ export interface TableRowProps extends ComponentProps<'tr'> {
   selected?: boolean;
 }
 
+/** Renders a native row with its selection state. */
 function TableRow({ selected, className, ...props }: TableRowProps) {
   return (
     <tr
@@ -239,6 +243,7 @@ export interface TableCellProps extends Omit<ComponentProps<'td'>, 'align'> {
   align?: CellAlign;
 }
 
+/** Aligns native cell content using the table density. */
 function TableCell({ align = 'start', className, ...props }: TableCellProps) {
   return <td className={cx(`yarcl-cell-${align}`, className)} {...props} />;
 }
@@ -257,6 +262,7 @@ export interface TableSelectAllCellProps extends Omit<ComponentProps<'th'>, 'chi
   disabled?: boolean;
 }
 
+/** Renders the header selection checkbox, including partial selection state. */
 function TableSelectAllCell({
   checked = false,
   indeterminate = false,
@@ -292,6 +298,7 @@ export interface TableSelectionCellProps extends Omit<ComponentProps<'td'>, 'chi
   disabled?: boolean;
 }
 
+/** Renders a row selection checkbox without triggering row click handlers. */
 function TableSelectionCell({
   checked = false,
   onCheckedChange,
@@ -349,6 +356,7 @@ export interface TableMeasuredBodyProps<T> extends TableVirtualBodyBaseProps<T> 
 /** Props for `Table.VirtualBody` with explicit fixed heights or measured variable heights. */
 export type TableVirtualBodyProps<T> = TableFixedBodyProps<T> | TableMeasuredBodyProps<T>;
 
+/** Finds the row containing an offset, or -1 for an empty body. */
 function rowAtOffset(offsets: number[], offset: number) {
   let low = 0;
   let high = offsets.length - 1;
@@ -360,6 +368,7 @@ function rowAtOffset(offsets: number[], offset: number) {
   return Math.min(low, offsets.length - 2);
 }
 
+/** Windows table rows using explicit fixed heights or cached measurements, preserving focus and scroll anchors. */
 function TableVirtualBody<T>({
   items,
   rowHeight,
@@ -385,6 +394,9 @@ function TableVirtualBody<T>({
   const stickToBottom = useRef(false);
   const bottomIntent = useRef(false);
   const columnWidths = useRef<string | undefined>(undefined);
+  const rowObserver = useRef<ResizeObserver | null>(null);
+  const observedRows = useRef(new Set<HTMLTableRowElement>());
+  const measureRows = useRef<(rows: HTMLTableRowElement[]) => void>(() => {});
   const [viewport, setViewport] = useState({ top: 0, height: 600 });
   const [focusedKey, setFocusedKey] = useState<string | number | null>(null);
   const [columnCount, setColumnCount] = useState(1);
@@ -408,7 +420,7 @@ function TableVirtualBody<T>({
     [items, getItemKey],
   );
   const uniqueKeys = useMemo(() => new Set(keys).size === keys.length, [keys]);
-  if (measured && !uniqueKeys) throw new Error('yarcl: Table.VirtualBody keys must be unique');
+  if (!uniqueKeys) throw new Error('yarcl: Table.VirtualBody keys must be unique');
   const offsets = useMemo(() => {
     const result = [0];
     for (const key of keys)
@@ -431,6 +443,7 @@ function TableVirtualBody<T>({
   const renderedIndices = [...indices].sort((a, b) => a - b);
   const scrollElement = () => scrollRef?.current ?? context?.wrapRef.current;
 
+  /** Uses the final header row or a rendered body row to determine logical columns. */
   function columnCells() {
     const body = bodyRef.current;
     const head = body?.closest('table')?.tHead;
@@ -440,11 +453,13 @@ function TableVirtualBody<T>({
     );
   }
 
+  /** Includes column widths so wrapping changes invalidate offscreen measurements. */
   function widthSignature() {
     const width = bodyRef.current?.closest('table')?.getBoundingClientRect().width;
     return [width, ...[...(columnCells() ?? [])].map((cell) => cell.getBoundingClientRect().width)].join(',');
   }
 
+  /** Converts container geometry to body offsets, excluding the sticky header. */
   function readViewport() {
     const el = scrollElement();
     const body = bodyRef.current;
@@ -455,6 +470,7 @@ function TableVirtualBody<T>({
     return { top, height: Math.max(0, el.clientHeight - origin - top) };
   }
 
+  /** Publishes the viewport and spacer column counts when their values change. */
   function updateViewport() {
     const next = readViewport();
     if (!next) return;
@@ -463,6 +479,7 @@ function TableVirtualBody<T>({
     if (cells) setColumnCount([...cells].reduce((sum, cell) => sum + cell.colSpan, 0));
   }
 
+  /** Discards heights after layout changes while retaining the first visible item as an anchor. */
   function invalidateHeights() {
     if (!measured || !heights.current.size) return;
     const current = layout.current;
@@ -533,6 +550,20 @@ function TableVirtualBody<T>({
   }, [scrollRef, context?.wrapRef, context?.stickyHeader, measured]);
 
   useLayoutEffect(() => {
+    if (!measured) return;
+    const observer = new ResizeObserver((entries) => {
+      measureRows.current(entries.map((entry) => entry.target as HTMLTableRowElement));
+    });
+    rowObserver.current = observer;
+    const observed = observedRows.current;
+    return () => {
+      observer.disconnect();
+      observed.clear();
+      rowObserver.current = null;
+    };
+  }, [measured, scrollRef, context?.wrapRef]);
+
+  useLayoutEffect(() => {
     const el = scrollElement();
     const body = bodyRef.current;
     if (!body || !el) return;
@@ -552,20 +583,21 @@ function TableVirtualBody<T>({
     updateViewport();
     if (!measured) return;
     const rows = [...body.rows].filter((row) => !row.classList.contains('yarcl-table-virtual-spacer'));
-    const measure = () => {
+    measureRows.current = (changedRows) => {
       const current = layout.current;
       const anchor = rowAtOffset(current.offsets, readViewport()?.top ?? 0);
       const atBottom = bottomIntent.current;
       let adjustment = 0;
       let changed = false;
-      for (const row of rows) {
+      for (const row of changedRows) {
+        if (!observedRows.current.has(row)) continue;
         const index = Number(row.dataset.yarclRowIndex);
         const key = keys[index];
         const height = row.getBoundingClientRect().height;
         if (height <= 0 || key === undefined) continue;
         const previous = heights.current.get(key) ?? estimate;
+        heights.current.set(key, height);
         if (height !== previous) {
-          heights.current.set(key, height);
           if (index < anchor) adjustment += height - previous;
           changed = true;
         }
@@ -576,10 +608,22 @@ function TableVirtualBody<T>({
         setRevision(++generation.current);
       }
     };
-    const observer = new ResizeObserver(measure);
-    rows.forEach((row) => observer.observe(row));
-    measure();
-    return () => observer.disconnect();
+    const nextRows = new Set(rows);
+    const newlyObserved: HTMLTableRowElement[] = [];
+    for (const row of observedRows.current) {
+      if (!nextRows.has(row)) {
+        rowObserver.current?.unobserve(row);
+        observedRows.current.delete(row);
+      }
+    }
+    for (const row of rows) {
+      if (!observedRows.current.has(row)) {
+        rowObserver.current?.observe(row);
+        observedRows.current.add(row);
+        newlyObserved.push(row);
+      } else if (!heights.current.has(keys[Number(row.dataset.yarclRowIndex)])) newlyObserved.push(row);
+    }
+    measureRows.current(newlyObserved);
   });
 
   useEffect(() => {
@@ -589,6 +633,7 @@ function TableVirtualBody<T>({
 
   const content: ReactNode[] = [];
   let previousEnd = 0;
+  /** Fills gaps between rendered rows, including gaps around a focused row outside the viewport. */
   function spacer(from: number, to: number) {
     const height = offsets[to] - offsets[from];
     if (height > 0)

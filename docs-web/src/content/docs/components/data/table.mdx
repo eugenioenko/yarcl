@@ -85,7 +85,7 @@ Use measured mode when descriptions wrap, rows expand, or density changes their 
 
 Render exactly one `Table.Row` or native `tr` per item. A custom row component must spread its props onto its `tr`. Row and body refs remain available. Keep column widths stable, for example with `tableLayout: 'fixed'` or a `colgroup`, so different windows do not continually change text wrapping.
 
-For fixed mode, pass `rowHeight` instead of `estimateRowHeight`. Rows must all render at that height, including their padding and borders. Update it if density or content changes the height:
+For fixed mode, pass `rowHeight` instead of `estimateRowHeight`. Rows must all render at that height, including their padding and borders. Both modes reject duplicate item keys. Update it if density or content changes the height:
 
 ```tsx
 <Table.VirtualBody items={orders} rowHeight={36} getItemKey={(order) => order.id}>

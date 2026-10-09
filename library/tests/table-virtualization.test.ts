@@ -34,6 +34,8 @@ test('rejects ambiguous height modes, missing stable keys and duplicate keys', (
   expect(() => render({ items, children, getItemKey, estimateRowHeight: 40, rowHeight: 40 })).toThrow(/either/);
   expect(() => render({ items, children, estimateRowHeight: 40 })).toThrow(/getItemKey/);
   expect(() => render({ items, children, getItemKey: () => 'duplicate', estimateRowHeight: 40 })).toThrow(/unique/);
+  expect(() => render({ items, children, getItemKey: () => 'duplicate', rowHeight: 40 })).toThrow(/unique/);
+  expect(() => render({ items: [{ id: 'same' }, { id: 'same' }], children, rowHeight: 40 })).toThrow(/unique/);
 });
 
 test('requires a row element in measured mode and preserves flexible children in fixed mode', () => {

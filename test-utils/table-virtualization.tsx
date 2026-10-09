@@ -1,5 +1,5 @@
 import { useRef, type ComponentProps } from 'react';
-import { beforeEach, expect, inject, test } from 'vitest';
+import { beforeEach, expect, inject, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { Table } from '@yarcl/react';
 import type { Density } from '@yarcl/react';
@@ -16,6 +16,7 @@ const settle = () =>
   new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 const firstIndex = () => Number(rows()[0]?.dataset.yarclRowIndex);
 
+/** Renders deterministic mixed heights and focusable controls for viewport tests. */
 function Fixture({
   data = items,
   density,
@@ -106,6 +107,7 @@ function Fixture({
   );
 }
 
+/** Checks that adjacent rendered rows cover the visible body without gaps. */
 async function assertCovered(el = wrap()) {
   await settle();
   await expect
@@ -167,9 +169,14 @@ export function testTableVirtualization(densities: [Density, Density]) {
     await settle();
     expect(rows().map((row) => row.dataset.id)).toEqual(items.slice(0, 12).reverse().slice(0, rows().length).map(key));
     expect(rows().length).toBeLessThan(12);
-    for (const row of rows())
-      expect(Math.abs(row.getBoundingClientRect().height - heights.get(row.dataset.id)!)).toBeLessThanOrEqual(1);
-    expect(document.querySelector('tbody')!.getBoundingClientRect().height).toBe(total);
+    let expectedTotal = total;
+    const border = parseFloat(getComputedStyle(rows()[0].cells[0]).borderBottomWidth);
+    for (const row of rows()) {
+      const change = row.getBoundingClientRect().height - heights.get(row.dataset.id)!;
+      expect(Math.abs(change)).toBeLessThanOrEqual(border);
+      expectedTotal += change;
+    }
+    expect(document.querySelector('tbody')!.getBoundingClientRect().height).toBe(expectedTotal);
     await screen.rerender(<Fixture data={items.slice(0, 2)} />);
     await expect.poll(() => rows().length).toBe(2);
     expect(document.querySelectorAll('.yarcl-table-virtual-spacer').length).toBe(0);
@@ -302,6 +309,39 @@ export function testTableVirtualization(densities: [Density, Density]) {
     await screen.unmount();
     expect(bodyRef.current).toBeNull();
     expect(rowRef.current).toBeNull();
+  });
+
+  test('keeps ResizeObserver instances stable as the window scrolls', async () => {
+    const Original = globalThis.ResizeObserver;
+    let created = 0;
+    let disconnected = 0;
+    class TrackingObserver extends Original {
+      constructor(callback: ResizeObserverCallback) {
+        super(callback);
+        created++;
+      }
+      disconnect() {
+        disconnected++;
+        super.disconnect();
+      }
+    }
+    vi.stubGlobal('ResizeObserver', TrackingObserver);
+    try {
+      const screen = await render(<Fixture />);
+      await settle();
+      const initial = created;
+      expect(initial).toBe(2);
+      for (const position of [30, 350, 1200, 0]) {
+        wrap().scrollTop = position;
+        await assertCovered();
+        expect(created).toBe(initial);
+        expect(disconnected).toBe(0);
+      }
+      await screen.unmount();
+      expect(disconnected).toBe(initial);
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   test('keeps explicit fixed-height virtualization bounded after large scrolls', async () => {
