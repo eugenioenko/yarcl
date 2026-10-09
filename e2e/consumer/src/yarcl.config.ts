@@ -44,6 +44,7 @@ export default defineConfig({
     float: '0 16px 40px -12px light-dark(rgb(28 25 23 / 0.25), rgb(0 0 0 / 0.8))',
   },
   density: {
+    compact: { paddingX: '0.5rem', paddingY: '0.25rem', fontSize: '0.75rem' },
     cozy: { paddingX: '1rem', paddingY: '0.75rem', fontSize: '0.8125rem' },
   },
   modalSizes: {

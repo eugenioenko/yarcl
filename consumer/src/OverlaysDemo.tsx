@@ -73,6 +73,7 @@ const commands: CommandPaletteCommand[] = [
 
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
+/** Demonstrates floating controls, sortable measured tables and pagination. */
 export function OverlaysDemo() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [density, setDensity] = useState<Density>(config.defaults.density);
@@ -273,7 +274,7 @@ export function OverlaysDemo() {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Head>
-          <Table.VirtualBody items={sortedInvoices} rowHeight={36}>
+          <Table.VirtualBody items={sortedInvoices} estimateRowHeight={48} getItemKey={(invoice) => invoice.id}>
             {(invoice) => (
               <Table.Row key={invoice.id} selected={selectedIds.has(invoice.id)}>
                 <Table.SelectionCell

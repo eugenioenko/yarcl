@@ -312,6 +312,19 @@ export const contract = (
           <Table.HeaderCell align="end">Value</Table.HeaderCell>
         </Table.Row>
       </Table.Head>
+      <Table.VirtualBody items={[{ id: 'order', value: 'Ready' }]} estimateRowHeight={48} getItemKey={(item) => item.id}>
+        {(item, index) => <Table.Row><Table.Cell>{item.value} {index}</Table.Cell></Table.Row>}
+      </Table.VirtualBody>
+      {/* @ts-expect-error Measured rows require stable keys. */}
+      <Table.VirtualBody items={[]} estimateRowHeight={48}>{() => <Table.Row />}</Table.VirtualBody>
+      {/* @ts-expect-error Choose one height mode. */}
+      <Table.VirtualBody items={[]} rowHeight={36} estimateRowHeight={48} getItemKey={() => 'key'}>{() => <Table.Row />}</Table.VirtualBody>
+      {/* @ts-expect-error A positive height or estimate must be supplied. */}
+      <Table.VirtualBody items={[]}>{() => <Table.Row />}</Table.VirtualBody>
+      {/* @ts-expect-error Measured mode renders a row element, not text. */}
+      <Table.VirtualBody items={[]} estimateRowHeight={48} getItemKey={() => 'key'}>{() => 'text'}</Table.VirtualBody>
+      {/* @ts-expect-error Stable keys must be strings or numbers. */}
+      <Table.VirtualBody items={[]} estimateRowHeight={48} getItemKey={() => ({})}>{() => <Table.Row />}</Table.VirtualBody>
       <Table.VirtualBody items={[{ id: '1', name: 'Item 1' }]} rowHeight={36} overscan={5} getItemKey={(item) => item.id}>
         {(item) => (
           <Table.Row key={item.id} selected>

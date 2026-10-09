@@ -26,7 +26,7 @@ import { Table } from '@yarcl/react';
       <Table.HeaderCell align="end">Amount</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
-  <Table.VirtualBody items={invoices} rowHeight={36}>
+  <Table.VirtualBody items={invoices} estimateRowHeight={48} getItemKey={(invoice) => invoice.id}>
     {(invoice) => (
       <Table.Row key={invoice.id} selected={selectedIds.has(invoice.id)}>
         <Table.SelectionCell
@@ -47,9 +47,58 @@ import { Table } from '@yarcl/react';
 - `radius` accepts the keys of your [radii](/configuration/sizes-and-radii/#radii) group and styles the table frame.
 - `sortable` on `Table.HeaderCell` manages `aria-sort` state and accessible sort triggers.
 - `Table.SelectAllCell` and `Table.SelectionCell` provide accessible row selection checkboxes.
-- `Table.VirtualBody` efficiently renders large datasets by windowing rows in the viewport. It is opt in and requires equal height rows. Pass their rendered height in CSS pixels as `rowHeight`; update it when row height changes. Use `Table.Body` for variable height rows.
+- `Table.VirtualBody` renders a window of rows around the viewport. Choose measured heights for wrapped content or an explicit fixed height when every row is equal.
 - `align="end"` also uses tabular numbers, so amounts line up.
 - `caption` is visible and names the table for screen readers.
+
+## Virtual rows
+
+Use measured mode when descriptions wrap, rows expand, or density changes their height:
+
+```tsx
+<Table stickyHeader caption="Orders" wrapStyle={{ maxHeight: '24rem' }}>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Customer</Table.HeaderCell>
+      <Table.HeaderCell>Description</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.VirtualBody
+    items={orders}
+    estimateRowHeight={48}
+    getItemKey={(order) => order.id}
+    overscan={5}
+  >
+    {(order) => (
+      <Table.Row>
+        <Table.Cell>{order.customer}</Table.Cell>
+        <Table.Cell>{order.description}</Table.Cell>
+      </Table.Row>
+    )}
+  </Table.VirtualBody>
+</Table>
+```
+
+`estimateRowHeight` is a positive initial estimate in CSS pixels. `ResizeObserver` replaces it with each rendered row's actual height. Unvisited rows retain their estimate, so the scrollbar becomes more accurate as you scroll. Choose an estimate close to a typical row to reduce adjustments.
+
+`getItemKey` is required in measured mode. Return a unique, stable ID that follows the item through sorting and filtering. An array index is unsuitable for mutable order. Measurements are cached by this key, refreshed when visible content resizes, and invalidated when table width, density or theme changes. The first visible item remains the scroll anchor when earlier rows are remeasured. The focused row and its immediate neighbors stay mounted so Tab and Shift+Tab can continue across virtual windows. The sticky table wrapper can receive keyboard focus; use PageDown to scroll, Home for the first row and End for the last row.
+
+Render exactly one `Table.Row` or native `tr` per item. A custom row component must spread its props onto its `tr`. Row and body refs remain available. Keep column widths stable, for example with `tableLayout: 'fixed'` or a `colgroup`, so different windows do not continually change text wrapping.
+
+For fixed mode, pass `rowHeight` instead of `estimateRowHeight`. Rows must all render at that height, including their padding and borders. Both modes reject duplicate item keys. Update it if density or content changes the height:
+
+```tsx
+<Table.VirtualBody items={orders} rowHeight={36} getItemKey={(order) => order.id}>
+  {(order) => (
+    <Table.Row>
+      <Table.Cell>{order.customer}</Table.Cell>
+      <Table.Cell>{order.total}</Table.Cell>
+    </Table.Row>
+  )}
+</Table.VirtualBody>
+```
+
+`overscan` is a nonnegative integer. Both modes use the table wrapper as their scroll container. Pass `scrollRef` when an ancestor handles scrolling; captions and content before the table are accounted for in the offsets. Use `Table.Body` when every row must be present for printing, browser find or assistive technology traversal.
 
 ## Props
 
@@ -79,4 +128,10 @@ import { Table } from '@yarcl/react';
 
 ### Table.VirtualBody
 
-<Props of="TableVirtualBodyProps" />
+#### Measured heights
+
+<Props of="TableMeasuredBodyProps" exclude={['rowHeight']} />
+
+#### Fixed heights
+
+<Props of="TableFixedBodyProps" exclude={['estimateRowHeight']} />

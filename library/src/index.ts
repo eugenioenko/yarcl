@@ -112,6 +112,9 @@ export type {
   TableSelectAllCellProps,
   TableSelectionCellProps,
   TableVirtualBodyProps,
+  TableFixedBodyProps,
+  TableMeasuredBodyProps,
+  TableVirtualBodyBaseProps,
   CellAlign,
   SortDirection,
 } from './components/Table';

@@ -42,7 +42,8 @@
     .yarcl-tabs-panel,
     .yarcl-date-picker-nav,
     .yarcl-date-picker-day,
-    .yarcl-accordion-trigger
+    .yarcl-accordion-trigger,
+    .yarcl-table-wrap
   ):focus-visible {
   outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
