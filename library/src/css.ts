@@ -301,6 +301,10 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
     ]));
   }
 
+  for (const property of textProperties.slice(1)) {
+    root.push([`--yarcl-root-${property}`, `var(--yarcl-text-${ident(config.defaults.textStyle)}-${property})`]);
+  }
+
   const prose = config.typography.prose;
   const bodyStyle = prose?.body ?? config.defaults.textStyle;
   const codeStyle = prose?.code ?? (Object.hasOwn(config.typography.styles, 'code') ? 'code' : bodyStyle);

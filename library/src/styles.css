@@ -1,3 +1,14 @@
+:where(.yarcl-root) {
+  background: var(--yarcl-neutral-bg);
+  color: var(--yarcl-neutral-text);
+  font-family: var(--yarcl-font-body);
+  font-size: var(--yarcl-root-size);
+  font-weight: var(--yarcl-root-weight);
+  line-height: var(--yarcl-root-line-height);
+  letter-spacing: var(--yarcl-root-letter-spacing);
+  color-scheme: inherit;
+}
+
 .yarcl-button,
 .yarcl-input,
 .yarcl-textarea {

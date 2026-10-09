@@ -170,16 +170,33 @@ Use `--config <path>` to choose a different config file, `--bundler <name>` when
 
 ## Page styles
 
-yarcl doesn't style `body`. Use the generated CSS variables to match the page to your config:
+Add `yarcl-root` to your body to let the design system style the page:
 
-```css title="src/index.css"
-body {
-  margin: 0;
-  font-family: var(--yarcl-font-body);
-  color: var(--yarcl-neutral-text);
-  background: var(--yarcl-neutral-bg);
-}
+```html title="index.html"
+<body class="yarcl-root">
+  <div id="root"></div>
+</body>
 ```
+
+For a section of an existing application, put it on that section instead:
+
+```tsx
+<div className="yarcl-root">
+  <App />
+</div>
+```
+
+The class uses `neutrals.bg` for the background, `neutrals.text` for text, and `typography.fonts.body` for the font family. Font size, weight, line height and letter spacing follow the style named by `defaults.textStyle`. This supports your own style keys, such as `copy`, and does not depend on a style named `body`.
+
+`applyTheme` updates these styles along with the components. The class inherits `color-scheme`: the generated tokens follow the operating system by default, and a mode forced on an ancestor continues to apply. To force a mode just for this section:
+
+```tsx
+<div className="yarcl-root" style={{ colorScheme: 'dark' }}>
+  <App />
+</div>
+```
+
+Page styles are opt in. Without `yarcl-root`, your page keeps its own background and typography. Use your own CSS for layout, margins and viewport height, or to override the page defaults.
 
 ## Keep both mappings in sync
 

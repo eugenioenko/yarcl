@@ -1,4 +1,4 @@
-import { beforeEach, expect, inject, test, vi } from 'vitest';
+import { afterEach, beforeEach, expect, inject, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import axe from 'axe-core';
 import { Pagination, config, type ComponentSize } from '@yarcl/react';
@@ -16,9 +16,13 @@ function pixels(value: string) {
 
 /** Checks compact pagination behavior, layout, tokens and accessibility in both brands. */
 export function testPagination() {
+  let bodyClass = '';
   beforeEach(() => {
+    bodyClass = document.body.className;
+    document.body.classList.add('yarcl-root');
     document.documentElement.style.colorScheme = inject('scheme');
   });
+  afterEach(() => { document.body.className = bodyClass; });
 
   test('controlled compact pagination reports changes and supports custom summary and navigation labels', async () => {
     const changed = vi.fn();

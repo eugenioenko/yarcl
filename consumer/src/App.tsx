@@ -83,6 +83,7 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
+/** Demonstrates the library using the first consumer design system. */
 export function App() {
   const [scheme, setScheme] = useState<Scheme>(() => {
     const s = initialScheme();
@@ -100,7 +101,7 @@ export function App() {
   const reference = new URLSearchParams(location.search).get('page') === 'reference';
 
   return (
-    <Stack as="main" gap="loose" className="page">
+    <Stack as="main" gap="loose" className="page yarcl-root">
       <Inline as="header" justify="between">
         <Heading level={1} textStyle="display">
           yarcl
