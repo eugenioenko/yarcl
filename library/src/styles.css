@@ -1,3 +1,6 @@
+@layer yarcl.tokens, yarcl.base, yarcl.recipes;
+
+@layer yarcl.base {
 :where(.yarcl-root) {
   background: var(--yarcl-neutral-bg);
   color: var(--yarcl-neutral-text);
@@ -2072,8 +2075,8 @@ html:has(.yarcl-modal[open]) {
 }
 
 .yarcl-table-virtual-spacer td {
-  padding: 0 !important;
-  border-bottom: 0 !important;
+  padding: 0;
+  border-bottom: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2740,4 +2743,5 @@ html:has(.yarcl-modal[open]) {
   .yarcl-date-picker-day {
     transition: none;
   }
+}
 }

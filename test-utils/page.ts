@@ -292,10 +292,11 @@ export const page = {
       await sleep(50);
     }
   },
-  addStyleTag: async ({ content }: { content: string }) => {
+  addStyleTag: async ({ content, prepend = false }: { content: string; prepend?: boolean }) => {
     const style = document.createElement('style');
     style.textContent = content;
-    document.head.append(style);
+    if (prepend) document.head.prepend(style);
+    else document.head.append(style);
     added.push(style);
   },
   viewportSize: () => ({ width: innerWidth, height: innerHeight }),

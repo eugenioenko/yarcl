@@ -76,6 +76,8 @@ import { Button, Field, Input } from '@yarcl/react';
 
 Importing from `@yarcl/react` also loads the generated CSS and the component styles; there is no stylesheet to import. Editing the config hot-reloads the CSS.
 
+All yarcl styles use ordered layers: `yarcl.tokens` (generated variables, modifiers, typography and font faces), `yarcl.base` (components and reference), then `yarcl.recipes` (extensions). Component rules preserve size props, automatic table text sizing and invalid-state colors; recipes can override both layers. Unlayered consumer CSS overrides normal yarcl declarations regardless of specificity or import order, including after `applyTheme`. Declare external layer order before importing libraries: `@layer reset, yarcl, app;`, or with Tailwind 4 `@layer theme, base, yarcl, components, utilities;`. Keep resets layered below yarcl to preserve focus rings and dialog centering. For Starlight, put `@layer starlight, yarcl;` first in its first custom stylesheet. Use `not-content` around component previews. See https://yarcl.dev/configuration/css-layers/.
+
 Add `class="yarcl-root"` to the body, or `className="yarcl-root"` to an app root or section, to opt into theme-driven page styles. It uses `neutrals.bg`, `neutrals.text`, the `typography.fonts.body` font role, and size, weight, line height and letter spacing from `defaults.textStyle`. `applyTheme` updates them at runtime. It inherits `color-scheme`, preserving an ancestor's forced light or dark mode; you can also set `style={{ colorScheme: 'dark' }}` on the root itself. Page background and typography stay consumer-owned without this class. Keep layout and margins in your own CSS.
 
 ## How the build plugin and tsconfig work together

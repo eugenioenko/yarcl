@@ -51,7 +51,7 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   await page.getByRole('button', { name: 'Controlled dialog' }).click();
   const confirm = page.getByRole('dialog', { name: 'Delete project?' });
   check('controlled dialog opens', await confirm.isVisible());
-  await page.addStyleTag({ content: '* { margin: 0 }' });
+  await page.addStyleTag({ content: '@layer reset, yarcl; @layer reset { * { margin: 0 } }', prepend: true });
   const dialogBox = await confirm.boundingBox();
   const viewport = page.viewportSize();
   const centered =
