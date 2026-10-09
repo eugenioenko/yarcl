@@ -273,7 +273,7 @@ export function OverlaysDemo() {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Head>
-          <Table.VirtualBody items={sortedInvoices} rowHeight={36}>
+          <Table.VirtualBody items={sortedInvoices} estimateRowHeight={48} getItemKey={(invoice) => invoice.id}>
             {(invoice) => (
               <Table.Row key={invoice.id} selected={selectedIds.has(invoice.id)}>
                 <Table.SelectionCell

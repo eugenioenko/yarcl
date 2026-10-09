@@ -40,6 +40,12 @@ import { DesignReference } from '@yarcl/react/reference';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
 
+const deliveries = Array.from({ length: 200 }, (_, index) => ({
+  id: `delivery-${index}`,
+  name: `Order ${index + 1}`,
+  description: index % 3 === 0 ? 'Packed in recyclable materials, with a printed care guide and a prepaid return label included.' : 'Ready for delivery.',
+}));
+
 const garmentSizes = ['XS', 'S', 'M', 'L', 'XL'];
 const occasions = ['Office', 'Weekend', 'Travel', 'Evening'].map((label) => ({ value: label.toLowerCase(), label }));
 const shades = [
@@ -196,6 +202,12 @@ export function App() {
               <InputContentDemo />
             </Stack>
             <RecipesDemo />
+            <Table caption="Recent orders" stickyHeader style={{ tableLayout: 'fixed' }} wrapStyle={{ maxHeight: '18rem' }}>
+              <Table.Head><Table.Row><Table.HeaderCell>Order</Table.HeaderCell><Table.HeaderCell>Delivery details</Table.HeaderCell></Table.Row></Table.Head>
+              <Table.VirtualBody items={deliveries} estimateRowHeight={60} getItemKey={(delivery) => delivery.id}>
+                {(delivery) => <Table.Row><Table.Cell>{delivery.name}</Table.Cell><Table.Cell>{delivery.description}</Table.Cell></Table.Row>}
+              </Table.VirtualBody>
+            </Table>
             <Stack as="section" gap="3">
               <Heading level={2}>Save options</Heading>
               <SplitButton
