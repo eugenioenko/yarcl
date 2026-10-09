@@ -52,6 +52,10 @@ export function testNativeFormReset() {
     };
     await page.getByRole('button', { name: 'Submit form' }).click();
     expect(submitted).toEqual(initial);
+    expect(formRef.current!.querySelector('.yarcl-select-value')!.textContent).toBe('Basic plan');
+    expect((formRef.current!.querySelector('.yarcl-combobox') as HTMLInputElement).value).toBe('Canada');
+    expect((formRef.current!.querySelector('[name="seats"]') as HTMLInputElement).value).toBe('2');
+    expect((formRef.current!.querySelector('[name="notifications"]') as HTMLInputElement).checked).toBe(true);
 
     await page.getByRole('combobox', { name: 'Plan', exact: true }).click();
     await page.getByRole('option', { name: 'Premium plan' }).click();
