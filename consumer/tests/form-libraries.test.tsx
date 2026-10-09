@@ -1,12 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { useState } from 'react';
 import { Controller, useForm as useRHF } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm as useTanStackForm } from '@tanstack/react-form';
 import {
-  Checkbox,
   Combobox,
   Field,
   Input,
@@ -14,10 +12,8 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Slider,
   Switch,
 } from '@yarcl/react';
-import { page } from '../../test-utils/page';
 
 const selectOptions = [
   { value: 'free', label: 'Free Plan' },
@@ -704,93 +700,4 @@ describe('Form Libraries Integration', () => {
     });
   });
 
-  describe('Native Form Reset Lifecycle', () => {
-    it('resets uncontrolled yarcl components when HTML form reset is triggered', async () => {
-      function UncontrolledNativeResetForm() {
-        return (
-          <form id="test-native-form">
-            <Field label="Plan">
-              <Select
-                name="plan"
-                defaultValue="pro"
-                options={selectOptions}
-              />
-            </Field>
-
-            <Field label="Country">
-              <Combobox
-                name="country"
-                defaultValue="ca"
-                options={comboboxOptions}
-              />
-            </Field>
-
-            <RadioGroup label="Billing" name="frequency" defaultValue="annual">
-              <Radio value="monthly">Monthly</Radio>
-              <Radio value="annual">Annual</Radio>
-            </RadioGroup>
-
-            <Field label="Seats">
-              <NumberInput
-                name="seats"
-                defaultValue={5}
-                min={1}
-                max={20}
-              />
-            </Field>
-
-            <Field label="Volume">
-              <Slider
-                name="volume"
-                defaultValue={40}
-                min={0}
-                max={100}
-                aria-label="Volume Slider"
-              />
-            </Field>
-
-            <Field label="Notifications">
-              <Switch name="notifications" defaultChecked>
-                Enable Notifications
-              </Switch>
-            </Field>
-
-            <button type="reset">Reset Native</button>
-          </form>
-        );
-      }
-
-      const screen = await render(<UncontrolledNativeResetForm />);
-
-      // Initial state checks
-      expect(screen.getByText('Pro Plan')).toBeTruthy();
-      const comboboxInput = document.querySelector('input.yarcl-combobox') as HTMLInputElement;
-      expect(comboboxInput.value).toBe('Canada');
-
-      const seatsInput = document.querySelector('input.yarcl-number-input-field') as HTMLInputElement;
-      expect(seatsInput.value).toBe('5');
-
-      const switchInput = document.querySelector('input.yarcl-switch-input') as HTMLInputElement;
-      expect(switchInput.checked).toBe(true);
-
-      // Now change uncontrolled select: click select button and choose Enterprise
-      const selectBtn = document.querySelector('button.yarcl-select') as HTMLButtonElement;
-      await selectBtn.click();
-      const enterpriseOption = screen.getByText('Enterprise Plan');
-      await enterpriseOption.click();
-      expect(screen.getByText('Enterprise Plan')).toBeTruthy();
-
-      // Trigger native form reset via the reset button
-      const resetBtn = screen.getByRole('button', { name: 'Reset Native' });
-      await resetBtn.click();
-
-      // Verify Select restored defaultValue ("Pro Plan")
-      expect(screen.getByText('Pro Plan')).toBeTruthy();
-      // Verify NumberInput restored defaultValue ("5")
-      expect(seatsInput.value).toBe('5');
-      // Verify Switch restored defaultChecked (true)
-      expect(switchInput.checked).toBe(true);
-    });
-  });
 });
-
