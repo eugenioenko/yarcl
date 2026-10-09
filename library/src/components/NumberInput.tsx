@@ -1,8 +1,8 @@
-import { useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type FocusEvent } from 'react';
+import { useCallback, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type FocusEvent } from 'react';
 import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
 import { ChevronIcon } from '../floating';
-import { useControllable } from '../hooks';
+import { useControllable, useFormReset } from '../hooks';
 import type { TokenProps } from '../types';
 import { useDefaults } from '../runtime';
 
@@ -97,14 +97,8 @@ export function NumberInput(props: NumberInputProps) {
   const [value, setValue] = useControllable(valueProp, defaultValue, onValueChange, inputRef);
   const [draft, setDraft] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!inputRef.current) return;
-    const form = inputRef.current.closest('form');
-    if (!form) return;
-    const onReset = () => setDraft(null);
-    form.addEventListener('reset', onReset);
-    return () => form.removeEventListener('reset', onReset);
-  }, []);
+  const resetDraft = useCallback(() => setDraft(null), []);
+  useFormReset(inputRef, resetDraft);
 
   const clamp = (n: number) => Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n));
   const locked = disabled || readOnly;
