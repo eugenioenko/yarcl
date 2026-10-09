@@ -61,6 +61,12 @@ import type { YarclPluginOptions } from '@yarcl/react/vite';
 const invalidTokenOutput: YarclPluginOptions = { emitTokens: 1 };
 void invalidTokenOutput;
 
+type PageTextStyle = keyof typeof config.typography.styles;
+const pageTextStyle: PageTextStyle = config.defaults.textStyle;
+// @ts-expect-error page metrics must select a configured text style
+const invalidPageStyle: PageTextStyle = 'missing';
+void [pageTextStyle, invalidPageStyle];
+
 type FontFamily = keyof typeof config.typography.families;
 const bodyFont: FontFamily = config.typography.fonts.body;
 // @ts-expect-error unknown font families cannot be assigned to a role

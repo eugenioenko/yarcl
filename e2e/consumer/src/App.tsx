@@ -85,7 +85,7 @@ export function App() {
   }
 
   return (
-    <Stack as="main" gap="12" className="page">
+    <Stack as="main" gap="12" className="page yarcl-root">
       <Inline as="header" justify="between">
         <Text textStyle="title">Maison Talla</Text>
         <Inline gap="4">

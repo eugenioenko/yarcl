@@ -87,6 +87,16 @@ describe('generateCss', () => {
     expect(css).toContain('--yarcl-prose-list-indent: var(--yarcl-space-6);');
   });
 
+  it.each([defaults, brandA, brandB])('derives page metrics from the default text style', (config) => {
+    const css = generateCss(config);
+    const tokens = generateTokensCss(config);
+    for (const property of ['size', 'weight', 'line-height', 'letter-spacing']) {
+      const alias = `--yarcl-root-${property}: var(--yarcl-text-${config.defaults.textStyle}-${property});`;
+      expect(css).toContain(alias);
+      expect(tokens).toContain(alias);
+    }
+  });
+
   it('rejects breakpoint names that cannot be used in media queries', () => {
     expect(() => generateCss(withConfig({ breakpoints: { 'small screen': '40rem' } }))).toThrow('breakpoint key');
   });

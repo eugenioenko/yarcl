@@ -37,11 +37,11 @@ const budgets = {
   '@yarcl/react/demo': { js: 31.25 * 1024, css: 8.5 * 1024 },
   '@yarcl/react/themes': { js: 3.75 * 1024, css: 0 },
   '@yarcl/react/css': { js: 5 * 1024, css: 0 },
-  '@yarcl/react/generate': { js: 4.75 * 1024, css: 0 },
+  '@yarcl/react/generate': { js: 4.85 * 1024, css: 0 },
   'yarcl CLI': { js: 3.25 * 1024, css: 0 },
-  Button: { js: 2.5 * 1024, css: 10.25 * 1024 },
-  'Button + Input': { js: 2.75 * 1024, css: 10.25 * 1024 },
-  'Button + createComponent': { js: 3.25 * 1024, css: 10.25 * 1024 },
+  Button: { js: 2.5 * 1024, css: 10.35 * 1024 },
+  'Button + Input': { js: 2.75 * 1024, css: 10.35 * 1024 },
+  'Button + createComponent': { js: 3.25 * 1024, css: 10.35 * 1024 },
 };
 const externalPackages = [
   '@floating-ui/react',
