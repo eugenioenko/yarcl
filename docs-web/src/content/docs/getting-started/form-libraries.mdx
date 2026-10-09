@@ -28,7 +28,7 @@ Both React Hook Form and TanStack Form support schema-based validation using Zod
 
 ### Shared Validation Schema
 
-Define a type-safe schema with Zod:
+Define a type-safe schema with Zod 4. Use the [`error` option](https://zod.dev/error-customization) to customize validation messages:
 
 ```tsx title="src/schemas/settingsSchema.ts"
 import { z } from 'zod';
@@ -38,15 +38,15 @@ export const settingsSchema = z.object({
   plan: z.string().min(1, 'Please select a subscription plan'),
   region: z.string().min(1, 'Please select a deployment region'),
   billingCycle: z.enum(['monthly', 'annual'], {
-    message: 'Please choose a billing cycle',
+    error: 'Please choose a billing cycle',
   }),
   seats: z
-    .number({ invalid_type_error: 'Seats must be a number' })
+    .number({ error: 'Seats must be a number' })
     .min(1, 'Must have at least 1 seat')
     .max(50, 'Maximum 50 seats per organization'),
   notifications: z.boolean(),
   agreeToTerms: z.literal(true, {
-    message: 'You must accept the terms and conditions',
+    error: 'You must accept the terms and conditions',
   }),
 });
 
@@ -69,6 +69,7 @@ import {
   Combobox,
   Field,
   Input,
+  Inline,
   NumberInput,
   Radio,
   RadioGroup,
@@ -212,7 +213,7 @@ export function RHFSettingsForm() {
         name="agreeToTerms"
         control={control}
         render={({ field, fieldState }) => (
-          <Field error={fieldState.error?.message}>
+          <Field label="Terms and conditions" error={fieldState.error?.message}>
             <Switch
               checked={Boolean(field.value)}
               onChange={(e) => field.onChange(e.target.checked)}
@@ -223,14 +224,14 @@ export function RHFSettingsForm() {
         )}
       />
 
-      <Stack direction="row" gap={3}>
+      <Inline>
         <Button type="submit" disabled={isSubmitting}>
           Save Settings
         </Button>
-        <Button type="button" variant="subtle" onClick={() => reset()}>
+        <Button type="button" onClick={() => reset()}>
           Reset
         </Button>
-      </Stack>
+      </Inline>
     </Stack>
   );
 }
@@ -283,6 +284,7 @@ import {
   Combobox,
   Field,
   Input,
+  Inline,
   Radio,
   RadioGroup,
   Select,
@@ -406,12 +408,12 @@ export function TanStackSettingsForm() {
           )}
         />
 
-        <Stack direction="row" gap={3}>
+        <Inline>
           <Button type="submit">Submit</Button>
-          <Button type="button" variant="subtle" onClick={() => form.reset()}>
+          <Button type="button" onClick={() => form.reset()}>
             Reset Form
           </Button>
-        </Stack>
+        </Inline>
       </Stack>
     </form>
   );
@@ -453,7 +455,7 @@ When a native form reset occurs:
 - No manual event handlers are required.
 
 ```tsx title="src/NativeResetExample.tsx"
-import { Button, Combobox, Field, NumberInput, Radio, RadioGroup, Select, Slider, Stack, Switch } from '@yarcl/react';
+import { Button, Combobox, Field, Inline, NumberInput, Radio, RadioGroup, Select, Slider, Stack, Switch } from '@yarcl/react';
 
 export function NativeResetExample() {
   return (
@@ -483,10 +485,10 @@ export function NativeResetExample() {
         </Switch>
       </Field>
 
-      <Stack direction="row" gap={3}>
+      <Inline>
         <Button type="submit">Submit</Button>
-        <Button type="reset" variant="subtle">Reset to Defaults</Button>
-      </Stack>
+        <Button type="reset">Reset to Defaults</Button>
+      </Inline>
     </Stack>
   );
 }
