@@ -117,7 +117,7 @@ AvatarGroup passes its recipe to avatars without an explicit variant. Explicit A
 
 ## Generated CSS and themes
 
-Shared keys generate `yarcl-variant-{key}`. Local keys generate `yarcl-{Component}-variant-{key}`, for example `yarcl-Button-variant-action`. Every key generates one class, with no combination of color, size and variant classes needed. Component namespaces keep identical key names independent, including names that resemble a shared key.
+Shared keys generate `yarcl-variant-{key}`. Local keys generate `yarcl-{Component}-variant-{key}`, for example `yarcl-Button-variant-action`. Every key generates one class. CSS does not generate a separate rule for every color and size combination. Component namespaces keep identical key names independent, including names that resemble a shared key.
 
 The design reference lists shared and component-specific recipes separately. Consumer overrides work through the same [CSS cascade layers](/configuration/css-layers/) as other styles.
 
