@@ -47,7 +47,7 @@ export interface DatePickerLabels {
 /** Props shared by both modes of {@link DatePicker}. */
 export interface DatePickerBaseProps
   extends TokenProps<'DatePicker'>,
-    VariantProps,
+    VariantProps<'DatePicker'>,
     Omit<ComponentProps<'button'>, 'color' | 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
   /**
    * Earliest day that can be picked. Earlier days are shown disabled and the calendar can't move before its month.
@@ -413,7 +413,7 @@ export function DatePicker(props: DatePickerProps) {
                         data-in-range={between || undefined}
                         className={cx(
                           'yarcl-date-picker-day',
-                          endpoint ? variantClass(variant ?? own.variant) : between && softVariantClass(),
+                          endpoint ? variantClass(variant ?? own.variant, 'DatePicker') : between && softVariantClass(),
                         )}
                         onClick={() => {
                           setFocused(day);

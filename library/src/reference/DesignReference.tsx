@@ -1,6 +1,8 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import { contrast, parseHex, readableOn } from '../color';
-import type { ColorPair, ColorToken, YarclShape } from '../define';
+import type { ColorPair, ColorToken, ComponentName, YarclShape } from '../define';
+import { variantClass } from '../classes';
+import { VariantContext } from '../variant-context';
 import {
   Button,
   Card,
@@ -226,9 +228,11 @@ export function DesignReference({ title = 'Design reference', headingLevel = 1 }
                 {key}
               </Text>
               {colors.map((color) => (
-                <Button key={color} variant={key} color={color} size={config.defaults.size}>
-                  {color}
-                </Button>
+                <VariantContext.Provider key={color} value={{ button: variantClass(key) }}>
+                  <Button color={color} size={config.defaults.size}>
+                    {color}
+                  </Button>
+                </VariantContext.Provider>
               ))}
               <Text textStyle={config.defaults.helperStyle} muted>
                 background <Code>{recipe.background}</Code>, border <Code>{recipe.border}</Code>, text <Code>{recipe.text}</Code>
@@ -237,6 +241,27 @@ export function DesignReference({ title = 'Design reference', headingLevel = 1 }
           );
         })}
       </Section>
+
+      {Object.entries(shape.components ?? {}).flatMap(([component, own]) =>
+        'variants' in own && own.variants ? [
+          <Section key={component} title={`${component} variants`} description="Component-specific recipes.">
+            {Object.keys(own.variants).map((key) => (
+              <Inline key={key}>
+                <Text textStyle={config.defaults.labelStyle} className="yarcl-ref-label">
+                  {key}
+                </Text>
+                {colors.map((color) => (
+                  <VariantContext.Provider key={color} value={{ button: variantClass(key, component as ComponentName) }}>
+                    <Button color={color} size={config.defaults.size}>
+                      {color}
+                    </Button>
+                  </VariantContext.Provider>
+                ))}
+              </Inline>
+            ))}
+          </Section>,
+        ] : [],
+      )}
 
       <Section title="Spacing">
         {keys<Spacing>(config.spacing).map((key) => (
@@ -380,6 +405,7 @@ export function DesignReference({ title = 'Design reference', headingLevel = 1 }
               name,
               <Code>
                 {Object.entries(values ?? {})
+                  .filter(([prop]) => prop !== 'variants')
                   .map(([prop, value]) => `${prop}: ${value}`)
                   .join(' · ')}
               </Code>,

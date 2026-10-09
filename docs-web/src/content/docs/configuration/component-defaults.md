@@ -42,6 +42,8 @@ components: {
 
 Sized components can also use `allowedSizes` to restrict their `size` prop and `sizeOverrides` to adjust individual fields from the global size scale. These are sizing options, not defaults. See [sizes and radii](/configuration/sizes-and-radii/#per-component-sizes).
 
+Components that take `variant` can define a local `variants` map. Their `variant` and `selectedVariant` defaults then use that map's keys. See [component-specific variants](/configuration/variants/#component-specific-variants).
+
 Everything is checked:
 
 - component names must be real (`Buton` is an error)

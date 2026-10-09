@@ -1,7 +1,8 @@
 import type { ComponentProps, KeyboardEvent } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
+import { VariantContext } from '../variant-context';
 import { useControllable } from '../hooks';
-import type { Color, ComponentSize, Radius, Variant } from '../types';
+import type { Color, ComponentSize, Radius, ComponentVariant } from '../types';
 import { Button } from './Button';
 import { IconButton } from './IconButton';
 import { useConfig, useDefaults } from '../runtime';
@@ -56,15 +57,15 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'color' | '
   /** Radius of every button, from the `radii` config, or `'size'` to match the button size. */
   radius?: Radius | 'size';
   /**
-   * Variant of the other pages and the previous and next buttons, from the `variants` config.
+   * Variant of the other pages and the previous and next buttons, from this component's variant map or shared `variants`.
    * @default config.defaults.softVariant
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'Pagination'>;
   /**
-   * Variant of the current page in the numbered layout, from the `variants` config.
+   * Variant of the current page in the numbered layout, from this component's variant map or shared `variants`.
    * @default config.defaults.variant
    */
-  selectedVariant?: Variant;
+  selectedVariant?: ComponentVariant<'Pagination'>;
   /**
    * Joins the buttons into one control with shared borders.
    * @default false
@@ -110,11 +111,21 @@ function pageItems(page: number, count: number, siblings: number, boundaries: nu
   if (siblingsEnd < count - boundaries - 1) items.push('end-ellipsis');
   else if (count - boundaries > boundaries) items.push(count - boundaries);
   items.push(...endPages);
-  return items.filter((item, i) => typeof item !== 'number' || (item >= 1 && item <= count && items.indexOf(item) === i));
+  return items.filter(
+    (item, i) => typeof item !== 'number' || (item >= 1 && item <= count && items.indexOf(item) === i),
+  );
 }
 
 const Chevron = ({ d }: { d: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d={d} />
   </svg>
 );
@@ -195,36 +206,51 @@ export function Pagination({
   const edge = (label: string, target: number, d: string) => {
     const unavailable = target < 1 || target > total;
     return (
-      <IconButton
-        {...shared}
-        variant={resolvedVariant}
-        aria-label={label}
-        aria-disabled={unavailable || undefined}
-        onClick={() => go(target)}
-      >
-        <Chevron d={d} />
-      </IconButton>
+      <VariantContext.Provider value={{ button: variantClass(resolvedVariant, 'Pagination') }}>
+        <IconButton {...shared} aria-label={label} aria-disabled={unavailable || undefined} onClick={() => go(target)}>
+          <Chevron d={d} />
+        </IconButton>
+      </VariantContext.Provider>
     );
   };
 
   return (
-    <nav aria-label={ariaLabel} className={cx('yarcl-pagination', layout === 'compact' && 'yarcl-pagination-compact', sizeClass(resolvedSize, 'Pagination'), className)} onKeyDown={handleKeyDown} {...props}>
-      {layout === 'compact' && <span className="yarcl-pagination-summary" role="status">{summaryLabel(total === 0 ? 0 : active, total)}</span>}
-      <div className={cx('yarcl-button-group yarcl-button-group-horizontal', attached && 'yarcl-button-group-attached')}>
+    <nav
+      aria-label={ariaLabel}
+      className={cx(
+        'yarcl-pagination',
+        layout === 'compact' && 'yarcl-pagination-compact',
+        sizeClass(resolvedSize, 'Pagination'),
+        className,
+      )}
+      onKeyDown={handleKeyDown}
+      {...props}
+    >
+      {layout === 'compact' && (
+        <span className="yarcl-pagination-summary" role="status">
+          {summaryLabel(total === 0 ? 0 : active, total)}
+        </span>
+      )}
+      <div
+        className={cx('yarcl-button-group yarcl-button-group-horizontal', attached && 'yarcl-button-group-attached')}
+      >
         {edge(previousLabel, active - 1, 'm15 18-6-6 6-6')}
         {items.map((item) =>
           typeof item === 'number' ? (
-            <Button
+            <VariantContext.Provider
               key={item}
-              {...shared}
-              variant={item === active ? resolvedSelected : resolvedVariant}
-              className="yarcl-pagination-page"
-              aria-label={pageLabel(item)}
-              aria-current={item === active ? 'page' : undefined}
-              onClick={() => go(item)}
+              value={{ button: variantClass(item === active ? resolvedSelected : resolvedVariant, 'Pagination') }}
             >
-              {item}
-            </Button>
+              <Button
+                {...shared}
+                className="yarcl-pagination-page"
+                aria-label={pageLabel(item)}
+                aria-current={item === active ? 'page' : undefined}
+                onClick={() => go(item)}
+              >
+                {item}
+              </Button>
+            </VariantContext.Provider>
           ) : (
             <span
               key={item}
@@ -234,7 +260,7 @@ export function Pagination({
                 sizeClass(resolvedSize, 'Pagination'),
                 radiusClass(resolvedRadius, resolvedSize),
                 colorClass(resolvedColor),
-                variantClass(resolvedVariant),
+                variantClass(resolvedVariant, 'Pagination'),
               )}
             >
               …

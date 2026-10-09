@@ -62,6 +62,18 @@ const texts: Record<VariantToken['text'], string> = {
   neutral: 'var(--yarcl-neutral-text)',
 };
 
+/** Emits one shared or component-specific recipe class using the same color variables. */
+function variantRule(selector: string, variant: VariantToken): string {
+  const [bg, hover, active] = backgrounds[variant.background];
+  return rule(selector, [
+    ['--yarcl-v-bg', bg],
+    ['--yarcl-v-bg-hover', hover],
+    ['--yarcl-v-bg-active', active],
+    ['--yarcl-v-border', borders[variant.border]],
+    ['--yarcl-v-fg', texts[variant.text]],
+  ]);
+}
+
 const formats: Record<string, string> = { woff2: 'woff2', woff: 'woff', ttf: 'truetype', otf: 'opentype' };
 
 function fontFace(face: FontFaceToken): string {
@@ -196,16 +208,13 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
   }
 
   for (const [key, variant] of Object.entries(config.variants)) {
-    const [bg, hover, active] = backgrounds[variant.background];
-    rules.push(
-      rule(`.yarcl-variant-${ident(key)}`, [
-        ['--yarcl-v-bg', bg],
-        ['--yarcl-v-bg-hover', hover],
-        ['--yarcl-v-bg-active', active],
-        ['--yarcl-v-border', borders[variant.border]],
-        ['--yarcl-v-fg', texts[variant.text]],
-      ]),
-    );
+    rules.push(variantRule(`.yarcl-variant-${ident(key)}`, variant));
+  }
+  for (const [component, own] of Object.entries(config.components ?? {})) {
+    if (!('variants' in own) || !own.variants) continue;
+    for (const [key, variant] of Object.entries(own.variants)) {
+      rules.push(variantRule(`.yarcl-${ident(component)}-variant-${ident(key)}`, variant));
+    }
   }
 
   for (const [key, value] of Object.entries(config.spacing)) {

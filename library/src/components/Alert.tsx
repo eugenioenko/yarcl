@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { colorClass, cx, gapClass, paddingClass, radiusClass, softVariantClass, typeClass } from '../classes';
-import type { Color, Radius, Spacing, TextStyle, Variant } from '../types';
+import type { Color, Radius, Spacing, TextStyle, ComponentVariant } from '../types';
 import { useConfig, useDefaults } from '../runtime';
 
 
@@ -18,10 +18,10 @@ export interface AlertProps extends Omit<ComponentProps<'div'>, 'color' | 'title
    */
   color?: Color;
   /**
-   * Style recipe, from the `variants` config.
+   * Style recipe, from this component's variant map or shared `variants`.
    * @default config.defaults.softVariant
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'Alert'>;
   /**
    * Corner radius, from the `radii` config.
    * @default config.defaults.radius
@@ -86,7 +86,7 @@ export function Alert({
       className={cx(
         'yarcl-alert',
         colorClass(color ?? own.color),
-        softVariantClass(variant ?? own.variant),
+        softVariantClass(variant ?? own.variant, 'Alert'),
         radiusClass(radius ?? own.radius),
         gapClass(gap ?? own.gap),
         paddingClass(padding ?? own.padding),

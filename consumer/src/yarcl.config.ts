@@ -1,6 +1,13 @@
 import { defineConfig, defineRecipes } from '@yarcl/react/define';
 import defaults from '@yarcl/react/defaults';
 
+const variants = {
+  solid: { background: 'fill', border: 'color', text: 'on' },
+  subtle: { background: 'tint', border: 'none', text: 'color' },
+  outline: { background: 'none', border: 'color', text: 'color' },
+  quiet: { background: 'none', border: 'none', text: 'color' },
+} as const;
+
 export default defineConfig({
   ...defaults,
   colors: {
@@ -26,12 +33,7 @@ export default defineConfig({
     xl: '0.625rem',
     rounded: '9999px',
   },
-  variants: {
-    solid: { background: 'fill', border: 'color', text: 'on' },
-    subtle: { background: 'tint', border: 'none', text: 'color' },
-    outline: { background: 'none', border: 'color', text: 'color' },
-    quiet: { background: 'none', border: 'none', text: 'color' },
-  },
+  variants,
   spacing: {
     tight: '0.5rem',
     normal: '1rem',
@@ -62,12 +64,13 @@ export default defineConfig({
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
   components: {
+    Button: { variant: 'spotlight', variants: { ...variants, spotlight: variants.solid } },
     SplitButton: { size: 'md', allowedSizes: ['sm', 'md', 'lg'], sizeOverrides: { md: { paddingX: '1.125rem' } } },
     Grid: { gap: 'tight' },
     Avatar: { radius: 'rounded' },
     EmptyState: { color: 'neutral', gap: 'tight', padding: 'normal', textStyle: 'caption' },
     Alert: { gap: 'tight', padding: 'normal', textStyle: 'label' },
-    Badge: { radius: 'rounded' },
+    Badge: { radius: 'rounded', variant: 'ribbon', variants: { subtle: variants.subtle, outline: variants.outline, ribbon: variants.subtle } },
     Menu: {
       size: 'sm',
       allowedSizes: ['sm', 'md'],

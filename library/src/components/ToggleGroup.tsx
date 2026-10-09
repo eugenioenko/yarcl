@@ -7,12 +7,12 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { cx, sizeClass } from '../classes';
+import { cx, sizeClass, variantClass } from '../classes';
+import { VariantContext } from '../variant-context';
 import { useControllable } from '../hooks';
-import type { Color, ComponentSize, Radius, Size, Variant } from '../types';
+import type { Color, ComponentSize, Radius, Size, ComponentVariant } from '../types';
 import { Button } from './Button';
 import { useConfig, useDefaults } from '../runtime';
-
 
 interface ToggleGroupContextValue {
   selected: string[];
@@ -20,8 +20,8 @@ interface ToggleGroupContextValue {
   size?: Size;
   color?: Color;
   radius?: Radius | 'size';
-  variant: Variant;
-  selectedVariant: Variant;
+  variant: string;
+  selectedVariant: string;
   disabled?: boolean;
 }
 
@@ -36,15 +36,15 @@ export interface ToggleGroupBaseProps extends Omit<ComponentProps<'div'>, 'defau
   /** Radius of every item, from the `radii` config, or `'size'` to match the item size. */
   radius?: Radius | 'size';
   /**
-   * Variant of unselected items, from the `variants` config.
+   * Variant of unselected items, from this component's variant map or shared `variants`.
    * @default config.defaults.softVariant
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'ToggleGroup'>;
   /**
-   * Variant of selected items, from the `variants` config.
+   * Variant of selected items, from this component's variant map or shared `variants`.
    * @default config.defaults.variant
    */
-  selectedVariant?: Variant;
+  selectedVariant?: ComponentVariant<'ToggleGroup'>;
   /**
    * Joins the items into one segmented control.
    * @default true
@@ -84,7 +84,8 @@ export type ToggleGroupProps = ToggleGroupBaseProps &
       }
   );
 
-const toArray = (value: string | string[] | null | undefined) => (value == null ? [] : Array.isArray(value) ? value : [value]);
+const toArray = (value: string | string[] | null | undefined) =>
+  value == null ? [] : Array.isArray(value) ? value : [value];
 
 function ToggleGroupRoot(props: ToggleGroupProps) {
   const config = useConfig();
@@ -121,7 +122,9 @@ function ToggleGroupRoot(props: ToggleGroupProps) {
 
   useLayoutEffect(() => {
     const items = [...(ref.current?.querySelectorAll<HTMLButtonElement>('.yarcl-toggle-item') ?? [])];
-    const stop = items.find((item) => item.getAttribute('aria-pressed') === 'true' && !item.disabled) ?? items.find((item) => !item.disabled);
+    const stop =
+      items.find((item) => item.getAttribute('aria-pressed') === 'true' && !item.disabled) ??
+      items.find((item) => !item.disabled);
     items.forEach((item) => (item.tabIndex = item === stop ? 0 : -1));
   });
 
@@ -195,21 +198,22 @@ function ToggleGroupItem({ value, icon, disabled, className, onClick, ...props }
   if (!context) throw new Error('yarcl: <ToggleGroup.Item> must be inside <ToggleGroup>');
   const on = context.selected.includes(value);
   return (
-    <Button
-      aria-pressed={on}
-      data-value={value}
-      disabled={disabled || context.disabled}
-      size={context.size}
-      color={context.color}
-      radius={context.radius}
-      variant={on ? context.selectedVariant : context.variant}
-      className={cx('yarcl-toggle-item', icon && 'yarcl-icon-button', className)}
-      onClick={(event) => {
-        onClick?.(event);
-        context.toggle(value);
-      }}
-      {...props}
-    />
+    <VariantContext.Provider value={{ button: variantClass(on ? context.selectedVariant : context.variant, 'ToggleGroup') }}>
+      <Button
+        aria-pressed={on}
+        data-value={value}
+        disabled={disabled || context.disabled}
+        size={context.size}
+        color={context.color}
+        radius={context.radius}
+        className={cx('yarcl-toggle-item', icon && 'yarcl-icon-button', className)}
+        onClick={(event) => {
+          onClick?.(event);
+          context.toggle(value);
+        }}
+        {...props}
+      />
+    </VariantContext.Provider>
   );
 }
 

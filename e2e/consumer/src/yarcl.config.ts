@@ -1,6 +1,13 @@
 import { defineConfig, defineRecipes } from '@yarcl/react/define';
 import defaults from '@yarcl/react/defaults';
 
+const variants = {
+  filled: { background: 'fill', border: 'color', text: 'on' },
+  line: { background: 'none', border: 'color', text: 'color' },
+  wash: { background: 'tint', border: 'none', text: 'color' },
+  text: { background: 'none', border: 'none', text: 'color' },
+} as const;
+
 export default defineConfig({
   colors: {
     ink: { light: '#1c1917', dark: '#f5f5f4' },
@@ -24,12 +31,7 @@ export default defineConfig({
     square: '0',
     hairline: '2px',
   },
-  variants: {
-    filled: { background: 'fill', border: 'color', text: 'on' },
-    line: { background: 'none', border: 'color', text: 'color' },
-    wash: { background: 'tint', border: 'none', text: 'color' },
-    text: { background: 'none', border: 'none', text: 'color' },
-  },
+  variants,
   spacing: {
     '1': '0.25rem',
     '2': '0.5rem',
@@ -85,7 +87,9 @@ export default defineConfig({
     AvatarGroup: { size: 'talla-s', radius: 'square', color: 'moss', variant: 'wash' },
     EmptyState: { color: 'clay', gap: '3', padding: '6', textStyle: 'fine' },
     Alert: { gap: '2', padding: '4', textStyle: 'copy' },
+    Badge: { variant: 'marker', variants: { wash: variants.wash, line: variants.line, marker: variants.wash } },
     Button: {
+      variant: 'action', variants: { ...variants, action: variants.filled },
       size: 'talla-s',
       radius: 'square',
       allowedSizes: ['talla-s', 'talla-l'],

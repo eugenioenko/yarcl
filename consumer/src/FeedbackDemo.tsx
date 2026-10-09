@@ -17,12 +17,12 @@ import {
   config,
   type Color,
   type Size,
-  type Variant,
+  type ComponentVariant,
 } from '@yarcl/react';
 import { PlusIcon, SearchIcon } from './icons';
 
 const colors = Object.keys(config.colors) as Color[];
-const variants = Object.keys(config.variants) as Variant[];
+const variants = Object.keys(config.components.Badge.variants) as ComponentVariant<'Badge'>[];
 const sizes = Object.keys(config.sizes) as Size[];
 const avatarImage = '/avatar-demo.svg';
 

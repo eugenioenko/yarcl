@@ -409,3 +409,31 @@ defineConfig({
     Progress: { variant: 'solid' },
   },
 });
+
+const localRecipe = { background: 'fill', border: 'color', text: 'on' } as const;
+
+defineConfig({ ...defaults, components: { Button: { variants: { action: localRecipe }, variant: 'action' } } });
+defineConfig({ ...defaults, components: { Button: { variants: { solid: localRecipe } } } });
+defineConfig({ ...defaults, components: { ToggleGroup: { variants: { idle: localRecipe, active: localRecipe }, variant: 'idle', selectedVariant: 'active' } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error A local variant map must not be empty
+  Button: { variants: {} },
+} });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error A local map needs a valid component default when the shared default is absent
+  Button: { variants: { action: localRecipe } },
+} });
+// @ts-expect-error Shared defaults cannot reference an absent local key
+defineConfig({ ...defaults, components: { Button: { variants: { action: localRecipe }, variant: 'solid' } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error Components without variants cannot configure a variant map
+  Input: { variants: { action: localRecipe } },
+} });
+defineConfig({ ...defaults, components: { Button: { variant: 'bad key', variants: {
+  // @ts-expect-error Variant keys must not contain whitespace
+  'bad key': localRecipe,
+} } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error Selected variants need an explicit local default when the shared default is absent
+  ToggleGroup: { variants: { idle: localRecipe }, variant: 'idle' },
+} });

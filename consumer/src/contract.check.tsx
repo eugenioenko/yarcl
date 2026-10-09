@@ -693,3 +693,21 @@ function recipeContract() {
   void [literal, valid, invalidStatus, invalidEmphasis, invalidAxis, invalidDisabled, invalidLink, invalidRef, wrongGroup, wrongCss];
 }
 void recipeContract;
+
+
+/** Checks component variant isolation and shared fallbacks. */
+export function checkComponentVariantValues() {
+  return <>
+    <Button variant="spotlight" />
+    <Badge variant="ribbon" />
+    <Alert variant="solid" />
+    {/* @ts-expect-error Badge-only variants do not belong to Button */}
+    <Button variant="ribbon" />
+    {/* @ts-expect-error Button-only variants do not belong to Badge */}
+    <Badge variant="spotlight" />
+    {/* @ts-expect-error A local map replaces the shared group */}
+    <Badge variant="solid" />
+    {/* @ts-expect-error Component-only variants do not leak to shared fallbacks */}
+    <Alert variant="spotlight" />
+  </>;
+}

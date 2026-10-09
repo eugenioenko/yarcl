@@ -21,7 +21,7 @@ export interface SplitButtonOption<V extends string = string> {
 
 /** Props for {@link SplitButton}. Native attributes and refs go to the outer group. */
 export interface SplitButtonProps<V extends string = string>
-  extends Omit<ComponentProps<'div'>, 'color' | 'children' | 'defaultValue'>, TokenProps<'SplitButton'>, VariantProps {
+  extends Omit<ComponentProps<'div'>, 'color' | 'children' | 'defaultValue'>, TokenProps<'SplitButton'>, VariantProps<'SplitButton'> {
   /** Actions to choose from. Values must be unique. */
   options: readonly SplitButtonOption<V>[];
   /** Controlled selected action. */
@@ -95,7 +95,7 @@ export function SplitButton<V extends string = string>({
     sizeClass(size ?? own.size, 'SplitButton'),
     radiusClass(radius ?? own.radius, size ?? own.size),
     colorClass(color ?? own.color),
-    variantClass(variant ?? own.variant),
+    variantClass(variant ?? own.variant, 'SplitButton'),
   );
 
   return (

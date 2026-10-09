@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, softVariantClass } from '../classes';
-import type { Color, ComponentSize, Radius, Variant } from '../types';
+import type { Color, ComponentSize, Radius, ComponentVariant } from '../types';
 import { useDefaults } from '../runtime';
 
 
@@ -12,10 +12,10 @@ export interface BadgeProps extends Omit<ComponentProps<'span'>, 'color'> {
    */
   color?: Color;
   /**
-   * Style recipe, from the `variants` config.
+   * Style recipe, from this component's variant map or shared `variants`.
    * @default config.defaults.softVariant
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'Badge'>;
   /**
    * Scales with the size's font size, from the `sizes` config.
    * @default config.defaults.size
@@ -69,7 +69,7 @@ export function Badge({
   const s = size ?? own.size;
   return (
     <span
-      className={cx('yarcl-badge', wrap && 'yarcl-badge-wrap', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant), sizeClass(s, 'Badge'), radiusClass(radius ?? own.radius, s), className)}
+      className={cx('yarcl-badge', wrap && 'yarcl-badge-wrap', colorClass(color ?? own.color), softVariantClass(variant ?? own.variant, 'Badge'), sizeClass(s, 'Badge'), radiusClass(radius ?? own.radius, s), className)}
       {...props}
     >
       {startIcon && <span className="yarcl-badge-icon" aria-hidden="true">{startIcon}</span>}

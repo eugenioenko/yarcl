@@ -1,6 +1,6 @@
 import { activeConfig } from './runtime';
-import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle, Variant } from './types';
-import type { ComponentName } from './define';
+import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle } from './types';
+import type { ComponentName, YarclShape } from './define';
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
   return parts.filter(Boolean).join(' ');
@@ -15,10 +15,19 @@ export function radiusClass(radius?: Radius | 'size', size?: Size): string | und
   return match in activeConfig().radii ? `yarcl-radius-${match}` : undefined;
 }
 export const colorClass = (color: Color = activeConfig().defaults.color) => `yarcl-color-${color}`;
-export const variantClass = (variant: Variant = activeConfig().defaults.variant) => `yarcl-variant-${variant}`;
+/** Resolves a component recipe, falling back to the shared variant group. */
+export function variantClass(variant?: string, component?: ComponentName, soft = false) {
+  const config = activeConfig() as YarclShape;
+  const own = component ? config.components?.[component] : undefined;
+  const key =
+    variant ?? (own && 'variant' in own ? own.variant : undefined) ?? config.defaults[soft ? 'softVariant' : 'variant'];
+  const local = own && 'variants' in own && own.variants;
+  return `yarcl-${local ? `${component}-variant-` : 'variant-'}${key}`;
+}
 export const gapClass = (gap: Spacing = activeConfig().defaults.gap) => `yarcl-gap-${gap}`;
 export const paddingClass = (padding: Spacing = activeConfig().defaults.padding) => `yarcl-padding-${padding}`;
 export const shadowClass = (shadow?: Shadow) => shadow && `yarcl-shadow-${shadow}`;
 export const typeClass = (style: TextStyle) => `yarcl-type-${style}`;
 export const densityClass = (density: Density = activeConfig().defaults.density) => `yarcl-density-${density}`;
-export const softVariantClass = (variant: Variant = activeConfig().defaults.softVariant) => `yarcl-variant-${variant}`;
+/** Resolves a low-emphasis component recipe with shared soft variants as the fallback. */
+export const softVariantClass = (variant?: string, component?: ComponentName) => variantClass(variant, component, true);

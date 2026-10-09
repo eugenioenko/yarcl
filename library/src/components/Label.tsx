@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, softVariantClass, typeClass } from '../classes';
-import type { Color, ComponentSize, Radius, TextStyle, Variant } from '../types';
+import type { Color, ComponentSize, Radius, TextStyle, ComponentVariant } from '../types';
 import { useConfig, useDefaults } from '../runtime';
 
 /** Props for {@link Label}. */
@@ -15,9 +15,9 @@ export interface LabelProps extends Omit<ComponentProps<'label'>, 'color'> {
    */
   color?: Color;
   /**
-   * Style recipe, from the `variants` config, for a filled label. Plain when omitted.
+   * Style recipe, from this component's variant map or shared `variants`, for a filled label. Plain when omitted.
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'Label'>;
   /**
    * Font size scale, from the `sizes` config. Uses the text style's size when omitted.
    */
@@ -70,7 +70,7 @@ export function Label({
         'yarcl-label',
         typeClass(textStyle ?? own.textStyle ?? config.defaults.labelStyle),
         resolvedColor && cx('yarcl-label-colored', colorClass(resolvedColor)),
-        resolvedVariant && cx('yarcl-label-variant', softVariantClass(resolvedVariant)),
+        resolvedVariant && cx('yarcl-label-variant', softVariantClass(resolvedVariant, 'Label')),
         resolvedSize && cx('yarcl-label-sized', sizeClass(resolvedSize, 'Label')),
         radiusClass(radius ?? own.radius, resolvedSize),
         disabled && 'yarcl-label-disabled',
