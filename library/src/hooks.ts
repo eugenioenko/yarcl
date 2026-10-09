@@ -1,5 +1,32 @@
-import { useCallback, useEffect, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 
+/** Runs a control's reset callback after propagation if the form reset was not canceled. */
+export function useFormReset(elementRef: RefObject<HTMLElement | null> | undefined, onReset: (() => void) | undefined) {
+  const callbackRef = useRef(onReset);
+  const enabled = onReset !== undefined;
+  useEffect(() => {
+    callbackRef.current = onReset;
+  }, [onReset]);
+  useEffect(() => {
+    const form = elementRef?.current?.closest('form');
+    if (!form || !enabled) return;
+    const pending = new Set<ReturnType<typeof setTimeout>>();
+    const handleReset = (event: Event) => {
+      const timer = setTimeout(() => {
+        pending.delete(timer);
+        if (!event.defaultPrevented) callbackRef.current?.();
+      }, 0);
+      pending.add(timer);
+    };
+    form.addEventListener('reset', handleReset);
+    return () => {
+      form.removeEventListener('reset', handleReset);
+      pending.forEach(clearTimeout);
+    };
+  }, [elementRef, enabled]);
+}
+
+/** Tracks controlled or internal state and restores uncontrolled defaults after accepted form resets. */
 export function useControllable<T>(
   value: T | undefined,
   defaultValue: T,
@@ -10,17 +37,11 @@ export function useControllable<T>(
   const controlled = value !== undefined;
   const current = controlled ? value : internal;
 
-  useEffect(() => {
-    if (controlled || !elementRef?.current) return;
-    const form = elementRef.current.closest('form');
-    if (!form) return;
-    const onReset = () => {
-      setInternal(defaultValue);
-      onChange?.(defaultValue);
-    };
-    form.addEventListener('reset', onReset);
-    return () => form.removeEventListener('reset', onReset);
-  }, [controlled, defaultValue, elementRef, onChange]);
+  const reset = useCallback(() => {
+    setInternal(defaultValue);
+    onChange?.(defaultValue);
+  }, [defaultValue, onChange]);
+  useFormReset(elementRef, controlled ? undefined : reset);
 
   const set = useCallback(
     (next: T) => {
