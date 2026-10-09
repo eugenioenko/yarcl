@@ -2,12 +2,13 @@ import JSON5 from 'json5';
 import type { ComponentName, ComponentTokenProps, YarclShape } from '@yarcl/react/define';
 import { themes } from '@yarcl/react/themes';
 import { generateCss } from '@yarcl/react/generate';
+import defaults from '@yarcl/react/defaults';
 
 /** Editable values in a design system config. */
-export type Value = string | number | Value[] | { [key: string]: Value };
+export type Value = string | number | ((...args: never[]) => string) | Value[] | { [key: string]: Value };
 /** Form and validation rules for a config setting. */
 export type Schema = {
-  kind: 'string' | 'number' | 'object' | 'map' | 'array' | 'union';
+  kind: 'string' | 'number' | 'object' | 'map' | 'array' | 'union' | 'function';
   fields?: Record<string, Schema>;
   item?: Schema;
   choices?: Schema[];
@@ -84,6 +85,9 @@ const components = Object.fromEntries(Object.entries(componentProps).map(([name,
 
 /** All current config groups and optional settings supported by the playground. */
 export const themeSchema = object({
+  labels: object(Object.fromEntries(Object.entries(base.labels).map(([key, value]) => [
+    key, typeof value === 'function' ? { kind: 'function', seed: value } : string,
+  ]))),
   colors: map(object({ light: string, dark: string, on: optional(color), text: optional(color) }), Object.keys(base.colors)),
   neutrals: map(pair, Object.keys(base.neutrals)),
   sizes: map(size, Object.keys(base.sizes)),
@@ -127,7 +131,7 @@ export const themeSchema = object({
     floatingShadow: ref('shadows'), softVariant: ref('variants'), modalSize: ref('modalSizes'),
   }),
   components: optional(object(components)),
-} satisfies Record<keyof YarclShape, Schema>);
+} satisfies { [K in keyof YarclShape]: Schema });
 
 const labels: Record<string, string> = {
   bg: 'Background', sm: 'Small', md: 'Medium', lg: 'Large', xs: 'Extra small', xl: 'Extra large',
@@ -135,6 +139,7 @@ const labels: Record<string, string> = {
   radii: 'Corner radii', zIndex: 'Layer order', fontFaces: 'Font files', src: 'Sources',
   paddingX: 'Horizontal padding', paddingY: 'Vertical padding', fonts: 'Font roles', styles: 'Text styles',
   sizeOverrides: 'Size overrides', allowedSizes: 'Allowed sizes', prose: 'Rich text', components: 'Component settings',
+  labels: 'Built-in text',
   h1: 'Heading level 1', h2: 'Heading level 2', h3: 'Heading level 3', h4: 'Heading level 4', h5: 'Heading level 5', h6: 'Heading level 6',
   fill: 'Filled', tint: 'Tinted', none: 'None', color: 'Semantic color', neutral: 'Neutral', size: 'Size',
 };
@@ -162,10 +167,11 @@ export function fieldOptions(schema: Schema, theme: Value): string[] {
 
 /** Creates a value when an optional setting or token is added. */
 export function initialValue(schema: Schema, theme: Value): Value {
-  if (schema.seed !== undefined) return structuredClone(schema.seed);
+  if (schema.seed !== undefined) return typeof schema.seed === 'function' ? schema.seed : structuredClone(schema.seed);
   switch (schema.kind) {
     case 'string': return fieldOptions(schema, theme)[0] ?? '';
     case 'number': return 0;
+    case 'function': throw new Error('A message formatter must have a configured default.');
     case 'array': return [];
     case 'map': return {};
     case 'union': return initialValue(schema.choices![0], theme);
@@ -182,11 +188,28 @@ export function choiceIndex(schema: Schema, value: Value): number {
 
 /** Exports a complete, standalone yarcl config file. */
 export function serializeConfig(theme: unknown): string {
+  if (isObject(theme) && isObject(theme.labels)) {
+    const text: Record<string, Value> = {};
+    for (const [key, value] of Object.entries(theme.labels)) {
+      if (typeof value !== 'function') text[key] = value;
+      else if (value !== defaults.labels[key as keyof typeof defaults.labels]) {
+        throw new Error('Customize message formatters in your project config. The playground exports default formatters.');
+      }
+    }
+    return `import { defineConfig } from '@yarcl/react/define';\nimport defaults from '@yarcl/react/defaults';\n\nconst values = ${JSON.stringify({ ...theme, labels: text }, null, 2)} as const;\n\nexport default defineConfig({\n  ...values,\n  labels: { ...defaults.labels, ...values.labels },\n});\n`;
+  }
   return `import { defineConfig } from '@yarcl/react/define';\n\nexport default defineConfig(${JSON.stringify(theme, null, 2)});\n`;
 }
 
 /** Parses a config file or object literal without executing code. */
 export function parseConfig(source: string): unknown {
+  const catalog = source.trim().match(/^import\s*\{\s*defineConfig\s*\}\s*from\s*(['"])@yarcl\/react\/define\1\s*;?\s*import\s+defaults\s+from\s*(['"])@yarcl\/react\/defaults\2\s*;?\s*const\s+values\s*=\s*([\s\S]*?)\s*(?:as\s+const\s*)?;\s*export\s+default\s+defineConfig\s*\(\s*\{\s*\.\.\.values\s*,\s*labels\s*:\s*\{\s*\.\.\.defaults\.labels\s*,\s*\.\.\.values\.labels\s*,?\s*\}\s*,?\s*\}\s*\)\s*;?$/);
+  if (catalog) {
+    const values: unknown = JSON5.parse(catalog[3]);
+    return isObject(values) && isObject(values.labels)
+      ? { ...values, labels: { ...defaults.labels, ...values.labels } }
+      : values;
+  }
   const file = source.trim().match(/^import\s*\{\s*defineConfig\s*\}\s*from\s*(['"])@yarcl\/react\/define\1\s*;?\s*export\s+default\s+defineConfig\s*\(([\s\S]*)\)\s*;?$/);
   return JSON5.parse(file ? file[2] : source);
 }

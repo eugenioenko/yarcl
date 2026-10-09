@@ -2,6 +2,7 @@ import buildConfig from '@yarcl/config';
 import { useSyncExternalStore } from 'react';
 import type { ComponentName, YarclShape } from './define';
 import type { ComponentDefaults } from './types';
+import type { ConfigLabels } from './labels';
 
 type Config = typeof buildConfig;
 
@@ -35,4 +36,9 @@ export function useConfig(): Config {
 export function useDefaults<C extends ComponentName>(component: C): ComponentDefaults<C> {
   const config = useConfig();
   return ((config as unknown as YarclShape).components?.[component] ?? {}) as ComponentDefaults<C>;
+}
+
+/** The active built-in text catalog. Re-renders the caller when applyTheme changes the language. */
+export function useLabels(): ConfigLabels {
+  return useConfig().labels;
 }

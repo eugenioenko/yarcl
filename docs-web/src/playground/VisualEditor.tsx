@@ -50,6 +50,10 @@ function ThemeField({ name, schema, value, theme, onChange, removable }: FieldPr
     return <Button size="sm" variant="outline" color="neutral" onClick={() => onChange(initialValue(schema, theme))}>Add {title}</Button>;
   }
 
+  if (schema.kind === 'function') {
+    return <Text textStyle="caption">{title} uses the default message formatter. Customize it in your project config.</Text>;
+  }
+
   if (schema.kind === 'union') {
     const index = choiceIndex(schema, value);
     if (index < 0) return <Text color="danger">Correct {title} in the Code Editor.</Text>;

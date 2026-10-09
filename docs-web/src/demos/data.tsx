@@ -82,7 +82,7 @@ export function TableDemo() {
   };
 
   return (
-    <Stack className="demo-wide" gap="tight">
+    <Stack className="demo-wide" gap="sm">
       <ToggleGroup type="single" required value={density} onValueChange={setDensity} size="sm" aria-label="Density">
         {Object.keys(config.density).map((key) => (
           <ToggleGroup.Item key={key} value={key}>

@@ -1,3 +1,5 @@
+import type { ConfigLabels } from './labels';
+export type { ConfigLabels, FileDropzoneLabels } from './labels';
 import { tokens, type TokenAccessor } from './tokens';
 import type { RecipeChecks, RecipeDefinition } from './recipes';
 
@@ -192,6 +194,8 @@ type ComponentConfig<C extends ComponentName> = {
  * keys, which are emitted as CSS variables for the consumer's own styles.
  */
 export interface YarclShape {
+  /** Built-in text and message formatters. Spread the default catalog when translating selected entries. */
+  labels: ConfigLabels;
   /** Consumer component recipes, generated alongside the built-in component modifiers. */
   recipes?: Record<string, RecipeDefinition>;
   /** Semantic colors. Keys become the valid values of the `color` prop. */
@@ -436,6 +440,7 @@ type ComponentChecks<T extends YarclShape> = {
 };
 
 type Checks<T extends YarclShape> = {
+  labels: { [K in keyof T['labels']]: K extends keyof ConfigLabels ? ConfigLabels[K] : never };
   recipes?: T extends { recipes: infer R extends Record<string, RecipeDefinition> } ? RecipeChecks<R> : never;
   components?: ComponentChecks<T>;
   colors: KeyCheck<T['colors']>;

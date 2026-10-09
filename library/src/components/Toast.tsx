@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } fro
 import { createPortal } from 'react-dom';
 import { colorClass, cx, gapClass, paddingClass, radiusClass, typeClass } from '../classes';
 import type { Color, Radius, Spacing, TextStyle } from '../types';
-import { useConfig, useDefaults } from '../runtime';
+import { useLabels, useConfig, useDefaults } from '../runtime';
 
 
 /** Options for {@link toast}. */
@@ -45,6 +45,8 @@ export interface ToastOptions {
   action?: { label: string; onClick: () => void };
   /** Announces immediately (`role="alert"`) instead of politely. Use for errors that need attention. */
   urgent?: boolean;
+  /** Accessible name of this notification's dismiss button. @default config.labels.dismiss */
+  dismissLabel?: string;
 }
 
 interface ToastEntry extends ToastOptions {
@@ -98,7 +100,7 @@ export interface ToasterProps {
   limit?: number;
   /**
    * Accessible name of the notifications region.
-   * @default 'Notifications'
+   * @default config.labels.notifications
    */
   label?: string;
 }
@@ -129,7 +131,8 @@ function useModalHost() {
  * <Toaster placement="top-right" />
  * ```
  */
-export function Toaster({ placement = 'bottom-right', limit = 4, label = 'Notifications' }: ToasterProps) {
+export function Toaster({ placement = 'bottom-right', limit = 4, label }: ToasterProps) {
+  const labels = useLabels();
   const all = useSyncExternalStore(subscribe, () => entries, () => entries);
   const visible = all.slice(-limit);
   const ref = useRef<HTMLElement>(null);
@@ -150,7 +153,7 @@ export function Toaster({ placement = 'bottom-right', limit = 4, label = 'Notifi
     <section
       ref={ref}
       popover="manual"
-      aria-label={label}
+      aria-label={label ?? labels.notifications}
       className={cx('yarcl-toaster', `yarcl-toaster-${placement}`)}
     >
       {(placement.startsWith('top') ? [...visible].reverse() : visible).map((entry) => (
@@ -207,7 +210,7 @@ function ToastItem({ entry }: { entry: ToastEntry }) {
           {action.label}
         </button>
       )}
-      <button type="button" className="yarcl-toast-close" aria-label="Dismiss" onClick={() => toast.dismiss(id)}>
+      <button type="button" className="yarcl-toast-close" aria-label={entry.dismissLabel ?? config.labels.dismiss} onClick={() => toast.dismiss(id)}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <path d="M6 6l12 12M18 6 6 18" />
         </svg>

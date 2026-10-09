@@ -1,4 +1,4 @@
-import type { ColorToken, DensityToken, SizeToken, TextStyleToken, VariantToken } from '../define';
+import type { ConfigLabels, ColorToken, DensityToken, SizeToken, TextStyleToken, VariantToken } from '../define';
 import type defaults from '../yarcl.config';
 
 type Defaults = typeof defaults;
@@ -9,6 +9,7 @@ type Defaults = typeof defaults;
  * Values are free; extra keys are allowed.
  */
 export interface ThemeContract {
+  labels: ConfigLabels;
   colors: Record<keyof Defaults['colors'], ColorToken>;
   sizes: Record<keyof Defaults['sizes'], SizeToken>;
   radii: Record<keyof Defaults['radii'], string>;

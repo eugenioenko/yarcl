@@ -44,6 +44,8 @@ export interface ModalProps {
    * @default config.defaults.modalSize (Drawer: its component default, `sm` in the library defaults)
    */
   size?: ModalSize;
+  /** Accessible name of the close button. @default config.labels.close */
+  closeLabel?: string;
 }
 
 const openModals: HTMLDialogElement[] = [];
@@ -112,6 +114,7 @@ export function Modal({
   defaultOpen = false,
   onOpenChange,
   closeOnBackdrop = true,
+  closeLabel,
   size,
   className,
   radius,
@@ -150,7 +153,7 @@ export function Modal({
                   </p>
                 )}
               </div>
-              <button type="button" className="yarcl-modal-close" aria-label="Close" onClick={() => setOpen(false)}>
+              <button type="button" className="yarcl-modal-close" aria-label={closeLabel ?? config.labels.close} onClick={() => setOpen(false)}>
                 <CloseIcon />
               </button>
             </div>

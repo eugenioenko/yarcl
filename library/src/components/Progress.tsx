@@ -1,7 +1,7 @@
 import { useId, type ComponentProps, type CSSProperties, type ReactNode } from 'react';
 import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import type { Color, ComponentSize, Radius } from '../types';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 
 /** Props for {@link Progress}. */
 export interface ProgressProps extends Omit<ComponentProps<'div'>, 'color' | 'children'> {
@@ -75,11 +75,12 @@ export function Progress({
   ...props
 }: ProgressProps) {
   const own = useDefaults('Progress');
+  const labels = useLabels();
   const labelId = useId();
   const indeterminate = value == null;
   const limit = max > 0 ? max : 100;
   const current = indeterminate ? 0 : Math.min(Math.max(value, 0), limit);
-  const text = formatValue ? formatValue(current, limit) : `${Math.round((current / limit) * 100)}%`;
+  const text = (formatValue ?? labels.progressValue)(current, limit);
   const hasLabel = label != null;
   const named = hasLabel || props['aria-label'] != null || props['aria-labelledby'] != null;
   const valueVisible = showValue && !indeterminate;
@@ -88,11 +89,11 @@ export function Progress({
     <div
       role="progressbar"
       aria-labelledby={hasLabel ? labelId : undefined}
-      aria-label={named ? undefined : 'Progress'}
+      aria-label={named ? undefined : labels.progress}
       aria-valuemin={indeterminate ? undefined : 0}
       aria-valuemax={indeterminate ? undefined : limit}
       aria-valuenow={indeterminate ? undefined : current}
-      aria-valuetext={indeterminate || !formatValue ? undefined : text}
+      aria-valuetext={indeterminate ? undefined : text}
       data-indeterminate={indeterminate || undefined}
       className={cx(
         'yarcl-progress',

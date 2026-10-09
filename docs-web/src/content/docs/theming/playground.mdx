@@ -20,3 +20,5 @@ The playground calls `applyTheme` from `@yarcl/react/css` whenever you pick a th
 The theme editor has two tabs: **Visual Editor** has forms for all tokens, typography, interaction settings, defaults and component overrides. Optional settings can be added or removed, and token groups accept new entries. **Code Editor** edits the same config file, with support for comments, single quotes and trailing commas. Switching tabs preserves your changes, and **Apply** validates the config before updating the dashboard.
 
 **Copy config** copies the edited config file for `src/yarcl.config.ts`. **Download config** saves the same file as `yarcl.config.ts`. Both include pending edits, even before you apply them.
+
+The editor also includes built-in text from the [labels catalog](/configuration/labels/). Exported configs spread the default message formatters so they remain complete. Customize formatter functions in your project config; the playground parses data without executing code.

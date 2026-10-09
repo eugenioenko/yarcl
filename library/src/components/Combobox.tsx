@@ -27,7 +27,7 @@ import { useControllable } from '../hooks';
 import type { Color, Size, TokenProps } from '../types';
 import { Badge, BadgeRemove } from './Badge';
 import type { SelectOption } from './Select';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 
 
 /** Props shared by both forms of {@link ComboboxProps}. */
@@ -58,14 +58,18 @@ export interface ComboboxBaseProps<V extends string = string>
   loading?: boolean;
   /**
    * Shown when no options match.
-   * @default 'No results'
+   * @default config.labels.noResults
    */
   emptyMessage?: ReactNode;
   /**
    * Shown while `loading` is set.
-   * @default 'Loading…'
+   * @default config.labels.loadingResults
    */
   loadingMessage?: ReactNode;
+  /** Accessible name of the multi-select chip list. @default config.labels.selectedItems */
+  selectedLabel?: string;
+  /** Accessible name of a chip removal button, given the option label. @default config.labels.removeItem */
+  removeLabel?: (name: string) => string;
 }
 
 /** Props for {@link Combobox}. `multiple` switches the value from one option to an array of them. */
@@ -234,6 +238,7 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
 
 function SingleCombobox<V extends string>(props: SingleProps<V>) {
   const own = useDefaults('Combobox');
+  const labels = useLabels();
   const {
     options,
     value: valueProp,
@@ -244,8 +249,10 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
     filter = true,
     allowCustomValue = false,
     loading = false,
-    emptyMessage = 'No results',
-    loadingMessage = 'Loading…',
+    emptyMessage = labels.noResults,
+    loadingMessage = labels.loadingResults,
+    selectedLabel: _selectedLabel,
+    removeLabel: _removeLabel,
     size,
     radius,
     color,
@@ -348,6 +355,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
 
 function MultipleCombobox<V extends string>(props: MultipleProps<V>) {
   const own = useDefaults('Combobox');
+  const labels = useLabels();
   const {
     options,
     value: valueProp,
@@ -359,8 +367,10 @@ function MultipleCombobox<V extends string>(props: MultipleProps<V>) {
     filter = true,
     allowCustomValue = false,
     loading = false,
-    emptyMessage = 'No results',
-    loadingMessage = 'Loading…',
+    emptyMessage = labels.noResults,
+    loadingMessage = labels.loadingResults,
+    selectedLabel,
+    removeLabel,
     size,
     radius,
     color,
@@ -501,14 +511,14 @@ function MultipleCombobox<V extends string>(props: MultipleProps<V>) {
         onMouseDown={onControlMouseDown}
       >
         {values.length > 0 && (
-          <ul ref={chipsRef} role="list" aria-label="Selected" className="yarcl-combobox-chips" onKeyDown={onChipKeyDown}>
+          <ul ref={chipsRef} role="list" aria-label={selectedLabel ?? labels.selectedItems} className="yarcl-combobox-chips" onKeyDown={onChipKeyDown}>
             {values.map((v) => {
               const label = labelOf(v);
               return (
                 <li key={v}>
                   <Badge size={s} color={color ?? own.color}>
                     <span className="yarcl-combobox-chip-label">{label}</span>
-                    <BadgeRemove aria-label={`Remove ${label}`} tabIndex={-1} disabled={disabled} onClick={() => remove(v)} />
+                    <BadgeRemove aria-label={(removeLabel ?? labels.removeItem)(label)} tabIndex={-1} disabled={disabled} onClick={() => remove(v)} />
                   </Badge>
                 </li>
               );

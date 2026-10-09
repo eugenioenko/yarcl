@@ -18,7 +18,7 @@ import {
 import { cx, densityClass, radiusClass } from '../classes';
 import { Checkbox } from './Checkbox';
 import type { Density, Radius } from '../types';
-import { useConfig, useDefaults } from '../runtime';
+import { useLabels, useConfig, useDefaults } from '../runtime';
 import { useMergeRefs } from '@floating-ui/react';
 
 interface TableContextValue {
@@ -256,7 +256,7 @@ export interface TableSelectAllCellProps extends Omit<ComponentProps<'th'>, 'chi
   indeterminate?: boolean;
   /** Change handler when the checkbox is toggled. */
   onCheckedChange?: (checked: boolean) => void;
-  /** Accessible label for screen readers. @default 'Select all rows' */
+  /** Accessible label for screen readers. @default config.labels.selectAllRows */
   'aria-label'?: string;
   /** Disables the select all checkbox. */
   disabled?: boolean;
@@ -268,15 +268,16 @@ function TableSelectAllCell({
   indeterminate = false,
   onCheckedChange,
   disabled,
-  'aria-label': ariaLabel = 'Select all rows',
+  'aria-label': ariaLabel,
   className,
   scope = 'col',
   ...props
 }: TableSelectAllCellProps) {
+  const labels = useLabels();
   return (
     <th scope={scope} className={cx('yarcl-cell-center', 'yarcl-table-selection-cell', className)} {...props}>
       <Checkbox
-        aria-label={ariaLabel}
+        aria-label={ariaLabel ?? labels.selectAllRows}
         checked={checked}
         indeterminate={indeterminate}
         disabled={disabled}

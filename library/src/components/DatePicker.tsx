@@ -22,7 +22,7 @@ import { useMergeRefs } from '@floating-ui/react';
 import { colorClass, cx, radiusClass, sizeClass, softVariantClass, variantClass } from '../classes';
 import { FieldContext, useFieldProps } from '../field-context';
 import { useControllable } from '../hooks';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 import type { TokenProps, VariantProps } from '../types';
 import { Popover } from './Popover';
 
@@ -119,7 +119,7 @@ export interface DatePickerBaseProps
   name?: string;
   /**
    * Accessible names for the popover and the month buttons, for translation.
-   * @default { dialog: 'Choose date', previousMonth: 'Previous month', nextMonth: 'Next month' }
+   * @default config.labels.chooseDate, config.labels.previousMonth, config.labels.nextMonth
    * @example
    * ```tsx
    * <DatePicker labels={{ dialog: 'Datum wählen', previousMonth: 'Vorheriger Monat', nextMonth: 'Nächster Monat' }} />
@@ -176,7 +176,6 @@ export interface DatePickerRangeProps extends DatePickerBaseProps {
 /** Props for {@link DatePicker}. `mode` decides whether one day or a range is picked. */
 export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;
 
-const defaultLabels: DatePickerLabels = { dialog: 'Choose date', previousMonth: 'Previous month', nextMonth: 'Next month' };
 
 function Icon({ d }: { d: string }) {
   return (
@@ -203,6 +202,7 @@ const iso = (date: Date) => format(date, 'yyyy-MM-dd');
  */
 export function DatePicker(props: DatePickerProps) {
   const own = useDefaults('DatePicker');
+  const catalog = useLabels();
   const field = useContext(FieldContext);
   const {
     mode = 'single',
@@ -227,7 +227,11 @@ export function DatePicker(props: DatePickerProps) {
     ...rest
   } = useFieldProps(props as DatePickerProps & { required?: boolean });
   const range = mode === 'range';
-  const labels = { ...defaultLabels, ...labelsProp };
+  const labels = {
+    dialog: labelsProp?.dialog ?? catalog.chooseDate,
+    previousMonth: labelsProp?.previousMonth ?? catalog.previousMonth,
+    nextMonth: labelsProp?.nextMonth ?? catalog.nextMonth,
+  };
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const mergedRef = useMergeRefs([triggerRef, rest.ref]);
   const [value, setValue] = useControllable<Date | DateRange | null>(

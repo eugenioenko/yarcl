@@ -13,7 +13,8 @@ import {
 } from 'react';
 import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { useControllable } from '../hooks';
-import { useConfig, useDefaults } from '../runtime';
+import { useConfig, useDefaults, useLabels } from '../runtime';
+import type { ConfigLabels } from '../labels';
 import type { TokenProps } from '../types';
 import { useModalDialog } from './Modal';
 
@@ -78,17 +79,17 @@ export interface CommandPaletteProps
   filter?: boolean | ((command: CommandPaletteCommand, text: string) => boolean);
   /**
    * Placeholder of the search input.
-   * @default 'Search commands…'
+   * @default config.labels.searchCommands
    */
   placeholder?: string;
   /**
    * Accessible name of the palette and its search input.
-   * @default 'Command palette'
+   * @default config.labels.commandPalette
    */
   label?: string;
   /**
    * Shown when no commands match.
-   * @default 'No results'
+   * @default config.labels.noResults
    */
   emptyMessage?: ReactNode;
 }
@@ -138,23 +139,24 @@ function ariaShortcut(shortcut: string, apple: boolean) {
     .join(' ');
 }
 
-function shortcutKeys(shortcut: string, apple: boolean) {
+function shortcutKeys(shortcut: string, apple: boolean, labels: ConfigLabels) {
   return shortcut.trim().split(/[\s+]+/).filter(Boolean).map((raw) => {
     const part = raw.trim();
     const lower = part.toLowerCase();
-    if (lower === 'mod') return apple ? '⌘' : 'Ctrl';
-    if (lower === 'ctrl' || lower === 'control') return apple ? '⌃' : 'Ctrl';
-    if (lower === 'alt' || lower === 'option') return apple ? '⌥' : 'Alt';
-    if (lower === 'shift') return apple ? '⇧' : 'Shift';
-    if (lower === 'meta' || lower === 'cmd') return apple ? '⌘' : 'Meta';
+    if (lower === 'mod') return apple ? '⌘' : labels.shortcutControl;
+    if (lower === 'ctrl' || lower === 'control') return apple ? '⌃' : labels.shortcutControl;
+    if (lower === 'alt' || lower === 'option') return apple ? '⌥' : labels.shortcutAlt;
+    if (lower === 'shift') return apple ? '⇧' : labels.shortcutShift;
+    if (lower === 'meta' || lower === 'cmd') return apple ? '⌘' : labels.shortcutMeta;
     return part.length === 1 ? part.toUpperCase() : part;
   });
 }
 
 function ShortcutHint({ shortcut, apple }: { shortcut: string; apple: boolean }) {
+  const labels = useLabels();
   return (
     <span className="yarcl-command-palette-shortcut" aria-hidden="true">
-      {shortcutKeys(shortcut, apple).map((key, i) => (
+      {shortcutKeys(shortcut, apple, labels).map((key, i) => (
         <kbd key={i}>{key}</kbd>
       ))}
     </span>
@@ -212,12 +214,13 @@ function CommandPaletteBody({
   inputValue,
   onInputValueChange,
   filter = true,
-  placeholder = 'Search commands…',
-  label = 'Command palette',
-  emptyMessage = 'No results',
+  placeholder,
+  label,
+  emptyMessage,
   apple,
   choose,
 }: BodyProps) {
+  const labels = useLabels();
   const [text, setText] = useControllable(inputValue, '', onInputValueChange);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const idPrefix = useId();
@@ -266,7 +269,7 @@ function CommandPaletteBody({
           className="yarcl-command-palette-input"
           type="text"
           role="combobox"
-          aria-label={label}
+          aria-label={label ?? labels.commandPalette}
           aria-autocomplete="list"
           aria-expanded={visible.length > 0}
           aria-controls={visible.length > 0 ? listId : undefined}
@@ -274,7 +277,7 @@ function CommandPaletteBody({
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
-          placeholder={placeholder}
+          placeholder={placeholder ?? labels.searchCommands}
           value={text}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             setText(event.target.value);
@@ -284,7 +287,7 @@ function CommandPaletteBody({
         />
       </div>
       {visible.length > 0 && (
-        <div id={listId} role="listbox" aria-label={label} className="yarcl-listbox yarcl-command-palette-list">
+        <div id={listId} role="listbox" aria-label={label ?? labels.commandPalette} className="yarcl-listbox yarcl-command-palette-list">
           {sections.map((section, s) => {
             const headingId = `${idPrefix}-group-${s}`;
             const options = section.commands.map((command) => {
@@ -333,7 +336,7 @@ function CommandPaletteBody({
         </div>
       )}
       <div role="status" className="yarcl-listbox-message yarcl-command-palette-empty">
-        {visible.length === 0 ? emptyMessage : null}
+        {visible.length === 0 ? (emptyMessage === undefined ? labels.noResults : emptyMessage) : null}
       </div>
     </div>
   );
@@ -366,7 +369,7 @@ export function CommandPalette({
   onInputValueChange,
   filter,
   placeholder,
-  label = 'Command palette',
+  label,
   emptyMessage,
   size,
   radius,
@@ -413,7 +416,7 @@ export function CommandPalette({
           ...(shortcut ? { 'aria-keyshortcuts': ariaShortcut(shortcut, apple) } : {}),
         })}
       <dialog
-        aria-label={label}
+        aria-label={label ?? config.labels.commandPalette}
         {...props}
         ref={dialog.ref}
         className={cx(

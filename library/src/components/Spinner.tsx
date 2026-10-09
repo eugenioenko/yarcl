@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 import { colorClass, cx, sizeClass } from '../classes';
 import type { Color, ComponentSize } from '../types';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 
 
 /** Props for {@link Spinner}. */
@@ -12,7 +12,7 @@ export interface SpinnerProps extends Omit<ComponentProps<'span'>, 'color'> {
   color?: Color;
   /**
    * Accessible label announced to screen readers.
-   * @default 'Loading'
+   * @default config.labels.loading
    */
   label?: string;
 }
@@ -25,12 +25,13 @@ export interface SpinnerProps extends Omit<ComponentProps<'span'>, 'color'> {
  * <Spinner size="lg" color="brand" />
  * ```
  */
-export function Spinner({ size, color, label = 'Loading', className, ...props }: SpinnerProps) {
+export function Spinner({ size, color, label, className, ...props }: SpinnerProps) {
   const own = useDefaults('Spinner');
+  const labels = useLabels();
   return (
     <span
       role="status"
-      aria-label={label}
+      aria-label={label ?? labels.loading}
       className={cx('yarcl-spinner', (size ?? own.size) && sizeClass(size ?? own.size, 'Spinner'), (color ?? own.color) && cx('yarcl-spinner-colored', colorClass(color ?? own.color)), className)}
       {...props}
     />

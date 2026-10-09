@@ -11,7 +11,7 @@ import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { FieldContext, useFieldProps } from '../field-context';
 import { useControllable } from '../hooks';
 import type { Color, TokenProps } from '../types';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 
 /** A {@link Slider} value: one number, or a `[start, end]` pair for a range. */
 export type SliderValue = number | [number, number];
@@ -122,7 +122,7 @@ export interface SliderProps<V extends SliderValue = number>
   formatValue?: (value: number) => string;
   /**
    * Names of the two thumbs of a range, added to the slider's label.
-   * @default ['Minimum', 'Maximum']
+   * @default [config.labels.sliderMinimum, config.labels.sliderMaximum]
    * @example
    * ```tsx
    * <Slider defaultValue={[9, 17]} thumbLabels={['Opens', 'Closes']} aria-label="Hours" />
@@ -147,8 +147,6 @@ function decimals(value: number): number {
   return text.split('.')[1]?.length ?? 0;
 }
 
-const DEFAULT_THUMB_LABELS = ['Minimum', 'Maximum'] as const;
-
 /**
  * Picks a number, or a range with two thumbs, by dragging along a track.
  * Each thumb has `role="slider"` and supports the arrow keys, Home, End, PageUp and PageDown.
@@ -163,6 +161,7 @@ const DEFAULT_THUMB_LABELS = ['Minimum', 'Maximum'] as const;
  */
 function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
   const own = useDefaults('Slider');
+  const labels = useLabels();
   const field = useContext(FieldContext);
   const uid = useId();
   const {
@@ -176,7 +175,7 @@ function SliderRoot<V extends SliderValue = number>(props: SliderProps<V>) {
     disabled = false,
     name,
     formatValue,
-    thumbLabels = DEFAULT_THUMB_LABELS,
+    thumbLabels = [labels.sliderMinimum, labels.sliderMaximum],
     marks,
     segments,
     size,

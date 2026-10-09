@@ -10,6 +10,7 @@ const variants = {
 
 export default defineConfig({
   ...defaults,
+  labels: { ...defaults.labels, notifications: 'Project notifications' },
   colors: {
     brand: { light: '#2d4bb8', dark: '#8aa2ff' },
     neutral: { light: '#475467', dark: '#98a2b3' },

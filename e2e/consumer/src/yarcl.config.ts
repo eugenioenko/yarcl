@@ -9,6 +9,7 @@ const variants = {
 } as const;
 
 export default defineConfig({
+  labels: { ...defaults.labels, notifications: 'Avisos del proyecto' },
   colors: {
     ink: { light: '#1c1917', dark: '#f5f5f4' },
     clay: { light: '#a4441f', dark: '#f0a07a' },
