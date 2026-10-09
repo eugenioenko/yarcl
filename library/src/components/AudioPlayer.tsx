@@ -1,3 +1,4 @@
+import { useLabels } from '../runtime';
 import { useEffect, useRef, useState, type ComponentProps, type CSSProperties } from 'react';
 import { cx } from '../classes';
 import { IconButton } from './IconButton';
@@ -43,16 +44,17 @@ function PauseIcon() {
 export function AudioPlayer({
   src,
   level,
-  levelLabel = 'Input level',
-  playLabel = 'Play audio',
-  pauseLabel = 'Pause audio',
-  seekLabel = 'Seek audio',
+  levelLabel,
+  playLabel,
+  pauseLabel,
+  seekLabel,
   className,
   style,
   preload = 'metadata',
   ref,
   ...audioProps
 }: AudioPlayerProps) {
+  const labels = useLabels();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -107,11 +109,11 @@ export function AudioPlayer({
       className="yarcl-audio-player-native"
     />
     <div className="yarcl-audio-player-controls">
-      <IconButton aria-label={playing ? pauseLabel : playLabel} onClick={togglePlayback} disabled={!src}>
+      <IconButton aria-label={playing ? pauseLabel ?? labels.pauseAudio : playLabel ?? labels.playAudio} onClick={togglePlayback} disabled={!src}>
         {playing ? <PauseIcon /> : <PlayIcon />}
       </IconButton>
       <Slider
-        aria-label={seekLabel}
+        aria-label={seekLabel ?? labels.seekAudio}
         min={0}
         max={duration || 1}
         step={0.1}
@@ -122,6 +124,6 @@ export function AudioPlayer({
       />
       <span className="yarcl-audio-player-time" aria-live="off">{formatTime(currentTime)} / {formatTime(duration)}</span>
     </div>
-    {level !== undefined && <Progress value={Math.min(1, Math.max(0, Number.isFinite(level) ? level : 0)) * 100} label={levelLabel} />}
+    {level !== undefined && <Progress value={Math.min(1, Math.max(0, Number.isFinite(level) ? level : 0)) * 100} label={levelLabel ?? labels.audioLevel} />}
   </div>;
 }

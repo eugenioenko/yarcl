@@ -37,7 +37,7 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'color' | '
   layout?: 'numbered' | 'compact';
   /**
    * Text shown in the compact layout. Receives page 0 when there are no pages.
-   * @default (page, count) => `Page ${page} of ${count}`
+   * @default config.labels.pageSummary
    */
   summaryLabel?: (page: number, count: number) => string;
   /**
@@ -80,17 +80,17 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'color' | '
   'aria-label'?: string;
   /**
    * Accessible name of the previous button.
-   * @default 'Previous page'
+   * @default config.labels.previousPage
    */
   previousLabel?: string;
   /**
    * Accessible name of the next button.
-   * @default 'Next page'
+   * @default config.labels.nextPage
    */
   nextLabel?: string;
   /**
    * Accessible name of each page button.
-   * @default (page) => `Page ${page}`
+   * @default config.labels.page
    */
   pageLabel?: (page: number) => string;
 }
@@ -148,7 +148,7 @@ export function Pagination({
   defaultPage = 1,
   onPageChange,
   layout = 'numbered',
-  summaryLabel = (page, count) => `Page ${page} of ${count}`,
+  summaryLabel: summaryLabelProp,
   siblings = 1,
   boundaries = 1,
   size,
@@ -158,16 +158,18 @@ export function Pagination({
   selectedVariant,
   attached = false,
   disabled,
-  previousLabel = 'Previous page',
-  nextLabel = 'Next page',
-  pageLabel = (n) => `Page ${n}`,
-  'aria-label': ariaLabel = 'Pagination',
+  previousLabel,
+  nextLabel,
+  pageLabel: pageLabelProp,
+  'aria-label': ariaLabel,
   className,
   onKeyDown,
   ...props
 }: PaginationProps) {
   const config = useConfig();
   const own = useDefaults('Pagination');
+  const pageLabel = pageLabelProp ?? config.labels.page;
+  const summaryLabel = summaryLabelProp ?? config.labels.pageSummary;
   const resolvedSize = size ?? own.size ?? config.defaults.size;
   const resolvedRadius = radius ?? own.radius ?? config.defaults.radius;
   const resolvedColor = color ?? own.color ?? config.defaults.color;
@@ -216,7 +218,7 @@ export function Pagination({
 
   return (
     <nav
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? config.labels.pagination}
       className={cx(
         'yarcl-pagination',
         layout === 'compact' && 'yarcl-pagination-compact',
@@ -234,7 +236,7 @@ export function Pagination({
       <div
         className={cx('yarcl-button-group yarcl-button-group-horizontal', attached && 'yarcl-button-group-attached')}
       >
-        {edge(previousLabel, active - 1, 'm15 18-6-6 6-6')}
+        {edge(previousLabel ?? config.labels.previousPage, active - 1, 'm15 18-6-6 6-6')}
         {items.map((item) =>
           typeof item === 'number' ? (
             <VariantContext.Provider
@@ -267,7 +269,7 @@ export function Pagination({
             </span>
           ),
         )}
-        {edge(nextLabel, active + 1, 'm9 18 6-6-6-6')}
+        {edge(nextLabel ?? config.labels.nextPage, active + 1, 'm9 18 6-6-6-6')}
       </div>
     </nav>
   );

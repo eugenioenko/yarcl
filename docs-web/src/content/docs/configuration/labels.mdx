@@ -1,0 +1,169 @@
+---
+title: Labels and languages
+description: Typed built-in text, message formatters, instance overrides and live language changes.
+sidebar:
+  order: 12
+---
+
+import Preview from '@/components/Preview.astro';
+import { LabelsDemo } from '@/demos/labels';
+
+The `labels` group supplies built-in visible text and accessible names. It covers loading and empty states, close and remove buttons, pagination, file controls, calendar navigation, audio controls and other default copy.
+
+<Preview column>
+  <LabelsDemo client:visible />
+</Preview>
+
+Change the language in the preview. The mounted controls read the new catalog immediately. Application text and the calendar's date locale are selected separately in the example.
+
+## Configure a catalog
+
+Spread the default catalog and translate the entries you need:
+
+```ts title="src/yarcl.config.ts"
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
+
+export default defineConfig({
+  ...defaults,
+  labels: {
+    ...defaults.labels,
+    close: 'Fermer',
+    dismiss: 'Masquer',
+    loading: 'Chargement',
+    noResults: 'Aucun résultat',
+    remove: 'Supprimer',
+    removeItem: (name) => `Supprimer ${name}`,
+    page: (page) => `Page ${page}`,
+    pageSummary: (page, count) => `Page ${page} sur ${count}`,
+  },
+});
+```
+
+Autocomplete suggests the fixed built-in keys. `defineConfig` checks that every key is present, rejects unknown keys, and validates strings and formatter signatures. Unlike token groups such as `colors`, this catalog does not accept application-specific keys.
+
+A config written from scratch must include a complete `labels` group. Spreading `defaults.labels` preserves entries you are not changing. Each bundled theme includes the same catalog contract.
+
+Use `ConfigLabels` from `@yarcl/react` or `@yarcl/react/define` to type a separate translation file:
+
+```ts title="src/french.ts"
+import type { ConfigLabels } from '@yarcl/react';
+import defaults from '@yarcl/react/defaults';
+
+export const french = {
+  ...defaults.labels,
+  close: 'Fermer',
+  loading: 'Chargement',
+  avatarOverflow: (count) => `${count} ${count === 1 ? 'autre personne' : 'autres personnes'}`,
+} satisfies ConfigLabels;
+```
+
+## Messages with values
+
+Some messages contain a file name, count or value. Those catalog entries are functions returning strings. They let translations change word order, format numbers and choose plural forms.
+
+```ts
+const number = new Intl.NumberFormat('fr-FR');
+
+const labels = {
+  ...defaults.labels,
+  removeItem: (name: string) => `Supprimer ${name}`,
+  previewImage: (name: string) => `Aperçu de ${name}`,
+  avatarOverflow: (count: number) => `${number.format(count)} autres personnes`,
+  progressValue: (value: number, max: number) => `${number.format(value)} sur ${number.format(max)}`,
+};
+```
+
+Keep formatters pure and return text. They run when components render, including during server rendering. CSS generation does not call them or emit translated strings into the stylesheet.
+
+## Switch language at runtime
+
+Pass a complete config with the new catalog to `applyTheme`. Use the active config when changing only language so the current design tokens are retained:
+
+```tsx
+import { Button, useConfig } from '@yarcl/react';
+import { applyTheme } from '@yarcl/react/css';
+import { french } from './french';
+
+function LanguageButton() {
+  const current = useConfig();
+  return (
+    <Button onClick={() => applyTheme({ ...current, labels: french })}>
+      Français
+    </Button>
+  );
+}
+```
+
+Controls already on the page re-render. Open dialogs, calendar popovers, combobox lists and existing toasts use the new defaults. Changing copy keeps their state and focus. `resetTheme()` restores the build-time catalog along with its design tokens.
+
+`DatePicker.locale` still controls month names, weekday names, date formatting and the first day of the week. Choose that locale alongside the catalog. Application headings, option names and content remain application copy. For number formatting, use `Intl` inside the message formatters or existing instance `formatValue` props.
+
+## Per-instance overrides
+
+Explicit props take priority over the catalog, including after a language change:
+
+```tsx
+<Dialog title="Details" closeLabel="Close details" />
+<Alert title="Maintenance" onDismiss={hideAlert} dismissLabel="Hide notice" />
+<Spinner label="Uploading photo" />
+<Badge onRemove={removeTag} removeLabel="Delete tag">React</Badge>
+<Combobox options={countries} emptyMessage="No matching countries" />
+<Combobox multiple options={countries} selectedLabel="Chosen countries" removeLabel={(name) => `Unselect ${name}`} />
+<Pagination count={8} pageLabel={(page) => `Results page ${page}`} />
+<DatePicker labels={{ previousMonth: 'Earlier month' }} />
+<FileDropzone label="Photo" labels={{ chooseFile: 'Browse photos' }} />
+```
+
+A toast can override its dismiss name through `toast({ title: 'Saved', dismissLabel: 'Hide confirmation' })`. `Toaster.label` overrides the region name.
+
+DatePicker's partial `labels` object and FileDropzone's partial `labels` object retain config values for omitted or undefined fields. File picker overrides are typed as `Partial<FileDropzoneLabels>` and can include its name formatters.
+
+An empty string stays empty, which preserves decorative spinner usage such as `<Spinner label="" aria-hidden="true" />`. A `null` `emptyMessage` or `loadingMessage` suppresses the default message in Combobox; CommandPalette also preserves a `null` `emptyMessage`. ReactNode overrides can contain markup.
+
+## Custom components
+
+`useLabels()` returns the active typed catalog and subscribes to language changes:
+
+```tsx
+import { useLabels } from '@yarcl/react';
+
+function ImportStatus() {
+  const labels = useLabels();
+  return <span role="status">{labels.loading}</span>;
+}
+```
+
+Use the same hook when a component extension needs built-in copy. An imported `config` is the build-time config; `useLabels` and `useConfig` follow runtime changes.
+
+## Catalog reference
+
+All entries are strings except the formatters listed with arguments.
+
+| Keys | Used by |
+|---|---|
+| `close` | Dialog and Drawer close buttons |
+| `dismiss` | Alert and Toast dismiss buttons |
+| `remove` | Badge and FileDropzone remove text |
+| `removeItem(name)` | Combobox chip and FileDropzone accessible remove names |
+| `loading` | Spinner |
+| `loadingResults`, `noResults` | Combobox loading and empty results; CommandPalette uses `noResults` |
+| `selectedItems` | Combobox chip list |
+| `breadcrumb`, `expandBreadcrumb` | Breadcrumb navigation and expansion |
+| `progress`, `progressValue(value, max)` | Progress fallback name, visible value and accessible value text |
+| `increase`, `decrease` | NumberInput stepper buttons |
+| `chooseDate`, `previousMonth`, `nextMonth` | DatePicker calendar name and navigation |
+| `commandPalette`, `searchCommands` | CommandPalette name and search placeholder |
+| `shortcutControl`, `shortcutAlt`, `shortcutShift`, `shortcutMeta` | Visible non-Apple command shortcut hints |
+| `pagination`, `previousPage`, `nextPage`, `page(page)`, `pageSummary(page, count)` | Pagination navigation, buttons and compact summary |
+| `actions`, `chooseAction` | SplitButton group, dropdown and empty action placeholder |
+| `avatarOverflow(count)` | AvatarGroup overflow name |
+| `sliderMinimum`, `sliderMaximum` | Slider.Range thumb names |
+| `audioLevel`, `playAudio`, `pauseAudio`, `seekAudio` | AudioPlayer meter and controls |
+| `chooseFile`, `chooseFiles`, `replaceFile` | FileDropzone picker buttons |
+| `dropFile`, `dropFiles`, `dropReplacement` | FileDropzone drop hints |
+| `currentImage`, `currentImageName`, `selectedImage`, `previewImage(name)` | FileDropzone unnamed image text, removal name and preview alternative text |
+| `selectAllRows` | Table.SelectAllCell checkbox |
+| `notifications` | Toaster region |
+
+Command shortcut parsing and `aria-keyshortcuts` use standardized key names. Translating visible modifier hints does not change keyboard behavior or those ARIA tokens. Apple shortcut hints retain their platform symbols.

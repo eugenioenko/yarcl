@@ -151,4 +151,5 @@ export type {
 } from './types';
 /** The build-time design system config: the consumer's, or the library default. */
 export { default as config } from '@yarcl/config';
-export { useConfig } from './runtime';
+export { useConfig, useLabels } from './runtime';
+export type { ConfigLabels, FileDropzoneLabels } from './labels';

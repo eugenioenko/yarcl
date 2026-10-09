@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState, type ComponentProps, type DragEvent, type ReactNode } from 'react';
 import { cx } from '../classes';
 import { Button } from './Button';
+import { useLabels } from '../runtime';
+import type { FileDropzoneLabels } from '../labels';
 
 /** Props for {@link FileDropzone}. */
 export interface FileDropzoneProps extends Omit<ComponentProps<'div'>, 'children' | 'onDrop' | 'onChange' | 'defaultValue'> {
@@ -8,6 +10,8 @@ export interface FileDropzoneProps extends Omit<ComponentProps<'div'>, 'children
   label: string;
   /** Optional helper text below the label. */
   description?: string;
+  /** Overrides the active catalog for this picker. Unspecified entries keep config labels. */
+  labels?: Partial<FileDropzoneLabels>;
   /** Accepted extensions or MIME types, as on a native file input. */
   accept?: string;
   /** Allows more than one file. */
@@ -47,6 +51,7 @@ function accepts(file: File, accept?: string): boolean {
 export function FileDropzone({
   label,
   description,
+  labels,
   accept,
   multiple = false,
   value,
@@ -64,6 +69,21 @@ export function FileDropzone({
   onDragOver,
   ...props
 }: FileDropzoneProps) {
+  const catalog = useLabels();
+  const {
+    chooseFile = catalog.chooseFile,
+    chooseFiles = catalog.chooseFiles,
+    replaceFile = catalog.replaceFile,
+    dropFile = catalog.dropFile,
+    dropFiles = catalog.dropFiles,
+    dropReplacement = catalog.dropReplacement,
+    currentImage = catalog.currentImage,
+    currentImageName = catalog.currentImageName,
+    selectedImage = catalog.selectedImage,
+    previewImage = catalog.previewImage,
+    remove = catalog.remove,
+    removeItem = catalog.removeItem,
+  } = labels ?? {};
   const id = useId();
   const input = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -158,21 +178,21 @@ export function FileDropzone({
       />
       <strong id={id}>{label}</strong>
       {description && <span className="yarcl-file-dropzone-description">{description}</span>}
-      <Button disabled={disabled} onClick={() => input.current?.click()}>{multiple ? 'Choose files' : hasCurrent ? 'Replace file' : 'Choose file'}</Button>
-      <span className="yarcl-file-dropzone-hint">{multiple ? 'or drop files here' : hasCurrent ? 'or drop a replacement here' : 'or drop a file here'}</span>
+      <Button disabled={disabled} onClick={() => input.current?.click()}>{multiple ? chooseFiles : hasCurrent ? replaceFile : chooseFile}</Button>
+      <span className="yarcl-file-dropzone-hint">{multiple ? dropFiles : hasCurrent ? dropReplacement : dropFile}</span>
       <div aria-live="polite" className="yarcl-file-dropzone-files">
         {children ? children(currentFiles, removeFile) : hasCurrent ? (
           <div className="yarcl-file-dropzone-current">
-            {imageUrl && <img src={imageUrl} alt={`Preview of ${currentFile?.name ?? previewName ?? 'selected image'}`} />}
-            <span>{currentFile?.name ?? previewName ?? 'Current image'}</span>
-            <button type="button" disabled={disabled} onClick={removeCurrent} aria-label={`Remove ${currentFile?.name ?? previewName ?? 'current image'}`}>Remove</button>
+            {imageUrl && <img src={imageUrl} alt={previewImage(currentFile?.name ?? previewName ?? selectedImage)} />}
+            <span>{currentFile?.name ?? previewName ?? currentImage}</span>
+            <button type="button" disabled={disabled} onClick={removeCurrent} aria-label={removeItem(currentFile?.name ?? previewName ?? currentImageName)}>{remove}</button>
           </div>
         ) : files.length > 0 && (
           <ul>
             {files.map((file, index) => (
               <li key={`${file.name}-${file.lastModified}-${index}`}>
                 <span>{file.name}</span>
-                <button type="button" disabled={disabled} onClick={() => removeFile(index)} aria-label={`Remove ${file.name}`}>Remove</button>
+                <button type="button" disabled={disabled} onClick={() => removeFile(index)} aria-label={removeItem(file.name)}>{remove}</button>
               </li>
             ))}
           </ul>

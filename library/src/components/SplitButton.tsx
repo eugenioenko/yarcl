@@ -2,7 +2,7 @@ import { useState, type ComponentProps, type ReactNode } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
 import { ChevronIcon } from '../floating';
 import { useControllable } from '../hooks';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 import type { TokenProps, VariantProps } from '../types';
 import { Menu } from './Menu';
 import { Spinner } from './Spinner';
@@ -41,12 +41,12 @@ export interface SplitButtonProps<V extends string = string>
   loading?: boolean;
   /**
    * Accessible name for the dropdown button and its choices.
-   * @default 'Choose action'
+   * @default config.labels.chooseAction
    */
   dropdownLabel?: string;
   /**
    * Main button label when the selected value has no matching option.
-   * @default 'Choose action'
+   * @default config.labels.chooseAction
    */
   placeholder?: string;
 }
@@ -73,8 +73,8 @@ export function SplitButton<V extends string = string>({
   onAction,
   disabled,
   loading,
-  dropdownLabel = 'Choose action',
-  placeholder = 'Choose action',
+  dropdownLabel,
+  placeholder,
   size,
   radius,
   color,
@@ -83,6 +83,7 @@ export function SplitButton<V extends string = string>({
   ...props
 }: SplitButtonProps<V>) {
   const own = useDefaults('SplitButton');
+  const labels = useLabels();
   const [value, setValue] = useControllable<V | undefined>(valueProp, defaultValue, (next) => {
     if (next !== undefined) onValueChange?.(next);
   });
@@ -101,7 +102,7 @@ export function SplitButton<V extends string = string>({
   return (
     <div
       role="group"
-      aria-label="Actions"
+      aria-label={labels.actions}
       {...props}
       className={cx('yarcl-split-button yarcl-button-group yarcl-button-group-attached yarcl-button-group-horizontal', className)}
     >
@@ -117,17 +118,17 @@ export function SplitButton<V extends string = string>({
         {loading ? <Spinner label="" aria-hidden="true" /> : selected?.icon && (
           <span className="yarcl-button-icon" aria-hidden="true">{selected.icon}</span>
         )}
-        {selected?.label ?? placeholder}
+        {selected?.label ?? (placeholder === undefined ? labels.chooseAction : placeholder)}
       </button>
       <Menu open={open && !locked} onOpenChange={setOpen} placement="bottom-end">
         <Menu.Trigger>
-          <button type="button" className={cx(classes, 'yarcl-icon-button')} disabled={locked} aria-label={dropdownLabel}>
+          <button type="button" className={cx(classes, 'yarcl-icon-button')} disabled={locked} aria-label={dropdownLabel ?? labels.chooseAction}>
             <ChevronIcon />
           </button>
         </Menu.Trigger>
         <Menu.Content>
           <Menu.RadioGroup
-            aria-label={dropdownLabel}
+            aria-label={dropdownLabel ?? labels.chooseAction}
             value={value ?? null}
             onValueChange={(next) => {
               const option = options.find((option) => option.value === next);

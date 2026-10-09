@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { colorClass, cx, radiusClass, sizeClass, softVariantClass } from '../classes';
 import type { Color, ComponentSize, Radius, ComponentVariant } from '../types';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 
 
 /** Props for {@link Badge}. */
@@ -36,7 +36,7 @@ export interface BadgeProps extends Omit<ComponentProps<'span'>, 'color'> {
   onRemove?: () => void;
   /**
    * Accessible label of the remove button.
-   * @default 'Remove'
+   * @default config.labels.remove
    */
   removeLabel?: string;
 }
@@ -60,12 +60,13 @@ export function Badge({
   endIcon,
   wrap,
   onRemove,
-  removeLabel = 'Remove',
+  removeLabel,
   className,
   children,
   ...props
 }: BadgeProps) {
   const own = useDefaults('Badge');
+  const labels = useLabels();
   const s = size ?? own.size;
   return (
     <span
@@ -75,7 +76,7 @@ export function Badge({
       {startIcon && <span className="yarcl-badge-icon" aria-hidden="true">{startIcon}</span>}
       <span className="yarcl-badge-label">{children}</span>
       {endIcon && <span className="yarcl-badge-icon" aria-hidden="true">{endIcon}</span>}
-      {onRemove && <BadgeRemove aria-label={removeLabel} onClick={onRemove} />}
+      {onRemove && <BadgeRemove aria-label={removeLabel ?? labels.remove} onClick={onRemove} />}
     </span>
   );
 }

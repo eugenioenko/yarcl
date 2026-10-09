@@ -66,7 +66,7 @@ export interface BreadcrumbProps extends Omit<ComponentProps<'nav'>, 'color'> {
   itemsAfterCollapse?: number;
   /**
    * Accessible label of the ellipsis button.
-   * @default 'Show all breadcrumbs'
+   * @default config.labels.expandBreadcrumb
    */
   expandLabel?: string;
   /**
@@ -92,12 +92,12 @@ function BreadcrumbRoot({
   maxItems,
   itemsBeforeCollapse = 1,
   itemsAfterCollapse = 2,
-  expandLabel = 'Show all breadcrumbs',
+  expandLabel,
   textStyle,
   color,
   underline = 'hover',
   className,
-  'aria-label': ariaLabel = 'Breadcrumb',
+  'aria-label': ariaLabel,
   ...props
 }: BreadcrumbProps) {
   const config = useConfig();
@@ -137,7 +137,7 @@ function BreadcrumbRoot({
             <button
               type="button"
               className="yarcl-breadcrumb-ellipsis"
-              aria-label={expandLabel}
+              aria-label={expandLabel ?? config.labels.expandBreadcrumb}
               onClick={() => {
                 focusNext.current = true;
                 setExpanded(true);
@@ -160,7 +160,7 @@ function BreadcrumbRoot({
 
   return (
     <nav
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? config.labels.breadcrumb}
       className={cx(
         'yarcl-breadcrumb',
         typeClass(textStyle ?? own.textStyle ?? config.defaults.textStyle),

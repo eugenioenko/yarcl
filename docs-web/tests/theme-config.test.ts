@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { themes } from '@yarcl/react/themes';
 import type { YarclShape } from '@yarcl/react/define';
+import { resolve } from 'node:path';
+import ts from 'typescript';
 import { checkTheme, parseConfig, serializeConfig, themeSchema } from '../src/playground/theme-config';
 
-const fresh = (): YarclShape => structuredClone(themes.yarcl);
+const fresh = (): YarclShape => parseConfig(serializeConfig(themes.yarcl)) as YarclShape;
 
 describe('playground config', () => {
   it.each(Object.entries(themes))('round trips the %s theme as a complete config file', (_, theme) => {
@@ -20,6 +22,50 @@ describe('playground config', () => {
   it('rejects executable expressions without evaluating them', () => {
     expect(() => parseConfig('{ value: (() => { throw new Error("executed"); })() }')).toThrow(/JSON5/);
     expect(() => parseConfig('null; throw new Error("executed")')).toThrow(/JSON5/);
+    const source = serializeConfig(themes.yarcl).replace('"Close"', '(() => { throw new Error("executed"); })()');
+    expect(() => parseConfig(source)).toThrow(/JSON5/);
+  });
+
+  it('round trips translated copy and preserves the default message formatters', () => {
+    const theme = fresh();
+    theme.labels.close = 'Fermer';
+    theme.labels.loading = 'Chargement';
+    const source = serializeConfig(theme);
+    expect(source).toContain('...defaults.labels');
+    expect(source).not.toContain('=>');
+    const parsed = parseConfig(source) as YarclShape;
+    expect(parsed).toEqual(theme);
+    expect(parsed.labels.pageSummary(2, 5)).toBe('Page 2 of 5');
+    expect(checkTheme(parsed)).toEqual([]);
+  });
+
+  it('exports a config accepted by defineConfig without widening token references', () => {
+    const file = resolve(import.meta.dirname, 'generated-config.ts');
+    const options: ts.CompilerOptions = {
+      target: ts.ScriptTarget.ESNext,
+      module: ts.ModuleKind.ESNext,
+      moduleResolution: ts.ModuleResolutionKind.Bundler,
+      strict: true,
+      skipLibCheck: true,
+      noEmit: true,
+      types: [],
+      paths: { '@yarcl/config': [resolve(import.meta.dirname, '../src/yarcl.config.ts')] },
+    };
+    const host = ts.createCompilerHost(options);
+    const read = host.getSourceFile.bind(host);
+    host.getSourceFile = (name, version, onError, shouldCreate) => name === file
+      ? ts.createSourceFile(name, serializeConfig(themes.yarcl), version, true)
+      : read(name, version, onError, shouldCreate);
+    const diagnostics = ts.getPreEmitDiagnostics(ts.createProgram([file], options, host));
+    expect(diagnostics.map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'))).toEqual([]);
+  });
+
+  it('rejects invalid or unknown catalog entries and custom formatter exports', () => {
+    const theme = fresh();
+    expect(checkTheme({ ...theme, labels: { ...theme.labels, close: 12, page: 'Page', extra: 'Extra' } }).join('\n'))
+      .toMatch(/labels.close[\s\S]*labels.page[\s\S]*labels.extra/);
+    expect(() => serializeConfig({ ...theme, labels: { ...theme.labels, page: () => 'Custom page' } }))
+      .toThrow('Customize message formatters in your project config');
   });
 
   it('exposes every required top-level setting in the visual schema', () => {

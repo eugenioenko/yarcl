@@ -437,3 +437,11 @@ defineConfig({ ...defaults, components: {
   // @ts-expect-error Selected variants need an explicit local default when the shared default is absent
   ToggleGroup: { variants: { idle: localRecipe }, variant: 'idle' },
 } });
+
+
+// @ts-expect-error A complete catalog is required
+defineConfig({ ...defaults, labels: { close: 'Fermer' } });
+// @ts-expect-error Unknown label keys are rejected
+defineConfig({ ...defaults, labels: { ...defaults.labels, missing: 'Unknown' } });
+// @ts-expect-error Label formatters cannot return numbers
+defineConfig({ ...defaults, labels: { ...defaults.labels, page: (page: number) => page } });

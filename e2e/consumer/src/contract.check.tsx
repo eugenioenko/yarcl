@@ -1,5 +1,5 @@
 import { createComponent } from '@yarcl/react';
-import { tokens, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
+import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
 import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
@@ -381,5 +381,30 @@ export function checkComponentVariantValues() {
     <Badge variant="filled" />
     {/* @ts-expect-error Component-only variants do not leak to shared fallbacks */}
     <Alert variant="action" />
+  </>;
+}
+
+
+/** Checks translated catalog keys, formatter signatures and per-instance overrides. */
+export function labelsContract() {
+  defineConfig({ ...config, labels: { ...config.labels, close: 'Fermer', page: (page: number) => `Page ${page}` } });
+  // @ts-expect-error Built-in catalog keys are fixed
+  defineConfig({ ...config, labels: { ...config.labels, clsoe: 'Fermer' } });
+  // @ts-expect-error Labels must be strings
+  defineConfig({ ...config, labels: { ...config.labels, loading: 42 } });
+  // @ts-expect-error Remove formatters receive a string and return a string
+  defineConfig({ ...config, labels: { ...config.labels, removeItem: (name: number) => name } });
+  // @ts-expect-error Pagination formatters receive numeric counts
+  defineConfig({ ...config, labels: { ...config.labels, pageSummary: (page: string, count: string) => page + count } });
+  return <>
+    <Dialog title="Details" closeLabel="Close details" />
+    <Alert dismissLabel="Dismiss warning" />
+    <FileDropzone label="Photo" labels={{ chooseFile: 'Browse', removeItem: (name) => `Delete ${name}` }} />
+    {/* @ts-expect-error Close labels are strings */}
+    <Dialog title="Details" closeLabel={42} />
+    {/* @ts-expect-error File picker copy has a fixed set of keys */}
+    <FileDropzone label="Photo" labels={{ missing: 'Browse' }} />
+    {/* @ts-expect-error Per-instance file formatters receive file names */}
+    <FileDropzone label="Photo" labels={{ removeItem: (name: number) => String(name) }} />
   </>;
 }

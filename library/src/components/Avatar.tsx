@@ -184,7 +184,7 @@ export function AvatarGroup({
   children,
   max,
   total,
-  overflowLabel = (count) => `${count} more`,
+  overflowLabel,
   size,
   radius,
   color,
@@ -237,7 +237,7 @@ export function AvatarGroup({
           }),
         )}
         {hidden > 0 && (
-          <span className="yarcl-avatar yarcl-avatar-overflow" role="img" aria-label={overflowLabel(hidden)}>
+          <span className="yarcl-avatar yarcl-avatar-overflow" role="img" aria-label={(overflowLabel ?? config.labels.avatarOverflow)(hidden)}>
             +{hidden}
           </span>
         )}

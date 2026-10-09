@@ -4,7 +4,7 @@ import { useFieldProps } from '../field-context';
 import { ChevronIcon } from '../floating';
 import { useControllable, useFormReset } from '../hooks';
 import type { TokenProps } from '../types';
-import { useDefaults } from '../runtime';
+import { useLabels, useDefaults } from '../runtime';
 
 /**
  * Props for {@link NumberInput}. Native `<input>` attributes go to the inner input;
@@ -33,12 +33,12 @@ export interface NumberInputProps
   step?: number;
   /**
    * Accessible label of the increment button.
-   * @default 'Increase'
+   * @default config.labels.increase
    */
   incrementLabel?: string;
   /**
    * Accessible label of the decrement button.
-   * @default 'Decrease'
+   * @default config.labels.decrease
    */
   decrementLabel?: string;
 }
@@ -71,6 +71,7 @@ function parse(text: string): number | null | undefined {
  */
 export function NumberInput(props: NumberInputProps) {
   const own = useDefaults('NumberInput');
+  const labels = useLabels();
   const fallbackId = useId();
   const {
     value: valueProp,
@@ -79,8 +80,8 @@ export function NumberInput(props: NumberInputProps) {
     min,
     max,
     step = 1,
-    incrementLabel = 'Increase',
-    decrementLabel = 'Decrease',
+    incrementLabel = labels.increase,
+    decrementLabel = labels.decrease,
     size,
     radius,
     color,

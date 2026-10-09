@@ -44,6 +44,8 @@ export interface AlertProps extends Omit<ComponentProps<'div'>, 'color' | 'title
   textStyle?: TextStyle;
   /** Shows a dismiss button. Called when it is pressed; hide the alert in response. */
   onDismiss?: () => void;
+  /** Accessible name of the dismiss button. @default config.labels.dismiss */
+  dismissLabel?: string;
   /**
    * Announces the alert when it appears: `'polite'` (`role="status"`) or `'assertive'` (`role="alert"`).
    * Leave unset for messages present on page load.
@@ -73,6 +75,7 @@ export function Alert({
   padding,
   textStyle,
   onDismiss,
+  dismissLabel,
   live,
   className,
   children,
@@ -102,7 +105,7 @@ export function Alert({
       </div>
       {action != null && <div className="yarcl-alert-action">{action}</div>}
       {onDismiss && (
-        <button type="button" className="yarcl-alert-dismiss" aria-label="Dismiss" onClick={onDismiss}>
+        <button type="button" className="yarcl-alert-dismiss" aria-label={dismissLabel ?? config.labels.dismiss} onClick={onDismiss}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M6 6l12 12M18 6 6 18" />
           </svg>

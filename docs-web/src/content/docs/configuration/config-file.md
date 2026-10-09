@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-Your config file default-exports the result of `defineConfig`. It's plain data: no functions, no theme objects, no CSS.
+Your config file default-exports the result of `defineConfig`. It holds design tokens, component defaults and built-in copy. Label messages that depend on names or counts use pure formatter functions.
 
 ```ts title="src/yarcl.config.ts"
 import { defineConfig } from '@yarcl/react/define';
@@ -25,6 +25,7 @@ export default defineConfig({
 
 | Group | Keys | Controls | Guide |
 |---|---|---|---|
+| `labels` | fixed text keys and formatter signatures | built-in copy and accessible names | [Labels and languages](/configuration/labels/) |
 | `colors` | open | the `color` prop | [Colors and theming](/configuration/colors-and-theming/) |
 | `neutrals` | `bg`, `surface`, `text`, `muted`, `border` + any | backgrounds, text, borders | [Colors and theming](/configuration/colors-and-theming/) |
 | `sizes` | open | the `size` prop: height, padding, font and icon size | [Sizes and radii](/configuration/sizes-and-radii/) |
@@ -67,6 +68,7 @@ At compile time:
 - every color has both a `light` and a `dark` value
 - every `defaults` entry, `focusRing.color`, font role, heading level and text style family points at a key that exists
 - `components` only names known components, sets supported options, and uses existing keys; size restrictions are non-empty and contain the resolved default
+- the built-in `labels` catalog has every required entry, uses known keys, and has valid strings and formatter signatures
 - required keys are present
 - no key contains whitespace
 
