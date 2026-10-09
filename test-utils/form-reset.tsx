@@ -1,13 +1,84 @@
 import { expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { useState } from 'react';
-import { Input, NumberInput, Select } from '@yarcl/react';
+import { DatePicker, Input, NumberInput, Radio, RadioGroup, Select } from '@yarcl/react';
 import { page } from './page';
 
 const options = [{ value: 'basic', label: 'Basic plan' }, { value: 'premium', label: 'Premium plan' }];
 
 /** Verifies native reset cancellation and completion in both consumer configurations. */
 export function testFormReset() {
+  test.each(['object', 'callback', 'cleanup'] as const)('resets RadioGroup with a consumer %s ref', async (kind) => {
+    const nodeRef = { current: null as HTMLFieldSetElement | null };
+    const cleanup = vi.fn();
+    const callback = vi.fn((node: HTMLFieldSetElement | null) => {
+      nodeRef.current = node;
+      if (kind === 'cleanup' && node) return () => {
+        nodeRef.current = null;
+        cleanup();
+      };
+    });
+    const changed = vi.fn();
+    const screen = await render(
+      <form>
+        <RadioGroup ref={kind === 'object' ? nodeRef : callback} label="Billing" name="billing" defaultValue="annual" onValueChange={changed}>
+          <Radio value="monthly">Monthly</Radio>
+          <Radio value="annual">Annual</Radio>
+        </RadioGroup>
+        <button type="reset">Reset form</button>
+      </form>,
+    );
+    const root = nodeRef.current;
+    expect(root?.tagName).toBe('FIELDSET');
+    await page.getByRole('radio', { name: 'Monthly' }).click();
+    expect(new FormData(document.querySelector('form')!).get('billing')).toBe('monthly');
+    changed.mockClear();
+    await page.getByRole('button', { name: 'Reset form' }).click();
+    await expect.poll(() => new FormData(document.querySelector('form')!).get('billing')).toBe('annual');
+    expect((root!.querySelector('[value="annual"]') as HTMLInputElement).checked).toBe(true);
+    expect(changed).toHaveBeenCalledExactlyOnceWith('annual');
+    expect(nodeRef.current).toBe(root);
+    await screen.unmount();
+    expect(nodeRef.current).toBeNull();
+    if (kind === 'cleanup') expect(cleanup).toHaveBeenCalledOnce();
+    if (kind === 'callback') expect(callback).toHaveBeenLastCalledWith(null);
+  });
+
+  test.each(['object', 'callback', 'cleanup'] as const)('resets DatePicker with a consumer %s ref', async (kind) => {
+    const nodeRef = { current: null as HTMLButtonElement | null };
+    const cleanup = vi.fn();
+    const callback = vi.fn((node: HTMLButtonElement | null) => {
+      nodeRef.current = node;
+      if (kind === 'cleanup' && node) return () => {
+        nodeRef.current = null;
+        cleanup();
+      };
+    });
+    const initial = new Date(2026, 8, 15);
+    const changed = vi.fn();
+    const screen = await render(
+      <form>
+        <DatePicker ref={kind === 'object' ? nodeRef : callback} aria-label="Appointment" name="appointment" defaultValue={initial} onValueChange={changed} />
+        <button type="reset">Reset form</button>
+      </form>,
+    );
+    const root = nodeRef.current;
+    expect(root?.tagName).toBe('BUTTON');
+    await page.getByRole('button', { name: 'Appointment', exact: true }).click();
+    await page.getByRole('gridcell', { name: 'Monday, September 21st, 2026' }).click();
+    expect(new FormData(document.querySelector('form')!).get('appointment')).toBe('2026-09-21');
+    changed.mockClear();
+    await page.getByRole('button', { name: 'Reset form' }).click();
+    await expect.poll(() => new FormData(document.querySelector('form')!).get('appointment')).toBe('2026-09-15');
+    expect(root!.textContent).toContain('Sep 15, 2026');
+    expect(changed).toHaveBeenCalledExactlyOnceWith(initial);
+    expect(nodeRef.current).toBe(root);
+    await screen.unmount();
+    expect(nodeRef.current).toBeNull();
+    if (kind === 'cleanup') expect(cleanup).toHaveBeenCalledOnce();
+    if (kind === 'callback') expect(callback).toHaveBeenLastCalledWith(null);
+  });
+
   test.each(['form', 'ancestor'] as const)('honors reset cancellation on the %s', async (location) => {
     const changed = vi.fn();
     const cancel = (event: React.FormEvent) => event.preventDefault();

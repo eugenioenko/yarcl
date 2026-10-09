@@ -1,4 +1,5 @@
 import { createContext, useContext, useId, useRef, type ComponentProps, type ReactNode } from 'react';
+import { useMergeRefs } from '@floating-ui/react';
 import { cx, typeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, ComponentSize, Size } from '../types';
@@ -83,6 +84,7 @@ export function RadioGroup({
   const config = useConfig();
   const id = useId();
   const fieldsetRef = useRef<HTMLFieldSetElement | null>(null);
+  const mergedRef = useMergeRefs([fieldsetRef, props.ref]);
   const [value, setValue] = useControllable<string | null>(
     valueProp,
     defaultValue,
@@ -97,16 +99,11 @@ export function RadioGroup({
       value={{ name: name ?? id, value, select: setValue, size, color, invalid: errorId != null, disabled }}
     >
       <fieldset
-        ref={(node) => {
-          fieldsetRef.current = node;
-          const incomingRef = (props as { ref?: React.Ref<HTMLFieldSetElement> }).ref;
-          if (typeof incomingRef === 'function') incomingRef(node);
-          else if (incomingRef && 'current' in incomingRef) (incomingRef as React.MutableRefObject<HTMLFieldSetElement | null>).current = node;
-        }}
         className={cx('yarcl-field yarcl-radio-group', className)}
         aria-describedby={cx(descriptionId, errorId) || undefined}
         disabled={disabled}
         {...props}
+        ref={mergedRef}
       >
         <legend className={cx('yarcl-field-label', typeClass(config.defaults.labelStyle))}>{label}</legend>
         <div className={cx('yarcl-radio-group-options', `yarcl-radio-group-${orientation}`)}>{children}</div>
