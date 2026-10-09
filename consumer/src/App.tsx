@@ -36,7 +36,7 @@ import {
   type Size,
   type Spacing,
   type TextStyle,
-  type Variant,
+  type ComponentVariant,
 } from '@yarcl/react';
 import { DesignReference } from '@yarcl/react/reference';
 import { DatePickerDemo } from './DatePickerDemo';
@@ -51,7 +51,7 @@ const keys = <T extends string>(o: object) => Object.keys(o) as T[];
 const sizes = keys<Size>(config.sizes);
 const radii = keys<Radius>(config.radii);
 const colors = keys<Color>(config.colors);
-const variants = keys<Variant>(config.variants);
+const variants = keys<ComponentVariant<'Button'>>(config.components.Button.variants);
 const spacings = keys<Spacing>(config.spacing);
 const shadows = keys<Shadow>(config.shadows);
 const textStyles = keys<TextStyle>(config.typography.styles);

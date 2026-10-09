@@ -1,15 +1,18 @@
 import { createContext, useContext, type ComponentProps } from 'react';
-import { cx } from '../classes';
+import { cx, variantClass } from '../classes';
+import { VariantContext } from '../variant-context';
+import { useConfig } from '../runtime';
 import type { TokenProps, VariantProps } from '../types';
 
-const ButtonGroupContext = createContext<(TokenProps<'Button'> & VariantProps) | null>(null);
+const ButtonGroupContext = createContext<(TokenProps<'Button'> & VariantProps<'Button'>) | null>(null);
 
 export function useButtonGroup() {
   return useContext(ButtonGroupContext);
 }
 
 /** Props for {@link ButtonGroup}. Token props are passed down to every button inside. */
-export interface ButtonGroupProps extends Omit<ComponentProps<'div'>, 'color'>, TokenProps<'Button'>, VariantProps {
+export interface ButtonGroupProps
+  extends Omit<ComponentProps<'div'>, 'color'>, TokenProps<'Button'>, VariantProps<'Button'> {
   /**
    * Joins the buttons into one control with shared borders.
    * @default true
@@ -44,18 +47,21 @@ export function ButtonGroup({
   className,
   ...props
 }: ButtonGroupProps) {
+  useConfig();
   return (
-    <ButtonGroupContext.Provider value={{ size, color, variant, radius }}>
-      <div
-        role="group"
-        className={cx(
-          'yarcl-button-group',
-          `yarcl-button-group-${orientation}`,
-          attached && 'yarcl-button-group-attached',
-          className,
-        )}
-        {...props}
-      />
-    </ButtonGroupContext.Provider>
+    <VariantContext.Provider value={variant === undefined ? null : { button: variantClass(variant, 'Button') }}>
+      <ButtonGroupContext.Provider value={{ size, color, variant, radius }}>
+        <div
+          role="group"
+          className={cx(
+            'yarcl-button-group',
+            `yarcl-button-group-${orientation}`,
+            attached && 'yarcl-button-group-attached',
+            className,
+          )}
+          {...props}
+        />
+      </ButtonGroupContext.Provider>
+    </VariantContext.Provider>
   );
 }

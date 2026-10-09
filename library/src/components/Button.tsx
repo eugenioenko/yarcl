@@ -1,5 +1,6 @@
+import { useVariantClass } from '../variant-context';
 import type { ComponentProps, ReactNode } from 'react';
-import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import type { TokenProps, VariantProps } from '../types';
 import { useButtonGroup } from './ButtonGroup';
 import { Spinner } from './Spinner';
@@ -7,7 +8,7 @@ import { useDefaults } from '../runtime';
 
 
 /** Props for the action form of {@link Button}. Accepts native `<button>` attributes except `color`. */
-export interface ButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps<'Button'>, VariantProps {
+export interface ButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps<'Button'>, VariantProps<'Button'> {
   href?: never;
   /** Lets multiline content determine the height, keeping the size token as the minimum height. */
   autoHeight?: boolean;
@@ -20,7 +21,7 @@ export interface ButtonProps extends Omit<ComponentProps<'button'>, 'color'>, To
 }
 
 /** Props for the link form of {@link Button}. Accepts native anchor attributes except `color` and `type`. */
-export interface ButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'href' | 'type' | 'disabled'>, TokenProps<'Button'>, VariantProps {
+export interface ButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'href' | 'type' | 'disabled'>, TokenProps<'Button'>, VariantProps<'Button'> {
   /** Destination. Renders a native link with the same visual styles as a button. */
   href: string;
   /** Lets multiline content determine the height, keeping the size token as the minimum height. */
@@ -55,7 +56,7 @@ export function Button(props: ButtonProps | ButtonLinkProps) {
     sizeClass(s, 'Button'),
     radiusClass(radius ?? group?.radius ?? own.radius, s),
     colorClass(color ?? group?.color ?? own.color),
-    variantClass(variant ?? group?.variant ?? own.variant),
+    useVariantClass(variant, 'Button'),
     className,
   );
   const leading = startIcon && <span className="yarcl-button-icon" aria-hidden="true">{startIcon}</span>;

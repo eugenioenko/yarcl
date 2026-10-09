@@ -1,6 +1,6 @@
 ---
 title: Variants
-description: Variant recipes shared by Button, IconButton, Badge, Alert and ToggleGroup.
+description: Shared and component-specific variant recipes, typed from your config.
 sidebar:
   order: 4
 ---
@@ -41,7 +41,7 @@ Any combination works. A "link" style is `{ background: 'none', border: 'none', 
 
 ## Which components use variants
 
-`Button`, `IconButton`, `Badge`, `Alert` and `ToggleGroup` take a `variant` prop. They share the recipes, so a `soft` badge and a `soft` button look like they belong together.
+`Button`, `IconButton`, `SplitButton`, `Badge`, `Alert`, `Avatar`, `AvatarGroup`, `Label`, `DatePicker`, `ToggleGroup` and `Pagination` take a `variant` prop. They use the shared recipes unless you configure their own map. `ButtonGroup` inherits Button recipes.
 
 ## Default variants
 
@@ -49,3 +49,76 @@ Any combination works. A "link" style is `{ background: 'none', border: 'none', 
 - `defaults.softVariant`: the variant of low-emphasis components: `Badge`, `Alert`, and unselected `ToggleGroup` items.
 
 Both must be keys of `variants`.
+
+## Component-specific variants
+
+Set `components.<Name>.variants` to give a component its own recipe keys. This map replaces the shared group for that component's `variant` prop. Other components continue using shared variants.
+
+```ts
+import { defineConfig } from '@yarcl/react/define';
+import defaults from '@yarcl/react/defaults';
+
+export default defineConfig({
+  ...defaults,
+  components: {
+    Button: {
+      variants: {
+        action: { background: 'fill', border: 'color', text: 'on' },
+        link: { background: 'none', border: 'none', text: 'color' },
+      },
+      variant: 'action',
+    },
+    Badge: {
+      variants: {
+        status: { background: 'tint', border: 'none', text: 'color' },
+      },
+      variant: 'status',
+    },
+  },
+});
+```
+
+```tsx
+<Button variant="action">Save changes</Button>
+<Button variant="link">Learn more</Button>
+<Badge variant="status">Approved</Badge>
+<Alert variant="soft" title="Shared recipes still work" />
+
+// Type errors: these keys belong to other groups.
+<Button variant="status" />
+<Badge variant="action" />
+<Button variant="solid" />
+```
+
+Autocomplete suggests exactly the keys in that component's map. Use `ComponentVariant<'Button'>` from `@yarcl/react` when typing your own wrapper. `Variant` continues to mean the shared group's keys.
+
+The ingredients are the same as shared recipes. To define CSS properties, custom slots, or variant axes such as emphasis and density, use [component extensions](/configuration/component-recipes/).
+
+## Defaults for local maps
+
+A local map must have at least one entry. Keys cannot contain whitespace.
+
+Set `components.<Name>.variant` when its map does not contain the inherited default key. You may omit it when that key is present. This is checked at compile time:
+
+- Button, IconButton, SplitButton and DatePicker inherit `defaults.variant`.
+- Badge, Alert, Avatar, AvatarGroup, ToggleGroup and Pagination inherit `defaults.softVariant`.
+- ToggleGroup and Pagination also inherit `defaults.variant` for selected items. Set their `selectedVariant` when the local map omits that key.
+- Label stays plain until a variant is provided through props or its component defaults.
+
+Component defaults and explicit props must reference their own map's keys. Without a local map, they must reference shared keys.
+
+## Composite components
+
+`ButtonGroup` accepts Button variant keys and passes the resolved recipe to its Button and IconButton children. An explicit child `variant` wins over the group, and is checked against that child's own keys.
+
+ToggleGroup and Pagination use their own maps for the buttons they render, including selected variants. They do not require those keys to exist in `components.Button.variants` or `components.IconButton.variants`.
+
+AvatarGroup passes its recipe to avatars without an explicit variant. Explicit Avatar variants use the Avatar map. When the group has neither its own map nor a variant default, it inherits Avatar's default recipe.
+
+## Generated CSS and themes
+
+Shared keys generate `yarcl-variant-{key}`. Local keys generate `yarcl-{Component}-variant-{key}`, for example `yarcl-Button-variant-action`. Every key generates one class. CSS does not generate a separate rule for every color and size combination. Component namespaces keep identical key names independent, including names that resemble a shared key.
+
+The design reference lists shared and component-specific recipes separately. Consumer overrides work through the same [CSS cascade layers](/configuration/css-layers/) as other styles.
+
+`applyTheme` updates the maps and defaults at runtime. Keep the variant keys used by your app when defining a replacement theme. Omitting a component map switches that component back to shared recipes, so the shared group must contain any explicit keys still used by its props.

@@ -32,7 +32,7 @@ export function useConfig(): Config {
   return useSyncExternalStore(subscribe, activeConfig, () => buildConfig);
 }
 
-export function useDefaults(component: ComponentName): ComponentDefaults {
+export function useDefaults<C extends ComponentName>(component: C): ComponentDefaults<C> {
   const config = useConfig();
-  return ((config as unknown as YarclShape).components?.[component] ?? {}) as ComponentDefaults;
+  return ((config as unknown as YarclShape).components?.[component] ?? {}) as ComponentDefaults<C>;
 }

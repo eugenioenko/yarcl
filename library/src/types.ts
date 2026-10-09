@@ -24,6 +24,13 @@ export type TextStyle = keyof Config['typography']['styles'] & string;
 
 type ConfiguredComponents = Config extends { components?: infer C } ? NonNullable<C> : Record<never, never>;
 
+/** A component's own variant keys, or shared variant keys when it has no variant map. */
+export type ComponentVariant<C extends ComponentName> = C extends keyof ConfiguredComponents
+  ? ConfiguredComponents[C] extends { variants: infer V }
+    ? Extract<keyof V, string>
+    : Variant
+  : Variant;
+
 /** A component's allowed size keys, or every global size when it has no restriction. */
 export type ComponentSize<C extends ComponentName> = C extends keyof ConfiguredComponents
   ? ConfiguredComponents[C] extends { allowedSizes: readonly (infer S)[] }
@@ -56,21 +63,21 @@ export type Align = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 export type Justify = 'start' | 'center' | 'end' | 'between';
 
 /** The `variant` prop shared by components that apply a style recipe. */
-export interface VariantProps {
+export interface VariantProps<C extends ComponentName | undefined = undefined> {
   /**
-   * Style recipe, from the `variants` config.
+   * Style recipe, from the component's variant map or the shared `variants` config.
    * @default config.defaults.variant
    */
-  variant?: Variant;
+  variant?: C extends ComponentName ? ComponentVariant<C> : Variant;
 }
 
 /** Values a component can receive from `components` in the config. */
-export interface ComponentDefaults {
+export interface ComponentDefaults<C extends ComponentName | undefined = undefined> {
   size?: Size;
   radius?: Radius | 'size';
   color?: Color;
-  variant?: Variant;
-  selectedVariant?: Variant;
+  variant?: C extends ComponentName ? ComponentVariant<C> : Variant;
+  selectedVariant?: C extends ComponentName ? ComponentVariant<C> : Variant;
   gap?: Spacing;
   padding?: Spacing;
   shadow?: Shadow;

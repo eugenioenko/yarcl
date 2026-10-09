@@ -44,13 +44,14 @@ Breakpoints generate `@custom-media --yarcl-min-{key}` and `@custom-media --yarc
 
 ## Modifier classes
 
-One class per key, shared by every component:
+Shared token groups generate one class per key. Local variant maps generate one class per component and key:
 
 | Class | Sets |
 |---|---|
 | `yarcl-color-{key}` | `--yarcl-c`, `--yarcl-c-on`, `--yarcl-c-text` |
 | `yarcl-size-{key}` | `--yarcl-h`, `--yarcl-px`, `--yarcl-fs`, `--yarcl-icon` |
 | `yarcl-radius-{key}` | `--yarcl-r` |
+| `yarcl-{Component}-variant-{key}` | the same recipe variables, scoped to one component |
 | `yarcl-variant-{key}` | `--yarcl-v-bg`, `--yarcl-v-bg-hover`, `--yarcl-v-bg-active`, `--yarcl-v-border`, `--yarcl-v-fg` |
 | `yarcl-gap-{key}`, `yarcl-padding-{key}` | `--yarcl-component-gap`, `--yarcl-component-padding` |
 | `yarcl-shadow-{key}` | `box-shadow` |
@@ -64,7 +65,7 @@ A button renders like this:
 <button class="yarcl-button yarcl-size-md yarcl-radius-md yarcl-color-primary yarcl-variant-solid">
 ```
 
-The generated file grows with the number of token keys and configured component size overrides.
+The generated file grows with the number of token keys, local variant keys and configured component size overrides. See [component-specific variants](/configuration/variants/#component-specific-variants) for the config and prop types.
 
 `components.<Name>.sizeOverrides` emits scoped rules after the shared size classes. Only the overridden variables are repeated, so the remaining fields continue to inherit from the global size:
 

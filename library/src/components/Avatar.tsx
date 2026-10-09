@@ -1,16 +1,28 @@
-import { Children, cloneElement, isValidElement, useState, type ComponentProps, type ReactElement, type ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useState,
+  type ComponentProps,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { colorClass, cx, radiusClass, sizeClass, softVariantClass } from '../classes';
-import { useDefaults } from '../runtime';
-import type { Color, ComponentSize, Radius, Variant } from '../types';
+import { useConfig, useDefaults } from '../runtime';
+import { VariantContext, useVariantClass } from '../variant-context';
+import type { YarclShape } from '../define';
+import type { Color, ComponentSize, Radius, ComponentVariant } from '../types';
 
 function initials(name: string | undefined): string {
-  return name
-    ?.trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toLocaleUpperCase())
-    .join('') ?? '';
+  return (
+    name
+      ?.trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toLocaleUpperCase())
+      .join('') ?? ''
+  );
 }
 
 /** Props for {@link Avatar}. */
@@ -47,10 +59,10 @@ export interface AvatarProps extends Omit<ComponentProps<'span'>, 'children' | '
    */
   color?: Color;
   /**
-   * Fallback style recipe from the `variants` config.
+   * Fallback style recipe from this component's variant map or shared `variants`.
    * @default config.defaults.softVariant
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'Avatar'>;
 }
 
 /**
@@ -81,7 +93,7 @@ export function Avatar({
   const own = useDefaults('Avatar');
   const [failedSrc, setFailedSrc] = useState<string>();
   const decorative = alt === '' && ariaLabel == null && ariaLabelledBy == null && role == null;
-  const label = ariaLabel ?? (alt === '' ? undefined : alt ?? name);
+  const label = ariaLabel ?? (alt === '' ? undefined : (alt ?? name));
   const labelled = label != null || ariaLabelledBy != null;
 
   return (
@@ -95,7 +107,7 @@ export function Avatar({
         sizeClass(size ?? own.size, 'Avatar'),
         radiusClass(radius ?? own.radius, size ?? own.size),
         colorClass(color ?? own.color),
-        softVariantClass(variant ?? own.variant),
+        useVariantClass(variant, 'Avatar', true),
         className,
       )}
     >
@@ -151,10 +163,10 @@ export interface AvatarGroupProps extends Omit<ComponentProps<'div'>, 'color'> {
    */
   color?: Color;
   /**
-   * Fallback style recipe from the `variants` config.
+   * Fallback style recipe from this component's variant map or shared `variants`.
    * @default config.defaults.softVariant
    */
-  variant?: Variant;
+  variant?: ComponentVariant<'AvatarGroup'>;
 }
 
 /**
@@ -184,6 +196,7 @@ export function AvatarGroup({
   ...props
 }: AvatarGroupProps) {
   const own = useDefaults('AvatarGroup');
+  const config = useConfig() as YarclShape;
   const avatarOwn = useDefaults('Avatar');
   const avatars = Children.toArray(children).filter(
     (child): child is ReactElement<AvatarProps> => isValidElement<AvatarProps>(child) && child.type === Avatar,
@@ -194,37 +207,41 @@ export function AvatarGroup({
   const groupSize = size ?? own.size ?? avatarOwn.size;
   const groupRadius = radius ?? own.radius ?? avatarOwn.radius;
   const groupColor = color ?? own.color ?? avatarOwn.color;
-  const groupVariant = variant ?? own.variant ?? avatarOwn.variant;
+  const groupVariant =
+    variant !== undefined || own.variant !== undefined || config.components?.AvatarGroup?.variants
+      ? softVariantClass(variant ?? own.variant, 'AvatarGroup')
+      : softVariantClass(avatarOwn.variant, 'Avatar');
   const labelled = ariaLabel != null || ariaLabelledBy != null;
 
   return (
-    <div
-      {...props}
-      role={role ?? (labelled ? 'group' : undefined)}
-      aria-label={ariaLabelledBy == null ? ariaLabel : undefined}
-      aria-labelledby={ariaLabelledBy}
-      className={cx(
-        'yarcl-avatar-group',
-        sizeClass(groupSize, 'AvatarGroup'),
-        radiusClass(groupRadius, groupSize),
-        colorClass(groupColor),
-        softVariantClass(groupVariant),
-        className,
-      )}
-    >
-      {visible.map((avatar) =>
-        cloneElement(avatar, {
-          size: avatar.props.size ?? groupSize,
-          radius: avatar.props.radius ?? groupRadius,
-          color: avatar.props.color ?? groupColor,
-          variant: avatar.props.variant ?? groupVariant,
-        }),
-      )}
-      {hidden > 0 && (
-        <span className="yarcl-avatar yarcl-avatar-overflow" role="img" aria-label={overflowLabel(hidden)}>
-          +{hidden}
-        </span>
-      )}
-    </div>
+    <VariantContext.Provider value={{ avatar: groupVariant }}>
+      <div
+        {...props}
+        role={role ?? (labelled ? 'group' : undefined)}
+        aria-label={ariaLabelledBy == null ? ariaLabel : undefined}
+        aria-labelledby={ariaLabelledBy}
+        className={cx(
+          'yarcl-avatar-group',
+          sizeClass(groupSize, 'AvatarGroup'),
+          radiusClass(groupRadius, groupSize),
+          colorClass(groupColor),
+          groupVariant,
+          className,
+        )}
+      >
+        {visible.map((avatar) =>
+          cloneElement(avatar, {
+            size: avatar.props.size ?? groupSize,
+            radius: avatar.props.radius ?? groupRadius,
+            color: avatar.props.color ?? groupColor,
+          }),
+        )}
+        {hidden > 0 && (
+          <span className="yarcl-avatar yarcl-avatar-overflow" role="img" aria-label={overflowLabel(hidden)}>
+            +{hidden}
+          </span>
+        )}
+      </div>
+    </VariantContext.Provider>
   );
 }

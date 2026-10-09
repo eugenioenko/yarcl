@@ -47,7 +47,7 @@ export interface SizeToken {
 
 /**
  * A style recipe applied on top of a semantic color.
- * Shared by every component that takes a `variant` prop.
+ * Used in the shared variant group or a component-specific variant map.
  */
 export interface VariantToken {
   /** `fill`: the color itself; `tint`: a translucent wash of the color; `none`: transparent. */
@@ -154,6 +154,11 @@ export interface ComponentTokenProps {
 /** Names of components that accept defaults in `components`. */
 export type ComponentName = keyof ComponentTokenProps;
 
+/** Built-in components that accept a variant recipe. */
+export type VariantComponentName = {
+  [C in ComponentName]: 'variant' extends ComponentTokenProps[C] ? C : never;
+}[ComponentName];
+
 type ControlSizeComponentName = Exclude<
   {
     [C in ComponentName]: 'size' extends ComponentTokenProps[C] ? C : never;
@@ -170,7 +175,13 @@ type ComponentConfig<C extends ComponentName> = {
       /** Partial overrides of global size tokens, scoped to this component. */
       sizeOverrides?: Record<string, Partial<SizeToken>>;
     }
-  : object);
+  : object) &
+  (C extends VariantComponentName
+    ? {
+        /** Replaces shared variants for this component. Keys become its typed variant values. */
+        variants?: Record<string, VariantToken>;
+      }
+    : object);
 
 /**
  * The structure every yarcl config must satisfy.
@@ -288,7 +299,7 @@ export interface YarclShape {
     style?: 'solid' | 'dashed' | 'dotted' | 'double';
   };
   /**
-   * Per-component defaults and sizing, e.g. `{ Button: { radius: 'square', allowedSizes: ['sm', 'md'] } }`.
+   * Per-component defaults, variants and sizing, e.g. `{ Button: { radius: 'square', allowedSizes: ['sm', 'md'] } }`.
    * Defaults apply when a prop is omitted, before the global `defaults`.
    */
   components?: { [C in ComponentName]?: ComponentConfig<C> };
@@ -346,36 +357,71 @@ interface TokenKeys<T extends YarclShape> {
   textStyle: keyof T['typography']['styles'];
 }
 
+type LocalVariantKeys<T extends YarclShape, C> = C extends keyof T['components']
+  ? T['components'][C] extends { variants: infer V }
+    ? keyof V
+    : keyof T['variants']
+  : keyof T['variants'];
+
+type VariantDefaultChecks<T extends YarclShape, C extends keyof T['components']> = T['components'][C] extends {
+  variants: infer V;
+}
+  ? (C extends 'Label'
+      ? object
+      : T['components'][C] extends { variant: string }
+        ? object
+        : T['defaults'][C extends 'Badge' | 'Avatar' | 'AvatarGroup' | 'Alert' | 'ToggleGroup' | 'Pagination'
+              ? 'softVariant'
+              : 'variant'] extends keyof V
+          ? object
+          : { variant: keyof V }) &
+      (C extends 'ToggleGroup' | 'Pagination'
+        ? T['components'][C] extends { selectedVariant: string }
+          ? object
+          : T['defaults']['variant'] extends keyof V
+            ? object
+            : { selectedVariant: keyof V }
+        : object)
+  : object;
+
 type ComponentChecks<T extends YarclShape> = {
   [C in keyof T['components']]: C extends ComponentName
     ? {
         [P in keyof T['components'][C]]: P extends ComponentTokenProps[C]
-          ? C extends 'Dialog' | 'Drawer'
-            ? P extends 'size'
-              ? keyof T['modalSizes']
-              : TokenKeys<T>[P]
-            : P extends 'size'
-              ? T['components'][C] extends { allowedSizes: readonly (infer S)[] }
-                ? S
-                : keyof T['sizes']
-              : TokenKeys<T>[P]
-          : P extends 'allowedSizes'
-            ? C extends ControlSizeComponentName
-              ? readonly [keyof T['sizes'], ...(keyof T['sizes'])[]]
+          ? P extends 'variant' | 'selectedVariant'
+            ? LocalVariantKeys<T, C>
+            : C extends 'Dialog' | 'Drawer'
+              ? P extends 'size'
+                ? keyof T['modalSizes']
+                : TokenKeys<T>[P]
+              : P extends 'size'
+                ? T['components'][C] extends { allowedSizes: readonly (infer S)[] }
+                  ? S
+                  : keyof T['sizes']
+                : TokenKeys<T>[P]
+          : P extends 'variants'
+            ? C extends VariantComponentName
+              ? keyof T['components'][C][P] extends never
+                ? { error: 'Component variants must not be empty' }
+                : KeyCheck<T['components'][C][P]>
               : never
-            : P extends 'sizeOverrides'
+            : P extends 'allowedSizes'
               ? C extends ControlSizeComponentName
-                ? {
-                    [K in keyof T['components'][C][P]]: K extends keyof T['sizes']
-                      ? T['components'][C] extends { allowedSizes: readonly (infer S)[] }
-                        ? K extends S
-                          ? Partial<SizeToken>
-                          : never
-                        : Partial<SizeToken>
-                      : never;
-                  }
+                ? readonly [keyof T['sizes'], ...(keyof T['sizes'])[]]
                 : never
-          : never;
+              : P extends 'sizeOverrides'
+                ? C extends ControlSizeComponentName
+                  ? {
+                      [K in keyof T['components'][C][P]]: K extends keyof T['sizes']
+                        ? T['components'][C] extends { allowedSizes: readonly (infer S)[] }
+                          ? K extends S
+                            ? Partial<SizeToken>
+                            : never
+                          : Partial<SizeToken>
+                        : never;
+                    }
+                  : never
+                : never;
       } & (C extends ControlSizeComponentName
         ? T['components'][C] extends { allowedSizes: readonly (infer S)[] }
           ? T['components'][C] extends { size: unknown }
@@ -384,7 +430,8 @@ type ComponentChecks<T extends YarclShape> = {
               ? object
               : { size: S }
           : object
-        : object)
+        : object) &
+        VariantDefaultChecks<T, C>
     : { error: `Unknown component "${C & string}"` };
 };
 
@@ -472,6 +519,9 @@ export function defineConfig<const T extends YarclShape, const R extends Record<
   config: T & Checks<T>,
   extend: (yarcl: TokenAccessor<T>) => { recipes: R & RecipeChecks<R> },
 ): Omit<T, 'recipes'> & { recipes: R };
-export function defineConfig<T extends YarclShape>(config: T, extend?: (yarcl: TokenAccessor<T>) => { recipes: Record<string, RecipeDefinition> }) {
+export function defineConfig<T extends YarclShape>(
+  config: T,
+  extend?: (yarcl: TokenAccessor<T>) => { recipes: Record<string, RecipeDefinition> },
+) {
   return extend ? { ...config, ...extend(tokens(config)) } : config;
 }

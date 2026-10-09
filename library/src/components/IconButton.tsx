@@ -1,5 +1,6 @@
+import { useVariantClass } from '../variant-context';
 import type { ComponentProps } from 'react';
-import { colorClass, cx, radiusClass, sizeClass, variantClass } from '../classes';
+import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import type { TokenProps, VariantProps } from '../types';
 import { useButtonGroup } from './ButtonGroup';
 import { Spinner } from './Spinner';
@@ -7,7 +8,7 @@ import { useDefaults } from '../runtime';
 
 
 /** Props for the action form of {@link IconButton}. `aria-label` is required. */
-export interface IconButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps<'IconButton'>, VariantProps {
+export interface IconButtonProps extends Omit<ComponentProps<'button'>, 'color'>, TokenProps<'IconButton'>, VariantProps<'IconButton'> {
   href?: never;
   /** Shows a {@link Spinner}, disables the button and sets `aria-busy`. */
   loading?: boolean;
@@ -16,7 +17,7 @@ export interface IconButtonProps extends Omit<ComponentProps<'button'>, 'color'>
 }
 
 /** Props for the link form of {@link IconButton}. `aria-label` is required. */
-export interface IconButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'href' | 'type' | 'disabled'>, TokenProps<'IconButton'>, VariantProps {
+export interface IconButtonLinkProps extends Omit<ComponentProps<'a'>, 'color' | 'href' | 'type' | 'disabled'>, TokenProps<'IconButton'>, VariantProps<'IconButton'> {
   /** Destination. Renders a native link with the same visual styles as an icon button. */
   href: string;
   /** Accessible name, announced by screen readers in place of visible text. */
@@ -44,7 +45,7 @@ export function IconButton(props: IconButtonProps | IconButtonLinkProps) {
     sizeClass(size ?? group?.size ?? own.size, 'IconButton'),
     radiusClass(radius ?? group?.radius ?? own.radius, size ?? group?.size ?? own.size),
     colorClass(color ?? group?.color ?? own.color),
-    variantClass(variant ?? group?.variant ?? own.variant),
+    useVariantClass(variant, 'IconButton'),
     className,
   );
   if (elementProps.href !== undefined) return <a className={classes} {...elementProps}>{children}</a>;
