@@ -18,6 +18,7 @@ import {
 } from 'date-fns';
 import { enUS } from 'date-fns/locale/en-US';
 import { useContext, useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
+import { useMergeRefs } from '@floating-ui/react';
 import { colorClass, cx, radiusClass, sizeClass, softVariantClass, variantClass } from '../classes';
 import { FieldContext, useFieldProps } from '../field-context';
 import { useControllable } from '../hooks';
@@ -228,6 +229,7 @@ export function DatePicker(props: DatePickerProps) {
   const range = mode === 'range';
   const labels = { ...defaultLabels, ...labelsProp };
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const mergedRef = useMergeRefs([triggerRef, rest.ref]);
   const [value, setValue] = useControllable<Date | DateRange | null>(
     valueProp,
     defaultValue,
@@ -331,15 +333,10 @@ export function DatePicker(props: DatePickerProps) {
       <Popover open={open} onOpenChange={onOpenChange} placement="bottom-start" modal>
         <Popover.Trigger>
           <button
-            ref={(node) => {
-              triggerRef.current = node;
-              const incomingRef = (rest as { ref?: React.Ref<HTMLButtonElement> }).ref;
-              if (typeof incomingRef === 'function') incomingRef(node);
-              else if (incomingRef && 'current' in incomingRef) (incomingRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
-            }}
             type="button"
             className={cx('yarcl-input yarcl-select yarcl-date-picker', sizeClass(s, 'DatePicker'), radiusClass(radius ?? own.radius, s), colorClass(color ?? own.color), className)}
             {...rest}
+            ref={mergedRef}
             aria-describedby={cx(labelled && display && valueId, rest['aria-describedby']) || undefined}
           >
             <span id={valueId} className={cx('yarcl-select-value', !display && 'yarcl-select-placeholder')}>
