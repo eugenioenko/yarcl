@@ -3,6 +3,7 @@ import type { ColorPair, ColorToken, ComponentName, FontFaceToken, SizeToken, Va
 import { generateRecipeCss } from './recipe-css';
 
 const MIN_CONTRAST = 4.5;
+const LAYERS = '@layer yarcl.tokens, yarcl.base, yarcl.recipes;';
 
 function ident(key: string): string {
   return key.replace(/[^a-zA-Z0-9_-]/g, (c) => `\\${c}`);
@@ -109,7 +110,9 @@ type ComponentSizing = { sizeOverrides?: Record<string, Partial<SizeToken>> };
 
 /**
  * Generates the stylesheet for a config: CSS variables on `:root`, one class per key and
- * `@font-face` rules. The build plugin calls this at build time; call it yourself to preview
+ * `@font-face` rules in `yarcl.tokens`, with component recipes in `yarcl.recipes`.
+ * Declares the `yarcl.tokens`, `yarcl.base`, `yarcl.recipes` order before emitting styles.
+ * The build plugin calls this at build time; call it yourself to preview
  * or switch themes at runtime (inject the result into a `<style>` element).
  *
  * @param config A config from `defineConfig`, e.g. one of `@yarcl/react/themes`.
@@ -120,7 +123,8 @@ export function generateCss(config: YarclShape, warn: (message: string) => void 
 }
 
 /**
- * Generates the config's `:root` variables, `color-scheme` and text-style classes.
+ * Generates the config's `:root` variables, `color-scheme` and text-style classes in `yarcl.tokens`.
+ * Declares the same layer order as the complete stylesheet.
  * Excludes other modifier classes, component styles, custom media and `@font-face` rules.
  *
  * @param config A config from `defineConfig`.
@@ -130,10 +134,12 @@ export function generateTokensCss(config: YarclShape, warn: (message: string) =>
   return generate(config, warn, true);
 }
 
+/** Emits ordered stylesheet layers, keeping custom media outside the style blocks. */
 function generate(config: YarclShape, warn: (message: string) => void, tokensOnly: boolean): string {
   const root: [string, string | number][] = [['color-scheme', 'light dark']];
   const rules: string[] = [];
   const textRules: string[] = [];
+  const media: string[] = [];
 
   for (const [key, token] of Object.entries(config.colors)) {
     const k = ident(key);
@@ -227,8 +233,8 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
       throw new Error(`yarcl: breakpoint key "${key}" must start with a letter and contain only letters, numbers, hyphens or underscores`);
     }
     const k = key;
-    rules.push(`@custom-media --yarcl-min-${k} (min-width: ${value});`);
-    rules.push(`@custom-media --yarcl-max-${k} (max-width: ${value});`);
+    media.push(`@custom-media --yarcl-min-${k} (min-width: ${value});`);
+    media.push(`@custom-media --yarcl-max-${k} (max-width: ${value});`);
   }
 
   for (const [key, density] of Object.entries(config.density)) {
@@ -342,7 +348,13 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
     ['--yarcl-r', `var(--yarcl-radius-${defaultRadius}, 0)`],
   );
 
-  if (tokensOnly) return [rule(':root', root), ...textRules].join('\n\n') + '\n';
+  if (tokensOnly) return `${LAYERS}\n\n@layer yarcl.tokens {\n${[rule(':root', root), ...textRules].join('\n\n')}\n}\n`;
   const faces = (config.typography.fontFaces ?? []).map(fontFace);
-  return [...faces, rule(':root', root), ...rules, ...generateRecipeCss(config)].join('\n\n') + '\n';
+  const recipes = generateRecipeCss(config);
+  return [
+    LAYERS,
+    ...media,
+    `@layer yarcl.tokens {\n${[...faces, rule(':root', root), ...rules].join('\n\n')}\n}`,
+    ...(recipes.length ? [`@layer yarcl.recipes {\n${recipes.join('\n\n')}\n}`] : []),
+  ].join('\n\n') + '\n';
 }

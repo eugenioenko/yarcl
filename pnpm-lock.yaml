@@ -47,6 +47,9 @@ importers:
       react-hook-form:
         specifier: ^7.88.0
         version: 7.88.0(react@19.3.0)
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
       typedoc:
         specifier: ^0.28.20
         version: 0.28.20(typescript@6.0.3)
@@ -3792,6 +3795,9 @@ packages:
 
   tabbable@6.5.0:
     resolution: {integrity: sha512-wieBHXygIm7OyQOu5hQlkk62/WyCFYGlWg7L6/ZCUZwx0o398Zkn4pVmMyfYhfMG8kGrj/Krt8eIk6UKC6VzwA==}
+
+  tailwindcss@4.3.3:
+    resolution: {integrity: sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ==}
 
   tapable@2.3.3:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
@@ -7981,6 +7987,8 @@ snapshots:
       sax: 1.6.1
 
   tabbable@6.5.0: {}
+
+  tailwindcss@4.3.3: {}
 
   tapable@2.3.3: {}
 

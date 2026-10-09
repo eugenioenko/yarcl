@@ -1,3 +1,6 @@
+@layer yarcl.tokens, yarcl.base, yarcl.recipes;
+
+@layer yarcl.base {
 .yarcl-ref-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
@@ -55,4 +58,5 @@
 
 .yarcl-ref-input {
   width: 8rem;
+}
 }

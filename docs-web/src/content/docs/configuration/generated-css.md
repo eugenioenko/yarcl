@@ -98,10 +98,10 @@ For rich HTML whose descendants have no classes, apply `yarcl-prose` to its cont
 
 ## Overriding a component
 
-Component classes are plain, unscoped classes with low specificity. Override them with your own class:
+All library and generated styles use [CSS cascade layers](/configuration/css-layers/). An ordinary consumer class overrides them, even when it loads first:
 
 ```css
-.checkout .yarcl-button {
+.checkout-button {
   --yarcl-h: 3.5rem;
 }
 ```

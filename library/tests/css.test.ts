@@ -34,6 +34,23 @@ describe('generateTokensCss', () => {
 });
 
 describe('generateCss', () => {
+  it.each([defaults, brandA, brandB])('declares stable layers and keeps custom media at the top level', (config) => {
+    const css = generateCss(config);
+    const tokens = generateTokensCss(config);
+    const order = '@layer yarcl.tokens, yarcl.base, yarcl.recipes;';
+    expect(css.startsWith(order)).toBe(true);
+    expect(tokens.startsWith(order)).toBe(true);
+    expect(tokens).toContain('@layer yarcl.tokens {\n:root {');
+    expect(tokens.trimEnd().endsWith('}\n}')).toBe(true);
+    expect(css.indexOf('@custom-media')).toBeLessThan(css.indexOf('@layer yarcl.tokens {'));
+    expect(css.indexOf(':root {')).toBeGreaterThan(css.indexOf('@layer yarcl.tokens {'));
+    if ('recipes' in config && config.recipes) {
+      expect(css.indexOf('@layer yarcl.recipes {')).toBeGreaterThan(css.indexOf('@layer yarcl.tokens {'));
+    } else {
+      expect(css).not.toContain('@layer yarcl.recipes {');
+    }
+  });
+
   it('emits root variables and modifier classes', () => {
     const css = generateCss(defaults);
 

@@ -1,3 +1,5 @@
+@layer starlight, yarcl;
+
 :root {
   --sl-font: 'Inter Variable', system-ui, sans-serif;
   --sl-font-mono: 'Ubuntu Mono', ui-monospace, monospace;
