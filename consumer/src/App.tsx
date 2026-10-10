@@ -16,6 +16,7 @@ import {
   Label,
   Link,
   NavItem,
+  NavSection,
   Breadcrumb,
   NumberInput,
   Radio,
@@ -170,8 +171,9 @@ export function App() {
           <Section title="Files and navigation">
             <FileDropzone data-testid="feedback-files" label="Attachments" description="Images or PDF files" accept="image/*,.pdf" multiple />
             <nav aria-label="Demo navigation" data-testid="feedback-nav">
-              <NavItem href="#overview" active icon={<SearchIcon />}>Overview</NavItem>
-              <NavItem href="#settings">Settings</NavItem>
+              <NavSection title="Workspace"><NavItem href="#overview" active icon={<SearchIcon />}>Overview</NavItem>
+              <NavItem href="#settings">Settings</NavItem></NavSection>
+              <NavSection title="Quick access" collapsed><NavItem href="#reports" icon={<span>R</span>}>Reports</NavItem><NavItem href="#people" icon={<span>P</span>}>People</NavItem></NavSection>
             </nav>
           </Section>
           <Section title="Variants × colors">

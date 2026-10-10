@@ -43,6 +43,7 @@ import {
   Label,
   Link,
   NavItem,
+  NavSection,
   Breadcrumb,
   NumberInput,
   Radio,
@@ -791,3 +792,15 @@ defineConfig({ ...config, components: optionalInvalidSlot });
 <FileDropzone label="Uploads" multiple defaultFiles={[42]} />;
 // @ts-expect-error inputRef exposes a native file input
 <FileDropzone label="Uploads" inputRef={(input: HTMLTextAreaElement | null) => { input?.focus(); }} />;
+
+<NavSection title="Workspace" collapsed gap="tight" textStyle="label" ref={(group) => { group?.focus(); }}><NavItem href="/projects" collapsed icon={<span>P</span>}>Projects</NavItem></NavSection>;
+// @ts-expect-error collapse is boolean
+<NavItem href="/projects" collapsed="yes">Projects</NavItem>;
+// @ts-expect-error heading is required
+<NavSection />;
+// @ts-expect-error unknown spacing token
+<NavSection title="Workspace" gap="missing" />;
+// @ts-expect-error unknown typography token
+<NavSection title="Workspace" textStyle="missing" />;
+// @ts-expect-error collapse is boolean
+<NavSection title="Workspace" collapsed="yes" />;

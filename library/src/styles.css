@@ -943,7 +943,18 @@ p.yarcl-text {
   text-decoration-line: underline;
 }
 
-/* Breadcrumb */
+/* Navigation */
+
+.yarcl-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yarcl-component-gap, var(--yarcl-gap));
+  min-width: 0;
+}
+
+.yarcl-nav-section-heading {
+  color: var(--yarcl-neutral-muted);
+}
 
 .yarcl-nav-item {
   display: flex;
@@ -982,6 +993,14 @@ p.yarcl-text {
 
 .yarcl-nav-item-label {
   min-width: 0;
+}
+
+.yarcl-nav-item-collapsed {
+  justify-content: center;
+  width: var(--yarcl-h);
+  padding-inline: 0;
+  gap: 0;
+  flex-shrink: 0;
 }
 
 /* Breadcrumb */

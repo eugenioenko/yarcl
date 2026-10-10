@@ -44,6 +44,8 @@ export { Heading } from './components/Heading';
 export type { HeadingProps } from './components/Heading';
 export { Link } from './components/Link';
 export type { LinkProps } from './components/Link';
+export { NavSection } from './components/NavSection';
+export type { NavSectionProps } from './components/NavSection';
 export { NavItem } from './components/NavItem';
 export type { NavItemProps } from './components/NavItem';
 export { Breadcrumb } from './components/Breadcrumb';

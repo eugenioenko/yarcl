@@ -1,0 +1,72 @@
+---
+title: Nav section
+description: Named navigation groups that expand to labels or collapse to an accessible icon rail.
+sidebar:
+  order: 2
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { NavSectionDemo } from '@/demos/navigation';
+
+```tsx
+import { NavItem, NavSection } from '@yarcl/react';
+```
+
+<Preview>
+  <NavSectionDemo client:visible />
+</Preview>
+
+## Group navigation links
+
+Use a section to group related links under a visible heading. Put sections inside a named `nav` landmark. Each section is a `group` with an accessible name derived from its heading; it does not create another navigation landmark or change the document's heading hierarchy.
+
+```tsx
+<nav aria-label="Workspace navigation">
+  <NavSection title="Learn">
+    <NavItem href="/courses" icon={<CoursesIcon />} active>Courses</NavItem>
+    <NavItem href="/progress" icon={<ProgressIcon />}>Progress</NavItem>
+  </NavSection>
+  <NavSection title="Admin">
+    <NavItem href="/people" icon={<PeopleIcon />}>People</NavItem>
+  </NavSection>
+</nav>
+```
+
+The heading remains available to assistive technology in both expanded and collapsed modes. Native div attributes, including `ref`, `className` and `style`, reach the group.
+
+## Collapse to an icon rail
+
+Set `collapsed` on a section to hide its heading visually and collapse its descendant navigation items. Every collapsed item uses a square target derived from its `size`, keeps the link label available to assistive technology, and shows a label tooltip on pointer hover or keyboard focus. Escape dismisses the tooltip without moving focus.
+
+```tsx
+const [collapsed, setCollapsed] = useState(false);
+
+<Button onClick={() => setCollapsed(!collapsed)} aria-pressed={collapsed}>
+  Toggle icon rail
+</Button>
+<NavSection title="Workspace" collapsed={collapsed}>
+  <NavItem href="/projects" icon={<ProjectsIcon />}>Projects</NavItem>
+  <NavItem href="/settings" icon={<SettingsIcon />}>Settings</NavItem>
+</NavSection>
+```
+
+Provide a meaningful text label and an icon for each rail item. Icons are decorative. An item without an icon stays expanded so its destination remains visible. `collapsed={false}` on an item or a nested section overrides the inherited state; `collapsed` on an individual item also works without a section.
+
+Collapse changes the item presentation, while sidebar width belongs to the containing layout. Keep the toggle outside a section whose heading disappears. Collapsed items still follow ordinary link behavior, including opening in another tab and router click handling.
+
+## Typography and spacing
+
+`gap` uses your spacing keys and resolves from `components.NavSection.gap`, then `defaults.gap`. `textStyle` applies to the section heading and resolves from `components.NavSection.textStyle`, then `defaults.labelStyle`. Explicit props win over configured defaults. Runtime theme updates change both values.
+
+```ts
+components: {
+  NavSection: { gap: 'sm', textStyle: 'caption' },
+}
+```
+
+The link target and icon sizes come from each [NavItem](/components/navigation/nav-item/). Native anchor attributes preserve router integration; follow the [router link recipe](/getting-started/router-links/) for client-side navigation.
+
+## Props
+
+<Props of="NavSectionProps" />
