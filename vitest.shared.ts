@@ -46,7 +46,8 @@ export function browserTests(name: string): ViteUserConfig {
   const executablePath = process.env.CHROME_PATH;
   return {
     optimizeDeps: {
-      include: ['vitest-browser-react', 'axe-core', 'react', 'react/jsx-dev-runtime', 'react-dom/client'],
+      include: ['vitest-browser-react', 'axe-core', 'react', 'react/jsx-dev-runtime', 'react-dom/client', '@yarcl/react/themes'],
+      exclude: ['@yarcl/react/demo'],
     },
     test: {
       name,
