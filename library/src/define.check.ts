@@ -452,3 +452,14 @@ defineConfig({
   // @ts-expect-error base is reserved for responsive prop defaults
   breakpoints: { ...defaults.breakpoints, base: '0px' },
 });
+
+
+defineConfig({ ...defaults, components: { TreeView: { size: 'sm', radius: 'md', color: 'primary', allowedSizes: ['sm', 'md'] } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error TreeView only accepts its declared token props
+  TreeView: { padding: 'md' },
+} });
+defineConfig({ ...defaults,
+  // @ts-expect-error interaction timing is numeric
+  timing: { ...defaults.timing, typeaheadTimeout: 'fast' },
+});

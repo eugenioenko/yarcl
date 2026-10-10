@@ -45,6 +45,7 @@ import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
+import { TreeViewDemo } from './TreeViewDemo';
 import { AppLayoutDemo } from './AppLayoutDemo';
 import { ResponsiveDemo } from './ResponsiveDemo';
 import { OverlaysDemo } from './OverlaysDemo';
@@ -102,6 +103,7 @@ export function App() {
     setScheme(next);
   }
 
+  if (new URLSearchParams(location.search).get('page') === 'tree-view') return <main className="page yarcl-root"><TreeViewDemo /></main>;
   if (new URLSearchParams(location.search).get('page') === 'responsive') return <ResponsiveDemo />;
 
   const reference = new URLSearchParams(location.search).get('page') === 'reference';
@@ -119,6 +121,7 @@ export function App() {
           <Link href={reference ? '?' : '?page=reference'} underline="hover">
             {reference ? 'Component demo' : 'Design reference'}
           </Link>
+          <Link href="?page=tree-view" underline="hover">Project explorer</Link>
           <Link href="?page=responsive" underline="hover">Responsive props</Link>
           <Link href="?page=layout" underline="hover">App layout</Link>
           <Link href="?page=themes" underline="hover">Bundled themes</Link>
@@ -155,6 +158,7 @@ export function App() {
             <InputContentDemo />
           </Section>
           <RecipesDemo />
+          <TreeViewDemo />
           <Section title="Sizes">
             {sizes.map((size) => (
               <Row key={size} label={size}>

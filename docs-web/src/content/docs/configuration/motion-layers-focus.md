@@ -22,7 +22,7 @@ When the user asks for reduced motion (`prefers-reduced-motion: reduce`), transi
 ## Timing
 
 ```ts
-timing: { tooltipDelay: 400, hoverOpenDelay: 300, hoverCloseDelay: 150, toastDuration: 5000 },
+timing: { typeaheadTimeout: 1000, tooltipDelay: 400, hoverOpenDelay: 300, hoverCloseDelay: 150, toastDuration: 5000 },
 ```
 
 Delays and durations in milliseconds, read when components render:
@@ -86,3 +86,5 @@ Or change the variables for a region:
   --yarcl-focus-color: black;
 }
 ```
+
+`timing.typeaheadTimeout` sets the maximum pause between characters in TreeView type-ahead. It defaults to 1000 milliseconds and updates through runtime themes.

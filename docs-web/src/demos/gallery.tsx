@@ -45,6 +45,7 @@ import {
   ToggleGroup,
   VisuallyHidden,
 } from '@yarcl/react';
+import { TreeViewDemo } from './tree-view';
 import { InfoIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
 
 interface Item {
@@ -335,6 +336,7 @@ const groups: Record<string, Item[]> = {
     },
   ],
   navigation: [
+    { name: 'TreeView', href: '/components/navigation/tree-view/', description: 'Explore nested items with independent focus, expansion and selection.', preview: <TreeViewDemo /> },
     { name: "Nav section", href: "/components/navigation/nav-section/", description: "Named groups of navigation links, with an optional icon rail.", preview: <NavSection title="Workspace"><NavItem href="#projects" icon={<SearchIcon />}>Projects</NavItem></NavSection> },
     {
       name: 'Nav item',

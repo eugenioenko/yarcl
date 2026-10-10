@@ -145,6 +145,7 @@ export interface ComponentTokenProps {
   Table: 'density' | 'radius';
   Stack: 'gap';
   AppLayout: 'padding';
+  TreeView: 'size' | 'radius' | 'color';
   NavSection: 'gap' | 'textStyle';
   Grid: 'gap';
   Inline: 'gap';
@@ -288,6 +289,8 @@ export interface YarclShape {
   timing: Record<string, number> & {
     /** Delay before a `Tooltip` opens on hover. */
     tooltipDelay: number;
+    /** Maximum pause between characters in TreeView type-ahead. */
+    typeaheadTimeout: number;
     /** Delay before a `HoverCard` opens on hover. */
     hoverOpenDelay: number;
     /** Delay before a `HoverCard` closes after the pointer leaves. */

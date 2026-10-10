@@ -1,35 +1,19 @@
 ---
 import api from '../generated/api.json';
+import { publicProps, type PropNode } from './props';
 
 interface Props {
   of: string;
   exclude?: string[];
 }
 
-type Node = {
-  id: number;
-  name: string;
-  kind: number;
-  flags: { isOptional?: boolean; isExternal?: boolean };
-  comment?: { summary?: Part[]; blockTags?: { tag: string; content: Part[] }[] };
-  children?: Node[];
-  type?: Type;
-};
+type Node = PropNode;
 type Part = { kind: string; text: string };
 type Type = Record<string, any>;
 
 const { of, exclude = [] } = Astro.props;
 
-const all: Node[] = [];
-(function walk(node: { children?: Node[] }) {
-  node.children?.forEach((child) => {
-    all.push(child);
-    walk(child);
-  });
-})(api as unknown as { children: Node[] });
-
-const target = all.find((node) => node.name === of && node.children?.length);
-if (!target) throw new Error(`Props: no declaration with properties named "${of}"`);
+const properties = publicProps(api as unknown as { children: Node[] }, of);
 
 const tokenTypes: Record<string, string> = {
   Size: '/configuration/sizes-and-radii/',
@@ -88,8 +72,8 @@ function inline(value: string): string {
   return escaped.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\{@link ([^}]+)\}/g, '<code>$1</code>');
 }
 
-const rows = target
-  .children!.filter((child) => !child.flags.isExternal && !exclude.includes(child.name))
+const rows = properties
+  .filter((child) => !child.flags.isExternal && !exclude.includes(child.name))
   .sort((a, b) => Number(!!a.flags.isOptional) - Number(!!b.flags.isOptional) || a.name.localeCompare(b.name))
   .map((child) => {
     const type = format(child.type);
