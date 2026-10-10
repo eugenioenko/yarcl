@@ -152,7 +152,7 @@ The library imports a placeholder module, `@yarcl/config`. Two pieces of wiring 
 ## Theming
 
 - **Dark mode**: every color is a `{ light, dark }` pair rendered with `light-dark()`. It follows the OS by default; set `color-scheme: light` or `dark` on any element to force a mode. No JavaScript needed.
-- **Bundled themes** in `@yarcl/react/themes`: `brutalist`, `bloom`, `compact` and `editorial`, plus the library defaults (`@yarcl/react/defaults`).
+- **Bundled themes** in `@yarcl/react/themes`: `brutalist`, `bloom`, `compact`, `editorial`, `atelier`, `circuit` and `studio`, plus the library defaults (`@yarcl/react/defaults`). Atelier has serif headings and bronze accents; Circuit has cyan and navy surfaces with monospace labels; Studio has bold type, large controls and cobalt with citrus accents. All include light and dark modes.
 - **One theme per build**: make the config file the theme, `export { editorial as default } from '@yarcl/react/themes';`, or spread it and override: `defineConfig({ ...bloom, colors: { ...bloom.colors, brand: { light: '#4f46e5', dark: '#a5b4fc' } } })`.
 - **Several themes from one codebase** (white-label builds): keep one config file per theme and pick it in `vite.config.ts`, e.g. ``yarcl({ config: `src/themes/${process.env.THEME ?? 'default'}.ts` })``.
 - **Runtime switching**: `applyTheme(themes.bloom)` from `@yarcl/react/css` swaps the CSS and the defaults without a rebuild; `resetTheme()` returns to the build-time config. Prop types still come from the build-time config, so a runtime theme must define every key the app uses.

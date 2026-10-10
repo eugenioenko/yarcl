@@ -1,7 +1,9 @@
+import axe from 'axe-core';
 import { afterEach, beforeEach, expect, inject, test } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { resetTheme } from '@yarcl/react/css';
 import { themes, themeNames } from '@yarcl/react/themes';
+import type { YarclShape } from '@yarcl/react/define';
 import { ThemeDemo } from '../consumer/src/ThemeDemo';
 import { page } from './page';
 
@@ -55,5 +57,26 @@ export function testThemeDemo() {
     expect(new URLSearchParams(location.search).get('theme')).toBe('yarcl');
     expect(new URLSearchParams(location.search).get('scheme')).toBe('light dark');
     expect(document.documentElement.style.colorScheme).toBe('light dark');
+  });
+
+  test.each(['atelier', 'circuit', 'studio'] as const)('switches to %s through the selector and applies its component defaults without losing input', async (id) => {
+    history.replaceState(null, '', `?page=themes&theme=yarcl&scheme=${inject('scheme')}`);
+    const screen = await render(<ThemeDemo />);
+    const name = page.getByRole('textbox', { name: 'Name', exact: true });
+    await name.fill('Ada Lovelace');
+    await page.getByRole('combobox', { name: 'Theme', exact: true }).click();
+    await page.getByRole('option', { name: themeNames[id], exact: true }).click();
+    await expect.poll(() => screen.container.querySelector('main')?.getAttribute('data-theme')).toBe(id);
+    expect(await name.inputValue()).toBe('Ada Lovelace');
+    expect(new URLSearchParams(location.search).get('theme')).toBe(id);
+    const theme: YarclShape = themes[id];
+    await expect.poll(() => getComputedStyle(document.documentElement).getPropertyValue('--yarcl-font-heading').trim())
+      .toBe(theme.typography.families[theme.typography.fonts!.heading]);
+    const radius = theme.components?.Button?.radius ?? theme.defaults.radius;
+    expect(screen.container.querySelector(`.yarcl-button.yarcl-radius-${radius}`)).not.toBeNull();
+    expect(screen.container.querySelector(`.yarcl-card.yarcl-radius-${theme.components?.Card?.radius}`)).not.toBeNull();
+    expect(document.documentElement.style.colorScheme).toBe(inject('scheme'));
+    const audit = await axe.run(screen.container, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] } });
+    expect(audit.violations.map(({ id, nodes }) => ({ id, targets: nodes.map(({ target }) => target) }))).toEqual([]);
   });
 }

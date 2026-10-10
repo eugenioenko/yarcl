@@ -22,7 +22,7 @@ export interface ThemeContract {
   breakpoints: Record<keyof Defaults['breakpoints'], string>;
   typography: {
     families: Record<keyof Defaults['typography']['families'], string>;
-    fonts?: Record<keyof Defaults['typography']['fonts'], keyof Defaults['typography']['families']>;
+    fonts?: Record<keyof Defaults['typography']['fonts'], string>;
     styles: Record<keyof Defaults['typography']['styles'], TextStyleToken>;
   };
 }

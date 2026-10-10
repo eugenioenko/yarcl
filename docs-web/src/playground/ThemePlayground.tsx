@@ -130,6 +130,15 @@ export function ThemePlayground() {
           </ToggleGroup>
         </Inline>
         <Inline gap="sm">
+          <Button
+            href="/"
+            size="sm"
+            variant="outline"
+            color="neutral"
+            startIcon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z" /></svg>}
+          >
+            Back to docs
+          </Button>
           <Button size="sm" variant="outline" color="neutral" onClick={() => setEditorOpen(true)}>
             Edit theme
           </Button>

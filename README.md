@@ -153,7 +153,7 @@ Use custom markup with named slots or `useRecipe` for your own behavior. See the
 
 ## Themes
 
-`@yarcl/react/themes` ships four themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Bloom**, **Compact** and **Editorial**.
+`@yarcl/react/themes` ships seven themes that share the library defaults' keys, so they're interchangeable: **Brutalist**, **Bloom**, **Compact**, **Editorial**, **Atelier**, **Circuit** and **Studio**. Atelier pairs serif headings with bronze accents; Circuit combines cyan and navy with monospace labels; Studio uses heavy typography, large controls and cobalt with citrus accents. Every theme includes light and dark modes.
 
 ```ts title="src/yarcl.config.ts"
 export { editorial as default } from '@yarcl/react/themes';

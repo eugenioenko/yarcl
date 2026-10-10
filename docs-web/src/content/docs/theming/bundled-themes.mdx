@@ -1,11 +1,11 @@
 ---
 title: Bundled themes
-description: Four deliberately different themes that ship with yarcl, and how to use them.
+description: Eight distinct design systems, including the defaults, with light and dark modes and typed configuration.
 sidebar:
   order: 3
 ---
 
-yarcl ships with four themes that each change everything a theme can change: color, shape, type, density, depth and the focus ring. Same components, same keys, very different products.
+yarcl ships with seven alternative themes alongside its default design system. They change color, shape, type, density, depth and component defaults. Every theme includes light and dark modes and keeps the same public token keys, so you can switch themes without rewriting your components.
 
 | Theme | Import | Color | Shape and type | Density and depth |
 |---|---|---|---|---|
@@ -14,8 +14,29 @@ yarcl ships with four themes that each change everything a theme can change: col
 | **Bloom** | `bloom` | violet on lavender | pill controls, round cards, rounded sans | large 44px controls, airy spacing, soft tinted shadows |
 | **Compact** | `compact` | teal on cool gray | 2px corners, 13px sans | 28px controls, tight spacing, compact tables, nearly flat |
 | **Editorial** | `editorial` | terracotta on cream | square corners, light grotesque sans | generous spacing, flat cards, double focus ring |
+| **Atelier** | `atelier` | bronze on ivory and charcoal | serif headings, rectangular buttons, fine borders | spacious 44px controls, restrained shadows |
+| **Circuit** | `circuit` | cyan on ice and navy | monospace labels, crisp controls, subtly rounded panels | 42px controls, comfortable tables, layered surfaces |
+| **Studio** | `studio` | cobalt with citrus accents | heavy display type, rounded rectangular controls, sculpted cards | 48px controls, generous table rows, colored depth |
 
 See them all in the [theme playground](/theming/playground/).
+
+## Atelier
+
+Atelier suits premium commerce, hospitality, portfolios and boutique brands. Georgia headings add a serif voice while body text and controls stay in a familiar sans serif. Bronze accents sit on ivory in light mode and warm charcoal in dark mode. Buttons are rectangular, cards have gently rounded corners, and fine borders and restrained shadows define surfaces.
+
+[Preview Atelier](/theme-playground/?theme=atelier&scheme=light) or [see its dark mode](/theme-playground/?theme=atelier&scheme=dark).
+
+## Circuit
+
+Circuit suits developer tools, monitoring, analytics and infrastructure dashboards. Cyan actions stand out against icy light surfaces or deep navy panels. Monospace labels, table headers and tab triggers add a technical rhythm without making all body text monospace. Controls and tables retain comfortable spacing, while crisp corners and subtle panel outlines separate layers.
+
+[Preview Circuit](/theme-playground/?theme=circuit&scheme=light) or [see its dark mode](/theme-playground/?theme=circuit&scheme=dark).
+
+## Studio
+
+Studio suits creative tools, education, collaboration and consumer apps. Cobalt anchors the interface, while citrus success accents bring energy to badges and alerts. Heavy headings, large controls, rounded rectangular buttons and broadly rounded cards establish a strong hierarchy. Light mode uses clean pale surfaces; dark mode keeps the same hierarchy on deep indigo surfaces.
+
+[Preview Studio](/theme-playground/?theme=studio&scheme=light) or [see its dark mode](/theme-playground/?theme=studio&scheme=dark).
 
 ## Using one
 
@@ -56,4 +77,6 @@ Every bundled theme satisfies `ThemeContract`: the same keys as the library defa
 
 ## Fonts
 
-Themes name their font families (JetBrains Mono, Nunito, IBM Plex Sans, Helvetica Neue) but don't ship font files. Without them, each stack falls back to a similar system font. Every theme maps the stable `body`, `heading` and `mono` roles to those families. To load a family, add `typography.fontFaces` with your own files, or load it from a font service in your HTML.
+Themes name their font families but don't ship font files. Without them, each stack falls back to a similar system font. Atelier uses Georgia for its serif headings; Circuit uses system sans and monospace stacks; Studio prefers Avenir Next or Trebuchet MS before falling back to system sans. These three themes work without a font download.
+
+Every theme maps the stable `body`, `heading` and `mono` roles to its families. Atelier adds a `serif` family while retaining the shared `sans` and `mono` keys. To load a family, add `typography.fontFaces` with your own files, or load it from a font service in your HTML.
