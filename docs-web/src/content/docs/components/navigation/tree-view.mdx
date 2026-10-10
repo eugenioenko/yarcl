@@ -1,0 +1,98 @@
+---
+title: TreeView
+description: Explore nested items with accessible keyboard navigation, expansion and typed selection.
+sidebar:
+  order: 3
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { TreeViewDemo } from '@/demos/tree-view';
+
+```tsx
+import { TreeView, type TreeViewItem } from '@yarcl/react';
+```
+
+<Preview>
+  <TreeViewDemo client:visible />
+</Preview>
+
+## Items and selection
+
+Supply a named tree and a hierarchy of items. Every `id` must be unique across the whole tree. Labels are accessible names; icons are decorative. Empty `children` arrays behave as leaves.
+
+```tsx
+const items = [
+  { id: 'projects', label: 'Projects', children: [
+    { id: 'website', label: 'Website' },
+    { id: 'mobile', label: 'Mobile app' },
+  ] },
+  { id: 'archive', label: 'Archive', disabled: true },
+] as const satisfies readonly TreeViewItem[];
+
+<TreeView aria-label="Projects" items={items}
+  defaultExpanded={['projects']} defaultValue="website"
+  onValueChange={(id) => openDetails(id)} />
+```
+
+Const arrays infer a union of their identifiers. Unknown IDs in `value`, `defaultValue`, `expanded` and `defaultExpanded` are type errors. Duplicate IDs throw at runtime, including across different branches.
+
+The default selection mode is single. `value` and `defaultValue` accept an ID or `null`; `onValueChange` reports the selected ID. Moving focus does not change selection. Selecting the current item keeps it selected. Clear controlled selection by passing `null`.
+
+Keep labels noninteractive. Place related actions outside the tree. For ordinary page links, use [NavItem](/components/navigation/nav-item/) in a navigation landmark instead. A rich label can provide `textValue` to make type-ahead predictable.
+
+## Multiple selection
+
+Multiple selection uses arrays. Click, Enter and Space toggle the focused item without requiring modifier keys. Arrow navigation preserves the selection.
+
+```tsx
+type ItemId = 'projects' | 'website' | 'mobile' | 'archive';
+const [selected, setSelected] = useState<ItemId[]>([]);
+
+<TreeView aria-label="Files to export" items={items} selectionMode="multiple"
+  value={selected} onValueChange={setSelected} />
+```
+
+Use `selectionMode="none"` for a hierarchy that only needs focus and expansion. It does not accept selection props or render selection states. Enter and Space then toggle the focused parent.
+
+## Expansion and state
+
+Use `defaultExpanded` for initial open parents, or control expansion with `expanded` and `onExpandedChange`. Selecting a row does not expand it. The disclosure icon, expansion arrow keys, or double-clicking a parent row toggle its group.
+
+```tsx
+const [expanded, setExpanded] = useState<('projects' | 'website' | 'mobile' | 'archive')[]>(['projects']);
+
+<TreeView aria-label="Workspace" items={items}
+  expanded={expanded} onExpandedChange={setExpanded} />
+```
+
+Controlled values report requests and wait for your next prop update. Collapsed children remain mounted inside hidden groups. Focus returns to the nearest visible ancestor when a branch is collapsed externally. Removing a focused item moves focus to an available visible item; changes elsewhere do not steal focus.
+
+`selectable={false}` allows a folder to be focused and expanded without being selected. Disabled items remain discoverable by arrow navigation but cannot select or expand. `disabled` on the root disables all interaction and removes the tree from the tab order. An empty tree remains named and reachable.
+
+## Keyboard and accessibility
+
+TreeView follows the [WAI-ARIA tree pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/), with `tree`, `treeitem` and nested `group` roles, explicit nesting and sibling metadata, and a single roving tab stop. Each selectable node exposes `aria-selected`; only parents expose `aria-expanded`. The focused row uses the shared config focus ring.
+
+| Key | Action |
+| --- | --- |
+| Up / Down | Previous / next visible item, without wrapping |
+| Right | Expand a closed parent or enter an open parent's first child |
+| Left | Collapse an open parent or move to its parent |
+| Home / End | First / last visible item |
+| Enter / Space | Select in single mode, toggle selection in multiple mode, toggle expansion in none mode |
+| Type a name | Move focus to the next visible matching label |
+| Repeated character | Cycle through matching labels |
+| `*` | Expand enabled siblings at the current level |
+
+Left and Right mirror in right-to-left layouts. Type-ahead uses `textValue` when supplied, otherwise label text, and resets after `timing.typeaheadTimeout`. It defaults to 1000 milliseconds. Native event handlers run before internal actions; `preventDefault()` on a click, double-click or key handler cancels that action.
+
+## Styling and themes
+
+`size`, `radius` and `color` are typed config keys. They resolve through `components.TreeView`, then the global defaults. Component `allowedSizes` and `sizeOverrides` work as with other sized controls. Size drives row height, padding, typography, icons and nesting indentation; radius shapes rows; color marks selection. CSS variables keep token values out of style attributes.
+
+Runtime themes update styling and type-ahead timing while preserving expansion, selection, focus and DOM. Native attributes, `className`, `style` and `ref` reach the root div. Row styling uses `data-part="item"`; your unlayered CSS can override it without `!important`.
+
+## Props
+
+<Props of="TreeViewProps" />

@@ -1,3 +1,4 @@
+import { TreeView, type TreeViewItem } from '@yarcl/react';
 import { createComponent } from '@yarcl/react';
 import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
 import { Accordion, AppLayout, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast, HoverCard, Popover, Toaster, type Responsive, type Spacing } from '@yarcl/react';
@@ -530,3 +531,28 @@ export const responsiveContract = <>
 </>;
 
 toast({ title: 'Saved', gap: responsiveSpacing, padding: responsiveSpacing });
+
+const treeItems = [{ id: 'work', label: 'Work', icon: <svg />, children: [{ id: 'draft', label: 'Draft', textValue: 'Draft project', disabled: false }] }, { id: 'archive', label: 'Archive', selectable: false }] as const satisfies readonly TreeViewItem[];
+export const treeContract = <>
+  <TreeView items={treeItems} aria-label="Workspace" size='talla-s' color='clay' radius='hairline' expanded={['work']} defaultExpanded={['work']} value="draft" defaultValue="draft" onValueChange={(value: 'work' | 'draft' | 'archive' | null) => value} onExpandedChange={(values: ('work' | 'draft' | 'archive')[]) => values} disabled={false} ref={() => {}} className="files" data-owner="Sam" />
+  <TreeView items={treeItems} aria-labelledby="workspace-heading" selectionMode="multiple" value={['draft']} defaultValue={['work']} onValueChange={(values: ('work' | 'draft' | 'archive')[]) => values} />
+  <TreeView items={treeItems} aria-label="Workspace" selectionMode="none" />
+  {/* @ts-expect-error trees require an accessible name */}
+  <TreeView items={treeItems} />
+  {/* @ts-expect-error unknown tree item identifiers */}
+  <TreeView items={treeItems} aria-label="Workspace" value="missing" />
+  {/* @ts-expect-error unknown expanded identifiers */}
+  <TreeView items={treeItems} aria-label="Workspace" expanded={['missing']} />
+  {/* @ts-expect-error single selection uses a scalar */}
+  <TreeView items={treeItems} aria-label="Workspace" value={['draft']} />
+  {/* @ts-expect-error multiple selection uses an array */}
+  <TreeView items={treeItems} aria-label="Workspace" selectionMode="multiple" value="draft" />
+  {/* @ts-expect-error navigation-only trees have no selection */}
+  <TreeView items={treeItems} aria-label="Workspace" selectionMode="none" value="draft" />
+  {/* @ts-expect-error size keys come from the consumer config */}
+  <TreeView items={treeItems} aria-label="Workspace" size="missing" />
+  {/* @ts-expect-error color keys come from the consumer config */}
+  <TreeView items={treeItems} aria-label="Workspace" color="missing" />
+  {/* @ts-expect-error radius keys come from the consumer config */}
+  <TreeView items={treeItems} aria-label="Workspace" radius="missing" />
+</>;

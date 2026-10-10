@@ -40,6 +40,7 @@ import {
 import { DesignReference } from '@yarcl/react/reference';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
+import { TreeViewDemo } from './TreeViewDemo';
 import { AppLayoutDemo } from './AppLayoutDemo';
 import { ResponsiveDemo } from './ResponsiveDemo';
 
@@ -74,6 +75,7 @@ export function App() {
   const [splitAction, setSplitAction] = useState('Nothing executed');
   const [quantity, setQuantity] = useState<number | null>(1);
 
+  if (new URLSearchParams(location.search).get('page') === 'tree-view') return <main className="page yarcl-root"><TreeViewDemo /></main>;
   if (params.get('page') === 'responsive') return <ResponsiveDemo />;
   if (params.get('page') === 'layout') return <AppLayoutDemo />;
 
@@ -95,6 +97,7 @@ export function App() {
       <Inline as="header" justify="between">
         <Text textStyle="title">Maison Talla</Text>
         <Inline gap="4">
+          <Link href="?page=tree-view" underline="hover">Project explorer</Link>
           <Link href="?page=responsive" underline="hover">Responsive props</Link>
           <Link href="?page=layout" underline="hover" color="ink">App layout</Link>
           <Link href="?page=shop" underline="hover" color="ink">
@@ -211,6 +214,7 @@ export function App() {
               <InputContentDemo />
             </Stack>
             <RecipesDemo />
+            <TreeViewDemo />
             <Table caption="Recent orders" stickyHeader style={{ tableLayout: 'fixed' }} wrapStyle={{ maxHeight: '18rem' }}>
               <Table.Head><Table.Row><Table.HeaderCell>Order</Table.HeaderCell><Table.HeaderCell>Delivery details</Table.HeaderCell></Table.Row></Table.Head>
               <Table.VirtualBody items={deliveries} estimateRowHeight={60} getItemKey={(delivery) => delivery.id}>

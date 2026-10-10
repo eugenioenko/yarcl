@@ -64,7 +64,8 @@
 }
 
 .yarcl-input-control:has(> .yarcl-input-field:focus-visible),
-.yarcl-combobox-control:has(> .yarcl-combobox-input:focus-visible) {
+.yarcl-combobox-control:has(> .yarcl-combobox-input:focus-visible),
+.yarcl-tree-item:focus-visible > .yarcl-tree-row {
   outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
 }
@@ -941,6 +942,78 @@ p.yarcl-text {
 
 .yarcl-link-underline-hover:hover {
   text-decoration-line: underline;
+}
+
+/* TreeView */
+
+.yarcl-tree {
+  min-width: 0;
+  color: var(--yarcl-neutral-text);
+  font-size: var(--yarcl-fs);
+}
+
+.yarcl-tree-item {
+  outline: none;
+}
+
+.yarcl-tree-row {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: var(--yarcl-h);
+  padding: calc(var(--yarcl-px) / 2) var(--yarcl-px);
+  gap: calc(var(--yarcl-px) / 2);
+  border-radius: var(--yarcl-r);
+  cursor: pointer;
+  user-select: none;
+}
+
+.yarcl-tree-item:not([aria-disabled='true']) > .yarcl-tree-row:hover {
+  background: color-mix(in oklab, var(--yarcl-neutral-text) 5%, transparent);
+}
+
+.yarcl-tree-item[aria-selected='true'] > .yarcl-tree-row {
+  color: var(--yarcl-c-text);
+  background: color-mix(in oklab, var(--yarcl-c) 10%, transparent);
+  font-weight: 600;
+}
+
+.yarcl-tree-item[aria-disabled='true'] > .yarcl-tree-row {
+  color: var(--yarcl-neutral-muted);
+  cursor: default;
+}
+
+.yarcl-tree-group {
+  padding-inline-start: var(--yarcl-px);
+}
+
+.yarcl-tree-toggle,
+.yarcl-tree-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--yarcl-icon);
+  height: var(--yarcl-icon);
+}
+
+.yarcl-tree-toggle svg,
+.yarcl-tree-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.yarcl-tree:dir(rtl) .yarcl-tree-toggle svg {
+  transform: rotate(180deg);
+}
+
+.yarcl-tree-item[aria-expanded='true'] > .yarcl-tree-row .yarcl-tree-toggle svg {
+  transform: rotate(90deg);
+}
+
+.yarcl-tree-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Navigation */
