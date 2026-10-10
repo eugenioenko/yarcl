@@ -1,4 +1,4 @@
-import { atelier, circuit, studio, themes, themeNames, type ThemeContract } from '@yarcl/react/themes';
+import { cyberpunk, vermeer, artDeco, circuit, studio, themes, themeNames, type ThemeContract } from '@yarcl/react/themes';
 import { useTableColumns, type TableColumnDefinition, type TableColumnWidths, type TableColumnVisibility } from '@yarcl/react';
 import { ColorPicker, type ColorPickerProps, type ColorPickerValue } from '@yarcl/react';
 import { Stepper, type StepperItem } from '@yarcl/react';
@@ -657,13 +657,17 @@ const unnamedColumnResizer = <Table.ColumnResizer value={220} min={100} max={480
 const invalidColumnDensity = <Table density="missing-density"><Table.Columns columns={[{ id: 'customer', width: 220 }]} /></Table>;
 void missingColumnBounds; void unnamedColumnResizer; void invalidColumnDensity;
 
-const bundledThemes: readonly ThemeContract[] = [atelier, circuit, studio];
-const bundledThemeName = themeNames.atelier;
-const serifTheme = defineConfig({ ...atelier, typography: { ...atelier.typography, fonts: { body: 'sans', heading: 'serif', mono: 'mono' } } });
+const bundledThemes: readonly ThemeContract[] = [cyberpunk, vermeer, artDeco, circuit, studio];
+const bundledThemeName = themeNames.vermeer;
+const serifTheme = defineConfig({ ...vermeer, typography: { ...vermeer.typography, fonts: { body: 'sans', heading: 'serif', mono: 'mono' } } });
 // @ts-expect-error Theme identifiers stay literal across both consumer configurations.
 const unknownBundledTheme = themes.unknown;
 // @ts-expect-error Font roles must reference families defined by the theme.
-const unknownThemeFamily = defineConfig({ ...atelier, typography: { ...atelier.typography, fonts: { body: 'sans', heading: 'missing', mono: 'mono' } } });
+const unknownThemeFamily = defineConfig({ ...vermeer, typography: { ...vermeer.typography, fonts: { body: 'sans', heading: 'missing', mono: 'mono' } } });
 // @ts-expect-error The new themes retain literal token names.
 const unknownThemeColor = studio.colors.missing;
 void bundledThemes; void bundledThemeName; void serifTheme; void unknownBundledTheme; void unknownThemeFamily; void unknownThemeColor;
+
+// @ts-expect-error Atelier was removed from the bundled theme registry.
+const removedTheme = themes.atelier;
+void removedTheme;
