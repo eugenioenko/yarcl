@@ -1,10 +1,12 @@
 import axe from 'axe-core';
 import { afterEach, beforeEach, expect, inject, test } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { Button, Card, Combobox, Dialog, Drawer, Input, Menu, Select, Table, Tabs, config, type Density, type Radius, type Shadow, type Spacing } from '@yarcl/react';
+import { Button, Card, Combobox, Dialog, Drawer, Input, Menu, Select, Table, Tabs, config, createComponent, type Density, type Radius, type Shadow, type Spacing } from '@yarcl/react';
 import { applyTheme, resetTheme } from '@yarcl/react/css';
 import type { YarclShape } from '@yarcl/react/define';
 import { page } from './page';
+
+const RecipeCard = createComponent('Action', Card);
 
 const spacing = Object.keys(config.spacing) as Spacing[];
 const radii = Object.keys(config.radii) as Radius[];
@@ -70,6 +72,15 @@ export function testComponentSlots() {
     expect(getComputedStyle(root.children[1]).paddingTop).toBe(measure(config.spacing[large]));
     expect(getComputedStyle(root.children[2]).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
     expect(getComputedStyle(root.children[0]).fontSize).toBe(measure(config.typography.styles[style].size));
+  });
+
+  test('allows a consumer component recipe to override built-in root slot styles', async () => {
+    theme({ Card: { slots: { root: { radius: 'square', padding: large } } } });
+    const screen = await render(<RecipeCard>Recipe surface</RecipeCard>);
+    const card = screen.container.querySelector('[data-part="root"]')!;
+    const radius = config.recipes.Action.slots.root.borderRadius.key as Radius;
+    expect(getComputedStyle(card).borderRadius).toBe(measure(config.radii[radius]));
+    expect(getComputedStyle(card).paddingTop).toBe(measure(config.spacing[large]));
   });
 
   test('keeps explicit card radius, padding and shadow above root slot settings', async () => {
