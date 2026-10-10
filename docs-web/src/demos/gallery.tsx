@@ -25,6 +25,7 @@ import {
   Label,
   Link,
   NavItem,
+  NavSection,
   NumberInput,
   Radio,
   RadioGroup,
@@ -333,6 +334,7 @@ const groups: Record<string, Item[]> = {
     },
   ],
   navigation: [
+    { name: "Nav section", href: "/components/navigation/nav-section/", description: "Named groups of navigation links, with an optional icon rail.", preview: <NavSection title="Workspace"><NavItem href="#projects" icon={<SearchIcon />}>Projects</NavItem></NavSection> },
     {
       name: 'Nav item',
       href: '/components/navigation/nav-item/',

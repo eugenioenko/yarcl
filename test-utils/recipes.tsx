@@ -162,9 +162,18 @@ export function testRecipes() {
 
   test('extensions and custom markup retain accessible names and pass axe', async () => {
     document.documentElement.style.colorScheme = inject('scheme');
-    const screen = await render(<main><Action>Save changes</Action><Status status="paid">Payment received</Status></main>);
-    const results = await axe.run(screen.container, { rules: { region: { enabled: false } } });
-    expect(results.violations.map((violation) => violation.id)).toEqual([]);
+    await page.mouse.move(innerWidth - 1, innerHeight - 1);
+    const screen = await render(<main className="yarcl-root"><Action>Save changes</Action><Status status="paid">Payment received</Status></main>);
+    for (const hover of [false, true]) {
+      if (hover) {
+        await page.getByRole('button', { name: 'Save changes' }).hover();
+        const button = screen.container.querySelector('button')!;
+        const target = cssColor(getComputedStyle(button).getPropertyValue('--yarcl-v-bg-hover'));
+        await expect.poll(() => getComputedStyle(button).backgroundColor).toBe(target);
+      }
+      const results = await axe.run(screen.container, { rules: { region: { enabled: false } } });
+      expect(results.violations.map(({ id, nodes }) => ({ id, nodes: nodes.map(({ html, failureSummary }) => ({ html, failureSummary })) }))).toEqual([]);
+    }
     expect(await page.getByRole('button', { name: 'Save changes' }).count()).toBe(1);
   });
 }

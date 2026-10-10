@@ -144,6 +144,7 @@ export interface ComponentTokenProps {
   Accordion: 'size' | 'radius' | 'color';
   Table: 'density' | 'radius';
   Stack: 'gap';
+  NavSection: 'gap' | 'textStyle';
   Grid: 'gap';
   Inline: 'gap';
   Text: 'textStyle' | 'color';

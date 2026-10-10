@@ -18,6 +18,16 @@ import { NavItem } from '@yarcl/react';
 
 `active` adds `aria-current="page"` and the active style. The icon is decorative; the text supplies the link name. `NavItem` accepts native anchor attributes, so a router can pass its resolved `href` and click handler. See the [router link recipe](/getting-started/router-links/).
 
+## Icon rail
+
+Set `collapsed` with an `icon` to show a square icon target. The text stays available to screen readers, and a tooltip appears on hover or keyboard focus. Escape dismisses it. `aria-label`, when supplied, also provides the tooltip text. Items without icons, including false conditional nodes and empty fragments, stay expanded. The tooltip does not repeat the link name as an accessible description; an explicit `aria-describedby` is preserved. If `aria-labelledby` supplies an external name, the tooltip remains a description.
+
+```tsx
+<NavItem href="/projects" collapsed icon={<ProjectsIcon />}>Projects</NavItem>
+```
+
+Items inherit collapse state from [NavSection](/components/navigation/nav-section/). Set `collapsed={false}` to keep an item expanded. Target width and height use the selected size's `height`; the icon uses `iconSize`. No extra layout wrapper is needed.
+
 ## Props
 
 <Props of="NavItemProps" />

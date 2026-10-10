@@ -1,6 +1,6 @@
 import { createComponent } from '@yarcl/react';
 import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
-import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
 
@@ -463,3 +463,15 @@ defineConfig({ ...config, components: optionalInvalidSlot });
 <FileDropzone label="Uploads" multiple defaultFiles={[42]} />;
 // @ts-expect-error inputRef exposes a native file input
 <FileDropzone label="Uploads" inputRef={(input: HTMLTextAreaElement | null) => { input?.focus(); }} />;
+
+<NavSection title="Workspace" collapsed gap="2" textStyle="label" ref={(group) => { group?.focus(); }}><NavItem href="/projects" collapsed icon={<span>P</span>}>Projects</NavItem></NavSection>;
+// @ts-expect-error collapse is boolean
+<NavItem href="/projects" collapsed="yes">Projects</NavItem>;
+// @ts-expect-error heading is required
+<NavSection />;
+// @ts-expect-error unknown spacing token
+<NavSection title="Workspace" gap="missing" />;
+// @ts-expect-error unknown typography token
+<NavSection title="Workspace" textStyle="missing" />;
+// @ts-expect-error collapse is boolean
+<NavSection title="Workspace" collapsed="yes" />;

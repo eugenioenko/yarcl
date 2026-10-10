@@ -25,7 +25,7 @@ const entries = {
   'yarcl CLI': 'cli.js',
 };
 const budgets = {
-  '@yarcl/react': { js: 32.15 * 1024, css: 8.25 * 1024 },
+  '@yarcl/react': { js: 32.6 * 1024, css: 8.35 * 1024 },
   '@yarcl/react/define': { js: 0.9 * 1024, css: 0 },
   '@yarcl/react/defaults': { js: 2.6 * 1024, css: 0 },
   '@yarcl/react/vite': { js: 8.95 * 1024, css: 0 },
@@ -34,14 +34,14 @@ const budgets = {
   '@yarcl/react/rollup': { js: 8.95 * 1024, css: 0 },
   '@yarcl/react/esbuild': { js: 8.95 * 1024, css: 0 },
   '@yarcl/react/reference': { js: 9.4 * 1024, css: 0.6 * 1024 },
-  '@yarcl/react/demo': { js: 32.35 * 1024, css: 8.5 * 1024 },
+  '@yarcl/react/demo': { js: 32.5 * 1024, css: 8.6 * 1024 },
   '@yarcl/react/themes': { js: 4.45 * 1024, css: 0 },
   '@yarcl/react/css': { js: 6.3 * 1024, css: 0 },
   '@yarcl/react/generate': { js: 6.15 * 1024, css: 0 },
   'yarcl CLI': { js: 3.25 * 1024, css: 0 },
-  Button: { js: 3.2 * 1024, css: 10.35 * 1024 },
-  'Button + Input': { js: 3.45 * 1024, css: 10.35 * 1024 },
-  'Button + createComponent': { js: 3.75 * 1024, css: 10.35 * 1024 },
+  Button: { js: 3.2 * 1024, css: 10.4 * 1024 },
+  'Button + Input': { js: 3.45 * 1024, css: 10.4 * 1024 },
+  'Button + createComponent': { js: 3.75 * 1024, css: 10.4 * 1024 },
 };
 const externalPackages = [
   '@floating-ui/react',

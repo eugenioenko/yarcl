@@ -23,6 +23,7 @@ import {
   Link,
   Menu,
   NavItem,
+  NavSection,
   Progress,
   Pagination,
   NumberInput,
@@ -326,8 +327,9 @@ export function App() {
 
             <FileDropzone data-testid="feedback-files" label="Attachments" description="Images or PDF files" accept="image/*,.pdf" multiple />
             <nav aria-label="Demo navigation" data-testid="feedback-nav">
-              <NavItem href="#overview" active icon={<span>✦</span>}>Overview</NavItem>
-              <NavItem href="#settings">Settings</NavItem>
+              <NavSection title="Workspace"><NavItem href="#overview" active icon={<span>✦</span>}>Overview</NavItem>
+              <NavItem href="#settings">Settings</NavItem></NavSection>
+              <NavSection title="Quick access" collapsed><NavItem href="#reports" icon={<span>R</span>}>Reports</NavItem><NavItem href="#people" icon={<span>P</span>}>People</NavItem></NavSection>
             </nav>
 
             <Grid columns={3} data-testid="grid-equal">

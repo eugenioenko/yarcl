@@ -202,3 +202,5 @@ Conventions:
 - [Components](https://yarcl.dev/components/): every component with examples and props tables
 - [API reference](https://yarcl.dev/reference/api/)
 - [Source](https://github.com/eugenioenko/yarcl)
+
+- `NavSection title="Workspace"` names a navigation group. `collapsed` hides the heading visually and makes descendant `NavItem` links icon rails. Items can override it with `collapsed={false}`. `NavItem collapsed` keeps its text accessible and shows a right-side tooltip on hover or keyboard focus. Provide icons for collapsed items; links without icons remain expanded. Native anchor props, refs and router handlers are preserved. Section `gap` and `textStyle` resolve through `components.NavSection`, then global defaults. See https://yarcl.dev/components/navigation/nav-section/.
