@@ -18,6 +18,13 @@ const current = () => document.querySelector('.yarcl-stepper [aria-current="step
 const focused = () => document.activeElement?.getAttribute('aria-labelledby');
 async function key(value: string) { await page.keyboard.press(value); }
 function pixels(value: string) { const probe = document.createElement('div'); probe.style.width = value; document.body.append(probe); const result = getComputedStyle(probe).width; probe.remove(); return result; }
+function connector(item: Element) {
+  const rect = item.getBoundingClientRect(), style = getComputedStyle(item, '::after');
+  const width = parseFloat(style.width), height = parseFloat(style.height);
+  const left = parseFloat(style.left), right = parseFloat(style.right);
+  return { left: Number.isFinite(left) ? rect.left + left : rect.right - right - width, top: rect.top + parseFloat(style.top), width, height, style };
+}
+function center(item: Element) { const rect = item.getBoundingClientRect(); return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }; }
 
 /** Exercises ordered progress, activation, roving focus, dynamic data, copy and consumer tokens. */
 export function testStepper() {
@@ -180,6 +187,65 @@ export function testStepper() {
   test('runtime component defaults and size overrides apply to indicators', async () => {
     const size = Object.keys(config.sizes)[0] as Size; applyTheme({ ...config, components: { ...config.components, Stepper: { size, sizeOverrides: { [size]: { height: '52px' } } } } });
     const screen = await render(<Stepper aria-label="Checkout" items={items} />); expect(getComputedStyle(screen.container.querySelector('.yarcl-stepper-indicator')!).height).toBe('52px');
+  });
+
+  test.each(['horizontal', 'vertical'] as const)('timeline connectors meet indicator centers in %s layout', async (orientation) => {
+    const screen = await render(<Stepper aria-label="Checkout" items={items} orientation={orientation} />);
+    const rows = [...screen.container.querySelectorAll('li')], indicators = [...screen.container.querySelectorAll('.yarcl-stepper-indicator')];
+    for (let index = 0; index < rows.length - 1; index++) {
+      const line = connector(rows[index]), start = center(indicators[index]), end = center(indicators[index + 1]);
+      if (orientation === 'horizontal') { expect(line.left).toBeCloseTo(start.x, 1); expect(line.left + line.width).toBeCloseTo(end.x, 1); expect(line.top + line.height / 2).toBeCloseTo(start.y, 1); }
+      else { expect(line.top).toBeCloseTo(start.y, 1); expect(line.top + line.height).toBeCloseTo(end.y, 1); expect(line.left + line.width / 2).toBeCloseTo(start.x, 1); }
+      expect(line.style.pointerEvents).toBe('none');
+    }
+    expect(getComputedStyle(rows.at(-1)!, '::after').content).toBe('none');
+  });
+
+  test.each(['horizontal', 'vertical'] as const)('RTL timeline alignment follows %s indicators', async (orientation) => {
+    const screen = await render(<Stepper aria-label="Checkout" items={items} dir="rtl" orientation={orientation} />);
+    const rows = [...screen.container.querySelectorAll('li')], indicators = [...screen.container.querySelectorAll('.yarcl-stepper-indicator')];
+    const line = connector(rows[0]), start = center(indicators[0]), end = center(indicators[1]);
+    if (orientation === 'horizontal') { expect(line.left + line.width).toBeCloseTo(start.x, 1); expect(line.left).toBeCloseTo(end.x, 1); }
+    else { expect(line.left + line.width / 2).toBeCloseTo(start.x, 1); expect(line.top + line.height).toBeCloseTo(end.y, 1); }
+  });
+
+  test('completed outgoing connectors use the semantic color and leave incomplete connectors neutral', async () => {
+    const screen = await render(<Stepper aria-label="Checkout" items={items} defaultValue="payment" />);
+    const rows = [...screen.container.querySelectorAll('li')];
+    expect(connector(rows[0]).style.backgroundColor).toBe(getComputedStyle(rows[0].querySelector('.yarcl-stepper-indicator')!).backgroundColor);
+    expect(connector(rows[1]).style.backgroundColor).toBe(getComputedStyle(rows[2].querySelector('.yarcl-stepper-indicator')!).borderTopColor);
+  });
+
+  test('consumer component defaults render circular indicators while explicit rounded tokens win', async () => {
+    const screen = await render(<Stepper aria-label="Checkout" items={items} />); const indicator = screen.container.querySelector('.yarcl-stepper-indicator')!;
+    expect(parseFloat(getComputedStyle(indicator).borderRadius)).toBeGreaterThanOrEqual(indicator.getBoundingClientRect().width / 2);
+    const radius = config.defaults.radius as Radius;
+    await screen.rerender(<Stepper aria-label="Checkout" items={items} radius={radius} />);
+    expect(getComputedStyle(indicator).borderRadius).toBe(pixels(config.radii[radius]));
+  });
+
+  test('long vertical descriptions retain connector alignment without clipping or losing states', async () => {
+    const screen = await render(<Stepper aria-label="Checkout" orientation="vertical" style={{ width: '240px' }} items={items.map((item) => ({ ...item, description: 'A long description that wraps onto multiple lines beside its stage indicator.' }))} />);
+    const rows = [...screen.container.querySelectorAll('li')], first = center(rows[0].querySelector('.yarcl-stepper-indicator')!), second = center(rows[1].querySelector('.yarcl-stepper-indicator')!), line = connector(rows[0]);
+    expect(line.top).toBeCloseTo(first.y, 1); expect(line.top + line.height).toBeCloseTo(second.y, 1);
+    expect(screen.container.querySelector('ol')!.scrollWidth).toBeLessThanOrEqual(240); expect(rows[0].hasAttribute('data-completed')).toBe(true); expect(rows[2].hasAttribute('data-disabled')).toBe(true);
+  });
+
+  test('responsive gap changes update timeline endpoints in both orientations', async () => {
+    const gap = Object.keys(config.spacing)[0] as Spacing, later = Object.keys(config.spacing).at(-1) as Spacing;
+    const screen = await render(<Stepper aria-label="Checkout" items={items} gap={{ base: gap, lg: later }} />);
+    try {
+      for (const orientation of ['horizontal', 'vertical'] as const) {
+        await screen.rerender(<Stepper aria-label="Checkout" items={items} gap={{ base: gap, lg: later }} orientation={orientation} />);
+        for (const width of [390, 1400]) {
+          await page.setViewportSize({ width, height: 800 }); await expect.poll(() => innerWidth).toBe(width);
+          const root = screen.container.querySelector('ol')!;
+          await expect.poll(() => getComputedStyle(root).gap).toBe(pixels(config.spacing[width === 390 ? gap : later]));
+          const rows = root.querySelectorAll('li'), line = connector(rows[0]), end = center(rows[1].querySelector('.yarcl-stepper-indicator')!);
+          expect(orientation === 'horizontal' ? line.left + line.width : line.top + line.height).toBeCloseTo(orientation === 'horizontal' ? end.x : end.y, 1);
+        }
+      }
+    } finally { await page.setViewportSize({ width: 1100, height: 800 }); }
   });
 
   test('responsive spacing resolves from this consumer and follows its breakpoints', async () => {

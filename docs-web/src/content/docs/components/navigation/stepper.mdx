@@ -71,6 +71,8 @@ Use `readOnly` when a separate form or navigation flow controls progress. This r
 
 ## Orientation and keyboard
 
+Indicators are connected by a timeline line. A completed stage colors its outgoing connector; current and disabled states remain independent of completion. No connector follows the final stage.
+
 The default arrangement is horizontal. Set `orientation="vertical"` for a narrow sidebar or a detailed sequence with longer descriptions. Labels wrap within their available space.
 
 | Key | Action |
@@ -82,6 +84,25 @@ The default arrangement is horizontal. Set `orientation="vertical"` for a narrow
 | Tab | Enter at the current or last focused enabled stage, then leave the stepper |
 
 Focus movement does not change progress, and arrows stop at the edges. Native click and keyboard handlers run first; `preventDefault()` cancels activation or navigation. Native button behavior supplies Enter and Space activation. Stepper uses a named ordered list and the standard [current step state](https://www.w3.org/TR/wai-aria-1.2/#aria-current). Its explicit list role preserves those semantics when custom marker styling is applied.
+
+## Circular and rounded indicators
+
+The typed `radius` prop shapes both indicators and interactive entries. The library defaults and bundled themes set `components.Stepper.radius` to the circular `rounded` radius token. An explicit radius overrides that component default.
+
+```tsx
+<Stepper aria-label="Checkout" items={stages} radius="rounded" />
+<Stepper aria-label="Checkout" items={stages} radius="md" />
+<Stepper aria-label="Checkout" items={stages} radius="rounded" orientation="vertical" />
+```
+
+Use your own config keys. A circular token can have a large radius such as `9999px`, while a normal rounded token can use your usual control radius. Configs with different names work equally well:
+
+```ts
+radii: { softCorner: '0.375rem', circle: '9999px' },
+components: { Stepper: { radius: 'circle' } },
+```
+
+`radius="size"` resolves the radius named after the active size when available. Connector positions follow size tokens, responsive spacing, orientation and RTL. Long vertical descriptions wrap beside their indicator without shifting the timeline's alignment. Runtime theme changes update the shape and line without resetting progress or focus.
 
 ## Styling, spacing and language
 

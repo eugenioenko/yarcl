@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Heading, Inline, Stack, Stepper, Text, type StepperItem } from '@yarcl/react';
+import { Button, Heading, Inline, Stack, Stepper, Switch, Text, useConfig, type StepperItem } from '@yarcl/react';
 
 const stages = [
   { id: 'details', label: 'Details', description: 'Your information' },
@@ -11,6 +11,9 @@ type Stage = typeof stages[number]['id'];
 
 /** A controlled three-stage checkout with independently tracked completion. */
 export function StepperDemo() {
+  const active = useConfig();
+  const [circular, setCircular] = useState(true);
+  const [vertical, setVertical] = useState(false);
   const [stage, setStage] = useState<Stage | null>('details');
   const [completed, setCompleted] = useState<Stage[]>([]);
   const index = stages.findIndex((item) => item.id === stage);
@@ -18,7 +21,8 @@ export function StepperDemo() {
   return <Stack as="section">
     <Heading level={2}>Checkout progress</Heading>
     <Text>Choose an available stage, or complete it to continue.</Text>
-    <Stepper aria-label="Checkout" items={stages.map((item) => ({ ...item, completed: completed.includes(item.id), disabled: item.id === 'review' && !completed.includes('payment') }))} value={stage} onValueChange={setStage} />
+    <Inline><Switch checked={circular} onChange={(event) => setCircular(event.currentTarget.checked)}>Circular stages</Switch><Switch checked={vertical} onChange={(event) => setVertical(event.currentTarget.checked)}>Vertical layout</Switch></Inline>
+    <Stepper orientation={vertical ? 'vertical' : 'horizontal'} radius={circular ? undefined : active.defaults.radius} aria-label="Checkout" items={stages.map((item) => ({ ...item, completed: completed.includes(item.id), disabled: item.id === 'review' && !completed.includes('payment') }))} value={stage} onValueChange={setStage} />
     <Text role="status">{stage === null ? 'Checkout completed' : `Current stage: ${stages[index].label}`}</Text>
     <Inline><Button disabled={index <= 0} onClick={() => setStage(stages[Math.max(0, index - 1)].id)}>Previous</Button><Button disabled={stage === null} onClick={next}>{stage === null ? 'Checkout completed' : index === stages.length - 1 ? 'Complete checkout' : 'Complete and continue'}</Button></Inline>
   </Stack>;

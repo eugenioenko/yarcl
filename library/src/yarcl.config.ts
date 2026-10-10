@@ -154,6 +154,7 @@ export default defineConfig({
     modalSize: 'md',
   },
   components: {
+    Stepper: { radius: 'rounded' },
     Avatar: { radius: 'rounded' },
     EmptyState: { color: 'neutral', gap: 'sm', padding: 'lg', textStyle: 'body' },
     Alert: { gap: 'sm', padding: 'md', textStyle: 'label' },

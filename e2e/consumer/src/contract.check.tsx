@@ -599,3 +599,9 @@ const stepperItems = [{ id: 'details', label: 'Details', completed: true }, { id
 <Stepper aria-label="Checkout" items={stepperItems} gap={{ desktop: '4' }} />;
 // @ts-expect-error Step markers always follow the item order.
 <Stepper aria-label="Checkout" items={stepperItems} start={2} />;
+
+const circularSteps = <Stepper aria-label="Circular progress" items={[{ id: 'start', label: 'Start' }]} radius="circle" orientation="horizontal" />;
+const roundedSteps = <Stepper aria-label="Rounded progress" items={[{ id: 'start', label: 'Start' }]} radius="hairline" orientation="vertical" />;
+// @ts-expect-error Circle token names come from this consumer config.
+const invalidCircle = <Stepper aria-label="Progress" items={[{ id: 'start', label: 'Start' }]} radius="rounded" />;
+void circularSteps; void roundedSteps; void invalidCircle;
