@@ -22,6 +22,8 @@ export interface ConfigLabels {
   expandBreadcrumb: string;
   /** Accessible name of an unnamed progress bar. */
   progress: string;
+  /** Announces a completed stage in Stepper. */
+  stepCompleted: string;
   /** Default visible and accessible formatting of a progress value. */
   progressValue: (value: number, max: number) => string;
   /** Increment button in NumberInput. */

@@ -47,6 +47,8 @@ export type { LinkProps } from './components/Link';
 export { AppLayout } from './components/AppLayout';
 export type { AppLayoutProps } from './components/AppLayout';
 export { TreeView } from './components/TreeView';
+export { Stepper } from './components/Stepper';
+export type { StepperProps, StepperBaseProps, StepperItem } from './components/Stepper';
 export type { TreeViewProps, TreeViewBaseProps, TreeViewItem } from './components/TreeView';
 export { NavSection } from './components/NavSection';
 export type { NavSectionProps } from './components/NavSection';

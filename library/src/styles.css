@@ -59,7 +59,9 @@
     .yarcl-accordion-trigger,
     .yarcl-table-wrap,
     .yarcl-split-pane,
-    .yarcl-split-handle
+    .yarcl-split-handle,
+    .yarcl-stepper,
+    .yarcl-stepper-entry
   ):focus-visible {
   outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
@@ -1017,6 +1019,84 @@ p.yarcl-text {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Stepper */
+
+.yarcl-stepper {
+  display: flex;
+  gap: var(--yarcl-component-gap, var(--yarcl-gap));
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--yarcl-neutral-text);
+  font-size: var(--yarcl-fs);
+}
+
+.yarcl-stepper-vertical { flex-direction: column; }
+
+.yarcl-stepper-item { flex: 1; min-width: 0; }
+
+.yarcl-stepper-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--yarcl-px) / 2);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: calc(var(--yarcl-px) / 2);
+  border: 0;
+  border-radius: var(--yarcl-r);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+}
+
+button.yarcl-stepper-entry { cursor: pointer; }
+
+button.yarcl-stepper-entry:not(:disabled):hover .yarcl-stepper-indicator {
+  border-color: var(--yarcl-c);
+}
+
+.yarcl-stepper-vertical .yarcl-stepper-entry { flex-direction: row; text-align: start; }
+
+.yarcl-stepper-indicator {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--yarcl-h);
+  height: var(--yarcl-h);
+  border: var(--yarcl-border-width) solid var(--yarcl-neutral-border);
+  border-radius: var(--yarcl-r);
+  background: var(--yarcl-neutral-bg);
+}
+
+.yarcl-stepper-indicator svg { width: var(--yarcl-icon); height: var(--yarcl-icon); }
+
+.yarcl-stepper-content { display: flex; flex-direction: column; gap: calc(var(--yarcl-px) / 4); min-width: 0; overflow-wrap: anywhere; }
+
+.yarcl-stepper-description { color: var(--yarcl-neutral-muted); }
+
+.yarcl-stepper-item[data-current] .yarcl-stepper-label { font-weight: 600; }
+
+.yarcl-stepper-item[data-current] .yarcl-stepper-indicator {
+  border-color: var(--yarcl-c);
+  color: var(--yarcl-c-text);
+  background: color-mix(in oklab, var(--yarcl-c) 10%, var(--yarcl-neutral-bg));
+}
+
+.yarcl-stepper-item[data-completed] .yarcl-stepper-indicator {
+  border-color: var(--yarcl-c);
+  color: var(--yarcl-c-on);
+  background: var(--yarcl-c);
+}
+
+.yarcl-stepper-item[data-disabled] { color: var(--yarcl-neutral-muted); }
+.yarcl-stepper-item[data-disabled] button.yarcl-stepper-entry { cursor: default; }
 
 /* SplitPane */
 

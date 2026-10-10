@@ -147,6 +147,7 @@ export interface ComponentTokenProps {
   AppLayout: 'padding';
   TreeView: 'size' | 'radius' | 'color';
   SplitPane: 'size' | 'radius' | 'color';
+  Stepper: 'size' | 'radius' | 'color' | 'gap';
   NavSection: 'gap' | 'textStyle';
   Grid: 'gap';
   Inline: 'gap';

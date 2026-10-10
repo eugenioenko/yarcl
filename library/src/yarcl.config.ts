@@ -14,6 +14,7 @@ export default defineConfig({
     breadcrumb: 'Breadcrumb',
     expandBreadcrumb: 'Show all breadcrumbs',
     progress: 'Progress',
+    stepCompleted: 'Completed',
     progressValue: (value: number, max: number) => `${Math.round((value / max) * 100)}%`,
     increase: 'Increase',
     decrease: 'Decrease',

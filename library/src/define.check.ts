@@ -469,3 +469,14 @@ defineConfig({ ...defaults, components: {
   // @ts-expect-error SplitPane only accepts its declared token props
   SplitPane: { padding: 'md' },
 } });
+
+defineConfig({ ...defaults, components: { Stepper: { size: 'sm', color: 'primary', radius: 'md', gap: 'md', allowedSizes: ['sm'] } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error Stepper only accepts its declared token props
+  Stepper: { padding: 'md' },
+} });
+defineConfig({ ...defaults, labels: {
+  ...defaults.labels,
+  // @ts-expect-error Step completion copy is a string
+  stepCompleted: 1,
+} });

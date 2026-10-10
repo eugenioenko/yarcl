@@ -28,7 +28,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 |---|---|
 | Buttons | `Button`, `IconButton`, `ButtonGroup`, `SplitButton`, `ToggleGroup` |
 | Forms | `Field`, `Label`, `Input`, `NumberInput`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
-| Navigation | `NavItem`, `NavSection`, `TreeView` |
+| Navigation | `NavItem`, `NavSection`, `TreeView`, `Stepper` |
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `AppLayout`, `SplitPane`, `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `CommandPalette`, `Toaster`, `toast` |
