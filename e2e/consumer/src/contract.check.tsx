@@ -1,3 +1,4 @@
+import { ColorPicker, type ColorPickerProps, type ColorPickerValue } from '@yarcl/react';
 import { Stepper, type StepperItem } from '@yarcl/react';
 import { SplitPane } from '@yarcl/react';
 import { TreeView, type TreeViewItem } from '@yarcl/react';
@@ -605,3 +606,22 @@ const roundedSteps = <Stepper aria-label="Rounded progress" items={[{ id: 'start
 // @ts-expect-error Circle token names come from this consumer config.
 const invalidCircle = <Stepper aria-label="Progress" items={[{ id: 'start', label: 'Start' }]} radius="rounded" />;
 void circularSteps; void roundedSteps; void invalidCircle;
+
+const colorValue: ColorPickerValue = '#123456';
+const pickerProps: ColorPickerProps = { defaultValue: '#ABC', size: 'talla-s', radius: 'hairline', color: 'clay', presets: [{ value: '#f00', label: 'Red' }], pickerLabel: 'Choose accent', presetsLabel: 'Brand suggestions', name: 'accent', form: 'preferences', disabled: false, readOnly: false, required: true, 'aria-label': 'Accent', onValueChange: (value) => { const hex: ColorPickerValue = value; void hex; }, ref: (node) => { const input: HTMLInputElement | null = node; void input; } };
+const validPicker = <ColorPicker {...pickerProps} value={colorValue} />;
+// @ts-expect-error A color picker requires an initial or controlled color.
+const missingPickerValue = <ColorPicker aria-label="Accent" />;
+// @ts-expect-error Colors use hex notation.
+const invalidPickerValue = <ColorPicker aria-label="Accent" defaultValue="red" />;
+// @ts-expect-error Preset colors use hex notation.
+const invalidPickerPreset = <ColorPicker aria-label="Accent" defaultValue="#123" presets={[{ value: 'red', label: 'Red' }]} />;
+// @ts-expect-error Size is a consumer config key.
+const invalidPickerSize = <ColorPicker defaultValue="#123" size="missing-size" />;
+// @ts-expect-error Radius is a consumer config key.
+const invalidPickerRadius = <ColorPicker defaultValue="#123" radius="missing-radius" />;
+// @ts-expect-error Focus color is a consumer config key.
+const invalidPickerColor = <ColorPicker defaultValue="#123" color="missing-color" />;
+// @ts-expect-error The picker owns its native input type.
+const invalidPickerType = <ColorPicker defaultValue="#123" type="text" />;
+void validPicker; void missingPickerValue; void invalidPickerValue; void invalidPickerPreset; void invalidPickerSize; void invalidPickerRadius; void invalidPickerColor; void invalidPickerType;

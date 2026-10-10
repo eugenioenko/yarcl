@@ -480,3 +480,18 @@ defineConfig({ ...defaults, labels: {
   // @ts-expect-error Step completion copy is a string
   stepCompleted: 1,
 } });
+
+defineConfig({ ...defaults, components: { ColorPicker: { size: 'sm', radius: 'md', color: 'primary', allowedSizes: ['sm'], sizeOverrides: { sm: { height: '3rem' } } } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error ColorPicker only accepts its declared token props.
+  ColorPicker: { gap: 'md' },
+} });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error ColorPicker radius must exist in this config.
+  ColorPicker: { radius: 'unknown-radius' },
+} });
+defineConfig({ ...defaults, labels: {
+  ...defaults.labels,
+  // @ts-expect-error Color picker labels are text.
+  chooseColor: 1,
+} });

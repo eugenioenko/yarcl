@@ -110,7 +110,7 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 
 `Pagination` supports numbered pages with ellipses and `layout="compact"` for a live page summary with previous and next buttons at the end.
 
-**Controls**: Button, IconButton, ButtonGroup, SplitButton, ToggleGroup, Input, NumberInput, Textarea, Checkbox, Radio, RadioGroup, Switch, Slider, Select, Combobox, DatePicker, Field, Label
+**Controls**: Button, IconButton, ButtonGroup, SplitButton, ToggleGroup, Input, NumberInput, ColorPicker, Textarea, Checkbox, Radio, RadioGroup, Switch, Slider, Select, Combobox, DatePicker, Field, Label
 **Navigation**: NavItem, NavSection, TreeView, Stepper
 
 **Typography & layout**: Text, Heading, Link, AppLayout, SplitPane, Stack, Inline, Grid, Card, Divider, VisuallyHidden

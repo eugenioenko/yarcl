@@ -45,6 +45,7 @@ import {
   ToggleGroup,
   VisuallyHidden,
 } from '@yarcl/react';
+import { ColorPickerDemo } from './color-picker';
 import { StepperDemo } from './stepper';
 import { SplitPaneDemo } from './split-pane';
 import { TreeViewDemo } from './tree-view';
@@ -209,6 +210,12 @@ const groups: Record<string, Item[]> = {
       href: '/components/forms/number-input/',
       description: 'A numeric input with increment and decrement buttons.',
       preview: <NumberInput size="sm" defaultValue={2} min={1} aria-label="Guests" className="gallery-fill" />,
+    },
+    {
+      name: 'ColorPicker',
+      href: '/components/forms/color-picker/',
+      description: 'Choose a highlight with hex text, a native picker and named suggestions.',
+      preview: <ColorPickerDemo />,
     },
     {
       name: 'Textarea',
