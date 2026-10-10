@@ -30,12 +30,13 @@ export function publicProps(api: { children?: PropNode[] }, name: string): PropN
     if (type.type !== 'intersection' && type.type !== 'union') return [];
     const branches: PropNode[][] = type.types.map((entry: Record<string, any>) => properties(entry, seen));
     const names = new Set(branches.flatMap((branch) => branch.map((node) => node.name)));
-    return [...names].map((name) => {
+    return [...names].flatMap((name) => {
       const matches = branches.map((branch) => branch.find((node) => node.name === name));
       const present = matches.filter((node): node is PropNode => !!node);
       const types = present.flatMap((node) => node.type?.type === 'union' ? node.type.types : node.type ? [node.type] : []).filter((entry) => entry.type !== 'intrinsic' || entry.name !== 'never');
       const unique = [...new Map(types.map((entry) => [JSON.stringify(entry), entry])).values()];
-      return {
+      if (!unique.length) return [];
+      return [{
         ...present[0],
         comment: present.find((node) => node.comment)?.comment,
         flags: {
@@ -43,7 +44,7 @@ export function publicProps(api: { children?: PropNode[] }, name: string): PropN
           isOptional: type.type === 'union' ? matches.some((node) => !node || node.flags.isOptional) : present.every((node) => node.flags.isOptional),
         },
         type: unique.length === 1 ? unique[0] : { type: 'union', types: unique },
-      };
+      }];
     });
   }
   const result = target.children ?? properties(target.type, new Set([target.id]));

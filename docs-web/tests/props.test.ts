@@ -28,6 +28,7 @@ test('intersection overrides preserve required public fields and skip never bran
   const props = publicProps({ children: [alias] }, 'Props');
   expect(props.find((node) => node.name === 'value')?.flags).toEqual({ isOptional: false, isExternal: false });
   expect(props.find((node) => node.name === 'value')?.type).toEqual({ type: 'intrinsic', name: 'string' });
+  expect(props.some((node) => node.name === 'ignored')).toBe(false);
 });
 
 test('missing and cyclic declarations fail with a useful diagnostic', () => {
