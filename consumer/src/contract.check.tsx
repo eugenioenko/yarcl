@@ -1,3 +1,4 @@
+import { Stepper, type StepperItem } from '@yarcl/react';
 import { SplitPane } from '@yarcl/react';
 import { TreeView, type TreeViewItem } from '@yarcl/react';
 import { createComponent } from '@yarcl/react';
@@ -908,3 +909,27 @@ export const treeContract = <>
 <SplitPane primaryLabel="Files" primary="Files" secondary="Document" orientation="diagonal" />;
 // @ts-expect-error Pane size is a percentage number.
 <SplitPane primaryLabel="Files" primary="Files" secondary="Document" value="30%" />;
+
+const stepperItems = [{ id: 'details', label: 'Details', completed: true }, { id: 'payment', label: 'Payment', description: 'Your card' }, { id: 'review', label: 'Review', disabled: true }] as const satisfies readonly StepperItem[];
+<Stepper aria-label="Checkout" items={stepperItems} value="payment" defaultValue="details" onValueChange={(id: 'details' | 'payment' | 'review') => void id}
+  orientation="vertical" size="sm" color="brand" radius="md" gap={{ base: 'normal', lg: 'normal' }} readOnly disabled
+  ref={(element: HTMLOListElement | null) => { element?.focus(); }} data-test="stepper" />;
+<Stepper aria-label="Complete checkout" items={stepperItems} value={null} />;
+// @ts-expect-error A stepper needs an accessible name.
+<Stepper items={stepperItems} />;
+// @ts-expect-error Current identifiers are inferred from the items.
+<Stepper aria-label="Checkout" items={stepperItems} value="unknown-stage" />;
+// @ts-expect-error Initial identifiers are inferred from the items.
+<Stepper aria-label="Checkout" items={stepperItems} defaultValue="unknown-stage" />;
+// @ts-expect-error Size keys come from this consumer's config.
+<Stepper aria-label="Checkout" items={stepperItems} size="unknown-size" />;
+// @ts-expect-error Color keys come from this consumer's config.
+<Stepper aria-label="Checkout" items={stepperItems} color="unknown-color" />;
+// @ts-expect-error Radius keys come from this consumer's config.
+<Stepper aria-label="Checkout" items={stepperItems} radius="unknown-radius" />;
+// @ts-expect-error Spacing keys come from this consumer's config.
+<Stepper aria-label="Checkout" items={stepperItems} gap={{ lg: 'unknown-gap' }} />;
+// @ts-expect-error Breakpoints come from this consumer's config.
+<Stepper aria-label="Checkout" items={stepperItems} gap={{ desktop: 'normal' }} />;
+// @ts-expect-error Step markers always follow the item order.
+<Stepper aria-label="Checkout" items={stepperItems} start={2} />;

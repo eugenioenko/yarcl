@@ -1,0 +1,103 @@
+---
+title: Stepper
+description: Show ordered progress through typed current, completed and disabled stages.
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { StepperDemo } from '@/demos/stepper';
+
+```tsx
+import { Stepper, type StepperItem } from '@yarcl/react';
+```
+
+<Preview>
+  <StepperDemo client:visible />
+</Preview>
+
+## Stages and current progress
+
+Supply a named sequence of stages. Each `id` must be unique within that stepper. A const array infers valid identifiers for current state and callbacks, so unknown IDs produce a type error. Duplicate IDs throw at runtime.
+
+```tsx
+const stages = [
+  { id: 'details', label: 'Details', completed: true },
+  { id: 'payment', label: 'Payment', description: 'Choose your payment method' },
+  { id: 'review', label: 'Review', disabled: true },
+] as const satisfies readonly StepperItem[];
+
+<Stepper aria-label="Checkout" items={stages} defaultValue="payment"
+  onValueChange={(stage) => showStage(stage)} />
+```
+
+An uncontrolled stepper starts at its first enabled stage. Pass `defaultValue` for another initial stage. `null` represents no current stage, for example before starting or after completing the entire process. Changing `defaultValue` after mounting does not reset progress.
+
+Labels and descriptions can include inline markup, but should contain no interactive content. A button's accessible name is its label; its supporting description and completion status are announced separately. Step numbers follow the item order.
+
+## Controlled state and completion
+
+Own the current stage with `value` and `onValueChange`. Controlled components report requests and wait for your next prop update.
+
+```tsx
+type Stage = 'details' | 'payment' | 'review';
+const [stage, setStage] = useState<Stage | null>('payment');
+
+<Stepper aria-label="Checkout" items={stages}
+  value={stage} onValueChange={setStage} />
+```
+
+`completed` is explicit on each item. It is independent of order and current state: returning to a completed stage does not erase completion, and moving ahead does not mark previous stages complete. Your application validates and completes its own stages. The stepper only displays progress and requests navigation; render forms or content alongside it.
+
+The current stage uses `aria-current="step"`. Completed stages show a check mark and expose translated completion text from `labels.stepCompleted`, defaulting to "Completed". A stage can be both current and completed. Disabled stages remain visible, use native disabled buttons, and are skipped during keyboard focus movement.
+
+Removing the current stage leaves no current marker until your state supplies an available ID. Focus recovers to an enabled stage when its item is removed or disabled. Updating items elsewhere does not steal focus from another control.
+
+## Read-only progress
+
+Use `readOnly` when a separate form or navigation flow controls progress. This renders a static ordered list with no step buttons. Current, completed and disabled information remains available to assistive technology.
+
+```tsx
+<Stepper aria-label="Application status" readOnly value="review"
+  items={[
+    { id: 'submitted', label: 'Submitted', completed: true },
+    { id: 'review', label: 'Under review' },
+    { id: 'decision', label: 'Decision pending' },
+  ]} />
+```
+
+`disabled` prevents all interactive activation and removes every step button from the tab order. Switching a focused interactive stepper to static progress moves focus to its named list rather than losing the user's location. An empty interactive sequence remains named and keyboard discoverable.
+
+## Orientation and keyboard
+
+The default arrangement is horizontal. Set `orientation="vertical"` for a narrow sidebar or a detailed sequence with longer descriptions. Labels wrap within their available space.
+
+| Key | Action |
+| --- | --- |
+| Left / Right | Focus previous / next enabled horizontal stage, mirrored in RTL |
+| Up / Down | Focus previous / next enabled vertical stage |
+| Home / End | Focus first / last enabled stage |
+| Enter / Space | Activate the focused stage |
+| Tab | Enter at the current or last focused enabled stage, then leave the stepper |
+
+Focus movement does not change progress, and arrows stop at the edges. Native click and keyboard handlers run first; `preventDefault()` cancels activation or navigation. Native button behavior supplies Enter and Space activation. Stepper uses a named ordered list and the standard [current step state](https://www.w3.org/TR/wai-aria-1.2/#aria-current). Its explicit list role preserves those semantics when custom marker styling is applied.
+
+## Styling, spacing and language
+
+`size`, `radius` and `color` are typed consumer config keys. `gap` accepts a spacing key or a mobile-first breakpoint map. Component defaults, allowed sizes and size overrides work as for other sized controls.
+
+```tsx
+<Stepper aria-label="Checkout" items={stages}
+  gap={{ base: 'sm', lg: 'lg' }} />
+```
+
+Use the spacing names and breakpoints in your own config. Size controls indicator dimensions, typography and internal spacing; radius shapes indicators and buttons; color marks current and completed stages. Stepper renders classes with no inline token styles. The shared focus ring covers step buttons and the list when programmatically focused.
+
+Runtime themes preserve progress, focus and DOM. Changing the label catalog updates completion copy immediately. Translate `labels.stepCompleted` by spreading the full default catalog, as described in [labels and languages](/configuration/labels/).
+
+Native attributes, event handlers, `className`, `style` and React 19 `ref` reach the root `ol`. Style each entry through `data-part="item"`, or use the item state attributes `data-current`, `data-completed` and `data-disabled`.
+
+## Props
+
+<Props of="StepperProps" />

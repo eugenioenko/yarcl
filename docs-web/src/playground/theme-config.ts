@@ -64,6 +64,7 @@ const componentProps = {
   Accordion: ['size', 'radius', 'color'], Table: ['density', 'radius'],
   TreeView: ['size', 'radius', 'color'],
   SplitPane: ['size', 'radius', 'color'],
+  Stepper: ['size', 'radius', 'color', 'gap'],
   AppLayout: ['padding'], NavSection: ['gap', 'textStyle'], Stack: ['gap'], Grid: ['gap'], Inline: ['gap'], Text: ['textStyle', 'color'],
   Label: ['textStyle', 'color', 'variant', 'size', 'radius'], Link: ['color'],
   Breadcrumb: ['textStyle', 'color'], Spinner: ['size', 'color'], Skeleton: ['size', 'radius'],
