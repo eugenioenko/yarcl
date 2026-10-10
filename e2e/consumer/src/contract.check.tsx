@@ -1,6 +1,6 @@
 import { createComponent } from '@yarcl/react';
 import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
-import { Accordion, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, AppLayout, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
 
@@ -475,3 +475,19 @@ defineConfig({ ...config, components: optionalInvalidSlot });
 <NavSection title="Workspace" textStyle="missing" />;
 // @ts-expect-error collapse is boolean
 <NavSection title="Workspace" collapsed="yes" />;
+
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" navigation={<NavSection title="Work"><NavItem href="/projects">Projects</NavItem></NavSection>} navbar={<Text>Acme</Text>} footer={<Text>Help</Text>} padding="4" collapsed menuLabel="Open navigation" closeLabel="Close navigation" skipLabel="Skip to content" navigationOpen={false} defaultNavigationOpen={false} onNavigationOpenChange={(open) => open} mainAs="section" mainProps={{ ref: (element) => { element?.focus(); }, id: 'workspace-content' }}>Content</AppLayout>;
+// @ts-expect-error unknown breakpoint key
+<AppLayout desktopBreakpoint="missing" sidebarWidth="sidebar" navigationLabel="Workspace" navigation={null} />;
+// @ts-expect-error unknown width key
+<AppLayout desktopBreakpoint="lg" sidebarWidth="missing" navigationLabel="Workspace" navigation={null} />;
+// @ts-expect-error unknown padding token
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" navigation={null} padding="missing" />;
+// @ts-expect-error navigation requires an accessible name
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigation={null} />;
+// @ts-expect-error mainAs preserves content semantics
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" navigation={null} mainAs="button" />;
+// @ts-expect-error open state is boolean
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" navigation={null} navigationOpen="yes" />;
+// @ts-expect-error component padding defaults reference spacing tokens
+defineConfig({ ...config, components: { AppLayout: { padding: 'missing' } } });

@@ -56,6 +56,7 @@ Shared token groups generate one class per key. Local variant maps generate one 
 | `yarcl-gap-{key}`, `yarcl-padding-{key}` | `--yarcl-component-gap`, `--yarcl-component-padding` |
 | `yarcl-shadow-{key}` | `box-shadow` |
 | `yarcl-density-{key}` | table cell padding and font size |
+| `yarcl-app-width-{key}` | `--yarcl-app-width`, used by [AppLayout](/components/layout/app-layout/) |
 | `yarcl-modal-size-{key}` | `--yarcl-modal-width` |
 | `yarcl-type-{key}` | font family, size, weight, line height, letter spacing |
 

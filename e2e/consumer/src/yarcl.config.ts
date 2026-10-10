@@ -82,6 +82,7 @@ export default defineConfig({
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '3px', color: 'clay' },
   components: {
+    AppLayout: { padding: "4" },
     NavSection: { gap: "2", textStyle: "label" },
     Card: { slots: { body: { padding: '2' } } },
     Table: { slots: { header: { background: 'tint', textStyle: 'label' } } },

@@ -45,6 +45,7 @@ import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
+import { AppLayoutDemo } from './AppLayoutDemo';
 import { OverlaysDemo } from './OverlaysDemo';
 import { ThemeDemo } from './ThemeDemo';
 import { PlusIcon, SearchIcon } from './icons';
@@ -103,6 +104,7 @@ export function App() {
   const reference = new URLSearchParams(location.search).get('page') === 'reference';
 
   if (new URLSearchParams(location.search).get('page') === 'themes') return <ThemeDemo />;
+  if (new URLSearchParams(location.search).get('page') === 'layout') return <AppLayoutDemo />;
 
   return (
     <Stack as="main" gap="loose" className="page yarcl-root">
@@ -114,6 +116,7 @@ export function App() {
           <Link href={reference ? '?' : '?page=reference'} underline="hover">
             {reference ? 'Component demo' : 'Design reference'}
           </Link>
+          <Link href="?page=layout" underline="hover">App layout</Link>
           <Link href="?page=themes" underline="hover">Bundled themes</Link>
           {(['light dark', 'light', 'dark'] as Scheme[]).map((s) => (
             <Button

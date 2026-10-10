@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import {
   Alert,
+  AppLayout,
+  NavItem,
+  NavSection,
   Avatar,
   Badge,
   Breadcrumb,
@@ -12,7 +15,6 @@ import {
   CommandPalette,
   DatePicker,
   Dialog,
-  Drawer,
   Field,
   Heading,
   Grid,
@@ -46,7 +48,6 @@ import {
   HomeIcon,
   InfoIcon,
   InvoiceIcon,
-  MenuIcon,
   PlusIcon,
   SearchIcon,
   SettingsIcon,
@@ -91,21 +92,14 @@ const countries = ['Argentina', 'Canada', 'France', 'Germany', 'Japan', 'Portuga
 
 function Navigation({ active, onSelect }: { active: string; onSelect: (id: string) => void }) {
   return (
-    <Stack as="nav" gap="xs" aria-label="Main">
+    <NavSection title="Workspace" gap="xs">
       {nav.map((item) => (
-        <Button
-          key={item.id}
-          variant={item.id === active ? 'soft' : 'ghost'}
-          color={item.id === active ? 'primary' : 'neutral'}
-          className="pg-nav-item"
-          aria-current={item.id === active ? 'page' : undefined}
-          onClick={() => onSelect(item.id)}
-        >
-          {item.icon}
+        <NavItem key={item.id} href={`#${item.id}`} icon={item.icon} active={item.id === active}
+          onClick={(event) => { event.preventDefault(); onSelect(item.id); }}>
           {item.label}
-        </Button>
+        </NavItem>
       ))}
-    </Stack>
+    </NavSection>
   );
 }
 
@@ -209,20 +203,12 @@ export function Dashboard() {
   const [range, setRange] = useState<string | null>('30d');
 
   return (
-    <div className="pg-shell">
-      <header className="pg-navbar">
+    <AppLayout className="pg-shell" desktopBreakpoint="lg" sidebarWidth="sidebar"
+      navigationLabel="Acme navigation" menuLabel="Open navigation" skipLabel="Skip to main content"
+      padding="md" mainProps={{ className: 'pg-main' }}
+      footer={<Text textStyle="caption" muted>Acme workspace</Text>}
+      navbar={<>
         <Inline gap="sm" wrap={false}>
-          <Drawer
-            side="left"
-            title="Acme"
-            trigger={
-              <IconButton aria-label="Open navigation" variant="ghost" color="neutral" className="pg-menu-button">
-                <MenuIcon />
-              </IconButton>
-            }
-          >
-            <Navigation active={active} onSelect={setActive} />
-          </Drawer>
           <span className="pg-logo" aria-hidden="true" />
           <Text textStyle="subheading">Acme</Text>
         </Inline>
@@ -267,9 +253,8 @@ export function Dashboard() {
             </Menu.Content>
           </Menu>
         </Inline>
-      </header>
-
-      <aside className="pg-sidebar">
+      </>}
+      navigation={<>
         <Navigation active={active} onSelect={setActive} />
         <Card padding="sm" className="pg-upgrade">
           <Stack gap="xs">
@@ -282,9 +267,8 @@ export function Dashboard() {
             </Button>
           </Stack>
         </Card>
-      </aside>
-
-      <main className="pg-main">
+      </>}
+    >
         <Stack gap="lg">
           <Inline justify="between" align="end">
             <Stack gap="xs">
@@ -454,7 +438,6 @@ export function Dashboard() {
             </Card>
           </div>
         </Stack>
-      </main>
-    </div>
+    </AppLayout>
   );
 }

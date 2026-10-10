@@ -44,6 +44,8 @@ export { Heading } from './components/Heading';
 export type { HeadingProps } from './components/Heading';
 export { Link } from './components/Link';
 export type { LinkProps } from './components/Link';
+export { AppLayout } from './components/AppLayout';
+export type { AppLayoutProps } from './components/AppLayout';
 export { NavSection } from './components/NavSection';
 export type { NavSectionProps } from './components/NavSection';
 export { NavItem } from './components/NavItem';
@@ -146,6 +148,8 @@ export type {
   TextStyle,
   Density,
   ModalSize,
+  Width,
+  Breakpoint,
   Align,
   Justify,
   TokenProps,

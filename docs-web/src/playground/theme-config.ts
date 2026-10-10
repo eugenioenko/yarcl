@@ -62,7 +62,7 @@ const componentProps = {
   Menu: ['size'], Listbox: [], Tabs: ['size', 'color'],
   Pagination: ['size', 'radius', 'color', 'variant', 'selectedVariant'],
   Accordion: ['size', 'radius', 'color'], Table: ['density', 'radius'],
-  NavSection: ['gap', 'textStyle'], Stack: ['gap'], Grid: ['gap'], Inline: ['gap'], Text: ['textStyle', 'color'],
+  AppLayout: ['padding'], NavSection: ['gap', 'textStyle'], Stack: ['gap'], Grid: ['gap'], Inline: ['gap'], Text: ['textStyle', 'color'],
   Label: ['textStyle', 'color', 'variant', 'size', 'radius'], Link: ['color'],
   Breadcrumb: ['textStyle', 'color'], Spinner: ['size', 'color'], Skeleton: ['size', 'radius'],
   Progress: ['size', 'color', 'radius'], EmptyState: ['color', 'gap', 'padding', 'textStyle'],

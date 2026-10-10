@@ -59,6 +59,23 @@ test('demo drawer', async ({ page }, info) => {
 test('theme playground', async ({ page }, info) => {
   await open(page, info, 'playground');
   await expect(page).toHaveScreenshot('playground.png', { fullPage: true });
+  const footer = page.locator('.yarcl-app-layout > footer');
+  const position = await footer.boundingBox();
+  await page.locator('.yarcl-app-layout-main').evaluate((element) => { element.scrollTop = 500; });
+  expect(await footer.boundingBox()).toEqual(position);
+});
+
+test('playground mobile navigation', async ({ page }, info) => {
+  test.skip(info.project.name.endsWith('-desktop'), 'Mobile drawer is only available below the desktop breakpoint');
+  await open(page, info, 'playground');
+  await page.getByRole('button', { name: 'Open navigation', exact: true }).click();
+  const drawer = page.getByRole('dialog', { name: 'Acme navigation', exact: true });
+  await expect(drawer).toBeVisible();
+  await expect(drawer.getByRole('link', { name: 'Dashboard', exact: true })).toHaveAttribute('aria-current', 'page');
+  await expect(page).toHaveScreenshot('playground-navigation.png');
+  await drawer.getByRole('link', { name: 'Settings', exact: true }).click();
+  await expect(drawer).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Open navigation', exact: true })).toBeFocused();
 });
 
 test('playground dialog under its CSS reset', async ({ page }, info) => {

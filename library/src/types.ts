@@ -19,6 +19,10 @@ export type Shadow = keyof Config['shadows'] & string;
 export type Density = keyof Config['density'] & string;
 /** A key of the consumer's `modalSizes` config. */
 export type ModalSize = keyof Config['modalSizes'] & string;
+/** A key of the consumer's page and container widths. */
+export type Width = keyof Config['widths'] & string;
+/** A key of the consumer's responsive breakpoints. */
+export type Breakpoint = keyof Config['breakpoints'] & string;
 /** A key of the consumer's `typography.styles` config. */
 export type TextStyle = keyof Config['typography']['styles'] & string;
 

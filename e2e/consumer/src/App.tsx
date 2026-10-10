@@ -40,6 +40,7 @@ import {
 import { DesignReference } from '@yarcl/react/reference';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
+import { AppLayoutDemo } from './AppLayoutDemo';
 
 const deliveries = Array.from({ length: 200 }, (_, index) => ({
   id: `delivery-${index}`,
@@ -72,6 +73,8 @@ export function App() {
   const [splitAction, setSplitAction] = useState('Nothing executed');
   const [quantity, setQuantity] = useState<number | null>(1);
 
+  if (params.get('page') === 'layout') return <AppLayoutDemo />;
+
   function applyScheme(next: Scheme) {
     document.documentElement.style.colorScheme = next;
     setScheme(next);
@@ -90,6 +93,7 @@ export function App() {
       <Inline as="header" justify="between">
         <Text textStyle="title">Maison Talla</Text>
         <Inline gap="4">
+          <Link href="?page=layout" underline="hover" color="ink">App layout</Link>
           <Link href="?page=shop" underline="hover" color="ink">
             Shop
           </Link>

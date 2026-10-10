@@ -30,7 +30,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Forms | `Field`, `Label`, `Input`, `NumberInput`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
 | Navigation | `NavItem`, `NavSection` |
 | Typography | `Text`, `Heading`, `Link` |
-| Layout | `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |
+| Layout | `AppLayout`, `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `CommandPalette`, `Toaster`, `toast` |
 | Data display | `Avatar`, `AvatarGroup`, `Tabs`, `Accordion`, `Table`, `Pagination`, `Breadcrumb` |
 | Feedback | `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress`, `EmptyState` |
@@ -42,6 +42,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | `Size`, `Radius`, `Color`, `Variant` | keys of `sizes`, `radii`, `colors`, `variants` in your config |
 | `ComponentSize<'Button'>` | allowed size keys for one component, or every global size when unrestricted |
 | `Spacing`, `Shadow`, `Density`, `TextStyle` | keys of `spacing`, `shadows`, `density`, `typography.styles` |
+| `Width`, `Breakpoint` | keys of `widths` and `breakpoints` |
 | `ModalSize` | keys of `modalSizes` |
 | `TokenProps`, `VariantProps` | the shared `size` / `radius` / `color` and `variant` props |
 | `SelectOption` | `{ value, label, disabled? }` for `Select` and `Combobox` |

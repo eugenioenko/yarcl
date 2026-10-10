@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import {
   Accordion,
+  AppLayout,
   Alert,
   AudioPlayer,
   Avatar,
@@ -343,6 +344,12 @@ const groups: Record<string, Item[]> = {
     },
   ],
   layout: [
+    {
+      name: 'App layout',
+      href: '/components/layout/app-layout/',
+      description: 'A responsive workspace with persistent navigation and scrolling content.',
+      preview: <AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" mainAs="section" padding="xs" style={{ height: '12rem', width: '100%' }} navbar={<Text>Acme</Text>} footer={<Text textStyle="caption">Support</Text>} navigation={<NavItem href="#projects" icon={<SearchIcon />}>Projects</NavItem>}><Text>Projects</Text></AppLayout>,
+    },
     {
       name: 'Stack',
       href: '/components/layout/stack/',

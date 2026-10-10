@@ -300,6 +300,7 @@ export const page = {
     added.push(style);
   },
   viewportSize: () => ({ width: innerWidth, height: innerHeight }),
+  setViewportSize: (viewport: { width: number; height: number }) => typed.resizeViewport(viewport),
   evaluate: async <T, A>(fn: (arg: A) => T | Promise<T>, arg?: A) => fn(arg as A),
 };
 
