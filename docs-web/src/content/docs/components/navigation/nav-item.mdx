@@ -20,7 +20,7 @@ import { NavItem } from '@yarcl/react';
 
 ## Icon rail
 
-Set `collapsed` with an `icon` to show a square icon target. The text stays available to screen readers, and a tooltip appears on hover or keyboard focus. Escape dismisses it. `aria-label`, when supplied, also provides the tooltip text. Items without icons stay expanded.
+Set `collapsed` with an `icon` to show a square icon target. The text stays available to screen readers, and a tooltip appears on hover or keyboard focus. Escape dismisses it. `aria-label`, when supplied, also provides the tooltip text. Items without icons, including false conditional nodes and empty fragments, stay expanded. The tooltip does not repeat the link name as an accessible description; an explicit `aria-describedby` is preserved. If `aria-labelledby` supplies an external name, the tooltip remains a description.
 
 ```tsx
 <NavItem href="/projects" collapsed icon={<ProjectsIcon />}>Projects</NavItem>

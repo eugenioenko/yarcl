@@ -28,6 +28,8 @@ import { Tooltip } from '@yarcl/react';
 - `radius`, `padding` and `textStyle` use keys from your config and can be set in `components.Tooltip`.
 - Keep the content short and plain. Tooltips can't contain interactive elements; use [HoverCard](/components/overlays/hover-card/) or [Popover](/components/overlays/popover/) for that.
 
+When the tooltip repeats the trigger's accessible name, set `describe={false}` to avoid announcing the same text twice. The visible tooltip still appears on hover and keyboard focus, while an explicit description on the trigger is preserved. The default describes the trigger with the tooltip text.
+
 ## Props
 
 <Props of="TooltipProps" />

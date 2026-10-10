@@ -47,7 +47,7 @@ export function testNavigation() {
     await page.getByRole('link', { name: 'Projects', exact: true }).focus();
     await expect.poll(() => document.querySelector('[role="tooltip"]')?.textContent).toBe('Projects');
     const link = page.getByRole('link', { name: 'Projects', exact: true }).resolve()[0];
-    expect(link.getAttribute('aria-describedby')).toBe(document.querySelector('[role="tooltip"]')?.id);
+    expect(link.getAttribute('aria-describedby')).toBeNull();
     await page.keyboard.press('Escape');
     await expect.poll(() => document.querySelector('[role="tooltip"]')).toBeNull();
     expect(document.activeElement).toBe(link);
@@ -77,6 +77,28 @@ export function testNavigation() {
     const screen = await render(<NavItem href="#help" collapsed>Help</NavItem>);
     expect(screen.container.querySelector('.yarcl-visually-hidden')).toBeNull();
     expect(screen.container.querySelector('.yarcl-nav-item-collapsed')).toBeNull();
+  });
+
+  test.each([false, true, '', [], [null, false], <></>])('keeps labels visible for an empty icon %s', async (icon) => {
+    const screen = await render(<NavItem href="#help" collapsed icon={icon}>Help</NavItem>);
+    expect(screen.container.querySelector('.yarcl-visually-hidden')).toBeNull();
+    expect(screen.container.querySelector('.yarcl-nav-item-icon')).toBeNull();
+  });
+
+  test('preserves a custom description without repeating the tooltip label', async () => {
+    const screen = await render(<><span id="project-hint">Your team's work</span><NavItem href="#projects" collapsed icon={icon} aria-describedby="project-hint">Projects</NavItem></>);
+    await page.keyboard.press('Tab');
+    await page.getByRole('link', { name: 'Projects', exact: true }).focus();
+    await expect.poll(() => document.querySelector('[role="tooltip"]')?.textContent).toBe('Projects');
+    expect(screen.container.querySelector('a')?.getAttribute('aria-describedby')).toBe('project-hint');
+  });
+
+  test('keeps a tooltip description when an external label provides a different name', async () => {
+    const screen = await render(<><span id="external-name">Team workspace</span><NavItem href="#projects" collapsed icon={icon} aria-labelledby="external-name">Projects</NavItem></>);
+    await page.keyboard.press('Tab');
+    await page.getByRole('link', { name: 'Team workspace', exact: true }).focus();
+    await expect.poll(() => document.querySelector('[role="tooltip"]')?.textContent).toBe('Projects');
+    expect(screen.container.querySelector('a')?.getAttribute('aria-describedby')).toBe(document.querySelector('[role="tooltip"]')?.id);
   });
 
   test('names sections independently and inherits collapse with explicit item overrides', async () => {

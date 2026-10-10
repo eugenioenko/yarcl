@@ -20,6 +20,8 @@ import type { Radius, Spacing, TextStyle } from '../types';
 export interface TooltipProps {
   /** Short text describing the trigger. Keep it plain; tooltips can't contain interactive content. */
   content: ReactNode;
+  /** Adds the tooltip as an accessible description. Disable when it repeats the trigger's name. @default true */
+  describe?: boolean;
   /** A single focusable element, e.g. an {@link IconButton}. */
   children: ReactElement;
   /**
@@ -59,7 +61,7 @@ export interface TooltipProps {
  * </Tooltip>
  * ```
  */
-export function Tooltip({ content, children, placement = 'top', delay, radius, padding, textStyle }: TooltipProps) {
+export function Tooltip({ content, describe = true, children, placement = 'top', delay, radius, padding, textStyle }: TooltipProps) {
   const config = useConfig();
   const own = useDefaults('Tooltip');
   const [open, setOpen] = useState(false);
@@ -76,7 +78,7 @@ export function Tooltip({ content, children, placement = 'top', delay, radius, p
     useHover(context, { move: false, delay: { open: delay ?? config.timing.tooltipDelay, close: 0 } }),
     useFocus(context),
     useDismiss(context),
-    useRole(context, { role: 'tooltip' }),
+    useRole(context, { role: 'tooltip', enabled: describe }),
   ]);
   const trigger = useTrigger(children, refs.setReference, getReferenceProps);
 
@@ -86,6 +88,7 @@ export function Tooltip({ content, children, placement = 'top', delay, radius, p
       {open && (
         <FloatingPortal>
           <div
+            role="tooltip"
             ref={refs.setFloating}
             style={floatingStyles}
             className={cx(

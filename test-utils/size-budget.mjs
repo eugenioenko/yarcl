@@ -25,7 +25,7 @@ const entries = {
   'yarcl CLI': 'cli.js',
 };
 const budgets = {
-  '@yarcl/react': { js: 32.45 * 1024, css: 8.35 * 1024 },
+  '@yarcl/react': { js: 32.6 * 1024, css: 8.35 * 1024 },
   '@yarcl/react/define': { js: 0.9 * 1024, css: 0 },
   '@yarcl/react/defaults': { js: 2.6 * 1024, css: 0 },
   '@yarcl/react/vite': { js: 8.95 * 1024, css: 0 },
