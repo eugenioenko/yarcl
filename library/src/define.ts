@@ -245,7 +245,7 @@ export interface YarclShape {
   modalSizes: Record<string, string>;
   /** Page and container widths, emitted as `--yarcl-width-{key}`. */
   widths: Record<string, string>;
-  /** Named media-query thresholds. Use as `@media (--yarcl-max-{key})` or `@media (--yarcl-min-{key})` in CSS processed by the yarcl plugin. */
+  /** Named viewport thresholds in ascending declaration order. Use as `@media (--yarcl-min-{key})` or `@media (--yarcl-max-{key})` in plugin-processed CSS. The name `base` is reserved for responsive props. */
   breakpoints: Record<string, string>;
   /** Font files, font families, stable font roles, named text styles and heading levels. */
   typography: {
@@ -470,7 +470,7 @@ type Checks<T extends YarclShape> = {
   density: KeyCheck<T['density']>;
   modalSizes: KeyCheck<T['modalSizes']>;
   widths: KeyCheck<T['widths']>;
-  breakpoints: KeyCheck<T['breakpoints']>;
+  breakpoints: KeyCheck<T['breakpoints']> & { base?: { error: 'The breakpoint key "base" is reserved for responsive defaults' } };
   typography: {
     families: KeyCheck<T['typography']['families']>;
     fonts?: Record<'body' | 'heading' | 'mono', keyof T['typography']['families']>;

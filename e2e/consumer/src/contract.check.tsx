@@ -1,6 +1,6 @@
 import { createComponent } from '@yarcl/react';
 import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
-import { Accordion, AppLayout, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast } from '@yarcl/react';
+import { Accordion, AppLayout, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast, HoverCard, Popover, Toaster, type Responsive, type Spacing } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
 
@@ -491,3 +491,42 @@ defineConfig({ ...config, components: optionalInvalidSlot });
 <AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" navigation={null} navigationOpen="yes" />;
 // @ts-expect-error component padding defaults reference spacing tokens
 defineConfig({ ...config, components: { AppLayout: { padding: 'missing' } } });
+
+const responsiveSpacing: Responsive<Spacing> = { base: '2', md: '8' } as const;
+// @ts-expect-error only configured breakpoint names are accepted
+const invalidBreakpoint: Responsive<Spacing> = { desktop: '2' };
+// @ts-expect-error responsive values must be configured spacing tokens
+const invalidResponsiveToken: Responsive<Spacing> = { lg: 'missing' };
+void [invalidBreakpoint, invalidResponsiveToken];
+
+export const responsiveContract = <>
+  <Stack gap={{ base: '2', studio: '8' }} />
+  <Stack gap={responsiveSpacing} align={{ base: 'stretch', lg: 'start' }} justify={{ md: 'between' }} />
+  <Inline gap={{ base: '2', md: '8' }} align={{ lg: 'end' }} wrap={{ base: false, lg: true }} />
+  <Grid columns={{ base: 1, md: 2, lg: '12rem 1fr' }} gap={responsiveSpacing} />
+  <Card padding={responsiveSpacing} />
+  <Alert gap={responsiveSpacing} padding={responsiveSpacing}>Saved</Alert>
+  <EmptyState title="No results" gap={responsiveSpacing} padding={responsiveSpacing} />
+  <NavSection title="Work" gap={responsiveSpacing}><NavItem href="/">Home</NavItem></NavSection>
+  <AppLayout navigation={<NavItem href="/">Home</NavItem>} navigationLabel="Work" sidebarWidth="sidebar" desktopBreakpoint="lg" padding={responsiveSpacing}>Content</AppLayout>
+  <Tooltip content="Hint" padding={responsiveSpacing}><Button>Help</Button></Tooltip>
+  <HoverCard content="Details" padding={responsiveSpacing}><Button>Details</Button></HoverCard>
+  <Popover><Popover.Trigger><Button>Open</Button></Popover.Trigger><Popover.Content padding={responsiveSpacing}>Details</Popover.Content></Popover>
+  <Toaster />
+  {/* @ts-expect-error unknown responsive breakpoint */}
+  <Stack gap={{ desktop: '2' }} />
+  {/* @ts-expect-error unknown spacing token */}
+  <Card padding={{ base: 'missing' }} />
+  {/* @ts-expect-error invalid responsive alignment */}
+  <Inline align={{ lg: 'middle' }} />
+  {/* @ts-expect-error invalid responsive distribution */}
+  <Stack justify={{ md: 'around' }} />
+  {/* @ts-expect-error wrapping accepts booleans */}
+  <Inline wrap={{ lg: 'yes' }} />
+  {/* @ts-expect-error column counts accept numbers or CSS track strings */}
+  <Grid columns={{ lg: false }} />
+  {/* @ts-expect-error unknown responsive breakpoint */}
+  <Grid columns={{ desktop: 3 }} />
+</>;
+
+toast({ title: 'Saved', gap: responsiveSpacing, padding: responsiveSpacing });

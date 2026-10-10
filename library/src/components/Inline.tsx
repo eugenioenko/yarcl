@@ -1,4 +1,5 @@
-import { cx, gapClass } from '../classes';
+import { alignClass, cx, gapClass, justifyClass, wrapClass } from '../classes';
+import type { Responsive } from '../types';
 import type { LayoutProps } from './Stack';
 import { useDefaults } from '../runtime';
 
@@ -6,10 +7,10 @@ import { useDefaults } from '../runtime';
 /** Props for {@link Inline}. */
 export interface InlineProps extends LayoutProps {
   /**
-   * Wraps children onto new lines when they don't fit.
+   * Wraps children onto new lines when they don't fit. Accepts a boolean or breakpoint map.
    * @default true
    */
-  wrap?: boolean;
+  wrap?: Responsive<boolean>;
 }
 
 /**
@@ -30,10 +31,10 @@ export function Inline({ as = 'div', gap, align = 'center', justify, wrap = true
     <Tag
       className={cx(
         'yarcl-inline',
-        gapClass(gap ?? own.gap),
-        `yarcl-align-${align}`,
-        justify && `yarcl-justify-${justify}`,
-        !wrap && 'yarcl-inline-nowrap',
+        gapClass(gap ?? own.gap, own.gap),
+        alignClass(align, 'center'),
+        justifyClass(justify),
+        wrapClass(wrap),
         className,
       )}
       {...props}

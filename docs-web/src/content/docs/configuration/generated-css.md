@@ -111,3 +111,7 @@ All library and generated styles use [CSS cascade layers](/configuration/css-lay
 ## Naming
 
 Class names are `yarcl-{component}`, `yarcl-{component}-{element}` and `yarcl-{group}-{key}`. Because modifiers include the group name, a size called `sm` and a radius called `sm` never collide. Keys can contain any character except whitespace; the plugin escapes them in selectors.
+
+## Responsive modifiers
+
+[Responsive props](/configuration/responsive-props/) use generated `min-width` media queries in breakpoint declaration order. Spacing modifiers belong to `yarcl.tokens`; alignment, distribution and wrapping overrides belong to `yarcl.base`. Grid column maps use cumulative custom-property fallbacks so unspecified larger breakpoints keep the last defined tracks. Token-only output omits these component modifiers.

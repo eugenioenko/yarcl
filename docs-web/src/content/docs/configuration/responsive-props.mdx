@@ -1,0 +1,129 @@
+---
+title: Responsive props
+description: Typed breakpoint maps for spacing, layout alignment, wrapping and Grid columns, driven entirely by CSS.
+sidebar:
+  order: 6
+---
+
+import Preview from '@/components/Preview.astro';
+import { ResponsiveDemo } from '@/demos/responsive';
+
+Pass a breakpoint map wherever you need layout to change with the viewport. Both the breakpoint names and spacing values come from your config, so your editor completes them and TypeScript catches unknown names.
+
+```tsx
+import { Button, Card, Grid, Inline, Stack } from '@yarcl/react';
+
+<Stack gap={{ base: 'sm', lg: 'lg' }}>
+  <Grid columns={{ base: 1, md: 2, lg: 4 }} gap={{ base: 'sm', lg: 'md' }}>
+    <Card padding={{ base: 'sm', lg: 'lg' }}>Overview</Card>
+    <Card padding={{ base: 'sm', lg: 'lg' }}>Activity</Card>
+  </Grid>
+  <Inline justify={{ base: 'start', lg: 'end' }} wrap={{ base: true, lg: false }}>
+    <Button variant="outline">Cancel</Button>
+    <Button>Save</Button>
+  </Inline>
+</Stack>
+```
+
+<Preview>
+  <ResponsiveDemo client:visible />
+</Preview>
+
+The preview uses the browser viewport. Resize the browser to cross its breakpoints. Changing only the preview container's width does not activate a viewport media query.
+
+## How values resolve
+
+`base` applies before any matching breakpoint. Each breakpoint is inclusive: its override starts at its configured minimum width and stays active until a later matching override replaces it. A larger breakpoint with no value keeps the previous value.
+
+```tsx
+<Stack gap={{ base: 'sm', md: 'lg' }} />
+```
+
+With the default config, this uses compact spacing below the medium threshold and spacious spacing at that threshold and every larger viewport. You do not need to repeat the same value at later breakpoints.
+
+Breakpoints follow **config declaration order**, regardless of the order of keys in a prop object. Define them from smallest to largest, including when you mix supported CSS units:
+
+```ts
+export default defineConfig({
+  ...defaults,
+  breakpoints: {
+    phone: '400px',
+    tablet: '48rem',
+    desktop: '64rem',
+  },
+});
+```
+
+```tsx
+<Stack gap={{ desktop: 'lg', base: 'sm', tablet: 'md' }} />
+```
+
+The `base` name is reserved and cannot be a config breakpoint. Standard media-query units apply, including the browser's initial font size for `rem` and `em` thresholds. Choose an ascending order whose thresholds make sense for your design system.
+
+## Defaults and omitted values
+
+You can omit `base`. Spacing then uses the component's configured default, followed by the global default. Empty maps and entries with `undefined` also keep the fallback.
+
+```tsx
+// Below the large threshold: components.Grid.gap, then defaults.gap.
+<Grid gap={{ lg: 'lg' }} columns={{ md: 2 }} />
+
+// Below the large threshold: center alignment and wrapping enabled.
+<Inline align={{ lg: 'start' }} wrap={{ lg: false }} />
+```
+
+Grid defaults to one column when the base count is omitted. Stack uses its normal CSS alignment and distribution when no base is supplied. Inline retains its centered cross-axis alignment and wrapping default. Component defaults in the config remain scalar token keys; breakpoint maps belong on component props.
+
+A responsive prop is an explicit override. For example, `Card padding={{ lg: 'lg' }}` disables configured **root slot padding** at every viewport; below the threshold it uses `components.Card.padding`, then `defaults.padding`. Other Card slot settings and the padding on its Header, Body and Footer remain configured independently.
+
+## Supported props
+
+| Component or API | Responsive props |
+| --- | --- |
+| Stack | `gap`, `align`, `justify` |
+| Inline | `gap`, `align`, `justify`, `wrap` |
+| Grid | `gap`, `columns` |
+| Card | `padding` |
+| Alert and EmptyState | `gap`, `padding` |
+| NavSection | `gap` |
+| AppLayout | `padding` |
+| Tooltip and HoverCard | `padding` |
+| Popover.Content | `padding` |
+| `toast(options)` | `gap`, `padding` |
+
+All existing scalar values continue to work. Spacing keeps each component's existing interpretation of its token, including internal spacing ratios used by alerts, tooltips and notifications. Other props, such as `size`, `color` and `variant`, keep their existing scalar APIs.
+
+## Grid tracks
+
+Column maps accept numeric counts or raw CSS track definitions. Numeric values create equal-width columns, with the same normalization as scalar counts. `minItemWidth` takes precedence over the entire `columns` map and keeps its existing auto-fit behavior.
+
+```tsx
+<Grid columns={{ base: 1, md: 2, lg: '16rem minmax(0, 1fr)' }} />
+<Grid columns={{ base: 1, lg: 4 }} minItemWidth="14rem" />
+```
+
+Grid stores caller-supplied track definitions in inline CSS custom properties. Spacing tokens stay in generated classes. A CSP that blocks style attributes requires defining Grid tracks in your own CSS instead. Native `style` overrides, including `gridTemplateColumns`, take precedence.
+
+## Reuse the type
+
+Exported `Responsive<T>` accepts either a scalar `T` or an optional map of `base` and your configured breakpoint names. It works with readonly maps.
+
+```tsx
+import { Stack, type Responsive, type Spacing } from '@yarcl/react';
+
+const sectionGap = { base: 'sm', lg: 'lg' } as const satisfies Responsive<Spacing>;
+
+function Section({ gap }: { gap?: Responsive<Spacing> }) {
+  return <Stack as="section" gap={gap} />;
+}
+```
+
+An unknown breakpoint or token in a map literal is a type error, just as an unknown scalar token is. Wiring `@yarcl/config` through both your [build plugin](/configuration/build-plugins/) and [TypeScript paths](/configuration/typescript/) makes these types reflect your own config.
+
+## Rendering, themes and overrides
+
+Responsive spacing and layout produce classes and generated `min-width` media queries. They do not read the viewport in React, install resize listeners, or replace children. The same classes render on the server; CSS resolves them as soon as the stylesheet loads. Input values, refs, focus and component state survive breakpoint changes.
+
+`applyTheme` regenerates responsive CSS from the active theme's spacing and breakpoints. Keep the keys referenced by your props available in every theme you apply, following the existing theme contract. Themes can change token values and thresholds without a rebuild.
+
+The normal [CSS layer order](/configuration/css-layers/) still applies. Your unlayered CSS overrides responsive declarations; recipes in `yarcl.recipes` also retain their precedence. Breakpoints use viewport width; use your own container queries when a layout needs to respond to its parent instead.

@@ -41,6 +41,7 @@ import { DesignReference } from '@yarcl/react/reference';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
 import { AppLayoutDemo } from './AppLayoutDemo';
+import { ResponsiveDemo } from './ResponsiveDemo';
 
 const deliveries = Array.from({ length: 200 }, (_, index) => ({
   id: `delivery-${index}`,
@@ -73,6 +74,7 @@ export function App() {
   const [splitAction, setSplitAction] = useState('Nothing executed');
   const [quantity, setQuantity] = useState<number | null>(1);
 
+  if (params.get('page') === 'responsive') return <ResponsiveDemo />;
   if (params.get('page') === 'layout') return <AppLayoutDemo />;
 
   function applyScheme(next: Scheme) {
@@ -93,6 +95,7 @@ export function App() {
       <Inline as="header" justify="between">
         <Text textStyle="title">Maison Talla</Text>
         <Inline gap="4">
+          <Link href="?page=responsive" underline="hover">Responsive props</Link>
           <Link href="?page=layout" underline="hover" color="ink">App layout</Link>
           <Link href="?page=shop" underline="hover" color="ink">
             Shop

@@ -1,5 +1,6 @@
 import { activeConfig } from './runtime';
-import type { Color, Density, Radius, Shadow, Size, Spacing, TextStyle } from './types';
+import type { Align, Color, Density, Justify, Radius, Responsive, Shadow, Size, Spacing, TextStyle } from './types';
+import { responsiveClasses } from './responsive';
 import type { ComponentName, YarclShape } from './define';
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
@@ -24,8 +25,11 @@ export function variantClass(variant?: string, component?: ComponentName, soft =
   const local = own && 'variants' in own && own.variants;
   return `yarcl-${local ? `${component}-variant-` : 'variant-'}${key}`;
 }
-export const gapClass = (gap: Spacing = activeConfig().defaults.gap) => `yarcl-gap-${gap}`;
-export const paddingClass = (padding: Spacing = activeConfig().defaults.padding) => `yarcl-padding-${padding}`;
+export const gapClass = (gap?: Responsive<Spacing>, fallback: Spacing = activeConfig().defaults.gap) => responsiveClasses('gap', gap, fallback, (choice) => `yarcl-gap-${choice}`);
+export const paddingClass = (padding?: Responsive<Spacing>, fallback: Spacing = activeConfig().defaults.padding) => responsiveClasses('padding', padding, fallback, (choice) => `yarcl-padding-${choice}`);
+export const alignClass = (align?: Responsive<Align>, fallback?: Align) => responsiveClasses('align', align, fallback, (choice) => `yarcl-align-${choice}`);
+export const justifyClass = (justify?: Responsive<Justify>) => responsiveClasses('justify', justify, undefined, (choice) => `yarcl-justify-${choice}`);
+export const wrapClass = (wrap: Responsive<boolean>) => responsiveClasses('wrap', wrap, true, (choice) => choice ? undefined : 'yarcl-inline-nowrap');
 export const shadowClass = (shadow?: Shadow) => shadow && `yarcl-shadow-${shadow}`;
 export const typeClass = (style: TextStyle) => `yarcl-type-${style}`;
 export const densityClass = (density: Density = activeConfig().defaults.density) => `yarcl-density-${density}`;

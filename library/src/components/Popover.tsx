@@ -13,7 +13,7 @@ import { createContext, useContext, type ComponentProps, type ReactElement, type
 import { cx, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
-import type { Radius, Spacing } from '../types';
+import type { Responsive, Radius, Spacing } from '../types';
 import { useDefaults } from '../runtime';
 
 
@@ -89,10 +89,10 @@ function PopoverTrigger({ children }: PopoverTriggerProps) {
 /** Props for `Popover.Content`. */
 export interface PopoverContentProps extends ComponentProps<'div'> {
   /**
-   * Inner padding, from the `spacing` config.
+   * Inner padding, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Corner radius, from the `radii` config.
    * @default config.defaults.radius
@@ -115,7 +115,7 @@ function PopoverContent({ padding, radius, initialFocus, className, style, ...pr
         <div
           ref={refs.setFloating}
           style={{ ...floatingStyles, ...style }}
-          className={cx('yarcl-floating yarcl-panel yarcl-popover', paddingClass(padding ?? own.padding), radiusClass(radius ?? own.radius), className)}
+          className={cx('yarcl-floating yarcl-panel yarcl-popover', paddingClass(padding ?? own.padding, own.padding), radiusClass(radius ?? own.radius), className)}
           {...getFloatingProps(props)}
         />
       </FloatingFocusManager>

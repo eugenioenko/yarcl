@@ -187,3 +187,17 @@ The consumer's **Bundled themes** view and the full theme playground have screen
 
 - **One config per build.** Two brands in one bundle would need a Provider for the runtime values.
 - **Types are a development-time guarantee.** Keep config changes and deploys in the same build.
+
+### Responsive layout
+
+Spacing, layout alignment and Grid columns accept typed maps of your configured breakpoints. CSS applies them while form state and focus stay in place.
+
+```tsx
+<Stack gap={{ base: 'sm', lg: 'lg' }}>
+  <Grid columns={{ base: 1, md: 2, lg: 4 }}>
+    <Card padding={{ base: 'sm', lg: 'lg' }}>Overview</Card>
+  </Grid>
+</Stack>
+```
+
+See the [responsive props guide](https://yarcl.dev/configuration/responsive-props/) for supported props, defaults and custom breakpoint names.

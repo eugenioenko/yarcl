@@ -317,7 +317,7 @@ export function Dashboard() {
             </Alert>
           )}
 
-          <Grid minItemWidth="12rem">
+          <Grid columns={{ base: 1, sm: 2, lg: 4 }}>
             {stats.map((stat) => (
               <Card key={stat.label} shadow="sm">
                 <Stack gap="xs">

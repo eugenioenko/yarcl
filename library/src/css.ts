@@ -2,6 +2,7 @@ import { contrast, mix, parseHex, readableOn, readableText, toHex } from './colo
 import type { ColorPair, ColorToken, ComponentName, FontFaceToken, SizeToken, VariantToken, YarclShape } from './define';
 import { generateRecipeCss } from './recipe-css';
 import { generateSlotCss } from './slot-css';
+import { generateResponsiveCss } from './responsive-css';
 
 const MIN_CONTRAST = 4.5;
 const LAYERS = '@layer yarcl.tokens, yarcl.base, yarcl.recipes;';
@@ -243,6 +244,7 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
     rules.push(rule(`.yarcl-app-width-${k}`, [['--yarcl-app-width', `var(--yarcl-width-${k})`]]));
   }
   for (const [key, value] of Object.entries(config.breakpoints)) {
+    if (key === 'base') throw new Error('yarcl: breakpoint key "base" is reserved for responsive defaults');
     if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(key)) {
       throw new Error(`yarcl: breakpoint key "${key}" must start with a letter and contain only letters, numbers, hyphens or underscores`);
     }
@@ -363,12 +365,14 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
   );
 
   if (tokensOnly) return `${LAYERS}\n\n@layer yarcl.tokens {\n${[rule(':root', root), ...textRules].join('\n\n')}\n}\n`;
+  const responsive = generateResponsiveCss(config);
   const faces = (config.typography.fontFaces ?? []).map(fontFace);
   const recipes = [...generateSlotCss(config), ...generateRecipeCss(config)];
   return [
     LAYERS,
     ...media,
-    `@layer yarcl.tokens {\n${[...faces, rule(':root', root), ...rules].join('\n\n')}\n}`,
+    `@layer yarcl.tokens {\n${[...faces, rule(':root', root), ...rules, ...responsive.tokens].join('\n\n')}\n}`,
+    ...(responsive.base.length ? [`@layer yarcl.base {\n${responsive.base.join('\n\n')}\n}`] : []),
     ...(recipes.length ? [`@layer yarcl.recipes {\n${recipes.join('\n\n')}\n}`] : []),
   ].join('\n\n') + '\n';
 }

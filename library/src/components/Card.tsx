@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 import { cx, paddingClass, radiusClass, shadowClass } from '../classes';
-import type { Radius, Shadow, Spacing } from '../types';
+import type { Responsive, Radius, Shadow, Spacing } from '../types';
 import { useDefaults } from '../runtime';
 import { useSlotClass } from '../slot-classes';
 
@@ -13,10 +13,10 @@ export interface CardProps extends ComponentProps<'div'> {
    */
   as?: 'div' | 'section' | 'article' | 'aside';
   /**
-   * Inner padding, from the `spacing` config.
+   * Inner padding, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Corner radius, from the `radii` config.
    * @default config.defaults.radius
@@ -45,7 +45,7 @@ function CardRoot({ as = 'div', padding, radius, shadow, className, ...props }: 
   return (
     <Tag
       data-part="root"
-      className={cx('yarcl-card', useSlotClass('Card', 'root', { padding, radius, shadow }), paddingClass(padding ?? own.padding), radiusClass(radius ?? own.radius), shadowClass(shadow ?? own.shadow), className)}
+      className={cx('yarcl-card', useSlotClass('Card', 'root', { padding, radius, shadow }), paddingClass(padding ?? own.padding, own.padding), radiusClass(radius ?? own.radius), shadowClass(shadow ?? own.shadow), className)}
       {...props}
     />
   );

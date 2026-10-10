@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { colorClass, cx, gapClass, paddingClass, radiusClass, softVariantClass, typeClass } from '../classes';
-import type { Color, Radius, Spacing, TextStyle, ComponentVariant } from '../types';
+import type { Responsive, Color, Radius, Spacing, TextStyle, ComponentVariant } from '../types';
 import { useConfig, useDefaults } from '../runtime';
 
 
@@ -28,15 +28,15 @@ export interface AlertProps extends Omit<ComponentProps<'div'>, 'color' | 'title
    */
   radius?: Radius;
   /**
-   * Space between the icon, text, action and dismiss button, from the `spacing` config.
+   * Space between the icon, text, action and dismiss button, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.components.Alert.gap ?? config.defaults.gap
    */
-  gap?: Spacing;
+  gap?: Responsive<Spacing>;
   /**
-   * Inner spacing, from the `spacing` config.
+   * Inner spacing, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.components.Alert.padding ?? config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Typography style, from the `typography.styles` config.
    * @default config.components.Alert.textStyle ?? config.defaults.labelStyle
@@ -91,8 +91,8 @@ export function Alert({
         colorClass(color ?? own.color),
         softVariantClass(variant ?? own.variant, 'Alert'),
         radiusClass(radius ?? own.radius),
-        gapClass(gap ?? own.gap),
-        paddingClass(padding ?? own.padding),
+        gapClass(gap ?? own.gap, own.gap),
+        paddingClass(padding ?? own.padding, own.padding),
         typeClass(textStyle ?? own.textStyle ?? config.defaults.labelStyle),
         className,
       )}

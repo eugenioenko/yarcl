@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { colorClass, cx, gapClass, paddingClass, typeClass } from '../classes';
 import { useConfig, useDefaults } from '../runtime';
-import type { Color, Spacing, TextStyle } from '../types';
+import type { Responsive, Color, Spacing, TextStyle } from '../types';
 import { Heading } from './Heading';
 
 /** Props for {@link EmptyState}. */
@@ -25,15 +25,15 @@ export interface EmptyStateProps extends Omit<ComponentProps<'div'>, 'children' 
    */
   color?: Color;
   /**
-   * Space between content, from the `spacing` config.
+   * Space between content, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.defaults.gap
    */
-  gap?: Spacing;
+  gap?: Responsive<Spacing>;
   /**
-   * Inner spacing, from the `spacing` config.
+   * Inner spacing, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Description typography, from the `typography.styles` config.
    * @default config.defaults.textStyle
@@ -74,8 +74,8 @@ export function EmptyState({
       className={cx(
         'yarcl-empty-state',
         colorClass(color ?? own.color),
-        gapClass(gap ?? own.gap),
-        paddingClass(padding ?? own.padding),
+        gapClass(gap ?? own.gap, own.gap),
+        paddingClass(padding ?? own.padding, own.padding),
         typeClass(textStyle ?? own.textStyle ?? config.defaults.textStyle),
         className,
       )}

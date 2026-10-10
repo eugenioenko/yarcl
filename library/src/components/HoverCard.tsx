@@ -12,7 +12,7 @@ import {
 import { useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
-import type { Radius, Spacing } from '../types';
+import type { Responsive, Radius, Spacing } from '../types';
 import { useConfig, useDefaults } from '../runtime';
 
 
@@ -38,10 +38,10 @@ export interface HoverCardProps {
    */
   closeDelay?: number;
   /**
-   * Inner padding, from the `spacing` config.
+   * Inner padding, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Corner radius, from the `radii` config.
    * @default config.defaults.radius
@@ -96,7 +96,7 @@ export function HoverCard({
           <div
             ref={refs.setFloating}
             style={floatingStyles}
-            className={cx('yarcl-floating yarcl-panel yarcl-hover-card', paddingClass(padding ?? own.padding), radiusClass(radius ?? own.radius))}
+            className={cx('yarcl-floating yarcl-panel yarcl-hover-card', paddingClass(padding ?? own.padding, own.padding), radiusClass(radius ?? own.radius))}
             {...getFloatingProps()}
           >
             {content}

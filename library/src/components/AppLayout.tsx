@@ -4,7 +4,7 @@ import { cx, paddingClass } from '../classes';
 import { useControllable } from '../hooks';
 import { NavigationContext } from '../navigation';
 import { useConfig, useDefaults } from '../runtime';
-import type { Breakpoint, Spacing, Width } from '../types';
+import type { Responsive, Breakpoint, Spacing, Width } from '../types';
 import { IconButton } from './IconButton';
 import { Modal } from './Modal';
 
@@ -26,8 +26,8 @@ export interface AppLayoutProps extends Omit<ComponentProps<'div'>, 'children'> 
   sidebarWidth: Width;
   /** Collapses desktop navigation to an icon rail. Mobile navigation stays expanded. @default false */
   collapsed?: boolean;
-  /** Spacing inside the navbar, navigation, main area and footer. @default config.components.AppLayout.padding ?? config.defaults.padding */
-  padding?: Spacing;
+  /** Spacing inside the navbar, navigation, main area and footer. Accepts a scalar or breakpoint map. @default config.components.AppLayout.padding ?? config.defaults.padding */
+  padding?: Responsive<Spacing>;
   /** Accessible name of the mobile menu button. @default navigationLabel */
   menuLabel?: string;
   /** Accessible name of the mobile drawer's close button. @default config.labels.close */
@@ -110,7 +110,7 @@ export function AppLayout({ navigation, navigationLabel, navbar, footer, childre
   }
 
   return (
-    <div data-part="root" data-desktop={desktop || undefined} data-collapsed={collapsed || undefined} className={cx('yarcl-root yarcl-app-layout', `yarcl-app-width-${sidebarWidth}`, paddingClass(padding ?? own.padding), className)} {...props}>
+    <div data-part="root" data-desktop={desktop || undefined} data-collapsed={collapsed || undefined} className={cx('yarcl-root yarcl-app-layout', `yarcl-app-width-${sidebarWidth}`, paddingClass(padding ?? own.padding, own.padding), className)} {...props}>
       {skipLabel != null && <a className="yarcl-visually-hidden yarcl-app-layout-skip" href={`#${mainId}`} onClick={(event) => { event.preventDefault(); main.current?.focus(); }}>{skipLabel}</a>}
       <header data-part="navbar" className="yarcl-app-layout-navbar">
         <IconButton ref={menu} className="yarcl-app-layout-menu" aria-label={menuLabel ?? navigationLabel} aria-expanded={!desktop && open} aria-controls={navigationId} aria-haspopup="dialog" onClick={() => setOpen(true)}>

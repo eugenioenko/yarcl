@@ -445,3 +445,10 @@ defineConfig({ ...defaults, labels: { close: 'Fermer' } });
 defineConfig({ ...defaults, labels: { ...defaults.labels, missing: 'Unknown' } });
 // @ts-expect-error Label formatters cannot return numbers
 defineConfig({ ...defaults, labels: { ...defaults.labels, page: (page: number) => page } });
+
+
+defineConfig({
+  ...defaults,
+  // @ts-expect-error base is reserved for responsive prop defaults
+  breakpoints: { ...defaults.breakpoints, base: '0px' },
+});
