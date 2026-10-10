@@ -53,7 +53,7 @@ export type { StackProps, LayoutProps, LayoutElement } from './components/Stack'
 export { Inline } from './components/Inline';
 export type { InlineProps } from './components/Inline';
 export { Card } from './components/Card';
-export type { CardProps } from './components/Card';
+export type { CardProps, CardPartProps } from './components/Card';
 export { Divider } from './components/Divider';
 export type { DividerProps } from './components/Divider';
 export { VisuallyHidden } from './components/VisuallyHidden';

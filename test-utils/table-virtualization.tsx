@@ -112,10 +112,11 @@ async function assertCovered(el = wrap()) {
   await settle();
   await expect
     .poll(() => {
-      const header = document.querySelector('thead')!.getBoundingClientRect();
+      const headerBottom = Math.max(...[...document.querySelectorAll('thead th')].map((cell) => cell.getBoundingClientRect().bottom));
       const viewport = el.getBoundingClientRect();
-      const top = Math.max(viewport.top + el.clientTop, header.bottom);
-      const bottom = viewport.top + el.clientTop + el.clientHeight;
+      const body = document.querySelector('tbody')!.getBoundingClientRect();
+      const top = Math.max(viewport.top + el.clientTop, headerBottom, body.top);
+      const bottom = Math.min(viewport.top + el.clientTop + el.clientHeight, body.bottom);
       const visible = rows().filter((row) => {
         const rect = row.getBoundingClientRect();
         return rect.bottom > top && rect.top < bottom;

@@ -30,6 +30,8 @@ export function Dialog(props: DialogProps) {
   const own = useDefaults('Dialog');
   return (
     <Modal
+      slotComponent="Dialog"
+      slotRadiusOverride={props.radius}
       {...props}
       size={props.size ?? (own.size as ModalSize | undefined)}
       radius={props.radius ?? (own.radius === 'size' ? undefined : own.radius)}

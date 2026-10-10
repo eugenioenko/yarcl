@@ -2,6 +2,10 @@ import type { ConfigLabels } from './labels';
 export type { ConfigLabels, FileDropzoneLabels } from './labels';
 import { tokens, type TokenAccessor } from './tokens';
 import type { RecipeChecks, RecipeDefinition } from './recipes';
+import type { ComponentSlotConfig, SlotChecks, SlotComponentName } from './slots';
+
+export { componentSlots } from './slots';
+export type { ComponentSlotConfig, ComponentSlotProps, SlotBackground, SlotBorder, SlotComponentName } from './slots';
 
 export { tokens } from './tokens';
 export type { TokenAccessor, TokenGroup, TokenReference } from './tokens';
@@ -134,6 +138,7 @@ export interface ComponentTokenProps {
   Drawer: 'size';
   CommandPalette: 'size' | 'radius' | 'color';
   Menu: 'size';
+  Listbox: never;
   Tabs: 'size' | 'color';
   Pagination: 'size' | 'radius' | 'color' | 'variant' | 'selectedVariant';
   Accordion: 'size' | 'radius' | 'color';
@@ -170,7 +175,9 @@ type ControlSizeComponentName = Exclude<
 
 type ComponentConfig<C extends ComponentName> = {
   [P in ComponentTokenProps[C]]?: string;
-} & (C extends ControlSizeComponentName
+} & (C extends SlotComponentName
+  ? { /** Token styling for the component's public parts. */ slots?: ComponentSlotConfig<YarclShape, C> }
+  : object) & (C extends ControlSizeComponentName
   ? {
       /** Global size keys this component accepts. All global sizes are accepted when omitted. */
       allowedSizes?: readonly string[];
@@ -303,7 +310,7 @@ export interface YarclShape {
     style?: 'solid' | 'dashed' | 'dotted' | 'double';
   };
   /**
-   * Per-component defaults, variants and sizing, e.g. `{ Button: { radius: 'square', allowedSizes: ['sm', 'md'] } }`.
+   * Per-component defaults, part styles, variants and sizing, e.g. `{ Button: { radius: 'square', allowedSizes: ['sm', 'md'] } }`.
    * Defaults apply when a prop is omitted, before the global `defaults`.
    */
   components?: { [C in ComponentName]?: ComponentConfig<C> };
@@ -403,7 +410,11 @@ type ComponentChecks<T extends YarclShape> = {
                   ? S
                   : keyof T['sizes']
                 : TokenKeys<T>[P]
-          : P extends 'variants'
+          : P extends 'slots'
+            ? C extends SlotComponentName
+              ? SlotChecks<T, C, T['components'][C][P]>
+              : never
+            : P extends 'variants'
             ? C extends VariantComponentName
               ? keyof T['components'][C][P] extends never
                 ? { error: 'Component variants must not be empty' }

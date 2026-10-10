@@ -12,6 +12,7 @@ import { cx, radiusClass, typeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { ModalSize, Radius } from '../types';
 import { useConfig } from '../runtime';
+import { useSlotClass } from '../slot-classes';
 
 /** Props shared by {@link Dialog} and {@link Drawer}. */
 export interface ModalProps {
@@ -118,8 +119,14 @@ export function Modal({
   size,
   className,
   radius,
-}: ModalProps & { className: string; radius?: Radius }) {
+  slotComponent,
+  slotRadiusOverride,
+}: ModalProps & { className: string; radius?: Radius; slotComponent: 'Dialog' | 'Drawer'; slotRadiusOverride?: Radius }) {
   const config = useConfig();
+  const rootSlot = useSlotClass(slotComponent, 'root', { radius: slotRadiusOverride });
+  const headerSlot = useSlotClass(slotComponent, 'header');
+  const bodySlot = useSlotClass(slotComponent, 'body');
+  const footerSlot = useSlotClass(slotComponent, 'footer');
   const [open, setOpen] = useControllable(openProp, defaultOpen, onOpenChange);
   const dialogProps = useModalDialog(open, setOpen, closeOnBackdrop);
   const titleId = useId();
@@ -136,13 +143,14 @@ export function Modal({
         })}
       <dialog
         {...dialogProps}
-        className={cx('yarcl-modal', `yarcl-modal-size-${size ?? config.defaults.modalSize}`, radiusClass(radius), className)}
+        data-part="root"
+        className={cx('yarcl-modal', rootSlot, `yarcl-modal-size-${size ?? config.defaults.modalSize}`, radiusClass(radius), className)}
         aria-labelledby={titleId}
         aria-describedby={description != null ? descriptionId : undefined}
       >
         {open && (
           <div className="yarcl-modal-content">
-            <div className="yarcl-modal-header">
+            <div data-part="header" className={cx('yarcl-modal-header', headerSlot)}>
               <div className="yarcl-modal-heading">
                 <h2 id={titleId} className={cx('yarcl-modal-title', typeClass(config.typography.headings.h2))}>
                   {title}
@@ -157,8 +165,8 @@ export function Modal({
                 <CloseIcon />
               </button>
             </div>
-            {children != null && <div className="yarcl-modal-body">{children}</div>}
-            {footer != null && <div className="yarcl-modal-footer">{footer}</div>}
+            {children != null && <div data-part="body" className={cx('yarcl-modal-body', bodySlot)}>{children}</div>}
+            {footer != null && <div data-part="footer" className={cx('yarcl-modal-footer', footerSlot)}>{footer}</div>}
           </div>
         )}
       </dialog>

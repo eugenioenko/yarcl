@@ -71,6 +71,10 @@ A dialog can open another dialog. Only the topmost one shows a backdrop, so the 
 
 Dialogs center themselves with `margin: auto` rather than relying on the browser's default, so CSS resets like `* { margin: 0 }` don't push them into the corner.
 
+## Part styles
+
+Style the native root and its header, body and footer through [component parts](/configuration/component-slots/). They expose `data-part="root"`, `"header"`, `"body"` and `"footer"`. Configuring a slot does not add missing content sections.
+
 ## Props
 
 <Props of="DialogProps" />

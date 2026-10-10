@@ -28,6 +28,7 @@ import type { Color, Size, TokenProps } from '../types';
 import { Badge, BadgeRemove } from './Badge';
 import type { SelectOption } from './Select';
 import { useLabels, useDefaults } from '../runtime';
+import { useSlotClass } from '../slot-classes';
 
 
 /** Props shared by both forms of {@link ComboboxProps}. */
@@ -140,6 +141,8 @@ interface ListOptions<V extends string> {
 }
 
 function useComboboxList<V extends string>(opts: ListOptions<V>) {
+  const panelSlot = useSlotClass('Listbox', 'panel');
+  const itemSlot = useSlotClass('Listbox', 'item');
   const { options, text, filter, loading, isSelected, isDisabled, onChoose, containerRef } = opts;
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -197,7 +200,8 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
       <div
         ref={refs.setFloating}
         style={floatingStyles}
-        className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(opts.size, 'Combobox'), colorClass(opts.color))}
+        data-part="panel"
+        className={cx(panelSlot, 'yarcl-floating yarcl-panel yarcl-listbox', sizeClass(opts.size, 'Combobox'), colorClass(opts.color))}
         {...getFloatingProps({
           'aria-multiselectable': opts.multiple || undefined,
           onMouseDown: (event: MouseEvent) => event.preventDefault(),
@@ -220,7 +224,8 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
                 }}
                 aria-disabled={isDisabled(option) || undefined}
                 data-active={isActive || undefined}
-                className="yarcl-option"
+                data-part="item"
+                className={cx('yarcl-option', itemSlot)}
                 {...getItemProps({ active: isActive, selected, onClick: () => onChoose(option) })}
               >
                 <span className="yarcl-option-label">{option.label}</span>

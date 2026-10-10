@@ -26,6 +26,6 @@ export interface DrawerProps extends ModalProps {
 export function Drawer({ side = 'right', ...props }: DrawerProps) {
   const own = useDefaults('Drawer');
   return (
-    <Modal {...props} size={props.size ?? (own.size as ModalSize | undefined)} className={`yarcl-drawer yarcl-drawer-${side}`} />
+    <Modal slotComponent="Drawer" {...props} size={props.size ?? (own.size as ModalSize | undefined)} className={`yarcl-drawer yarcl-drawer-${side}`} />
   );
 }

@@ -100,6 +100,10 @@ For fixed mode, pass `rowHeight` instead of `estimateRowHeight`. Rows must all r
 
 `overscan` is a nonnegative integer. Both modes use the table wrapper as their scroll container. Pass `scrollRef` when an ancestor handles scrolling; captions and content before the table are accounted for in the offsets. Use `Table.Body` when every row must be present for printing, browser find or assistive technology traversal.
 
+## Part styles
+
+Configure `root`, `header`, `row` and `cell` through [component parts](/configuration/component-slots/). The root is the scrollable frame; header cells expose `data-part="header"`, body cells expose `"cell"`, and compound rows expose `"row"`. Use `wrapClassName` to scope application CSS to a table frame.
+
 ## Props
 
 ### Table

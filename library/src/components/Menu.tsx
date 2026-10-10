@@ -29,6 +29,7 @@ import { CheckIcon, floatingMiddleware, useTrigger } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, ComponentSize } from '../types';
 import { useDefaults } from '../runtime';
+import { useSlotClass } from '../slot-classes';
 
 
 type MenuContextValue = ReturnType<typeof useMenuState>;
@@ -123,6 +124,7 @@ export interface MenuContentProps extends ComponentProps<'div'> {}
 
 function MenuContent({ className, style, children, ...props }: MenuContentProps) {
   const own = useDefaults('Menu');
+  const panelSlot = useSlotClass('Menu', 'panel');
   const { open, size, refs, floatingStyles, context, getFloatingProps, elementsRef, labelsRef } =
     useMenuContext('Menu.Content');
   if (!open) return null;
@@ -132,7 +134,8 @@ function MenuContent({ className, style, children, ...props }: MenuContentProps)
         <div
           ref={refs.setFloating}
           style={{ ...floatingStyles, ...style }}
-          className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size, 'Menu'), colorClass(), className)}
+          data-part="panel"
+          className={cx(panelSlot, 'yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size, 'Menu'), colorClass(), className)}
           {...getFloatingProps(props)}
         >
           <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
@@ -169,7 +172,8 @@ function MenuItem({ onSelect, onClick, color, textValue, disabled, className, ch
       tabIndex={active ? 0 : -1}
       disabled={disabled}
       data-active={active || undefined}
-      className={cx('yarcl-option', color && cx('yarcl-option-colored', colorClass(color)), className)}
+      data-part="item"
+      className={cx(useSlotClass('Menu', 'item'), 'yarcl-option', color && cx('yarcl-option-colored', colorClass(color)), className)}
       {...getItemProps({
         ...props,
         onClick(event: MouseEvent<HTMLButtonElement>) {

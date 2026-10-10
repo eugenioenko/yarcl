@@ -30,6 +30,20 @@ import { Card } from '@yarcl/react';
   <CardComposedDemo />
 </Preview>
 
+## Named parts
+
+Use optional `Card.Header`, `Card.Body` and `Card.Footer` when the sections should follow your theme’s part styles:
+
+```tsx
+<Card>
+  <Card.Header><Heading level={3}>Plan</Heading></Card.Header>
+  <Card.Body><Text>Monthly billing</Text></Card.Body>
+  <Card.Footer><Button>Choose plan</Button></Card.Footer>
+</Card>
+```
+
+Each part is a div with native props and a regular `ref` prop. Parts expose `data-part="header"`, `"body"` and `"footer"`; the root exposes `"root"`. They have no implicit content or spacing. Configure them through [component parts](/configuration/component-slots/).
+
 ## Props
 
 <Props of="CardProps" />

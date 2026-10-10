@@ -18,6 +18,7 @@ import { CheckIcon, ChevronIcon, floatingMiddleware } from '../floating';
 import { useControllable } from '../hooks';
 import type { TokenProps } from '../types';
 import { useDefaults } from '../runtime';
+import { useSlotClass } from '../slot-classes';
 
 
 /** An option of a {@link Select} or {@link Combobox}. */
@@ -70,6 +71,8 @@ export interface SelectProps<V extends string = string>
  */
 export function Select<V extends string = string>(props: SelectProps<V>) {
   const own = useDefaults('Select');
+  const panelSlot = useSlotClass('Listbox', 'panel');
+  const itemSlot = useSlotClass('Listbox', 'item');
   const {
     options,
     value: valueProp,
@@ -159,7 +162,8 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
             <div
               ref={refs.setFloating}
               style={floatingStyles}
-              className={cx('yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size, 'Select'), colorClass(color ?? own.color))}
+              data-part="panel"
+              className={cx(panelSlot, 'yarcl-floating yarcl-panel yarcl-listbox', sizeClass(size ?? own.size, 'Select'), colorClass(color ?? own.color))}
               {...getFloatingProps()}
             >
               {options.map((option, i) => {
@@ -174,7 +178,8 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
                     tabIndex={isActive ? 0 : -1}
                     aria-disabled={option.disabled || undefined}
                     data-active={isActive || undefined}
-                    className="yarcl-option"
+                    data-part="item"
+                    className={cx('yarcl-option', itemSlot)}
                     {...getItemProps({
                       active: isActive,
                       selected: isSelected,
