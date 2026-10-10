@@ -32,7 +32,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Typography | `Text`, `Heading`, `Link` |
 | Layout | `AppLayout`, `SplitPane`, `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `CommandPalette`, `Toaster`, `toast` |
-| Data display | `Avatar`, `AvatarGroup`, `Tabs`, `Accordion`, `Table`, `Pagination`, `Breadcrumb` |
+| Data display | `Avatar`, `AvatarGroup`, `Tabs`, `Accordion`, `Table` (resizable columns and visibility controls), `Pagination`, `Breadcrumb` |
 | Feedback | `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress`, `EmptyState` |
 
 ## Types

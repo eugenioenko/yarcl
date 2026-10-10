@@ -7,6 +7,7 @@ import {
   cloneElement,
   isValidElement,
   useRef,
+  useId,
   useState,
   Fragment,
   type ComponentProps,
@@ -21,6 +22,7 @@ import type { Density, Radius } from '../types';
 import { useLabels, useConfig, useDefaults } from '../runtime';
 import { useSlotClass } from '../slot-classes';
 import { useMergeRefs } from '@floating-ui/react';
+import { TableColumns, TableColumnVisibility, TableColumnResizer, type TableColumnResizerProps } from './TableColumns';
 
 interface TableContextValue {
   wrapRef: RefObject<HTMLDivElement | null>;
@@ -79,13 +81,22 @@ function TableRoot({
   const own = useDefaults('Table');
   const resolvedDensity = density ?? own.density;
   const wrapRef = useRef<HTMLDivElement>(null);
+  const focused = useRef<HTMLElement | null>(null);
+  useLayoutEffect(() => {
+    if (focused.current && !focused.current.isConnected && document.activeElement === document.body) {
+      focused.current = null;
+      wrapRef.current?.focus();
+    }
+  });
 
   return (
     <TableContext value={{ wrapRef, density: resolvedDensity, stickyHeader: !!stickyHeader, densityOverride: density !== undefined }}>
       <div
         ref={wrapRef}
         data-part="root"
-        tabIndex={stickyHeader ? 0 : undefined}
+        tabIndex={stickyHeader ? 0 : -1}
+        onFocusCapture={(event) => { focused.current = event.target; }}
+        onBlurCapture={(event) => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) focused.current = null; }}
         className={cx(
           'yarcl-table-wrap',
           useSlotClass('Table', 'root', { radius }),
@@ -178,6 +189,8 @@ export interface TableHeaderCellProps extends Omit<ComponentProps<'th'>, 'align'
   onSort?: (direction: 'ascending' | 'descending') => void;
   /** Accessible label for the sort action. */
   sortLabel?: string;
+  /** Optional column-width separator beside the header content or sort button. */
+  resize?: TableColumnResizerProps;
 }
 
 /** Renders a header cell with an optional accessible sort trigger. */
@@ -188,12 +201,26 @@ function TableHeaderCell({
   sortDirection,
   onSort,
   sortLabel,
+  resize,
   className,
   children,
   ...props
 }: TableHeaderCellProps) {
   const cellClass = useTableCellClass();
   const headerClass = useSlotClass('Table', 'header');
+  const resizeId = useId();
+  if (resize) {
+    const headerId = props.id ?? resizeId;
+    return <th data-part="header" scope={scope} aria-sort={sortable ? sortDirection || 'none' : undefined}
+      className={cx(cellClass, headerClass, `yarcl-cell-${align}`, sortable && 'yarcl-table-sortable', 'yarcl-table-resizable', className)} {...props} id={headerId}>
+      <div className={cx('yarcl-table-header-content', sortable && 'yarcl-table-header-sort')}>
+        {sortable ? <button type="button" className="yarcl-table-sort-button" aria-label={sortLabel} onClick={() => onSort?.(sortDirection === 'ascending' ? 'descending' : 'ascending')}>
+          <span>{children}</span><span className="yarcl-table-sort-icon" aria-hidden="true"><SortIcon direction={sortDirection} /></span>
+        </button> : children}
+        <TableColumnResizer aria-controls={headerId} {...resize} />
+      </div>
+    </th>;
+  }
   if (sortable) {
     const ariaSort =
       sortDirection === 'ascending' ? 'ascending' : sortDirection === 'descending' ? 'descending' : 'none';
@@ -725,6 +752,9 @@ function TableVirtualBody<T>({
  * ```
  */
 export const Table = Object.assign(TableRoot, {
+  Columns: TableColumns,
+  ColumnVisibility: TableColumnVisibility,
+  ColumnResizer: TableColumnResizer,
   Head: (props: ComponentProps<'thead'>) => <thead {...props} />,
   Body: (props: ComponentProps<'tbody'>) => <tbody {...props} />,
   VirtualBody: TableVirtualBody,

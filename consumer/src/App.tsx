@@ -46,6 +46,7 @@ import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
 import { ColorPickerDemo } from './ColorPickerDemo';
+import { TableColumnsDemo } from './TableColumnsDemo';
 import { StepperDemo } from './StepperDemo';
 import { SplitPaneDemo } from './SplitPaneDemo';
 import { TreeViewDemo } from './TreeViewDemo';
@@ -106,6 +107,7 @@ export function App() {
     setScheme(next);
   }
 
+  if (new URLSearchParams(location.search).get('page') === 'table-columns') return <main className="page yarcl-root"><TableColumnsDemo /></main>;
   if (new URLSearchParams(location.search).get('page') === 'color-picker') return <main className="page yarcl-root"><ColorPickerDemo /></main>;
   if (new URLSearchParams(location.search).get('page') === 'stepper') return <main className="page yarcl-root"><StepperDemo /></main>;
   if (new URLSearchParams(location.search).get('page') === 'split-pane') return <main className="page yarcl-root"><SplitPaneDemo /></main>;
@@ -127,6 +129,7 @@ export function App() {
           <Link href={reference ? '?' : '?page=reference'} underline="hover">
             {reference ? 'Component demo' : 'Design reference'}
           </Link>
+          <Link href="?page=table-columns" underline="hover">Table controls</Link>
           <Link href="?page=color-picker" underline="hover">Highlight color</Link>
           <Link href="?page=stepper" underline="hover">Checkout progress</Link>
           <Link href="?page=split-pane" underline="hover">Resizable workspace</Link>
@@ -338,6 +341,7 @@ export function App() {
           <Section title="Overlays, tabs, table">
             <OverlaysDemo />
           </Section>
+          <TableColumnsDemo />
 
           <Section title="Accordion">
             <Accordion type="single" defaultValue="shipping" data-testid="faq">

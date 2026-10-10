@@ -117,6 +117,8 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 **Floating**: Tooltip, HoverCard, Popover, Menu
 **Overlays**: Dialog, Drawer, CommandPalette, Toast
 **Data & navigation**: Avatar, AvatarGroup, Tabs, Accordion, Table, Pagination, Breadcrumb
+
+Table includes typed [column resizing and visibility controls](https://yarcl.dev/components/data/table-columns/) through `useTableColumns` and native compound parts.
 **Feedback**: Badge, Alert, Spinner, Skeleton, Progress, EmptyState
 **Reference**: `DesignReference` from `@yarcl/react/reference` renders your whole design system from your config.
 

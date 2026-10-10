@@ -40,6 +40,7 @@ import {
   Stack,
   Switch,
   Table,
+  useTableColumns,
   Tabs,
   Text,
   Textarea,
@@ -125,6 +126,7 @@ export interface DemoYarclProps {
  * Import from `@yarcl/react/demo`.
  */
 export function DemoYarcl({ title = 'yarcl demo' }: DemoYarclProps) {
+  const tableColumns = useTableColumns([{ id: 'status', label: 'Status', width: 140, hideable: false }, { id: 'message', label: 'Message', width: 220, resizable: true, minWidth: 120, maxWidth: 400 }]);
   const componentNames = components.map((component) => component.name).join(',');
 
   return (
@@ -231,13 +233,11 @@ export function DemoYarcl({ title = 'yarcl demo' }: DemoYarclProps) {
             </Accordion.Item>
           </Accordion>
           <Pagination count={5} aria-label="Demo pages" />
-          <Table caption="Demo table">
-            <Table.Body>
-              <Table.Row>
-                <Table.HeaderCell scope="row">Status</Table.HeaderCell>
-                <Table.Cell>Ready</Table.Cell>
-              </Table.Row>
-            </Table.Body>
+          <Table.ColumnVisibility label="Table columns" columns={tableColumns.columns} onVisibilityChange={tableColumns.setVisible} />
+          <Table caption="Demo table" style={tableColumns.tableStyle}>
+            <Table.Columns columns={tableColumns.visibleColumns} />
+            <Table.Head><Table.Row>{tableColumns.visibleColumns.map((column) => <Table.HeaderCell key={column.id} resize={column.id === 'message' ? tableColumns.getResizeProps('message') : undefined}>{column.label}</Table.HeaderCell>)}</Table.Row></Table.Head>
+            <Table.Body><Table.Row>{tableColumns.visibleColumns.map((column) => <Table.Cell key={column.id}>{column.id === 'status' ? 'Ready' : 'Resize this column'}</Table.Cell>)}</Table.Row></Table.Body>
           </Table>
         </Stack>
       </Card>
