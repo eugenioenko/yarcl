@@ -135,7 +135,7 @@ export default defineConfig({
       slots: { root: { borderRadius: yarcl.radii.hairline } },
       variants: {
         emphasis: {
-          subtle: { root: { opacity: 0.8 } },
+          subtle: { root: { fontWeight: 500 } },
           strong: { root: { fontWeight: 700 } },
         },
       },
