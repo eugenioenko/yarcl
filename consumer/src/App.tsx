@@ -45,6 +45,7 @@ import { FeedbackDemo } from './FeedbackDemo';
 import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
+import { SplitPaneDemo } from './SplitPaneDemo';
 import { TreeViewDemo } from './TreeViewDemo';
 import { AppLayoutDemo } from './AppLayoutDemo';
 import { ResponsiveDemo } from './ResponsiveDemo';
@@ -103,6 +104,7 @@ export function App() {
     setScheme(next);
   }
 
+  if (new URLSearchParams(location.search).get('page') === 'split-pane') return <main className="page yarcl-root"><SplitPaneDemo /></main>;
   if (new URLSearchParams(location.search).get('page') === 'tree-view') return <main className="page yarcl-root"><TreeViewDemo /></main>;
   if (new URLSearchParams(location.search).get('page') === 'responsive') return <ResponsiveDemo />;
 
@@ -121,6 +123,7 @@ export function App() {
           <Link href={reference ? '?' : '?page=reference'} underline="hover">
             {reference ? 'Component demo' : 'Design reference'}
           </Link>
+          <Link href="?page=split-pane" underline="hover">Resizable workspace</Link>
           <Link href="?page=tree-view" underline="hover">Project explorer</Link>
           <Link href="?page=responsive" underline="hover">Responsive props</Link>
           <Link href="?page=layout" underline="hover">App layout</Link>
@@ -159,6 +162,7 @@ export function App() {
           </Section>
           <RecipesDemo />
           <TreeViewDemo />
+          <SplitPaneDemo />
           <Section title="Sizes">
             {sizes.map((size) => (
               <Row key={size} label={size}>

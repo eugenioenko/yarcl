@@ -463,3 +463,9 @@ defineConfig({ ...defaults,
   // @ts-expect-error interaction timing is numeric
   timing: { ...defaults.timing, typeaheadTimeout: 'fast' },
 });
+
+defineConfig({ ...defaults, components: { SplitPane: { size: 'sm', radius: 'md', color: 'primary', allowedSizes: ['sm', 'md'] } } });
+defineConfig({ ...defaults, components: {
+  // @ts-expect-error SplitPane only accepts its declared token props
+  SplitPane: { padding: 'md' },
+} });

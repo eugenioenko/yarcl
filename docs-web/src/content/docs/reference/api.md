@@ -30,7 +30,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | Forms | `Field`, `Label`, `Input`, `NumberInput`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider` |
 | Navigation | `NavItem`, `NavSection`, `TreeView` |
 | Typography | `Text`, `Heading`, `Link` |
-| Layout | `AppLayout`, `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |
+| Layout | `AppLayout`, `SplitPane`, `Stack`, `Inline`, `Grid`, `Card`, `Divider`, `VisuallyHidden` |
 | Overlays | `Dialog`, `Drawer`, `Popover`, `Tooltip`, `HoverCard`, `Menu`, `CommandPalette`, `Toaster`, `toast` |
 | Data display | `Avatar`, `AvatarGroup`, `Tabs`, `Accordion`, `Table`, `Pagination`, `Breadcrumb` |
 | Feedback | `Badge`, `Alert`, `Spinner`, `Skeleton`, `Progress`, `EmptyState` |

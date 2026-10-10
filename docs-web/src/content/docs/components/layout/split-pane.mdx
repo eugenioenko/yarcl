@@ -1,0 +1,89 @@
+---
+title: SplitPane
+description: Resize two independently scrollable panes with a pointer or keyboard.
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { SplitPaneDemo } from '@/demos/split-pane';
+
+```tsx
+import { SplitPane } from '@yarcl/react';
+```
+
+<Preview>
+  <SplitPaneDemo client:visible />
+</Preview>
+
+## Two panes
+
+Pass the contents of the first and second panes. The first pane sits at the inline start, or at the top for a vertical arrangement. `primaryLabel` names both that pane and its separator. `secondaryLabel` optionally names the second region.
+
+```tsx
+<SplitPane primaryLabel="Project files" secondaryLabel="Editor"
+  primary={<FileExplorer />} secondary={<Editor />}
+  defaultValue={30} min={20} max={70}
+  style={{ height: '24rem' }} />
+```
+
+Each pane scrolls independently and keeps its content mounted during resizing. Panes have their own tab stops so keyboard users can scroll text-only content. `orientation="horizontal"` places panes side by side, with a vertical separator. `orientation="vertical"` stacks panes with a horizontal separator. Give a vertical layout a definite height, either through your own CSS or the native `style` prop.
+
+The percentage represents the first pane's share of the space remaining after the separator. It defaults to 50, with limits of 10 and 90. Limits must satisfy `0 <= min < max <= 100`; values outside those limits render at the nearest limit. Values and limits must be finite, and keyboard steps must be positive and finite. Invalid inputs throw a useful error.
+
+## Controlled state
+
+Use `defaultValue` for an uncontrolled initial size, or `value` and `onValueChange` to own it. A controlled component reports requests and waits for your prop update.
+
+```tsx
+const [size, setSize] = useState(35);
+
+<SplitPane primaryLabel="Files" primary={<Files />} secondary={<Document />}
+  value={size} onValueChange={setSize}
+  onValueCommit={(size) => saveWorkspaceSize(size)} />
+```
+
+`onValueChange` reports drag movement and keyboard changes. `onValueCommit` reports the last requested size at the end of a completed drag, or after a keyboard change. Canceling a pointer gesture stops resizing without committing. Native pointer and keyboard handlers run first; `preventDefault()` cancels that action. Changing orientation, limits, or `disabled` ends an active drag.
+
+`disabled` prevents resizing and removes the separator from the tab order. Pane content retains its own interaction.
+
+## Minimize and collapse
+
+Enter minimizes the first pane to `min`, then restores its previous size. If the initial value is at the minimum, restoration uses the initial default when it exceeds the minimum, otherwise the midpoint of the allowed range. Set `min={0}` to allow the first pane to collapse completely, or `max={100}` to allow the second pane to collapse. A zero-size pane is hidden from keyboard navigation and accessibility while remaining mounted. Collapsing a focused pane moves focus to the separator; focus elsewhere stays put.
+
+## Additional panes
+
+Nest SplitPane instances to build more complex workspaces. Each owns its separator and constraints, so an inner resize leaves the outer size unchanged.
+
+```tsx
+<SplitPane primaryLabel="Navigation" primary={<Navigation />}
+  secondary={<SplitPane orientation="vertical" primaryLabel="Editor"
+    primary={<Editor />} secondary={<Console />}
+    style={{ height: '100%' }} defaultValue={70} />} />
+```
+
+## Keyboard and accessibility
+
+The focusable separator follows the [WAI-ARIA window splitter pattern](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/). It exposes the current percentage and bounds, the opposite orientation to the pane arrangement, and `aria-controls` pointing to the named first pane.
+
+| Key | Action |
+| --- | --- |
+| Left / Right | Resize side-by-side panes by `step`, mirrored in RTL |
+| Up / Down | Resize vertically stacked panes by `step` |
+| Home / End | Minimum / maximum first-pane size |
+| PageUp / PageDown | Increase / decrease by `largeStep` |
+| Enter | Minimize / restore the first pane |
+| Tab | Move between pane controls and the separator in DOM order |
+
+`step` defaults to one percentage point, and `largeStep` to ten. Pointer resizing is continuous rather than snapped. `formatValue` supplies an optional `aria-valuetext` description. Focus uses the shared config focus ring. The separator handles touch gestures without preventing scrolling inside either pane.
+
+## Styling and themes
+
+`size`, `radius` and `color` are typed consumer config keys. Component defaults, allowed sizes and size overrides work as for other sized controls. Size controls the separator width, radius shapes the panes, and color marks an active or focused separator. Runtime theme changes retain the pane sizes and mounted content.
+
+Only the caller's layout percentages use inline CSS custom properties. Token values stay in generated classes. A strict CSP blocking style attributes needs a different layout mechanism or an appropriate style policy. Use `data-part="primary"`, `data-part="secondary"` and `data-part="separator"` to style individual parts. Native attributes, events, `className`, `style` and `ref` reach the root div.
+
+## Props
+
+<Props of="SplitPaneProps" />

@@ -45,6 +45,7 @@ import {
   ToggleGroup,
   VisuallyHidden,
 } from '@yarcl/react';
+import { SplitPaneDemo } from './split-pane';
 import { TreeViewDemo } from './tree-view';
 import { InfoIcon, PlusIcon, SearchIcon, TrashIcon } from './icons';
 
@@ -346,6 +347,7 @@ const groups: Record<string, Item[]> = {
     },
   ],
   layout: [
+    { name: 'SplitPane', href: '/components/layout/split-pane/', description: 'Resize independently scrollable panes with a pointer or keyboard.', preview: <SplitPaneDemo /> },
     {
       name: 'App layout',
       href: '/components/layout/app-layout/',

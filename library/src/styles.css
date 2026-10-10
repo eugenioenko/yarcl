@@ -57,7 +57,9 @@
     .yarcl-date-picker-nav,
     .yarcl-date-picker-day,
     .yarcl-accordion-trigger,
-    .yarcl-table-wrap
+    .yarcl-table-wrap,
+    .yarcl-split-pane,
+    .yarcl-split-handle
   ):focus-visible {
   outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
   outline-offset: var(--yarcl-focus-offset);
@@ -1015,6 +1017,71 @@ p.yarcl-text {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* SplitPane */
+
+.yarcl-split {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-split-horizontal {
+  grid-template-areas: 'primary handle secondary';
+  grid-template-columns: minmax(0, var(--yarcl-split-primary)) calc(var(--yarcl-px) / 2) minmax(0, var(--yarcl-split-secondary));
+}
+
+.yarcl-split-vertical {
+  grid-template-areas: 'primary' 'handle' 'secondary';
+  grid-template-rows: minmax(0, var(--yarcl-split-primary)) calc(var(--yarcl-px) / 2) minmax(0, var(--yarcl-split-secondary));
+}
+
+.yarcl-split-pane {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  border-radius: var(--yarcl-r);
+}
+
+.yarcl-split-primary { grid-area: primary; }
+.yarcl-split-secondary { grid-area: secondary; }
+
+.yarcl-split-handle {
+  grid-area: handle;
+  position: relative;
+  touch-action: none;
+  user-select: none;
+  cursor: col-resize;
+}
+
+.yarcl-split-vertical > .yarcl-split-handle { cursor: row-resize; }
+
+.yarcl-split-handle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--yarcl-border-width);
+  height: 100%;
+  background: var(--yarcl-neutral-border);
+}
+
+.yarcl-split-vertical > .yarcl-split-handle::after {
+  width: 100%;
+  height: var(--yarcl-border-width);
+}
+
+.yarcl-split-handle:not([aria-disabled='true']):is(:hover, :active, :focus-visible) {
+  background: color-mix(in oklab, var(--yarcl-c) 10%, transparent);
+}
+
+.yarcl-split-handle:not([aria-disabled='true']):is(:hover, :active, :focus-visible)::after {
+  background: var(--yarcl-c);
+}
+
+.yarcl-split-handle[aria-disabled='true'] { cursor: default; }
 
 /* Navigation */
 

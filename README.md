@@ -113,7 +113,7 @@ components: { Button: { radius: 'square' } },   // except buttons: always sharp
 **Controls**: Button, IconButton, ButtonGroup, SplitButton, ToggleGroup, Input, NumberInput, Textarea, Checkbox, Radio, RadioGroup, Switch, Slider, Select, Combobox, DatePicker, Field, Label
 **Navigation**: NavItem, NavSection, TreeView
 
-**Typography & layout**: Text, Heading, Link, AppLayout, Stack, Inline, Grid, Card, Divider, VisuallyHidden
+**Typography & layout**: Text, Heading, Link, AppLayout, SplitPane, Stack, Inline, Grid, Card, Divider, VisuallyHidden
 **Floating**: Tooltip, HoverCard, Popover, Menu
 **Overlays**: Dialog, Drawer, CommandPalette, Toast
 **Data & navigation**: Avatar, AvatarGroup, Tabs, Accordion, Table, Pagination, Breadcrumb
