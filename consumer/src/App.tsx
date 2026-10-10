@@ -45,6 +45,7 @@ import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
 import { OverlaysDemo } from './OverlaysDemo';
+import { ThemeDemo } from './ThemeDemo';
 import { PlusIcon, SearchIcon } from './icons';
 
 const keys = <T extends string>(o: object) => Object.keys(o) as T[];
@@ -100,6 +101,8 @@ export function App() {
 
   const reference = new URLSearchParams(location.search).get('page') === 'reference';
 
+  if (new URLSearchParams(location.search).get('page') === 'themes') return <ThemeDemo />;
+
   return (
     <Stack as="main" gap="loose" className="page yarcl-root">
       <Inline as="header" justify="between">
@@ -110,6 +113,7 @@ export function App() {
           <Link href={reference ? '?' : '?page=reference'} underline="hover">
             {reference ? 'Component demo' : 'Design reference'}
           </Link>
+          <Link href="?page=themes" underline="hover">Bundled themes</Link>
           {(['light dark', 'light', 'dark'] as Scheme[]).map((s) => (
             <Button
               key={s}

@@ -10,6 +10,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  visual:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    env:
+      VISUAL_CONTAINER: '1'
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compare reviewed visual baselines
+        run: pnpm test:visual
+
+      - name: Upload screenshot report, diffs and traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regressions
+          path: .visual/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14
+
   lint:
     runs-on: ubuntu-latest
     steps:

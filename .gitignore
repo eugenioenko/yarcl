@@ -7,3 +7,4 @@ docs-web/.astro
 library/LICENSE
 library/llms.txt
 .vitest
+.visual

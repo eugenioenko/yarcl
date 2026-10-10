@@ -173,10 +173,13 @@ pnpm dev          # consumer on :5173
 pnpm typecheck    # library + both consumers, including @ts-expect-error contract checks
 pnpm size         # gzip budgets per package entry and typical component imports
 pnpm test         # Vitest browser mode in headless Chrome: behavior, styling and axe audits, light and dark
+pnpm test:visual  # screenshot comparisons in the pinned Playwright Linux image, requires Docker
 pnpm docs:dev     # documentation site on :4321
 pnpm docs:build   # static docs site → docs-web/dist
 pnpm docs:api     # API reference from JSDoc → docs/api
 ```
+
+The consumer's **Bundled themes** view and the full theme playground have screenshot baselines for every theme in both color schemes, at desktop and mobile widths. See [visual regression tests](https://yarcl.dev/reference/visual-tests/) for filtering runs, reviewing diffs and explicitly updating baselines.
 
 ## Limitations
 

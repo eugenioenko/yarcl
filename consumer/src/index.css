@@ -2,6 +2,16 @@ body {
   margin: 0;
 }
 
+.theme-demo {
+  max-width: var(--yarcl-width-page);
+  margin: 0 auto;
+  padding: var(--yarcl-space-lg);
+}
+
+.theme-demo-header {
+  margin-bottom: var(--yarcl-space-lg);
+}
+
 .page {
   max-width: var(--yarcl-width-page);
   margin: 0 auto;
