@@ -2517,6 +2517,95 @@ html:has(.yarcl-modal:modal) {
   vertical-align: middle;
 }
 
+/* Table columns */
+
+.yarcl-table:has(> .yarcl-table-columns) td {
+  overflow-wrap: anywhere;
+}
+
+.yarcl-table:has(> .yarcl-table-columns) th {
+  overflow: hidden;
+}
+
+.yarcl-table th.yarcl-table-resizable {
+  padding: 0;
+}
+
+.yarcl-table-header-content {
+  position: relative;
+  padding: var(--yarcl-table-cell-padding, var(--yarcl-cell-py)) var(--yarcl-table-cell-padding, var(--yarcl-cell-px));
+  padding-inline-end: calc(var(--yarcl-table-cell-padding, var(--yarcl-cell-px)) + max(var(--yarcl-table-cell-padding, var(--yarcl-cell-px)), var(--yarcl-icon)));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yarcl-table-header-sort {
+  padding: 0;
+}
+
+.yarcl-table-header-sort .yarcl-table-sort-button {
+  padding: var(--yarcl-table-cell-padding, var(--yarcl-cell-py)) var(--yarcl-table-cell-padding, var(--yarcl-cell-px));
+  padding-inline-end: calc(var(--yarcl-table-cell-padding, var(--yarcl-cell-px)) + max(var(--yarcl-table-cell-padding, var(--yarcl-cell-px)), var(--yarcl-icon)));
+}
+
+.yarcl-table-header-sort .yarcl-table-sort-button > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yarcl-table-column-resizer {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  width: max(var(--yarcl-table-cell-padding, var(--yarcl-cell-px)), var(--yarcl-icon));
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.yarcl-table-column-resizer::after {
+  content: '';
+  width: var(--yarcl-border-width);
+  height: 50%;
+  background: var(--yarcl-neutral-border);
+}
+
+.yarcl-table-column-resizer:hover::after,
+.yarcl-table-column-resizer:focus-visible::after {
+  background: var(--yarcl-neutral-text);
+}
+
+.yarcl-table-column-resizer:focus-visible {
+  outline: var(--yarcl-focus-width) var(--yarcl-focus-style) var(--yarcl-focus-color);
+  outline-offset: calc(var(--yarcl-focus-width) * -1);
+}
+
+.yarcl-table-column-resizer[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.yarcl-table-column-visibility {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yarcl-px);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.yarcl-table-column-visibility legend {
+  padding: 0;
+  margin-block-end: calc(var(--yarcl-px) / 2);
+  color: var(--yarcl-neutral-text);
+  font: inherit;
+}
+
 .yarcl-table-virtual-spacer {
   pointer-events: none;
 }

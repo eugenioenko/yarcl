@@ -1,0 +1,142 @@
+---
+title: "Table columns"
+description: "Typed column widths and visibility with accessible pointer and keyboard resizing."
+sidebar:
+  order: 4
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { TableColumnsDemo } from '@/demos/table-columns';
+
+```tsx
+import { Table, useTableColumns, type TableColumnDefinition } from '@yarcl/react';
+```
+
+<Preview>
+  <TableColumnsDemo client:visible />
+</Preview>
+
+Define your columns once. `useTableColumns` infers their identifiers and shares accepted widths and visibility with a native `colgroup`, header separators, and visibility checkboxes. It leaves row data, sorting, filtering and selection with your application.
+
+## Set up a table
+
+```tsx
+const definitions = [
+  { id: 'customer', label: 'Customer', width: 220, resizable: true, minWidth: 100, maxWidth: 480 },
+  { id: 'total', label: 'Total', width: 140, hideable: false },
+] as const satisfies readonly TableColumnDefinition[];
+
+function Orders({ orders }: { orders: { id: string; customer: string; total: string }[] }) {
+  const columns = useTableColumns(definitions);
+  return <>
+    <Table.ColumnVisibility
+      label="Visible columns"
+      columns={columns.columns}
+      onVisibilityChange={columns.setVisible}
+    />
+    <Table caption="Orders" style={columns.tableStyle} stickyHeader>
+      <Table.Columns columns={columns.visibleColumns} />
+      <Table.Head><Table.Row>
+        {columns.visibleColumns.map((column) => (
+          <Table.HeaderCell key={column.id}
+            resize={column.id === 'customer' ? columns.getResizeProps('customer') : undefined}>
+            {column.label}
+          </Table.HeaderCell>
+        ))}
+      </Table.Row></Table.Head>
+      <Table.Body>
+        {orders.map((order) => <Table.Row key={order.id}>
+          {columns.visibleColumns.map((column) => (
+            <Table.Cell key={column.id}>{order[column.id]}</Table.Cell>
+          ))}
+        </Table.Row>)}
+      </Table.Body>
+    </Table>
+  </>;
+}
+```
+
+Render the same `visibleColumns` in the colgroup, headers and each body row, in the same order. A hidden column is removed from the DOM. Keep stable column IDs and row keys so other controls retain their state. `getResizeProps` accepts only identifiers declared with `resizable: true`.
+
+`tableStyle` sets a fixed layout and a table width equal to the sum of visible widths. Pass it to `Table`, and put `Table.Columns` before the header or body. Merge unrelated styles with `{ ...columns.tableStyle, ...yourStyles }`, keeping its width and layout for accurate resizing. A wide table scrolls inside its frame. Narrow columns wrap body text and truncate header text.
+
+Widths are application layout data in CSS pixels. They are separate from design tokens. Every initial width must be positive and finite. Resizable columns require positive finite `minWidth` and `maxWidth`, with `minWidth < maxWidth` and the initial width inside those bounds. Controlled or initial state widths outside the bounds are clamped. Empty column lists, duplicate or blank IDs, invalid widths, unknown state keys and non-boolean visibility fail with descriptive errors.
+
+## Controlled and initial state
+
+Widths and visibility can be controlled independently. Omitted width entries use the column definition; omitted visibility entries are visible.
+
+```tsx
+const [widths, setWidths] = useState<TableColumnWidths<'customer' | 'total'>>({});
+const [visibility, setVisibility] = useState<TableColumnVisibility<'customer' | 'total'>>({});
+const columns = useTableColumns(definitions, {
+  widths, onWidthsChange: setWidths,
+  visibility, onVisibilityChange: setVisibility,
+});
+
+columns.setWidth('customer', 300);
+columns.setVisible('customer', false);
+// columns.setWidth('unknown', 300); // Type error
+```
+
+Import the state types and `useState` for this example. When uncontrolled, use `defaultWidths` and `defaultVisibility`. Change callbacks receive the complete next state for the currently defined columns. A controlled request updates layout and checkbox state only when the parent accepts the new props. Requests that would leave a width or visibility unchanged do not repeat callbacks.
+
+Widths remain stored while a column is hidden, so showing it restores its accepted width. New column IDs use their definition and initial visibility unless explicitly controlled. Removed columns are excluded from the current state and layout.
+
+## Visibility controls
+
+`Table.ColumnVisibility` renders a native fieldset with a visible legend and one labeled `Checkbox` per column. Required columns, declared with `hideable: false`, stay visible and their checkboxes are disabled. The last visible column cannot be hidden. If supplied state hides every optional column, the first column remains visible.
+
+The fieldset accepts native props, including `disabled`, `className`, `style` and a React 19 ref to `HTMLFieldSetElement`. Disabling it disables every checkbox through native fieldset behavior. Column labels and the legend are application copy, so provide their translations directly.
+
+## Pointer and keyboard resizing
+
+`Table.HeaderCell.resize` places a separate, named separator beside the header content. It remains independent of the sort button. The separator exposes its accepted width and bounds, and controls the header through `aria-controls`. Native props and refs on the header still target its `th`; resize props and refs target an `HTMLSpanElement`.
+
+| Action | Result |
+| --- | --- |
+| Pointer drag | Requests widths continuously, clamped to the bounds |
+| Left / Right | Moves the vertical divider left or right, respecting RTL |
+| PageUp / PageDown | Increases or decreases by the large step |
+| Home / End | Reaches the minimum or maximum width |
+| Tab | Moves between sort buttons, separators and other native controls |
+
+Arrow keys adjust by one CSS pixel and page keys by ten. Override `step`, `largeStep` or `formatValue` through the resize props. `onValueCommit` runs after a completed drag or a changed keyboard adjustment. Pointer cancellation, capture loss, disabling or unmounting ends a drag without committing; widths already requested during the drag remain accepted by the application. A native `onKeyDown` or pointer handler can call `preventDefault()` to cancel that event's adjustment. `disabled` removes the separator from the tab order and prevents resizing.
+
+Use `Table.ColumnResizer` directly when building custom header markup. Position it inside a relative header-content wrapper and supply an accessible column name, width, limits and update callback. Supply `aria-controls` for the relevant header. The standard `Table.HeaderCell.resize` handles positioning and references for you.
+
+The separator behavior follows the [WAI-ARIA movable separator pattern](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/), with column widths represented in CSS pixels. It does not collapse columns with Enter; use the visibility checkboxes to hide optional columns.
+
+## Sorting, selection and virtualization
+
+Pass the existing `sortable`, `sortDirection` and `onSort` props to a resizable header. Resizing does not sort. Keep selection outside the column hook, and make a selection column required when its checkboxes should always be available.
+
+Use `visibleColumns` inside `Table.VirtualBody` just as you would inside `Table.Body`. Measured rows refresh when column widths or visibility change, including cached offscreen heights and spacer column counts. Keep a stable `getItemKey`. Use fixed `rowHeight` only when your row content remains that exact height at every allowed column width.
+
+`stickyHeader` keeps the header and separators pinned inside the frame. Hiding a focused header or body cell through external state moves focus to that table's wrapper. Changes preserve focus on controls outside the table. Visibility checkboxes keep their own focus when removing a column.
+
+## Design tokens
+
+Table density controls header padding, font size and the separator's hit area. The separator line, focus ring and visibility spacing use the active config's border, neutral, focus and spacing variables. Checkbox sizing and color use the existing `Checkbox` defaults. `Table.radius`, density and component slots continue to apply; this feature introduces no new token group or component defaults.
+
+Changing the runtime theme preserves accepted widths, visibility and focus. Columns use inline widths for application layout data; separators and checkboxes use config classes and CSS variables for their appearance.
+
+## Props
+
+### Column definitions and state
+
+<Props of="TableColumnDefinition" />
+<Props of="TableColumnOptions" />
+
+### Table.Columns
+
+<Props of="TableColumnsProps" />
+
+### Table.ColumnVisibility
+
+<Props of="TableColumnVisibilityProps" />
+
+### Table.ColumnResizer and HeaderCell.resize
+
+<Props of="TableColumnResizerProps" />

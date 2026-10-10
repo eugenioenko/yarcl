@@ -115,6 +115,9 @@ export { Tabs } from './components/Tabs';
 export type { TabsProps, TabsBaseProps, TabsListProps, TabsTriggerProps, TabsPanelProps } from './components/Tabs';
 export { Pagination } from './components/Pagination';
 export type { PaginationProps } from './components/Pagination';
+export { useTableColumns } from './table-columns';
+export type { TableColumnDefinition, TableColumnOptions, TableColumnState, TableColumnWidths, TableColumnVisibility } from './table-columns';
+export type { TableColumnsProps, TableColumnVisibilityProps, TableColumnResizerProps } from './components/TableColumns';
 export { Table } from './components/Table';
 export type {
   TableProps,

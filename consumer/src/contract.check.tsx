@@ -1,3 +1,4 @@
+import { useTableColumns, type TableColumnDefinition, type TableColumnWidths, type TableColumnVisibility } from '@yarcl/react';
 import { ColorPicker, type ColorPickerProps, type ColorPickerValue } from '@yarcl/react';
 import { Stepper, type StepperItem } from '@yarcl/react';
 import { SplitPane } from '@yarcl/react';
@@ -960,3 +961,32 @@ const invalidPickerColor = <ColorPicker defaultValue="#123" color="missing-color
 // @ts-expect-error The picker owns its native input type.
 const invalidPickerType = <ColorPicker defaultValue="#123" type="text" />;
 void validPicker; void missingPickerValue; void invalidPickerValue; void invalidPickerPreset; void invalidPickerSize; void invalidPickerRadius; void invalidPickerColor; void invalidPickerType;
+
+/** Checks literal column identifiers and native compound-part refs with this consumer's token keys. */
+function TableColumnContract() {
+  const definitions = [{ id: 'customer', label: 'Customer', width: 220, resizable: true, minWidth: 100, maxWidth: 480 }, { id: 'total', label: 'Total', width: 140 }] as const satisfies readonly TableColumnDefinition[];
+  const widths: TableColumnWidths<'customer' | 'total'> = { customer: 240 };
+  const visibility: TableColumnVisibility<'customer' | 'total'> = { total: false };
+  const columns = useTableColumns(definitions, { widths, defaultWidths: widths, onWidthsChange: (value) => { const width: number | undefined = value.customer; void width; }, visibility, defaultVisibility: visibility, onVisibilityChange: (value) => { const visible: boolean | undefined = value.total; void visible; } });
+  columns.setWidth('customer', 250); columns.setVisible('total', true);
+  // @ts-expect-error Column identifiers come from the definitions.
+  columns.setWidth('missing', 250);
+  // @ts-expect-error Visibility identifiers come from the definitions.
+  columns.setVisible('missing', true);
+  // @ts-expect-error Fixed columns do not expose resize props.
+  columns.getResizeProps('total');
+  // @ts-expect-error Controlled widths use the inferred identifiers.
+  useTableColumns(definitions, { widths: { missing: 200 } });
+  // @ts-expect-error Controlled visibility uses the inferred identifiers.
+  useTableColumns(definitions, { visibility: { missing: false } });
+  return <><Table.ColumnVisibility label="Columns" columns={columns.columns} onVisibilityChange={columns.setVisible} ref={(node: HTMLFieldSetElement | null) => { node?.focus(); }} disabled />
+    <Table style={columns.tableStyle} density="dense" radius="rounded"><Table.Columns columns={columns.visibleColumns} ref={(node: HTMLTableColElement | null) => { node?.focus(); }} /><Table.Head><Table.Row><Table.HeaderCell resize={{ ...columns.getResizeProps('customer'), step: 5, largeStep: 20, formatValue: (width) => `${width} pixels`, onValueCommit: (width) => void width, ref: (node: HTMLSpanElement | null) => { node?.focus(); } }}>Customer</Table.HeaderCell></Table.Row></Table.Head></Table></>;
+}
+void TableColumnContract;
+// @ts-expect-error Resizable columns require finite numeric bounds in their declaration.
+const missingColumnBounds: TableColumnDefinition = { id: 'customer', label: 'Customer', width: 220, resizable: true };
+// @ts-expect-error Every separator needs an accessible column name.
+const unnamedColumnResizer = <Table.ColumnResizer value={220} min={100} max={480} />;
+// @ts-expect-error Table density remains typed from the consumer config.
+const invalidColumnDensity = <Table density="missing-density"><Table.Columns columns={[{ id: 'customer', width: 220 }]} /></Table>;
+void missingColumnBounds; void unnamedColumnResizer; void invalidColumnDensity;

@@ -70,7 +70,8 @@ export function generateSlotCss(config: YarclShape): string[] {
           selector += ':where(:not([data-active]):not([aria-selected="true"]):not(.yarcl-table-row-selected):not(.yarcl-table-interactive tbody tr:hover):not(.yarcl-table-striped tbody tr:nth-child(even)):not(.yarcl-table tbody tr[aria-selected="true"] > *):not(.yarcl-table-interactive tbody tr:hover > *):not(.yarcl-table-striped tbody tr:nth-child(even) > *))';
         }
         if (component === 'Table' && part === 'cell' && property === 'padding') {
-          selector = `${selector}:not(.yarcl-table-sortable), ${selector}.yarcl-table-sortable > .yarcl-table-sort-button`;
+          rules.push(`${selector} {\n  --yarcl-table-cell-padding: var(--yarcl-space-${ident(key)});\n}`);
+          selector = `${selector}:not(.yarcl-table-sortable):not(.yarcl-table-resizable), ${selector}.yarcl-table-sortable > .yarcl-table-sort-button`;
         }
         if (component === 'Table' && part === 'root' && property === 'background') selector += `, ${selector} > .yarcl-table`;
         if ((component === 'Dialog' || component === 'Drawer') && part === 'header' && property === 'textStyle') {

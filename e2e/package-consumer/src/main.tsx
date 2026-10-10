@@ -1,4 +1,4 @@
-import { Button, ColorPicker, Card, Grid, IconButton, Stack, Stepper, SplitPane, TreeView, type IconButtonLinkProps, type Responsive, type Spacing } from '@yarcl/react';
+import { Table, useTableColumns, Button, ColorPicker, Card, Grid, IconButton, Stack, Stepper, SplitPane, TreeView, type IconButtonLinkProps, type Responsive, type Spacing } from '@yarcl/react';
 import { createRoot } from 'react-dom/client';
 import './layout.css';
 
@@ -15,7 +15,7 @@ const disabledLink = <IconButton {...iconLink} disabled />;
 // @ts-expect-error not defined by this consumer's config
 const invalid = <Button color="missing">Invalid</Button>;
 
-createRoot(document.getElementById('root')!).render(contract);
+createRoot(document.getElementById('root')!).render(<>{contract}<PackedTable /></>);
 
 void [invalid, unnamedLink, disabledLink];
 
@@ -40,3 +40,16 @@ void invalidStep;
 // @ts-expect-error Packed ColorPicker types require an initial or controlled color.
 const invalidPicker = <ColorPicker aria-label="Accent" />;
 void invalidPicker;
+
+/** Verifies inferred column identifiers through installed declarations and rendering through compiled exports. */
+function PackedTable() {
+  const columns = useTableColumns([{ id: 'name', label: 'Name', width: 220, resizable: true, minWidth: 100, maxWidth: 480 }, { id: 'total', label: 'Total', width: 140 }]);
+  // @ts-expect-error Column identifiers remain literal in the packed package.
+  const unknownWidth = () => columns.setWidth('unknown', 200);
+  void unknownWidth;
+  // @ts-expect-error Only resizable columns expose resize props.
+  const fixedResize = () => columns.getResizeProps('total');
+  void fixedResize;
+  return <><Table.ColumnVisibility label="Columns" columns={columns.columns} onVisibilityChange={columns.setVisible} /><Table style={columns.tableStyle}><Table.Columns columns={columns.visibleColumns} /><Table.Head><Table.Row><Table.HeaderCell resize={columns.getResizeProps('name')}>Name</Table.HeaderCell><Table.HeaderCell>Total</Table.HeaderCell></Table.Row></Table.Head></Table></>;
+}
+void PackedTable;

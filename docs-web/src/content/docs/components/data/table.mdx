@@ -104,6 +104,10 @@ For fixed mode, pass `rowHeight` instead of `estimateRowHeight`. Rows must all r
 
 Configure `root`, `header`, `row` and `cell` through [component parts](/configuration/component-slots/). The root is the scrollable frame; header cells expose `data-part="header"`, body cells expose `"cell"`, and compound rows expose `"row"`. Use `wrapClassName` to scope application CSS to a table frame.
 
+## Column controls
+
+Add typed column widths, pointer and keyboard resize handles, and visibility checkboxes with `useTableColumns`, `Table.Columns` and `Table.ColumnVisibility`. They work with sorting, selection, sticky headers and both virtualization modes. See the complete [table columns guide](/components/data/table-columns/).
+
 ## Props
 
 ### Table

@@ -46,6 +46,7 @@ import {
   VisuallyHidden,
 } from '@yarcl/react';
 import { ColorPickerDemo } from './color-picker';
+import { TableColumnsDemo } from './table-columns';
 import { StepperDemo } from './stepper';
 import { SplitPaneDemo } from './split-pane';
 import { TreeViewDemo } from './tree-view';
@@ -626,6 +627,12 @@ const groups: Record<string, Item[]> = {
           </Accordion.Item>
         </Accordion>
       ),
+    },
+    {
+      name: 'Table columns',
+      href: '/components/data/table-columns/',
+      description: 'Resize columns and choose their visibility.',
+      preview: <TableColumnsDemo />,
     },
     {
       name: 'Table',

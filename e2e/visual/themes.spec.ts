@@ -126,3 +126,23 @@ test('playground theme editor', async ({ page }, info) => {
   await expect(page.getByRole('dialog', { name: 'Edit theme', exact: true })).toBeVisible();
   await expect(page).toHaveScreenshot('playground-editor.png');
 });
+
+test('table column resizing and visibility', async ({ page }, info) => {
+  const { theme, scheme } = info.project.metadata;
+  const response = await page.goto(`http://127.0.0.1:4250/?page=themes&example=table-columns&theme=${theme}&scheme=${scheme}`);
+  expect(response?.status()).toBe(200);
+  await expect(page.locator('#yarcl-theme')).toBeAttached();
+  await page.evaluate(() => document.fonts.ready);
+  const table = page.locator('.yarcl-table-wrap');
+  await page.mouse.move(0, 0);
+  await expect(table).toHaveScreenshot('table-columns-visible.png');
+  await page.getByRole('separator', { name: 'Customer', exact: true }).focus();
+  await page.keyboard.press('End');
+  await page.getByRole('checkbox', { name: 'Description', exact: true }).setChecked(false);
+  await page.getByRole('button', { name: 'Customer', exact: true }).click();
+  await page.getByRole('checkbox', { name: 'Select Customer 80', exact: true }).setChecked(true);
+  await table.evaluate((element) => { element.scrollLeft = 0; });
+  await page.mouse.move(0, 0);
+  await expect(table).toHaveScreenshot('table-columns-resized-hidden.png');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+});
