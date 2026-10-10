@@ -98,6 +98,14 @@ test('theme playground', async ({ page }, info) => {
   const position = await footer.boundingBox();
   await page.locator('.yarcl-app-layout-main').evaluate((element) => { element.scrollTop = 500; });
   expect(await footer.boundingBox()).toEqual(position);
+  const home = page.getByRole('link', { name: 'Back to docs', exact: true });
+  await expect(home).toBeVisible();
+  await expect(home).toHaveAttribute('href', '/');
+  await expect(home.locator('svg')).toBeVisible();
+  await expect(home.locator('..').getByRole('button', { name: 'Edit theme', exact: true })).toBeVisible();
+  await home.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL('http://127.0.0.1:4251/');
 });
 
 test('playground mobile navigation', async ({ page }, info) => {
