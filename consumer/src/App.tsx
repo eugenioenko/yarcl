@@ -46,6 +46,7 @@ import { FloatingDemo } from './FloatingDemo';
 import { InputContentDemo } from './InputContentDemo';
 import { RecipesDemo } from './RecipesDemo';
 import { AppLayoutDemo } from './AppLayoutDemo';
+import { ResponsiveDemo } from './ResponsiveDemo';
 import { OverlaysDemo } from './OverlaysDemo';
 import { ThemeDemo } from './ThemeDemo';
 import { PlusIcon, SearchIcon } from './icons';
@@ -101,6 +102,8 @@ export function App() {
     setScheme(next);
   }
 
+  if (new URLSearchParams(location.search).get('page') === 'responsive') return <ResponsiveDemo />;
+
   const reference = new URLSearchParams(location.search).get('page') === 'reference';
 
   if (new URLSearchParams(location.search).get('page') === 'themes') return <ThemeDemo />;
@@ -116,6 +119,7 @@ export function App() {
           <Link href={reference ? '?' : '?page=reference'} underline="hover">
             {reference ? 'Component demo' : 'Design reference'}
           </Link>
+          <Link href="?page=responsive" underline="hover">Responsive props</Link>
           <Link href="?page=layout" underline="hover">App layout</Link>
           <Link href="?page=themes" underline="hover">Bundled themes</Link>
           {(['light dark', 'light', 'dark'] as Scheme[]).map((s) => (

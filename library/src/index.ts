@@ -150,6 +150,7 @@ export type {
   ModalSize,
   Width,
   Breakpoint,
+  Responsive,
   Align,
   Justify,
   TokenProps,

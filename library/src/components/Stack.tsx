@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
-import { cx, gapClass } from '../classes';
-import type { Align, Justify, Spacing } from '../types';
+import { alignClass, cx, gapClass, justifyClass } from '../classes';
+import type { Responsive, Align, Justify, Spacing } from '../types';
 import { useDefaults } from '../runtime';
 
 
@@ -15,14 +15,14 @@ export interface LayoutProps extends ComponentProps<'div'> {
    */
   as?: LayoutElement;
   /**
-   * Space between children, from the `spacing` config.
+   * Space between children, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.defaults.gap
    */
-  gap?: Spacing;
-  /** Cross-axis alignment of children. */
-  align?: Align;
-  /** Main-axis distribution of children. */
-  justify?: Justify;
+  gap?: Responsive<Spacing>;
+  /** Cross-axis alignment of children, as a scalar or breakpoint map. */
+  align?: Responsive<Align>;
+  /** Main-axis distribution of children, as a scalar or breakpoint map. */
+  justify?: Responsive<Justify>;
 }
 
 /** Props for {@link Stack}. */
@@ -46,9 +46,9 @@ export function Stack({ as = 'div', gap, align, justify, className, ...props }: 
     <Tag
       className={cx(
         'yarcl-stack',
-        gapClass(gap ?? own.gap),
-        align && `yarcl-align-${align}`,
-        justify && `yarcl-justify-${justify}`,
+        gapClass(gap ?? own.gap, own.gap),
+        alignClass(align),
+        justifyClass(justify),
         className,
       )}
       {...props}

@@ -42,6 +42,7 @@ The complete API reference, generated from the library's JSDoc with TypeDoc, is 
 | `Size`, `Radius`, `Color`, `Variant` | keys of `sizes`, `radii`, `colors`, `variants` in your config |
 | `ComponentSize<'Button'>` | allowed size keys for one component, or every global size when unrestricted |
 | `Spacing`, `Shadow`, `Density`, `TextStyle` | keys of `spacing`, `shadows`, `density`, `typography.styles` |
+| `Responsive<T>` | scalar value or readonly map of `base` and configured breakpoint names; see [responsive props](/configuration/responsive-props/) |
 | `Width`, `Breakpoint` | keys of `widths` and `breakpoints` |
 | `ModalSize` | keys of `modalSizes` |
 | `TokenProps`, `VariantProps` | the shared `size` / `radius` / `color` and `variant` props |

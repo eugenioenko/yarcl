@@ -56,7 +56,7 @@ export default defineConfig({
     wide: '52rem',
   },
   widths: { sidebar: '14rem', reading: '40rem', page: '68rem' },
-  breakpoints: { xs: '28rem', sm: '38rem', md: '46rem', lg: '62rem', xl: '78rem' },
+  breakpoints: { xs: '28rem', sm: '38rem', md: '46rem', studio: '54rem', lg: '62rem', xl: '78rem' },
   typography: {
     fontFaces: [{ family: 'Fraunces', src: '/fonts/fraunces.woff2', weight: '100 900' }],
     families: {

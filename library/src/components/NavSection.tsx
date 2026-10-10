@@ -2,7 +2,7 @@ import { useContext, useId, type ComponentProps } from 'react';
 import { cx, gapClass, typeClass } from '../classes';
 import { NavigationContext } from '../navigation';
 import { useConfig, useDefaults } from '../runtime';
-import type { Spacing, TextStyle } from '../types';
+import type { Responsive, Spacing, TextStyle } from '../types';
 
 /** Props for {@link NavSection}. */
 export interface NavSectionProps extends Omit<ComponentProps<'div'>, 'title'> {
@@ -11,7 +11,7 @@ export interface NavSectionProps extends Omit<ComponentProps<'div'>, 'title'> {
   /** Hides the heading visually and collapses descendant items. @default parent navigation state */
   collapsed?: boolean;
   /** Spacing between the heading and links. @default config.components.NavSection.gap ?? config.defaults.gap */
-  gap?: Spacing;
+  gap?: Responsive<Spacing>;
   /** Heading typography. @default config.components.NavSection.textStyle ?? config.defaults.labelStyle */
   textStyle?: TextStyle;
 }
@@ -31,7 +31,7 @@ export function NavSection({ title, collapsed, gap, textStyle, className, childr
   const id = useId();
   return (
     <NavigationContext value={isCollapsed}>
-      <div role="group" aria-labelledby={id} className={cx('yarcl-nav-section', gapClass(gap ?? own.gap), className)} {...props}>
+      <div role="group" aria-labelledby={id} className={cx('yarcl-nav-section', gapClass(gap ?? own.gap, own.gap), className)} {...props}>
         <span id={id} className={cx('yarcl-nav-section-heading', typeClass(textStyle ?? own.textStyle ?? config.defaults.labelStyle), isCollapsed && 'yarcl-visually-hidden')}>{title}</span>
         {children}
       </div>

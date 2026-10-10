@@ -23,6 +23,8 @@ export type ModalSize = keyof Config['modalSizes'] & string;
 export type Width = keyof Config['widths'] & string;
 /** A key of the consumer's responsive breakpoints. */
 export type Breakpoint = keyof Config['breakpoints'] & string;
+/** A scalar value or mobile-first overrides keyed by the consumer's breakpoints. Omitted base uses the component's default. */
+export type Responsive<T> = T | { readonly [K in 'base' | Breakpoint]?: T };
 /** A key of the consumer's `typography.styles` config. */
 export type TextStyle = keyof Config['typography']['styles'] & string;
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { colorClass, cx, gapClass, paddingClass, radiusClass, typeClass } from '../classes';
-import type { Color, Radius, Spacing, TextStyle } from '../types';
+import type { Responsive, Color, Radius, Spacing, TextStyle } from '../types';
 import { useLabels, useConfig, useDefaults } from '../runtime';
 
 
@@ -22,15 +22,15 @@ export interface ToastOptions {
    */
   radius?: Radius;
   /**
-   * Space between the message, action and dismiss button, from the `spacing` config.
+   * Space between the message, action and dismiss button, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.components.Toast.gap ?? config.defaults.gap
    */
-  gap?: Spacing;
+  gap?: Responsive<Spacing>;
   /**
-   * Inner spacing, from the `spacing` config.
+   * Inner spacing, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.components.Toast.padding ?? config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Typography style, from the `typography.styles` config.
    * @default config.components.Toast.textStyle ?? config.defaults.labelStyle
@@ -185,8 +185,8 @@ function ToastItem({ entry }: { entry: ToastEntry }) {
         'yarcl-toast',
         colorClass(color ?? own.color),
         radiusClass(radius ?? own.radius),
-        gapClass(gap ?? own.gap),
-        paddingClass(padding ?? own.padding),
+        gapClass(gap ?? own.gap, own.gap),
+        paddingClass(padding ?? own.padding, own.padding),
         typeClass(textStyle ?? own.textStyle ?? config.defaults.labelStyle),
       )}
       onMouseEnter={() => setPaused(true)}

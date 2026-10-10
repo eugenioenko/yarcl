@@ -14,7 +14,7 @@ import { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass, typeClass } from '../classes';
 import { floatingMiddleware, useTrigger } from '../floating';
 import { useConfig, useDefaults } from '../runtime';
-import type { Radius, Spacing, TextStyle } from '../types';
+import type { Responsive, Radius, Spacing, TextStyle } from '../types';
 
 /** Props for {@link Tooltip}. */
 export interface TooltipProps {
@@ -40,10 +40,10 @@ export interface TooltipProps {
    */
   radius?: Radius;
   /**
-   * Inner spacing, from the `spacing` config.
+   * Inner spacing, from the `spacing` config. Accepts a scalar or breakpoint map.
    * @default config.components.Tooltip.padding ?? config.defaults.padding
    */
-  padding?: Spacing;
+  padding?: Responsive<Spacing>;
   /**
    * Typography style, from the `typography.styles` config.
    * @default config.components.Tooltip.textStyle ?? config.defaults.helperStyle
@@ -94,7 +94,7 @@ export function Tooltip({ content, describe = true, children, placement = 'top',
             className={cx(
               'yarcl-floating yarcl-tooltip',
               radiusClass(radius ?? own.radius),
-              paddingClass(padding ?? own.padding),
+              paddingClass(padding ?? own.padding, own.padding),
               typeClass(textStyle ?? own.textStyle ?? config.defaults.helperStyle),
             )}
             {...getFloatingProps()}
