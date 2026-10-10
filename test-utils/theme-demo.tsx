@@ -50,8 +50,8 @@ export function testThemeDemo() {
     expect(await name.inputValue()).toBe('Grace Hopper');
   });
 
-  test('normalizes unknown theme and scheme names to the default theme and system scheme', async () => {
-    history.replaceState(null, '', '?page=themes&theme=constructor&scheme=unknown');
+  test.each(['constructor', 'atelier'])('normalizes unknown theme %s and scheme names to the default theme and system scheme', async (theme) => {
+    history.replaceState(null, '', `?page=themes&theme=${theme}&scheme=unknown`);
     const screen = await render(<ThemeDemo />);
     await expect.poll(() => screen.container.querySelector('main')?.getAttribute('data-theme')).toBe('yarcl');
     expect(new URLSearchParams(location.search).get('theme')).toBe('yarcl');
@@ -59,7 +59,7 @@ export function testThemeDemo() {
     expect(document.documentElement.style.colorScheme).toBe('light dark');
   });
 
-  test.each(['atelier', 'circuit', 'studio'] as const)('switches to %s through the selector and applies its component defaults without losing input', async (id) => {
+  test.each(['cyberpunk', 'vermeer', 'artDeco', 'circuit', 'studio'] as const)('switches to %s through the selector and applies its component defaults without losing input', async (id) => {
     history.replaceState(null, '', `?page=themes&theme=yarcl&scheme=${inject('scheme')}`);
     const screen = await render(<ThemeDemo />);
     const name = page.getByRole('textbox', { name: 'Name', exact: true });

@@ -1,11 +1,11 @@
 ---
 title: Bundled themes
-description: Eight distinct design systems, including the defaults, with light and dark modes and typed configuration.
+description: Ten distinct design systems, including the defaults, with light and dark modes and typed configuration.
 sidebar:
   order: 3
 ---
 
-yarcl ships with seven alternative themes alongside its default design system. They change color, shape, type, density, depth and component defaults. Every theme includes light and dark modes and keeps the same public token keys, so you can switch themes without rewriting your components.
+yarcl ships with nine alternative themes alongside its default design system. They change color, shape, type, density, depth and component defaults. Every theme includes light and dark modes and keeps the same public token keys, so you can switch themes without rewriting your components.
 
 | Theme | Import | Color | Shape and type | Density and depth |
 |---|---|---|---|---|
@@ -14,17 +14,31 @@ yarcl ships with seven alternative themes alongside its default design system. T
 | **Bloom** | `bloom` | violet on lavender | pill controls, round cards, rounded sans | large 44px controls, airy spacing, soft tinted shadows |
 | **Compact** | `compact` | teal on cool gray | 2px corners, 13px sans | 28px controls, tight spacing, compact tables, nearly flat |
 | **Editorial** | `editorial` | terracotta on cream | square corners, light grotesque sans | generous spacing, flat cards, double focus ring |
-| **Atelier** | `atelier` | bronze on ivory and charcoal | serif headings, rectangular buttons, fine borders | spacious 44px controls, restrained shadows |
+| **Cyberpunk** | `cyberpunk` | neon pink, cyan and lime on violet | monospace text, sharp controls, luminous panel edges | 42px controls, glowing shadows |
+| **Vermeer** | `vermeer` | rich blue and ochre on parchment and olive | serif text throughout, rounded controls and cards | 46px controls, comfortable tables, warm layered depth |
+| **Art Deco** | `artDeco` | gold on pearl and black | geometric letterspaced type, square controls, double frames | 44px controls, generous spacing, concentric panel outlines |
 | **Circuit** | `circuit` | cyan on ice and navy | monospace labels, crisp controls, subtly rounded panels | 42px controls, comfortable tables, layered surfaces |
 | **Studio** | `studio` | cobalt with citrus accents | heavy display type, rounded rectangular controls, sculpted cards | 48px controls, generous table rows, colored depth |
 
 See them all in the [theme playground](/theming/playground/).
 
-## Atelier
+## Cyberpunk
 
-Atelier suits premium commerce, hospitality, portfolios and boutique brands. Georgia headings add a serif voice while body text and controls stay in a familiar sans serif. Bronze accents sit on ivory in light mode and warm charcoal in dark mode. Buttons are rectangular, cards have gently rounded corners, and fine borders and restrained shadows define surfaces.
+Cyberpunk suits gaming, music, creative technology and developer tools with a stronger visual identity. Pink actions, cyan focus rings and lime success accents stand out against pale violet in light mode and deep purple in dark mode. Monospace text, sharp controls and luminous panel outlines carry the neon treatment through the whole interface. Text contrast stays readable in both schemes.
 
-[Preview Atelier](/theme-playground/?theme=atelier&scheme=light) or [see its dark mode](/theme-playground/?theme=atelier&scheme=dark).
+[Preview Cyberpunk](/theme-playground/?theme=cyberpunk&scheme=light) or [see its dark mode](/theme-playground/?theme=cyberpunk&scheme=dark).
+
+## Vermeer
+
+Vermeer suits galleries, cultural institutions, books, learning and hospitality. Rich blue actions and ochre accents sit on parchment surfaces in light mode and olive shadows in dark mode. Georgia carries through headings, body copy, labels, inputs and tables. Rounded panels, generous control sizes and warm shadows give it a softer, painterly character than Editorial's angular sans serif layout.
+
+[Preview Vermeer](/theme-playground/?theme=vermeer&scheme=light) or [see its dark mode](/theme-playground/?theme=vermeer&scheme=dark).
+
+## Art Deco
+
+Art Deco suits hotels, events, premium services and architectural portfolios. Gold accents, pearl surfaces and black backgrounds pair with geometric type and widely spaced labels. Cards, dialogs, drawers and table headers use double borders; card shadows add concentric outlines. Square controls and precise framing keep the decoration architectural, with light and dark modes using the same vocabulary.
+
+[Preview Art Deco](/theme-playground/?theme=artDeco&scheme=light) or [see its dark mode](/theme-playground/?theme=artDeco&scheme=dark).
 
 ## Circuit
 
@@ -77,6 +91,6 @@ Every bundled theme satisfies `ThemeContract`: the same keys as the library defa
 
 ## Fonts
 
-Themes name their font families but don't ship font files. Without them, each stack falls back to a similar system font. Atelier uses Georgia for its serif headings; Circuit uses system sans and monospace stacks; Studio prefers Avenir Next or Trebuchet MS before falling back to system sans. These three themes work without a font download.
+Themes name their font families but don't ship font files. Without them, each stack falls back to a similar system font. Cyberpunk uses a system monospace stack; Vermeer uses Georgia for headings and body text; Art Deco prefers Futura, Century Gothic or Avenir Next before falling back to system sans. Circuit uses system sans and monospace stacks; Studio prefers Avenir Next or Trebuchet MS. All work without a font download.
 
-Every theme maps the stable `body`, `heading` and `mono` roles to its families. Atelier adds a `serif` family while retaining the shared `sans` and `mono` keys. To load a family, add `typography.fontFaces` with your own files, or load it from a font service in your HTML.
+Every theme maps the stable `body`, `heading` and `mono` roles to its families. Vermeer adds a `serif` family while retaining the shared `sans` and `mono` keys. To load a family, add `typography.fontFaces` with your own files, or load it from a font service in your HTML.

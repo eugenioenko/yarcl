@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { contrast, parseHex } from '../src/color';
 import { generateCss } from '../src/css';
-import { atelier, circuit, studio, themeNames, themes } from '../src/themes';
+import { cyberpunk, vermeer, artDeco, circuit, studio, themeNames, themes } from '../src/themes';
 import defaults from '../src/yarcl.config';
 
-const additions = { atelier, circuit, studio };
+const additions = { cyberpunk, vermeer, artDeco, circuit, studio };
 const modes = ['light', 'dark'] as const;
 
 describe('bundled themes', () => {
@@ -37,11 +37,14 @@ describe('bundled themes', () => {
   });
 
   it('gives the new themes different type, shape and density alongside their palettes', () => {
-    expect(atelier.typography.fonts.heading).toBe('serif');
+    expect(vermeer.typography.fonts.body).toBe('serif');
+    expect(cyberpunk.typography.fonts.body).toBe('mono');
+    expect(artDeco.components.Card.slots.root.border).toBe('double');
+    expect(themes).not.toHaveProperty('atelier');
     expect(circuit.typography.styles.label.family).toBe('mono');
     expect(studio.typography.styles.display.weight).toBe(900);
-    expect(new Set(Object.values(additions).map((theme) => theme.sizes.md.height)).size).toBe(3);
-    expect(new Set(Object.values(additions).map((theme) => theme.radii.lg)).size).toBe(3);
-    expect(new Set(Object.values(additions).map((theme) => theme.shadows.sm)).size).toBe(3);
+    expect(new Set(Object.values({ cyberpunk, vermeer, artDeco }).map((theme) => theme.sizes.md.height)).size).toBe(3);
+    expect(new Set(Object.values({ cyberpunk, vermeer, artDeco }).map((theme) => theme.radii.lg)).size).toBe(3);
+    expect(new Set(Object.values({ cyberpunk, vermeer, artDeco }).map((theme) => theme.shadows.sm)).size).toBe(3);
   });
 });

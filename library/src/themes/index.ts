@@ -3,12 +3,14 @@ import { brutalist } from './brutalist';
 import { compact } from './compact';
 import { editorial } from './editorial';
 import { bloom } from './bloom';
-import { atelier } from './atelier';
+import { cyberpunk } from './cyberpunk';
+import { vermeer } from './vermeer';
+import { artDeco } from './art-deco';
 import { circuit } from './circuit';
 import { studio } from './studio';
 
 export type { ThemeContract } from './contract';
-export { brutalist, compact, editorial, bloom, atelier, circuit, studio };
+export { brutalist, compact, editorial, bloom, cyberpunk, vermeer, artDeco, circuit, studio };
 
 /**
  * Every bundled theme, keyed by id, including the library defaults as `yarcl`.
@@ -38,7 +40,9 @@ export const themes = {
   bloom,
   compact,
   editorial,
-  atelier,
+  cyberpunk,
+  vermeer,
+  artDeco,
   circuit,
   studio,
 };
@@ -50,7 +54,9 @@ export const themeNames: Record<keyof typeof themes, string> = {
   bloom: 'Bloom',
   compact: 'Compact',
   editorial: 'Editorial',
-  atelier: 'Atelier',
+  cyberpunk: 'Cyberpunk',
+  vermeer: 'Vermeer',
+  artDeco: 'Art Deco',
   circuit: 'Circuit',
   studio: 'Studio',
 };
