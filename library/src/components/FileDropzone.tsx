@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type ComponentProps, type DragEvent, type ReactNode } from 'react';
+import { useEffect, useId, useImperativeHandle, useRef, useState, type ComponentProps, type DragEvent, type ReactNode, type Ref } from 'react';
 import { cx } from '../classes';
 import { Button } from './Button';
 import { useLabels } from '../runtime';
@@ -16,6 +16,12 @@ export interface FileDropzoneProps extends Omit<ComponentProps<'div'>, 'children
   accept?: string;
   /** Allows more than one file. */
   multiple?: boolean;
+  /** Selected files in multi-file mode. Pass an empty array to reset after uploading. */
+  files?: readonly File[];
+  /** Initial files in uncontrolled multi-file mode. */
+  defaultFiles?: readonly File[];
+  /** Native picker input. Call `inputRef.current?.click()` from an external button. */
+  inputRef?: Ref<HTMLInputElement>;
   /** Selected file in single-file mode. Use `null` for no file. */
   value?: File | null;
   /** Initial file in uncontrolled single-file mode. */
@@ -54,6 +60,9 @@ export function FileDropzone({
   labels,
   accept,
   multiple = false,
+  files,
+  defaultFiles,
+  inputRef,
   value,
   defaultValue,
   onChange,
@@ -86,13 +95,14 @@ export function FileDropzone({
   } = labels ?? {};
   const id = useId();
   const input = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState<File[]>([]);
+  useImperativeHandle(inputRef, () => input.current!, []);
+  const [internalFiles, setFiles] = useState<File[]>(() => [...(defaultFiles ?? [])]);
   const [internalValue, setInternalValue] = useState<File | null>(defaultValue ?? null);
   const [localPreview, setLocalPreview] = useState<{ file: File; url: string } | null>(null);
   const [dismissedPreviewUrl, setDismissedPreviewUrl] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const currentFile = value !== undefined ? value : internalValue;
-  const currentFiles = multiple ? files : currentFile ? [currentFile] : [];
+  const currentFiles = multiple ? files ?? internalFiles : currentFile ? [currentFile] : [];
   const remotePreviewUrl = previewUrl === dismissedPreviewUrl ? undefined : previewUrl;
   const hasCurrent = !multiple && (currentFile != null || remotePreviewUrl != null);
   const imageUrl = currentFile
@@ -112,7 +122,7 @@ export function FileDropzone({
 
   function update(next: File[]) {
     if (multiple) {
-      setFiles(next);
+      if (files === undefined) setFiles(next);
     } else {
       if (value === undefined) setInternalValue(next[0] ?? null);
       onChange?.(next[0] ?? null);
@@ -121,6 +131,7 @@ export function FileDropzone({
   }
 
   function select(incoming: FileList | File[]) {
+    if (disabled) return;
     const selected = Array.from(incoming).filter((file) => accepts(file, accept));
     if (!selected.length) return;
     update(multiple ? selected : selected.slice(0, 1));
@@ -187,9 +198,9 @@ export function FileDropzone({
             <span>{currentFile?.name ?? previewName ?? currentImage}</span>
             <button type="button" disabled={disabled} onClick={removeCurrent} aria-label={removeItem(currentFile?.name ?? previewName ?? currentImageName)}>{remove}</button>
           </div>
-        ) : files.length > 0 && (
+        ) : currentFiles.length > 0 && (
           <ul>
-            {files.map((file, index) => (
+            {currentFiles.map((file, index) => (
               <li key={`${file.name}-${file.lastModified}-${index}`}>
                 <span>{file.name}</span>
                 <button type="button" disabled={disabled} onClick={() => removeFile(index)} aria-label={removeItem(file.name)}>{remove}</button>
