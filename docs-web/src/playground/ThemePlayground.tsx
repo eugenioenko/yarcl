@@ -112,7 +112,7 @@ export function ThemePlayground() {
   ];
 
   return (
-    <>
+    <div className="pg-workspace">
       <div className="pg-themebar" role="region" aria-label="Theme controls">
         <Inline gap="sm">
           <Text textStyle="label">Theme</Text>
@@ -214,6 +214,6 @@ export function ThemePlayground() {
       </Drawer>
 
       <Toaster placement="bottom-right" />
-    </>
+    </div>
   );
 }

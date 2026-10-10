@@ -65,6 +65,7 @@ export default defineConfig({
   zIndex: { ...defaults.zIndex, banner: 900 },
   focusRing: { ...defaults.focusRing, color: 'brand' },
   components: {
+    AppLayout: { padding: "normal" },
     NavSection: { gap: "tight", textStyle: "label" },
     Card: { slots: { body: { padding: 'tight' } } },
     Table: { slots: { header: { background: 'tint', textStyle: 'label' } } },

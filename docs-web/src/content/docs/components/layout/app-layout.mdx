@@ -1,0 +1,137 @@
+---
+title: App layout
+description: A responsive workspace with a sidebar, top navbar, footer and independently scrolling main content.
+sidebar:
+  order: 1
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { AppLayoutDemo } from '@/demos/app-layout';
+
+```tsx
+import { AppLayout, NavItem, NavSection } from '@yarcl/react';
+```
+
+<Preview>
+  <AppLayoutDemo client:visible />
+</Preview>
+
+Resize the browser to try the mobile drawer. Type a draft, change pages, or toggle the compact desktop menu. The navigation keeps its state when the layout switches modes.
+
+## Build a workspace
+
+Pass navigation, navbar and footer content as React nodes. The main content goes in `children`. AppLayout provides the navigation landmark, so sections do not need another `nav` wrapper.
+
+```tsx
+<AppLayout
+  desktopBreakpoint="lg"
+  sidebarWidth="sidebar"
+  navigationLabel="Workspace"
+  menuLabel="Open navigation"
+  skipLabel="Skip to main content"
+  navbar={<Text>Acme workspace</Text>}
+  footer={<Link href="/support">Help and support</Link>}
+  navigation={
+    <>
+      <NavSection title="Work">
+        <NavItem href="/projects" icon={<ProjectsIcon />} active>Projects</NavItem>
+        <NavItem href="/reports" icon={<ReportsIcon />}>Reports</NavItem>
+      </NavSection>
+      <NavSection title="Admin">
+        <NavItem href="/settings" icon={<SettingsIcon />}>Settings</NavItem>
+      </NavSection>
+    </>
+  }
+>
+  <Heading level={1}>Projects</Heading>
+  <ProjectList />
+</AppLayout>
+```
+
+The navbar stays above the content. The optional footer stays below it. Main content and long desktop navigation each scroll independently. The frame defaults to the dynamic viewport height, `100dvh`.
+
+`desktopBreakpoint` and `sidebarWidth` are required config keys with autocomplete. There is no assumed key name. The library defaults include `lg` and `sidebar`; choose keys from your own config when they differ.
+
+```ts
+export default defineConfig({
+  ...defaults,
+  widths: { ...defaults.widths, workspace: '17rem' },
+  breakpoints: { ...defaults.breakpoints, desktop: '68rem' },
+  components: { ...defaults.components, AppLayout: { padding: 'md' } },
+});
+```
+
+```tsx
+<AppLayout desktopBreakpoint="desktop" sidebarWidth="workspace"
+  navigationLabel="Workspace" navigation={<WorkspaceNavigation />}>
+  <ProjectList />
+</AppLayout>
+```
+
+`padding` uses your spacing keys. An explicit prop wins over `components.AppLayout.padding`, then `defaults.padding`. Runtime themes update widths, padding and the breakpoint query. Themes must contain the keys the layout uses.
+
+## Mobile navigation
+
+At the desktop breakpoint and above, navigation is a visible sidebar. Below it, the navbar shows a burger button that opens a left drawer. The breakpoint measures the browser viewport, including when the layout is embedded in a smaller container.
+
+The drawer uses native modal behavior: opening moves focus inside, background controls become unavailable, and Escape, the close button or a backdrop click dismisses it. Closing returns focus to the menu button. Switching to desktop closes the mobile drawer and moves focus out of any hidden controls.
+
+Ordinary primary link clicks close the drawer, including router handlers that prevent the browser navigation. Modified clicks, downloads and links targeting a new tab leave it open. Native anchor attributes and refs remain available on [NavItem](/components/navigation/nav-item/).
+
+`navigationLabel` names the navigation and the drawer heading. `menuLabel` names the burger button and defaults to `navigationLabel`. `closeLabel` defaults to your configured close label. Provide localized strings for these props. `skipLabel` enables a keyboard-visible link that moves focus directly to the main area.
+
+## Compact desktop navigation
+
+Set `collapsed` to display a desktop icon rail. It supplies the collapsed context to [NavSection](/components/navigation/nav-section/) and NavItem. Navigation is expanded in the mobile drawer.
+
+```tsx
+const [collapsed, setCollapsed] = useState(false);
+
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" collapsed={collapsed}
+  navigationLabel="Workspace" navigation={<WorkspaceNavigation />}
+  navbar={<Button aria-pressed={collapsed} onClick={() => setCollapsed(!collapsed)}>
+    Compact navigation
+  </Button>}>
+  <ProjectList />
+</AppLayout>
+```
+
+Provide icons and text labels for rail items. The labels remain accessible and appear in tooltips on hover or keyboard focus. An explicit `collapsed` prop on a section or item overrides the layout context, including in mobile mode. Links without icons remain expanded; use the expanded sidebar when your navigation needs wide custom content.
+
+## Control the drawer
+
+Use `defaultNavigationOpen` for an initially open mobile drawer, or supply `navigationOpen` and respond to `onNavigationOpenChange` to control it. These props affect mobile navigation; desktop navigation stays visible. Entering desktop mode requests `false` through the change callback.
+
+```tsx
+const [navigationOpen, setNavigationOpen] = useState(false);
+
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar"
+  navigationLabel="Workspace" navigation={<WorkspaceNavigation />}
+  navigationOpen={navigationOpen} onNavigationOpenChange={setNavigationOpen}>
+  <ProjectList />
+</AppLayout>
+```
+
+The navigation mounts once on the client and retains its React state and DOM when the drawer closes or the breakpoint changes. The frame and main content render on the server. Hydrate the component to enable navigation and drawer interaction.
+
+## Embed and customize
+
+Override the root height to fit a contained workspace. Use `mainAs="section"` when another main landmark surrounds it. `mainProps` supplies the content element's native attributes, ref and scroll handlers. The root accepts native div attributes and its own ref.
+
+```tsx
+const mainRef = useRef<HTMLElement>(null);
+
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar"
+  navigationLabel="Preview workspace" navigation={<WorkspaceNavigation />}
+  mainAs="section" style={{ height: '30rem' }}
+  mainProps={{ ref: mainRef, 'aria-label': 'Projects', onScroll: handleScroll }}>
+  <ProjectList />
+</AppLayout>
+```
+
+Scoped `data-part` selectors identify the frame's `navbar`, `sidebar`, `navigation`, `main` and `footer`. The sidebar is the desktop container; `navigation` identifies the same content in both modes. Use your own classes to customize slot content and preserve config variables for colors and spacing.
+
+## Props
+
+<Props of="AppLayoutProps" />

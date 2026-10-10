@@ -19,6 +19,14 @@ async function toPage(context: Parameters<BrowserCommand>[0], { x, y }: Point): 
 }
 
 const commands: Record<string, BrowserCommand<never[]>> = {
+  resizeViewport: (async (context, viewport: { width: number; height: number }) => {
+    const frame = await context.frame();
+    await (await frame.frameElement()).evaluate((element, { width, height }) => {
+      if (!(element instanceof HTMLElement)) throw new Error('Browser test frame is not an HTML element');
+      element.style.width = `${width}px`;
+      element.style.height = `${height}px`;
+    }, viewport);
+  }) as BrowserCommand<never[]>,
   pressKey: (async (context, key: string) => context.page.keyboard.press(key)) as BrowserCommand<never[]>,
   typeText: (async (context, text: string) => context.page.keyboard.type(text)) as BrowserCommand<never[]>,
   mouseMove: (async (context, point: Point) => {

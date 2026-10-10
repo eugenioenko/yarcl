@@ -121,7 +121,9 @@ export function Modal({
   radius,
   slotComponent,
   slotRadiusOverride,
-}: ModalProps & { className: string; radius?: Radius; slotComponent: 'Dialog' | 'Drawer'; slotRadiusOverride?: Radius }) {
+  keepMounted = false,
+  id,
+}: ModalProps & { className: string; radius?: Radius; slotComponent: 'Dialog' | 'Drawer'; slotRadiusOverride?: Radius; keepMounted?: boolean; id?: string }) {
   const config = useConfig();
   const rootSlot = useSlotClass(slotComponent, 'root', { radius: slotRadiusOverride });
   const headerSlot = useSlotClass(slotComponent, 'header');
@@ -143,12 +145,13 @@ export function Modal({
         })}
       <dialog
         {...dialogProps}
+        id={id}
         data-part="root"
         className={cx('yarcl-modal', rootSlot, `yarcl-modal-size-${size ?? config.defaults.modalSize}`, radiusClass(radius), className)}
         aria-labelledby={titleId}
         aria-describedby={description != null ? descriptionId : undefined}
       >
-        {open && (
+        {(open || keepMounted) && (
           <div className="yarcl-modal-content">
             <div data-part="header" className={cx('yarcl-modal-header', headerSlot)}>
               <div className="yarcl-modal-heading">

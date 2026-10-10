@@ -1,5 +1,5 @@
 import { Fragment, isValidElement, useContext, type ComponentProps, type ReactNode } from 'react';
-import { cx, radiusClass, sizeClass } from '../classes';
+import { cx, colorClass, radiusClass, sizeClass } from '../classes';
 import type { Radius, Size } from '../types';
 import { useConfig } from '../runtime';
 import { NavigationContext } from '../navigation';
@@ -41,7 +41,7 @@ export function NavItem({ icon, active, collapsed, size, radius, className, chil
   const isCollapsed = (collapsed ?? inherited) && hasIcon;
   const link = (
     <a
-      className={cx('yarcl-nav-item', isCollapsed && 'yarcl-nav-item-collapsed', sizeClass(size ?? defaults.size), radiusClass(radius ?? defaults.radius, size ?? defaults.size), className)}
+      className={cx('yarcl-nav-item', colorClass(defaults.color), isCollapsed && 'yarcl-nav-item-collapsed', sizeClass(size ?? defaults.size), radiusClass(radius ?? defaults.radius, size ?? defaults.size), className)}
       aria-current={ariaCurrent ?? (active ? 'page' : undefined)}
       {...props}
     >

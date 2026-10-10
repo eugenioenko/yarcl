@@ -42,3 +42,5 @@ body {
   width: var(--yarcl-icon);
   height: var(--yarcl-icon);
 }
+
+.yarcl-app-layout:not([data-desktop]) .app-demo-collapse { display: none; }
