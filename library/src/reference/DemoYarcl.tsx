@@ -44,6 +44,7 @@ import {
   Textarea,
   Toaster,
   TreeView,
+  SplitPane,
   ToggleGroup,
   Tooltip,
   VisuallyHidden,
@@ -98,6 +99,7 @@ const components = [
   Textarea,
   Toaster,
   TreeView,
+  SplitPane,
   ToggleGroup,
   Tooltip,
   VisuallyHidden,
@@ -172,6 +174,7 @@ export function DemoYarcl({ title = 'yarcl demo' }: DemoYarclProps) {
           <Alert title="Installation works">Every public component is available to this build.</Alert>
           <Skeleton lines={2} aria-label="Loading content" />
           <EmptyState title="Nothing here" description="This is the empty state component." />
+          <SplitPane primaryLabel="Files" primary={<Text>Project files</Text>} secondary={<Text>Document preview</Text>} defaultValue={35} />
           <TreeView aria-label="Project files" defaultExpanded={['projects']} defaultValue="readme"
             items={[{ id: 'projects', label: 'Projects', children: [{ id: 'readme', label: 'Readme' }, { id: 'notes', label: 'Design notes' }] }, { id: 'archive', label: 'Archive', disabled: true }]} />
           <Grid columns={2}><Card>Overview</Card><Card>Activity</Card></Grid>

@@ -54,6 +54,8 @@ export { NavItem } from './components/NavItem';
 export type { NavItemProps } from './components/NavItem';
 export { Breadcrumb } from './components/Breadcrumb';
 export type { BreadcrumbProps, BreadcrumbItemProps } from './components/Breadcrumb';
+export { SplitPane } from './components/SplitPane';
+export type { SplitPaneProps } from './components/SplitPane';
 export { Stack } from './components/Stack';
 export type { StackProps, LayoutProps, LayoutElement } from './components/Stack';
 export { Inline } from './components/Inline';

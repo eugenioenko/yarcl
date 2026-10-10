@@ -1,10 +1,10 @@
-import { Button, Card, Grid, IconButton, Stack, TreeView, type IconButtonLinkProps, type Responsive, type Spacing } from '@yarcl/react';
+import { Button, Card, Grid, IconButton, Stack, SplitPane, TreeView, type IconButtonLinkProps, type Responsive, type Spacing } from '@yarcl/react';
 import { createRoot } from 'react-dom/client';
 import './layout.css';
 
 const iconLink: IconButtonLinkProps = { href: 'https://example.com', 'aria-label': 'Open external site', target: '_blank', rel: 'noopener noreferrer' };
 const gap = { base: 'sm', lg: 'lg' } as const satisfies Responsive<Spacing>;
-const contract = <Stack gap={gap}><Grid columns={{ base: 1, md: 2 }}><Card padding={gap}>Responsive packed package</Card></Grid><TreeView aria-label="Packed files" items={[{ id: 'folder', label: 'Folder', children: [{ id: 'readme', label: 'Readme' }] }]} defaultExpanded={['folder']} defaultValue="readme" /><><Button color="packageAccent">Packed package</Button><IconButton {...iconLink}><svg aria-hidden="true" /></IconButton></></Stack>;
+const contract = <Stack gap={gap}><Grid columns={{ base: 1, md: 2 }}><Card padding={gap}>Responsive packed package</Card></Grid><TreeView aria-label="Packed files" items={[{ id: 'folder', label: 'Folder', children: [{ id: 'readme', label: 'Readme' }] }]} defaultExpanded={['folder']} defaultValue="readme" /><SplitPane primaryLabel="Packed files" primary="Files" secondary="Document" defaultValue={35} /><><Button color="packageAccent">Packed package</Button><IconButton {...iconLink}><svg aria-hidden="true" /></IconButton></></Stack>;
 
 // @ts-expect-error icon links must have an accessible name
 const unnamedLink = <IconButton href="https://example.com" />;
@@ -28,3 +28,7 @@ void [invalidSpacing, invalidBreakpoint];
 // @ts-expect-error identifier inference survives the installed declarations
 const invalidTree = <TreeView aria-label="Files" items={[{ id: 'known', label: 'Known' }]} value="missing" />;
 void invalidTree;
+
+// @ts-expect-error Packed SplitPane types require a numeric percentage.
+const invalidSplit = <SplitPane primaryLabel="Files" primary="Files" secondary="Document" value="30%" />;
+void invalidSplit;

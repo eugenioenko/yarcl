@@ -83,6 +83,7 @@ For any token prop, the first value found wins:
 | `Dialog` | `radius`, `size` (from `modalSizes`) |
 | `Drawer` | `size` (from `modalSizes`) |
 | `TreeView` | `size`, `radius`, `color` |
+| `SplitPane` | `size`, `radius`, `color` |
 | `Menu` | `size` |
 | `CommandPalette` | `size`, `radius`, `color` |
 | `Tabs` | `size`, `color` |

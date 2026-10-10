@@ -1,3 +1,4 @@
+import { SplitPane } from '@yarcl/react';
 import { TreeView, type TreeViewItem } from '@yarcl/react';
 import { createComponent } from '@yarcl/react';
 import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
@@ -556,3 +557,20 @@ export const treeContract = <>
   {/* @ts-expect-error radius keys come from the consumer config */}
   <TreeView items={treeItems} aria-label="Workspace" radius="missing" />
 </>;
+
+<SplitPane primaryLabel="Navigation" secondaryLabel="Content" primary={<button>Files</button>} secondary={<input aria-label="Document" />}
+  size="talla-s" color="clay" radius="hairline" orientation="vertical" value={30} defaultValue={40}
+  onValueChange={(value: number) => void value} onValueCommit={(value: number) => void value} min={0} max={100}
+  step={0.5} largeStep={15} disabled formatValue={(value) => `${value} percent`} ref={(element: HTMLDivElement | null) => { element?.focus(); }} data-test="split" />;
+// @ts-expect-error A separator needs its primary pane's name.
+<SplitPane primary="Files" secondary="Document" />;
+// @ts-expect-error Sizes come from this consumer's config.
+<SplitPane primaryLabel="Files" primary="Files" secondary="Document" size="unknown-size" />;
+// @ts-expect-error Colors come from this consumer's config.
+<SplitPane primaryLabel="Files" primary="Files" secondary="Document" color="unknown-color" />;
+// @ts-expect-error Radii come from this consumer's config.
+<SplitPane primaryLabel="Files" primary="Files" secondary="Document" radius="unknown-radius" />;
+// @ts-expect-error Layout orientation is horizontal or vertical.
+<SplitPane primaryLabel="Files" primary="Files" secondary="Document" orientation="diagonal" />;
+// @ts-expect-error Pane size is a percentage number.
+<SplitPane primaryLabel="Files" primary="Files" secondary="Document" value="30%" />;
