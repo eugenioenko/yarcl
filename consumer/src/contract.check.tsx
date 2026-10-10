@@ -736,3 +736,50 @@ export function labelsContract() {
     <FileDropzone label="Photo" labels={{ removeItem: (name: number) => String(name) }} />
   </>;
 }
+
+const partSettings = defineConfig({
+  ...config,
+  components: {
+    Table: { slots: { root: { radius: 'square', border: 'double', borderWidth: 'width' }, header: { textStyle: 'caption', background: 'tint' }, cell: { density: 'dense' } } },
+    Card: { slots: { body: { padding: 'tight' } } },
+    Dialog: { slots: { header: { textStyle: 'caption' }, body: { padding: 'tight' }, footer: { background: 'surface' } } },
+    Drawer: { slots: { root: { radius: 'square' }, footer: { border: 'dotted' } } },
+    Tabs: { slots: { list: { padding: 'tight' }, trigger: { textStyle: 'caption' } } },
+    Menu: { slots: { panel: { border: 'dashed' }, item: { padding: 'tight' } } },
+    Listbox: { slots: { panel: { background: 'surface' }, item: { textStyle: 'caption' } } },
+  },
+});
+void partSettings;
+const cardParts = <Card><Card.Header ref={() => {}}>Heading</Card.Header><Card.Body>Content</Card.Body><Card.Footer>Actions</Card.Footer></Card>;
+void cardParts;
+// @ts-expect-error unknown slot name
+defineConfig({ ...config, components: { Table: { slots: { missing: { padding: 'tight' } } } } });
+// @ts-expect-error slot properties are specific to each part
+defineConfig({ ...config, components: { Table: { slots: { row: { radius: 'square' } } } } });
+// @ts-expect-error slots are supported only on declared components
+defineConfig({ ...config, components: { Button: { slots: { root: { radius: 'square' } } } } });
+// @ts-expect-error unknown radius token
+defineConfig({ ...config, components: { Card: { slots: { root: { radius: 'missing' } } } } });
+// @ts-expect-error unknown spacing token
+defineConfig({ ...config, components: { Dialog: { slots: { body: { padding: 'missing' } } } } });
+// @ts-expect-error unknown text style token
+defineConfig({ ...config, components: { Table: { slots: { header: { textStyle: 'missing' } } } } });
+// @ts-expect-error unknown density token
+defineConfig({ ...config, components: { Table: { slots: { cell: { density: 'missing' } } } } });
+// @ts-expect-error unknown shadow token
+defineConfig({ ...config, components: { Menu: { slots: { panel: { shadow: 'missing' } } } } });
+// @ts-expect-error backgrounds cannot contain raw CSS
+defineConfig({ ...config, components: { Drawer: { slots: { footer: { background: '#fff' } } } } });
+// @ts-expect-error borders cannot contain raw CSS
+defineConfig({ ...config, components: { Card: { slots: { root: { border: '1px solid red' } } } } });
+// @ts-expect-error border widths reference the borders group
+defineConfig({ ...config, components: { Table: { slots: { root: { borderWidth: 'missing' } } } } });
+// @ts-expect-error size matching is a control prop, not a slot radius token
+defineConfig({ ...config, components: { Menu: { slots: { panel: { radius: 'size' } } } } });
+const invalidPartsFromVariable = { Card: { slots: { body: { padding: 'tight', rawCss: 'color: red' } } } } as const;
+// @ts-expect-error unknown properties are rejected even through variables
+defineConfig({ ...config, components: invalidPartsFromVariable });
+
+const optionalInvalidSlot: { Card: { slots?: { body?: { padding: 'missing' } } } } = { Card: { slots: { body: { padding: 'missing' } } } };
+// @ts-expect-error optional settings passed through variables still validate token references
+defineConfig({ ...config, components: optionalInvalidSlot });

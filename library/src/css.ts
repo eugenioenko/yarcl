@@ -1,6 +1,7 @@
 import { contrast, mix, parseHex, readableOn, readableText, toHex } from './color';
 import type { ColorPair, ColorToken, ComponentName, FontFaceToken, SizeToken, VariantToken, YarclShape } from './define';
 import { generateRecipeCss } from './recipe-css';
+import { generateSlotCss } from './slot-css';
 
 const MIN_CONTRAST = 4.5;
 const LAYERS = '@layer yarcl.tokens, yarcl.base, yarcl.recipes;';
@@ -359,7 +360,7 @@ function generate(config: YarclShape, warn: (message: string) => void, tokensOnl
 
   if (tokensOnly) return `${LAYERS}\n\n@layer yarcl.tokens {\n${[rule(':root', root), ...textRules].join('\n\n')}\n}\n`;
   const faces = (config.typography.fontFaces ?? []).map(fontFace);
-  const recipes = generateRecipeCss(config);
+  const recipes = [...generateSlotCss(config), ...generateRecipeCss(config)];
   return [
     LAYERS,
     ...media,

@@ -1,4 +1,5 @@
 import JSON5 from 'json5';
+import { componentSlots } from '@yarcl/react/define';
 import type { ComponentName, ComponentTokenProps, YarclShape } from '@yarcl/react/define';
 import { themes } from '@yarcl/react/themes';
 import { generateCss } from '@yarcl/react/generate';
@@ -58,7 +59,7 @@ const componentProps = {
   Alert: ['radius', 'color', 'variant', 'gap', 'padding', 'textStyle'],
   Card: ['radius', 'padding', 'shadow'], Popover: ['radius', 'padding'], HoverCard: ['radius', 'padding'],
   Dialog: ['radius', 'size'], Drawer: ['size'], CommandPalette: ['size', 'radius', 'color'],
-  Menu: ['size'], Tabs: ['size', 'color'],
+  Menu: ['size'], Listbox: [], Tabs: ['size', 'color'],
   Pagination: ['size', 'radius', 'color', 'variant', 'selectedVariant'],
   Accordion: ['size', 'radius', 'color'], Table: ['density', 'radius'],
   Stack: ['gap'], Grid: ['gap'], Inline: ['gap'], Text: ['textStyle', 'color'],
@@ -79,6 +80,16 @@ const components = Object.fromEntries(Object.entries(componentProps).map(([name,
       Object.entries(size.fields!).map(([key, field]) => [key, optional(field)]),
     ))));
     fields.sizeOverrides.ref = 'sizes';
+  }
+  if (Object.hasOwn(componentSlots, name)) {
+    const parts = componentSlots[name as keyof typeof componentSlots] as Record<string, readonly string[]>;
+    const slotRefs: Record<string, Schema> = {
+      ...tokenRefs, radius: ref('radii'), borderWidth: ref('borders'),
+      background: options('surface', 'tint', 'none'), border: options('solid', 'dashed', 'dotted', 'double', 'none'),
+    };
+    fields.slots = optional(object(Object.fromEntries(Object.entries(parts).map(([part, properties]) => [
+      part, optional(object(Object.fromEntries(properties.map((property) => [property, optional(slotRefs[property])])))),
+    ]))));
   }
   return [name, optional(object(fields))];
 }));
@@ -139,7 +150,7 @@ const labels: Record<string, string> = {
   radii: 'Corner radii', zIndex: 'Layer order', fontFaces: 'Font files', src: 'Sources',
   paddingX: 'Horizontal padding', paddingY: 'Vertical padding', fonts: 'Font roles', styles: 'Text styles',
   sizeOverrides: 'Size overrides', allowedSizes: 'Allowed sizes', prose: 'Rich text', components: 'Component settings',
-  labels: 'Built-in text',
+  labels: 'Built-in text', slots: 'Part styles', borderWidth: 'Border width',
   h1: 'Heading level 1', h2: 'Heading level 2', h3: 'Heading level 3', h4: 'Heading level 4', h5: 'Heading level 5', h6: 'Heading level 6',
   fill: 'Filled', tint: 'Tinted', none: 'None', color: 'Semantic color', neutral: 'Neutral', size: 'Size',
 };

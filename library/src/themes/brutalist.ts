@@ -41,7 +41,7 @@ export const brutalist = defineConfig({
     md: `5px 5px 0 0 ${ink}`,
     lg: `8px 8px 0 0 ${ink}`,
   },
-  borders: { width: '2px' },
+  borders: { width: '2px', heavy: '4px' },
   typography: {
     families: {
       sans: '"JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace',
@@ -60,5 +60,11 @@ export const brutalist = defineConfig({
     headings: { h1: 'display', h2: 'heading', h3: 'heading', h4: 'subheading', h5: 'subheading', h6: 'label' },
   },
   focusRing: { width: '3px', offset: '3px', color: 'neutral', style: 'dashed' },
+  components: {
+    ...defaults.components,
+    Card: { slots: { root: { border: 'double', borderWidth: 'heavy' } } },
+    Table: { slots: { header: { textStyle: 'label' } } },
+    Dialog: { slots: { footer: { background: 'tint', padding: 'md' } } },
+  },
   defaults: { ...defaults.defaults, radius: 'md', padding: 'lg', floatingShadow: 'md' },
 }) satisfies ThemeContract;

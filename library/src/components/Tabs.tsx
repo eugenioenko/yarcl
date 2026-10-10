@@ -10,6 +10,7 @@ import { colorClass, cx, sizeClass } from '../classes';
 import { useControllable } from '../hooks';
 import type { Color, ComponentSize } from '../types';
 import { useDefaults } from '../runtime';
+import { useSlotClass } from '../slot-classes';
 
 
 interface TabsContextValue {
@@ -87,7 +88,7 @@ function TabsList({ className, onKeyDown, ...props }: TabsListProps) {
     select(tabs[next].dataset.value!);
   }
 
-  return <div role="tablist" className={cx('yarcl-tabs-list', className)} onKeyDown={handleKeyDown} {...props} />;
+  return <div role="tablist" data-part="list" className={cx(useSlotClass('Tabs', 'list'), 'yarcl-tabs-list', className)} onKeyDown={handleKeyDown} {...props} />;
 }
 
 /** Props for `Tabs.Trigger`. */
@@ -108,7 +109,8 @@ function TabsTrigger({ value, className, onClick, ...props }: TabsTriggerProps) 
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
       data-value={value}
-      className={cx('yarcl-tabs-trigger', className)}
+      data-part="trigger"
+      className={cx(useSlotClass('Tabs', 'trigger'), 'yarcl-tabs-trigger', className)}
       onClick={(event) => {
         onClick?.(event);
         context.select(value);

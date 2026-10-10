@@ -52,5 +52,10 @@ export const editorial = defineConfig({
     headings: { h1: 'display', h2: 'heading', h3: 'heading', h4: 'subheading', h5: 'subheading', h6: 'label' },
   },
   focusRing: { width: '3px', offset: '3px', color: 'primary', style: 'double' },
+  components: {
+    ...defaults.components,
+    Table: { slots: { header: { textStyle: 'label' } } },
+    Dialog: { slots: { header: { textStyle: 'subheading' }, footer: { background: 'tint', padding: 'md' } } },
+  },
   defaults: { ...defaults.defaults, radius: 'square', padding: 'lg', gap: 'md', floatingShadow: 'md' },
 }) satisfies ThemeContract;

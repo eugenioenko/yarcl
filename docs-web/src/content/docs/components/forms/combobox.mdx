@@ -91,6 +91,10 @@ Chips are [Badges](/components/feedback/badge/) in the control's `size` and `col
 
 The input has `role="combobox"` and points at the highlighted option with `aria-activedescendant`. With `multiple`, the listbox has `aria-multiselectable` and selected options have `aria-selected`. Chips are a list named "Selected", and each remove button is labelled with the option, like "Remove Sweden". Chips are not tab stops, so <kbd>Tab</kbd> goes straight to the input.
 
+## Part styles
+
+Single and multiple selection popups follow shared `components.Listbox.slots` settings with `data-part="panel"` and `"item"`. The same settings style Select popups. See [component parts](/configuration/component-slots/).
+
 ## Props
 
 Accepts every native `<input>` attribute except `color`, `size`, `value`, `defaultValue`, `onChange` and `multiple`.

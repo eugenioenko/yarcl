@@ -19,15 +19,22 @@ import { cx, densityClass, radiusClass } from '../classes';
 import { Checkbox } from './Checkbox';
 import type { Density, Radius } from '../types';
 import { useLabels, useConfig, useDefaults } from '../runtime';
+import { useSlotClass } from '../slot-classes';
 import { useMergeRefs } from '@floating-ui/react';
 
 interface TableContextValue {
   wrapRef: RefObject<HTMLDivElement | null>;
   density: Density | undefined;
   stickyHeader: boolean;
+  densityOverride: boolean;
 }
 
 const TableContext = createContext<TableContextValue | null>(null);
+
+function useTableCellClass() {
+  const context = useContext(TableContext);
+  return useSlotClass('Table', 'cell', { density: context?.densityOverride ? true : undefined });
+}
 
 /** Props for {@link Table}. */
 export interface TableProps extends ComponentProps<'table'> {
@@ -74,12 +81,14 @@ function TableRoot({
   const wrapRef = useRef<HTMLDivElement>(null);
 
   return (
-    <TableContext value={{ wrapRef, density: resolvedDensity, stickyHeader: !!stickyHeader }}>
+    <TableContext value={{ wrapRef, density: resolvedDensity, stickyHeader: !!stickyHeader, densityOverride: density !== undefined }}>
       <div
         ref={wrapRef}
+        data-part="root"
         tabIndex={stickyHeader ? 0 : undefined}
         className={cx(
           'yarcl-table-wrap',
+          useSlotClass('Table', 'root', { radius }),
           radiusClass(radius ?? own.radius),
           stickyHeader && 'yarcl-table-sticky-wrap',
           wrapClassName,
@@ -183,6 +192,8 @@ function TableHeaderCell({
   children,
   ...props
 }: TableHeaderCellProps) {
+  const cellClass = useTableCellClass();
+  const headerClass = useSlotClass('Table', 'header');
   if (sortable) {
     const ariaSort =
       sortDirection === 'ascending' ? 'ascending' : sortDirection === 'descending' ? 'descending' : 'none';
@@ -190,9 +201,10 @@ function TableHeaderCell({
 
     return (
       <th
+        data-part="header"
         scope={scope}
         aria-sort={ariaSort}
-        className={cx(`yarcl-cell-${align}`, 'yarcl-table-sortable', className)}
+        className={cx(cellClass, headerClass, `yarcl-cell-${align}`, 'yarcl-table-sortable', className)}
         {...props}
       >
         <button
@@ -211,7 +223,7 @@ function TableHeaderCell({
   }
 
   return (
-    <th scope={scope} className={cx(`yarcl-cell-${align}`, className)} {...props}>
+    <th data-part="header" scope={scope} className={cx(cellClass, headerClass, `yarcl-cell-${align}`, className)} {...props}>
       {children}
     </th>
   );
@@ -227,8 +239,9 @@ export interface TableRowProps extends ComponentProps<'tr'> {
 function TableRow({ selected, className, ...props }: TableRowProps) {
   return (
     <tr
+      data-part="row"
       aria-selected={selected ? true : undefined}
-      className={cx(selected && 'yarcl-table-row-selected', className)}
+      className={cx(useSlotClass('Table', 'row'), selected && 'yarcl-table-row-selected', className)}
       {...props}
     />
   );
@@ -245,7 +258,8 @@ export interface TableCellProps extends Omit<ComponentProps<'td'>, 'align'> {
 
 /** Aligns native cell content using the table density. */
 function TableCell({ align = 'start', className, ...props }: TableCellProps) {
-  return <td className={cx(`yarcl-cell-${align}`, className)} {...props} />;
+  const cellClass = useTableCellClass();
+  return <td data-part="cell" className={cx(cellClass, `yarcl-cell-${align}`, className)} {...props} />;
 }
 
 /** Props for `Table.SelectAllCell`. */
@@ -274,8 +288,10 @@ function TableSelectAllCell({
   ...props
 }: TableSelectAllCellProps) {
   const labels = useLabels();
+  const cellClass = useTableCellClass();
+  const headerClass = useSlotClass('Table', 'header');
   return (
-    <th scope={scope} className={cx('yarcl-cell-center', 'yarcl-table-selection-cell', className)} {...props}>
+    <th data-part="header" scope={scope} className={cx(cellClass, headerClass, 'yarcl-cell-center', 'yarcl-table-selection-cell', className)} {...props}>
       <Checkbox
         aria-label={ariaLabel ?? labels.selectAllRows}
         checked={checked}
@@ -308,8 +324,9 @@ function TableSelectionCell({
   className,
   ...props
 }: TableSelectionCellProps) {
+  const cellClass = useTableCellClass();
   return (
-    <td className={cx('yarcl-cell-center', 'yarcl-table-selection-cell', className)} {...props}>
+    <td data-part="cell" className={cx(cellClass, 'yarcl-cell-center', 'yarcl-table-selection-cell', className)} {...props}>
       <Checkbox
         aria-label={ariaLabel}
         checked={checked}

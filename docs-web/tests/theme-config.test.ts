@@ -122,3 +122,35 @@ describe('playground config', () => {
     expect(checkTheme(theme)).toContain('sizes.sm is required by the preview.');
   });
 });
+
+
+describe('playground component parts', () => {
+  it('round trips token-only part settings and validates every supported component', () => {
+    const theme = fresh();
+    theme.components = {
+      Table: { slots: { root: { radius: 'square', border: 'double' }, header: { textStyle: 'label' }, cell: { density: 'compact' } } },
+      Card: { slots: { body: { padding: 'lg' } } },
+      Dialog: { slots: { footer: { background: 'tint' } } },
+      Drawer: { slots: { header: { textStyle: 'caption' } } },
+      Tabs: { slots: { trigger: { radius: 'square' } } },
+      Menu: { slots: { panel: { shadow: 'lg' } } },
+      Listbox: { slots: { item: { padding: 'sm' } } },
+    };
+    const parsed = parseConfig(serializeConfig(theme));
+    expect(parsed).toEqual(theme);
+    expect(checkTheme(parsed)).toEqual([]);
+  });
+
+  it.each([
+    { Table: { slots: { missing: { textStyle: 'label' } } } },
+    { Table: { slots: { row: { radius: 'square' } } } },
+    { Card: { slots: { body: { padding: 'missing' } } } },
+    { Dialog: { slots: { header: { textStyle: 'missing' } } } },
+    { Menu: { slots: { panel: { border: '1px solid red' } } } },
+    { Listbox: { slots: { item: { background: '#fff' } } } },
+    { Tabs: { slots: { trigger: { border: 'solid' } } } },
+    { Button: { slots: { root: { radius: 'square' } } } },
+  ])('rejects invalid part settings entered in the editor', (components) => {
+    expect(checkTheme({ ...fresh(), components }).join('\n')).toContain('components.');
+  });
+});

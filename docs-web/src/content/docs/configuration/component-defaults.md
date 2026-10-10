@@ -52,6 +52,8 @@ Everything is checked:
 - `allowedSizes` must contain at least one global size and include the resolved component default
 - `sizeOverrides` can only use global sizes allowed for that component and fields from a size token
 
+Parts such as table headers and dialog footers can use typed `slots` settings. See [component parts](/configuration/component-slots/) for their properties and precedence. `Listbox` accepts shared part settings for Select and Combobox, rather than public token prop defaults.
+
 ## Resolution order
 
 For any token prop, the first value found wins:
