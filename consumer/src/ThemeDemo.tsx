@@ -3,6 +3,7 @@ import { Field, Inline, Link, Select } from '@yarcl/react';
 import { DemoYarcl } from '@yarcl/react/demo';
 import { applyTheme, resetTheme } from '@yarcl/react/css';
 import { themeNames, themes } from '@yarcl/react/themes';
+import { StepperDemo } from './StepperDemo';
 
 type Theme = keyof typeof themes;
 type Scheme = 'light dark' | 'light' | 'dark';
@@ -52,7 +53,7 @@ export function ThemeDemo() {
           </Field>
         </Inline>
       </Inline>
-      <DemoYarcl title="Component showcase" />
+      {new URLSearchParams(location.search).get('example') === 'stepper' ? <StepperDemo /> : <DemoYarcl title="Component showcase" />}
     </main>
   );
 }

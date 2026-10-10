@@ -31,6 +31,7 @@ export default defineConfig({
   radii: {
     square: '0',
     hairline: '2px',
+    circle: '9999px',
   },
   variants,
   spacing: {
@@ -82,6 +83,7 @@ export default defineConfig({
   borders: { width: '1px' },
   focusRing: { width: '2px', offset: '3px', color: 'clay' },
   components: {
+    Stepper: { radius: 'circle' },
     AppLayout: { padding: "4" },
     NavSection: { gap: "2", textStyle: "label" },
     Card: { slots: { body: { padding: '2' } } },

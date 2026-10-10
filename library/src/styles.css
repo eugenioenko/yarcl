@@ -1035,9 +1035,32 @@ p.yarcl-text {
 
 .yarcl-stepper-vertical { flex-direction: column; }
 
-.yarcl-stepper-item { flex: 1; min-width: 0; }
+.yarcl-stepper-item { position: relative; flex: 1; min-width: 0; }
+
+.yarcl-stepper-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset-block-start: calc(var(--yarcl-px) / 2 + var(--yarcl-h) / 2 - var(--yarcl-border-width) / 2);
+  inset-inline-start: 50%;
+  inline-size: calc(100% + var(--yarcl-component-gap, var(--yarcl-gap)));
+  block-size: var(--yarcl-border-width);
+  background: var(--yarcl-neutral-border);
+  pointer-events: none;
+}
+
+.yarcl-stepper-item[data-completed]:not(:last-child)::after { background: var(--yarcl-c); }
+
+.yarcl-stepper-vertical .yarcl-stepper-item:not(:last-child)::after {
+  inset-inline-start: calc(var(--yarcl-px) / 2 + var(--yarcl-h) / 2 - var(--yarcl-border-width) / 2);
+  inset-block-start: calc(var(--yarcl-px) / 2 + var(--yarcl-h) / 2);
+  inline-size: var(--yarcl-border-width);
+  block-size: calc(100% + var(--yarcl-component-gap, var(--yarcl-gap)));
+}
 
 .yarcl-stepper-entry {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1060,7 +1083,7 @@ button.yarcl-stepper-entry:not(:disabled):hover .yarcl-stepper-indicator {
   border-color: var(--yarcl-c);
 }
 
-.yarcl-stepper-vertical .yarcl-stepper-entry { flex-direction: row; text-align: start; }
+.yarcl-stepper-vertical .yarcl-stepper-entry { flex-direction: row; align-items: flex-start; text-align: start; }
 
 .yarcl-stepper-indicator {
   display: inline-flex;

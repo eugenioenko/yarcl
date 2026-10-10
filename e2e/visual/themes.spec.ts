@@ -42,6 +42,25 @@ test('component demo', async ({ page }, info) => {
   await expect(page).toHaveScreenshot('demo.png', { fullPage: true });
 });
 
+test('stepper shapes and orientations', async ({ page }, info) => {
+  const { theme, scheme } = info.project.metadata;
+  const response = await page.goto(`http://127.0.0.1:4250/?page=themes&example=stepper&theme=${theme}&scheme=${scheme}`);
+  expect(response?.status()).toBe(200);
+  await expect(page.locator('#yarcl-theme')).toBeAttached();
+  await page.evaluate(() => document.fonts.ready);
+  const stepper = page.getByRole('list', { name: 'Checkout', exact: true });
+  await page.getByRole('button', { name: 'Complete and continue', exact: true }).click();
+  for (const vertical of [false, true]) {
+    await page.getByRole('switch', { name: 'Vertical layout', exact: true }).setChecked(vertical);
+    for (const circular of [true, false]) {
+      await page.getByRole('switch', { name: 'Circular stages', exact: true }).setChecked(circular);
+      await page.mouse.move(0, 0);
+      await expect(stepper).toHaveScreenshot(`stepper-${vertical ? 'vertical' : 'horizontal'}-${circular ? 'circle' : 'rounded'}.png`);
+      await expect.poll(() => stepper.evaluate((element) => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(0);
+    }
+  }
+});
+
 test('demo dialog', async ({ page }, info) => {
   await open(page, info, 'demo');
   await page.getByRole('button', { name: 'Dialog', exact: true }).click();

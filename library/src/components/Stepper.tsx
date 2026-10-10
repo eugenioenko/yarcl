@@ -44,7 +44,8 @@ export type StepperProps<V extends string = string> = StepperBaseProps<V>
   & ({ 'aria-label': string; 'aria-labelledby'?: string } | { 'aria-label'?: string; 'aria-labelledby': string });
 
 /**
- * Shows progress through named stages with current, completed and disabled states.
+ * Shows connected progress through named stages with current, completed and disabled states.
+ * Radius tokens shape the stage indicators; the default config uses circular indicators.
  * Interactive stages share a roving tab stop. Arrows and Home/End move focus; Enter/Space activate.
  * Use readOnly for progress controlled by a separate form or navigation flow.
  * @example
