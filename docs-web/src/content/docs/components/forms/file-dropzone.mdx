@@ -70,6 +70,74 @@ For an existing image hosted by your app, pass `previewUrl` and `previewName`. C
 
 `onFilesChange` still receives an array in either mode for existing upload handlers. In single-file mode, `onChange` receives the file or `null` after removal.
 
+## Controlled multi-file uploads
+
+With `multiple`, use `files` and `onFilesChange` to own the selected list, or `defaultFiles` for an uncontrolled initial list. Picker selections and drops replace the list after applying `accept`; removing a file proposes a new list. A controlled picker displays the parent's `files` until the parent updates them. Pass `[]` to clear it after an upload. Arrays can be readonly and are never mutated.
+
+```tsx
+import { useState } from 'react';
+import { FileDropzone } from '@yarcl/react';
+
+function Attachments() {
+  const [files, setFiles] = useState<readonly File[]>([]);
+  return (
+    <FileDropzone
+      label="Attachments"
+      multiple
+      files={files}
+      onFilesChange={setFiles}
+    />
+  );
+}
+```
+
+For upload-on-select, leave `files={[]}` and start the request in `onFilesChange`. Display progress and uploaded attachments in your own list. The native input resets after every selection, allowing the same file to be picked again. Cancelling the picker or selecting only rejected files leaves the list unchanged.
+
+`files` and `defaultFiles` apply only to multi-file mode. `value`, `defaultValue`, `onChange`, and preview props apply only to single-file mode. Choose the API that matches `multiple`.
+
+## Open the picker from another control
+
+`inputRef` exposes the existing native file input. Call its `click()` from a user action, such as a Replace button. This opens the same picker with the same `accept`, `multiple`, disabled state and callbacks. The regular `ref` still targets the outer div. Object refs and React 19 callback refs with cleanup are supported.
+
+```tsx
+import { useRef } from 'react';
+import { Button, FileDropzone } from '@yarcl/react';
+
+function AttachmentPicker() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  return (
+    <>
+      <Button onClick={() => inputRef.current?.click()}>Replace attachment</Button>
+      <FileDropzone
+        label="Attachments"
+        inputRef={inputRef}
+        onFilesChange={(files) => upload(files)}
+      />
+    </>
+  );
+}
+```
+
+Browsers require a user action to open a file picker. Disable an external Replace control when the dropzone is disabled. Set the attachment being replaced in your own state before opening the picker; the component handles file selection, while your app decides which upload to replace.
+
+## Custom copy and accessibility
+
+Use `labels` to override picker and drop instructions locally, or translate `config.labels` for the whole app:
+
+```tsx
+<FileDropzone
+  label="Attachments"
+  multiple
+  labels={{
+    chooseFiles: 'Browse attachments',
+    dropFiles: 'Drop attachments here',
+    removeItem: (name) => `Delete ${name}`,
+  }}
+/>
+```
+
+The visible label names the group. The picker button works with Enter and Space; the hidden input stays out of the tab sequence. Selected files are announced through a polite live region, and Remove buttons include each file's name. Disabled controls ignore picking and dropping. Keep uploaded-file actions outside the dropzone's internal list when they belong to a separate server-side attachment state.
+
 ## Props
 
 <Props of="FileDropzoneProps" />

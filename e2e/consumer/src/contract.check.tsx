@@ -455,3 +455,11 @@ defineConfig({ ...config, components: invalidPartsFromVariable });
 const optionalInvalidSlot: { Card: { slots?: { body?: { padding: 'missing' } } } } = { Card: { slots: { body: { padding: 'missing' } } } };
 // @ts-expect-error optional settings passed through variables still validate token references
 defineConfig({ ...config, components: optionalInvalidSlot });
+
+<FileDropzone label="Uploads" multiple files={[]} defaultFiles={[]} inputRef={(input) => { input?.click(); }} onFilesChange={(files) => files.length} />;
+// @ts-expect-error files must be File objects
+<FileDropzone label="Uploads" multiple files={['document.pdf']} />;
+// @ts-expect-error defaultFiles must be File objects
+<FileDropzone label="Uploads" multiple defaultFiles={[42]} />;
+// @ts-expect-error inputRef exposes a native file input
+<FileDropzone label="Uploads" inputRef={(input: HTMLTextAreaElement | null) => { input?.focus(); }} />;
