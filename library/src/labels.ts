@@ -32,6 +32,10 @@ export interface ConfigLabels {
   decrease: string;
   /** Accessible name of the date picker calendar. */
   chooseDate: string;
+  /** Accessible name of the native color chooser in ColorPicker. */
+  chooseColor: string;
+  /** Accessible name of ColorPicker's preset group. */
+  colorPresets: string;
   /** Previous month button in DatePicker. */
   previousMonth: string;
   /** Next month button in DatePicker. */

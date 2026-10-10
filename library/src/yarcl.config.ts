@@ -19,6 +19,8 @@ export default defineConfig({
     increase: 'Increase',
     decrease: 'Decrease',
     chooseDate: 'Choose date',
+    chooseColor: 'Choose color',
+    colorPresets: 'Suggested colors',
     previousMonth: 'Previous month',
     nextMonth: 'Next month',
     commandPalette: 'Command palette',

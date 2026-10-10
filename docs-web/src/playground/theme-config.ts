@@ -49,6 +49,7 @@ const componentProps = {
   Input: ['size', 'radius', 'color'],
   Textarea: ['size', 'radius', 'color'],
   NumberInput: ['size', 'radius', 'color'],
+  ColorPicker: ['size', 'radius', 'color'],
   Select: ['size', 'radius', 'color'],
   Combobox: ['size', 'radius', 'color'],
   DatePicker: ['size', 'radius', 'color', 'variant'],

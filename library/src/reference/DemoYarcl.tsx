@@ -27,6 +27,7 @@ import {
   Link,
   Menu,
   NumberInput,
+  ColorPicker,
   Pagination,
   Popover,
   Progress,
@@ -83,6 +84,7 @@ const components = [
   Link,
   Menu,
   NumberInput,
+  ColorPicker,
   Pagination,
   Popover,
   Progress,
@@ -157,6 +159,7 @@ export function DemoYarcl({ title = 'yarcl demo' }: DemoYarclProps) {
           <Label htmlFor="yarcl-demo-notes">Notes</Label>
           <Textarea id="yarcl-demo-notes" />
           <NumberInput aria-label="Quantity" defaultValue={1} />
+          <ColorPicker aria-label="Highlight color" defaultValue="#4f46e5" />
           <Inline>
             <Checkbox defaultChecked>Checkbox</Checkbox>
             <Radio name="yarcl-demo-radio" value="radio" defaultChecked>

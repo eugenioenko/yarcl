@@ -61,6 +61,22 @@ test('stepper shapes and orientations', async ({ page }, info) => {
   }
 });
 
+test('color picker editing and read-only state', async ({ page }, info) => {
+  const { theme, scheme } = info.project.metadata;
+  const response = await page.goto(`http://127.0.0.1:4250/?page=themes&example=color-picker&theme=${theme}&scheme=${scheme}`);
+  expect(response?.status()).toBe(200);
+  await expect(page.locator('#yarcl-theme')).toBeAttached();
+  await page.evaluate(() => document.fonts.ready);
+  const picker = page.locator('.yarcl-color-picker');
+  await page.getByRole('button', { name: 'Forest', exact: true }).click();
+  await page.mouse.move(0, 0);
+  await expect(picker).toHaveScreenshot('color-picker-editable.png');
+  await page.getByRole('switch', { name: 'Read-only color', exact: true }).setChecked(true);
+  await page.mouse.move(0, 0);
+  await expect(picker).toHaveScreenshot('color-picker-readonly.png');
+  await expect.poll(() => picker.evaluate((element) => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(0);
+});
+
 test('demo dialog', async ({ page }, info) => {
   await open(page, info, 'demo');
   await page.getByRole('button', { name: 'Dialog', exact: true }).click();

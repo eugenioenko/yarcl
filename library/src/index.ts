@@ -20,6 +20,8 @@ export { FileDropzone } from './components/FileDropzone';
 export type { FileDropzoneProps } from './components/FileDropzone';
 export { Textarea } from './components/Textarea';
 export type { TextareaProps } from './components/Textarea';
+export { ColorPicker } from './components/ColorPicker';
+export type { ColorPickerProps, ColorPickerBaseProps, ColorPickerPreset, ColorPickerValue } from './components/ColorPicker';
 export { NumberInput } from './components/NumberInput';
 export type { NumberInputProps } from './components/NumberInput';
 export { Checkbox } from './components/Checkbox';

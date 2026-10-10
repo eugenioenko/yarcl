@@ -14,7 +14,7 @@ export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
   error?: ReactNode;
   /** Marks the control as required and shows an indicator next to the label. */
   required?: boolean;
-  /** A single form control: {@link Input}, {@link Textarea}, {@link Checkbox}, {@link Switch} or {@link Slider}. */
+  /** A single form control, such as {@link Input}, {@link ColorPicker}, {@link Textarea}, {@link Checkbox}, {@link Switch} or {@link Slider}. */
   children: ReactNode;
 }
 

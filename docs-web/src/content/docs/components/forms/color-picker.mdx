@@ -1,0 +1,93 @@
+---
+title: ColorPicker
+description: Edit a hex color with a native chooser, keyboard text entry and named suggestions.
+sidebar:
+  order: 9
+---
+
+import Preview from '@/components/Preview.astro';
+import Props from '@/components/Props.astro';
+import { ColorPickerDemo } from '@/demos/color-picker';
+
+```tsx
+import { ColorPicker, Field, type ColorPickerValue } from '@yarcl/react';
+```
+
+<Preview>
+  <ColorPickerDemo client:visible />
+</Preview>
+
+## Initial and controlled colors
+
+Supply `defaultValue` for an uncontrolled color or `value` for controlled state. An explicit initial color is required. Values use opaque sRGB hex notation with three or six digits, such as `#abc` or `#aabbcc`. Inputs, callbacks and submitted values normalize to six lowercase digits. Invalid values and preset colors throw at runtime; the `ColorPickerValue` type checks the `#` prefix.
+
+```tsx
+<Field label="Highlight" description="Enter a hex color or choose a suggestion.">
+  <ColorPicker defaultValue="#4f46e5" name="highlight" />
+</Field>
+```
+
+Own the accepted color with `value` and `onValueChange`:
+
+```tsx
+const [highlight, setHighlight] = useState<ColorPickerValue>('#4f46e5');
+
+<ColorPicker aria-label="Highlight" value={highlight} onValueChange={setHighlight} />
+```
+
+Controlled components report changes and wait for your next prop update. Their native preview, selected presets and form value always follow the accepted prop. An empty or transparent color is outside this component's value format.
+
+## Native chooser and named suggestions
+
+The swatch is a native `input` with `type="color"`. It opens the browser's color chooser and preserves its platform interactions. The adjacent hex field provides keyboard editing independently of that chooser.
+
+`presets` add buttons with visible names and decorative swatches. A selected preset exposes `aria-pressed`; selecting an already accepted color does not repeat the callback. Presets remain normal keyboard buttons, with native Enter and Space activation. Give each color a meaningful name; color alone does not identify a suggestion.
+
+```tsx
+<ColorPicker aria-label="Highlight" defaultValue="#4f46e5" presets={[
+  { value: '#4f46e5', label: 'Violet' },
+  { value: '#15803d', label: 'Forest' },
+  { value: '#b45309', label: 'Amber', disabled: true },
+]} />
+```
+
+Preset colors are application data. The separate `color` prop is a typed design-system token controlling focus and selection styling. ColorPicker supports opaque hex colors consistently across browsers; broader CSS color formats and alpha are outside this API.
+
+## Text drafts and keyboard behavior
+
+Typing changes a local draft without changing the accepted color. Enter or blur commits valid hex text, expanding shorthand and trimming surrounding whitespace. Invalid drafts expose `aria-invalid` and a native validation pattern. Committing invalid text restores the accepted value without a callback. Escape also restores the accepted color, including a newer controlled value supplied while editing.
+
+| Action | Result |
+| --- | --- |
+| Type in the hex field | Edit a draft |
+| Enter with a draft | Commit or restore it, keeping focus and preventing form submission |
+| Enter after committing | Allow normal form submission |
+| Blur the hex field | Commit valid text or restore the accepted color |
+| Escape with a draft | Restore the accepted color |
+| Tab | Move through the native chooser, text input and enabled preset buttons |
+
+Native `onKeyDown` and `onBlur` handlers run before the internal behavior; `preventDefault()` cancels that behavior. Native attributes and handlers target the hex input. Use `onValueChange` for accepted color requests.
+
+## Forms, reset and locked controls
+
+`name` submits exactly one accepted, normalized color through a hidden input. Unfinished drafts never enter `FormData`. Native text validation still participates in browser form submission. Form reset restores uncontrolled `defaultValue`, clears drafts and reports the restored color. A canceled reset preserves both state and drafts; a controlled reset retains the parent's accepted color while clearing its draft. The native `form` attribute supports controls outside their associated form.
+
+`disabled` disables the chooser, text field and presets, removes their keyboard interaction and excludes the color from form submission. `readOnly` leaves the text value focusable and selectable while disabling changes, the native chooser and presets. A read-only color remains submitted. Switching to either locked state discards an unfinished draft without changing the accepted color.
+
+```tsx
+<ColorPicker aria-label="Locked highlight" value="#4f46e5" readOnly name="highlight" />
+```
+
+## Labels, styling and native refs
+
+Wrap ColorPicker in `Field` to connect its primary hex input to a visible label, description, error and required state. Outside a Field, supply an accessible name with `aria-label` or `aria-labelledby`. Field errors remain associated with the chooser as well as the text input. The chooser combines that field name with its action label.
+
+The built-in chooser name and suggested-color group name come from `labels.chooseColor` and `labels.colorPresets`. Override them per instance with `pickerLabel` and `presetsLabel`, or translate the label catalog. Runtime language changes update them without resetting the color or draft.
+
+`size`, `radius` and `color` use consumer config keys and `components.ColorPicker` defaults, including `allowedSizes` and `sizeOverrides`. Controls inherit typography, dimensions, borders and focus rings from tokens. Changing the runtime theme preserves the selected color, draft, DOM and focus. Only preset swatches use inline application color data; token styling uses generated classes and CSS variables.
+
+React 19 `ref` targets the native hex input for focus, selection and validation. Native input attributes go there; `className`, `style`, `dir` and `hidden` apply to the outer control. `name` targets the submitted accepted value. See [labels and languages](/configuration/labels/) and [component defaults](/configuration/component-defaults/).
+
+## Props
+
+<Props of="ColorPickerProps" />

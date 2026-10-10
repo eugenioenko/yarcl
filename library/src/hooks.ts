@@ -8,7 +8,8 @@ export function useFormReset(elementRef: RefObject<HTMLElement | null> | undefin
     callbackRef.current = onReset;
   }, [onReset]);
   useEffect(() => {
-    const form = elementRef?.current?.closest('form');
+    const element = elementRef?.current;
+    const form = element && 'form' in element ? (element as HTMLInputElement).form : element?.closest('form');
     if (!form || !enabled) return;
     const pending = new Set<ReturnType<typeof setTimeout>>();
     const handleReset = (event: Event) => {
