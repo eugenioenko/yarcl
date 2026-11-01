@@ -163,7 +163,9 @@ test('admin layout and form controls', async ({ page }, info) => {
   await expect(page.locator('#yarcl-theme')).toBeAttached();
   await page.evaluate(() => document.fonts.ready);
   const layout = page.locator('.yarcl-app-layout');
-  await expect(layout.getByRole('link', { name: 'Forgot password?', exact: true })).toBeVisible();
+  const help = layout.getByRole('link', { name: 'Forgot password?', exact: true });
+  await expect(help).toBeVisible();
+  expect(await help.evaluate((element) => document.getElementById(element.getAttribute('href')!.slice(1))?.textContent)).toBe('Contact your workspace administrator to reset your password.');
   const tabs = layout.getByRole('tablist');
   expect(await tabs.evaluate((element) => element.scrollHeight - element.clientHeight)).toBe(0);
   await page.mouse.move(0, 0);
