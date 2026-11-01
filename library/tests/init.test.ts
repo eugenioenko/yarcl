@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parse } from 'jsonc-parser';
@@ -87,6 +87,53 @@ describe('yarcl init', () => {
     expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).toThrow(
       'yarcl: Config path mismatch. build tool uses "src/yarcl.config.ts", but ./tsconfig.app.json has "./src/other.ts"',
     );
+  });
+
+  it('follows extends to find the TypeScript mapping', async () => {
+    const root = await project(
+      "import { defineConfig } from 'vite';\nexport default defineConfig({ plugins: [] });\n",
+      '{"extends":"./tsconfig.json","include":["src"]}\n',
+    );
+    await writeFile(join(root, 'tsconfig.json'), '{"compilerOptions":{"paths":{"@yarcl/config":["./src/yarcl.config.ts"]}}}\n');
+
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).not.toThrow();
+  });
+
+  it('lets a child paths entry replace an inherited mapping', async () => {
+    const root = await project(
+      "import { defineConfig } from 'vite';\nexport default defineConfig({ plugins: [] });\n",
+      '{"extends":"./tsconfig.json","compilerOptions":{"paths":{"@app/*":["./src/*"]}}}\n',
+    );
+    await writeFile(join(root, 'tsconfig.json'), '{"compilerOptions":{"paths":{"@yarcl/config":["./src/yarcl.config.ts"]}}}\n');
+
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).toThrow('has no path');
+  });
+
+  it('resolves inherited paths relative to the config that declares them', async () => {
+    const root = await project('export default {};\n', '{"extends":"./config/base"}\n');
+    await mkdir(join(root, 'config'));
+    await writeFile(join(root, 'config/base.json'), '{"compilerOptions":{"paths":{"@yarcl/config":["../src/yarcl.config.ts"]}}}\n');
+
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).not.toThrow();
+  });
+
+  it('uses the last parent that declares paths even when it has no yarcl mapping', async () => {
+    const root = await project('export default {};\n', '{"extends":["./first.json","./last.json"]}\n');
+    await writeFile(join(root, 'first.json'), '{"compilerOptions":{"paths":{"@yarcl/config":["./src/yarcl.config.ts"]}}}\n');
+    await writeFile(join(root, 'last.json'), '{"compilerOptions":{"paths":{}}}\n');
+
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).toThrow('has no path');
+    await writeFile(join(root, 'last.json'), '{"compilerOptions":{"strict":true}}\n');
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).not.toThrow();
+  });
+
+  it('accepts absolute parent paths and reports circular inheritance', async () => {
+    const root = await project('export default {};\n', '{}\n');
+    await writeFile(join(root, 'tsconfig.app.json'), JSON.stringify({ extends: join(root, 'base.json') }));
+    await writeFile(join(root, 'base.json'), '{"compilerOptions":{"paths":{"@yarcl/config":["./src/yarcl.config.ts"]}}}\n');
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).not.toThrow();
+    await writeFile(join(root, 'base.json'), '{"extends":"./tsconfig.app.json"}\n');
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).toThrow('Circular tsconfig extends');
   });
 
   it.each([
