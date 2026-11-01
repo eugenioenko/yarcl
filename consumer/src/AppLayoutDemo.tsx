@@ -13,6 +13,7 @@ export function AppLayoutDemo() {
     menuLabel="Open navigation"
     skipLabel="Skip to main content"
     collapsed={collapsed}
+    sidebarHeader={<Text>Acme workspace</Text>}
     navbar={<><Text>Acme workspace</Text><Button className="app-demo-collapse" aria-pressed={collapsed} onClick={() => setCollapsed(!collapsed)}>Compact navigation</Button></>}
     footer={<Link href="?">Component demo</Link>}
     navigation={<NavSection title="Workspace">

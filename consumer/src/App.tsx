@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import {
   Accordion,
   Button,
@@ -94,6 +94,7 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 
 /** Demonstrates the library using the first consumer design system. */
 export function App() {
+  const passwordHelp = useId();
   const [scheme, setScheme] = useState<Scheme>(() => {
     const s = initialScheme();
     document.documentElement.style.colorScheme = s;
@@ -303,6 +304,9 @@ export function App() {
                 </Label>
                 <Input id="label-city" placeholder="Zurich" required className="grow" />
               </Inline>
+              <Field label="Password" labelEnd={<Link href={`#${passwordHelp}`}>Forgot password?</Link>} description={<span id={passwordHelp}>Contact your workspace administrator to reset your password.</span>}>
+                <Input type="password" />
+              </Field>
               <Stack gap="tight">
                 <Label id="label-birth">Date of birth</Label>
                 <Inline role="group" aria-labelledby="label-birth" gap="tight" wrap={false}>

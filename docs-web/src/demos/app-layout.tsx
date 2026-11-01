@@ -16,6 +16,7 @@ export function AppLayoutDemo() {
     padding="sm"
     style={{ height: '28rem', width: '100%' }}
     collapsed={collapsed}
+    sidebarHeader={<Text>Acme workspace</Text>}
     navbar={<><Text>Acme</Text><Button size="sm" onClick={() => setCollapsed(!collapsed)} aria-pressed={collapsed}>Compact menu</Button></>}
     footer={<Text textStyle="caption">Workspace support</Text>}
     navigation={<NavSection title="Workspace" gap="xs">

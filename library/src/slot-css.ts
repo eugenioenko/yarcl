@@ -77,7 +77,12 @@ export function generateSlotCss(config: YarclShape): string[] {
         if ((component === 'Dialog' || component === 'Drawer') && part === 'header' && property === 'textStyle') {
           selector += `, ${selector} > .yarcl-modal-heading > .yarcl-modal-title`;
         }
-        rules.push(`${selector} {\n${declarations(property, key).map(([name, value]) => `  ${name}: ${value};`).join('\n')}\n}`);
+        const styles = declarations(property, key);
+        if (component === 'Tabs' && part === 'list') {
+          if (property === 'border') styles.push(['box-shadow', 'none']);
+          if (property === 'borderWidth') styles.push(['--yarcl-tabs-line-width', `var(--yarcl-border-${ident(key)})`]);
+        }
+        rules.push(`${selector} {\n${styles.map(([name, value]) => `  ${name}: ${value};`).join('\n')}\n}`);
       }
     }
   }

@@ -110,6 +110,8 @@ export default async function ({ page, check, focused, htmlOverflow }) {
   const overview = page.getByRole('tab', { name: 'Overview' });
   await overview.scrollIntoViewIfNeeded();
   await overview.click();
+  const tablistOverflow = await page.getByRole('tablist').first().evaluate((el) => el.scrollHeight - el.clientHeight);
+  check('tab list has no vertical overflow (no stray scrollbar)', tablistOverflow === 0, String(tablistOverflow));
   await page.keyboard.press('ArrowRight');
   check('ArrowRight selects next tab', (await page.getByRole('tab', { name: 'Activity' }).getAttribute('aria-selected')) === 'true' && (await page.getByRole('tabpanel', { name: 'Activity' }).isVisible()));
   await page.keyboard.press('ArrowRight');
