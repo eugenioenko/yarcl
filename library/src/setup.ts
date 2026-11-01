@@ -38,20 +38,24 @@ function localExtends(file: string, value: unknown): string[] {
     .filter((target) => existsSync(target));
 }
 
-function configMapping(root: string, file: string, ancestors = new Set<string>()): { path?: string } | undefined {
+interface MappingOptions {
+  mapping?: unknown;
+  directory?: string;
+  baseUrl?: string;
+}
+
+function configMapping(root: string, file: string, ancestors = new Set<string>()): MappingOptions {
   if (ancestors.has(file)) throw new Error(`yarcl: Circular tsconfig extends in ${projectPath(root, file)}.`);
   const seen = new Set(ancestors).add(file);
   const config = readTsconfig(root, file);
-  const mapping = config?.compilerOptions?.paths?.[CONFIG_MODULE];
+  const options: MappingOptions = {};
+  for (const parent of localExtends(file, config?.extends)) Object.assign(options, configMapping(root, parent, seen));
+  if (typeof config?.compilerOptions?.baseUrl === 'string') options.baseUrl = resolve(dirname(file), config.compilerOptions.baseUrl);
   if (config?.compilerOptions?.paths) {
-    return { path: Array.isArray(mapping) && typeof mapping[0] === 'string' ? resolve(dirname(file), mapping[0]) : undefined };
+    options.mapping = config.compilerOptions.paths[CONFIG_MODULE];
+    options.directory = dirname(file);
   }
-  const parents = localExtends(file, config?.extends).reverse();
-  for (const parent of parents) {
-    const found = configMapping(root, parent, seen);
-    if (found) return found;
-  }
-  return undefined;
+  return options;
 }
 
 export function assertConfigMapping(root: string, configPath: string, buildTool = 'build tool'): void {
@@ -61,7 +65,8 @@ export function assertConfigMapping(root: string, configPath: string, buildTool 
   }
 
   const expected = resolve(root, configPath);
-  const actual = configMapping(root, tsconfig)?.path;
+  const { mapping, directory, baseUrl } = configMapping(root, tsconfig);
+  const actual = Array.isArray(mapping) && typeof mapping[0] === 'string' ? resolve(baseUrl ?? directory ?? dirname(tsconfig), mapping[0]) : undefined;
   if (actual === expected) return;
 
   const current = actual ? `"${projectPath(root, actual)}"` : 'no path';
