@@ -274,24 +274,24 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
   const labelOf = (v: V | null) => options.find((option) => option.value === v)?.label ?? (allowCustomValue ? (v ?? '') : '');
   const selectedLabel = labelOf(value);
   const [inputText, setText] = useControllable(inputValueProp, labelOf(valueProp !== undefined ? valueProp : defaultValue), onInputValueChange, inputRef);
-  const [selection, setSelection] = useState({ value, label: selectedLabel, editing: false });
+  const [selection, setSelection] = useState({ value, label: selectedLabel, editing: false, pendingValue: undefined as V | null | undefined });
 
   if (selection.value !== value || selection.label !== selectedLabel) {
-    setSelection({ value, label: selectedLabel, editing: selection.value === value && selection.editing });
+    setSelection({ value, label: selectedLabel, editing: selection.editing && (selection.value === value || selection.pendingValue === value), pendingValue: undefined });
   }
   const text = inputValueProp ?? (selection.editing ? inputText : selectedLabel);
 
   function choose(option: SelectOption<V>) {
     if (option.disabled) return;
-    setSelection((current) => ({ ...current, editing: false }));
+    setSelection((current) => ({ ...current, editing: false, pendingValue: undefined }));
     setValue(option.value);
     setText(option.label);
     close();
   }
 
   function restore() {
+    setSelection((current) => ({ ...current, editing: false, pendingValue: undefined }));
     if (allowCustomValue) return;
-    setSelection((current) => ({ ...current, editing: false }));
     const label = labelOf(value);
     if (text !== label) setText(label);
   }
@@ -314,12 +314,12 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     const next = event.target.value;
-    setSelection((current) => ({ ...current, editing: true }));
+    const nextValue = next ? next as V : null;
+    setSelection((current) => ({ ...current, editing: true, pendingValue: allowCustomValue || !next ? nextValue : undefined }));
     setText(next);
     setOpen(true);
     setActiveIndex(next ? 0 : null);
-    if (allowCustomValue) setValue(next ? (next as V) : null);
-    else if (!next) setValue(null);
+    if (allowCustomValue || !next) setValue(nextValue);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -327,7 +327,10 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
     event.preventDefault();
     const option = activeIndex != null ? visible[activeIndex] : undefined;
     if (option) choose(option);
-    else close();
+    else {
+      if (allowCustomValue) restore();
+      close();
+    }
   }
 
   const referenceRef = useMergeRefs([inputRef, refs.setReference, (rest as { ref?: React.Ref<HTMLInputElement> }).ref]);
