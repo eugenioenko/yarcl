@@ -1,4 +1,4 @@
-import { createRef, type ReactElement } from 'react';
+import { createRef, useState, type ReactElement } from 'react';
 import { beforeEach, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { Button, Combobox, HoverCard, Menu, Popover, Tooltip } from '@yarcl/react';
@@ -78,5 +78,60 @@ export function testFloatingTriggers() {
     await page.getByRole('combobox', { name: 'Search', exact: true }).click();
     expect(await page.getByRole('option').count()).toBe(0);
     expect(document.body.textContent).toContain('No matches');
+  });
+
+  for (const controlled of [false, true]) {
+    test(`custom combobox searches stay active with ${controlled ? 'controlled' : 'uncontrolled'} values`, async () => {
+      function Example() {
+        const [value, setValue] = useState<string | null>(null);
+        return <form className="yarcl-root"><Combobox name="framework" aria-label="Framework" allowCustomValue
+          value={controlled ? value : undefined} onValueChange={setValue}
+          options={['React', 'Vue', 'Svelte'].map((label) => ({ value: label, label }))} /></form>;
+      }
+      const screen = await render(<Example />);
+      const input = page.getByRole('combobox', { name: 'Framework', exact: true });
+      const value = () => new FormData(screen.container.querySelector('form')!).get('framework');
+      await input.fill('Vu');
+      expect(await page.getByRole('option').allInnerTexts()).toEqual(['Vue']);
+      await page.keyboard.press('Enter');
+      expect(await input.inputValue()).toBe('Vue');
+      expect(value()).toBe('Vue');
+      await input.click();
+      expect(await page.getByRole('option').count()).toBe(3);
+      await input.fill('Lit');
+      expect(await page.getByRole('option').count()).toBe(0);
+      await page.keyboard.press('Enter');
+      expect(value()).toBe('Lit');
+      expect(await input.inputValue()).toBe('Lit');
+      await input.click();
+      expect(await page.getByRole('option').count()).toBe(3);
+    });
+  }
+
+  test('a rejected controlled custom value keeps its active draft until blur', async () => {
+    const changed = vi.fn();
+    await render(<main className="yarcl-root"><Combobox aria-label="Framework" allowCustomValue value="React" onValueChange={changed}
+      options={['React', 'Vue'].map((label) => ({ value: label, label }))} /><Button>Done</Button></main>);
+    const input = page.getByRole('combobox', { name: 'Framework', exact: true });
+    await input.fill('Vu');
+    expect(await input.inputValue()).toBe('Vu');
+    expect(await page.getByRole('option').allInnerTexts()).toEqual(['Vue']);
+    expect(changed).toHaveBeenLastCalledWith('Vu');
+    await page.getByRole('button', { name: 'Done', exact: true }).click();
+    expect(await input.inputValue()).toBe('React');
+    await input.click();
+    expect(await page.getByRole('option').count()).toBe(2);
+  });
+
+  test('form resets clear the custom search without treating the default label as a query', async () => {
+    await render(<form className="yarcl-root"><Combobox aria-label="Framework" allowCustomValue defaultValue="React"
+      options={['React', 'Vue', 'Svelte'].map((label) => ({ value: label, label }))} /><button type="reset">Reset</button></form>);
+    const input = page.getByRole('combobox', { name: 'Framework', exact: true });
+    await input.fill('Vu');
+    expect(await page.getByRole('option').allInnerTexts()).toEqual(['Vue']);
+    await page.getByRole('button', { name: 'Reset', exact: true }).click();
+    await expect.poll(() => input.inputValue()).toBe('React');
+    await input.click();
+    expect(await page.getByRole('option').count()).toBe(3);
   });
 }

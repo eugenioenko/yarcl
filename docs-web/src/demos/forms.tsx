@@ -27,6 +27,7 @@ import {
 } from '@yarcl/react';
 
 export function FieldDemo() {
+  const passwordHelp = useId();
   const [email, setEmail] = useState('ada@');
   const invalid = !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
   return (
@@ -34,7 +35,7 @@ export function FieldDemo() {
       <Field label="Full name" description="As it appears on your ID." required>
         <Input placeholder="Ada Lovelace" />
       </Field>
-      <Field label="Password" labelEnd={<Link href="#password-help">Forgot password?</Link>}>
+      <Field label="Password" labelEnd={<Link href={`#${passwordHelp}`}>Forgot password?</Link>} description={<span id={passwordHelp}>Contact your workspace administrator to reset your password.</span>}>
         <Input type="password" />
       </Field>
       <Field label="Email" error={invalid ? 'Enter a valid email address.' : undefined}>

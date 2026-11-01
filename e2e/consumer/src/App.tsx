@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import {
   Accordion,
   Alert,
@@ -68,6 +68,7 @@ type Scheme = 'light dark' | 'light' | 'dark';
 
 /** Demonstrates the library with the second consumer design system. */
 export function App() {
+  const passwordHelp = useId();
   const params = new URLSearchParams(location.search);
   const [scheme, setScheme] = useState<Scheme>(() => {
     const s = params.get('scheme');
@@ -226,7 +227,7 @@ export function App() {
             <Stack as="section" gap="3">
               <Heading level={2}>Input content</Heading>
               <InputContentDemo />
-              <Field label="Account password" labelEnd={<Link href="#password-help">Forgot password?</Link>}>
+              <Field label="Account password" labelEnd={<Link href={`#${passwordHelp}`}>Forgot password?</Link>} description={<span id={passwordHelp}>Contact your workspace administrator to reset your password.</span>}>
                 <Input type="password" />
               </Field>
             </Stack>

@@ -1,7 +1,9 @@
+import { useId } from 'react';
 import { AppLayout, Button, Field, Inline, Input, Link, NavItem, Select, Stack, Tabs, Text } from '@yarcl/react';
 
 /** Shows sidebar branding, separate field actions and compact admin controls. */
 export function AdminUiDemo() {
+  const passwordHelp = useId();
   return <AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" mainAs="section" navigationLabel="Admin navigation"
     sidebarHeader={<Text>Acme workspace</Text>} navbar={<Text>Account settings</Text>}
     navigation={<NavItem href="#settings" active>Settings</NavItem>} style={{ height: '32rem' }}>
@@ -12,7 +14,7 @@ export function AdminUiDemo() {
           <Tabs.Trigger value="security">Security</Tabs.Trigger>
         </Tabs.List>
         <Tabs.Panel value="profile">
-          <Field label="Password" labelEnd={<Link href="#reset-password">Forgot password?</Link>}>
+          <Field label="Password" labelEnd={<Link href={`#${passwordHelp}`}>Forgot password?</Link>} description={<span id={passwordHelp}>Contact your workspace administrator to reset your password.</span>}>
             <Input type="password" />
           </Field>
         </Tabs.Panel>
