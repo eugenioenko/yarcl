@@ -93,14 +93,41 @@ export function useModalDialog(open: boolean, setOpen: (open: boolean) => void, 
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
+    let composing = false;
+    let composingEscape = false;
+    let compositionTimer: ReturnType<typeof setTimeout> | undefined;
+    const handleCompositionStart = (event: CompositionEvent) => {
+      if (!(event.target instanceof Element) || event.target.closest('dialog') !== dialog) return;
+      clearTimeout(compositionTimer);
+      composing = true;
+    };
+    const handleCompositionEnd = (event: CompositionEvent) => {
+      if (!(event.target instanceof Element) || event.target.closest('dialog') !== dialog) return;
+      clearTimeout(compositionTimer);
+      compositionTimer = setTimeout(() => { composing = false; composingEscape = false; }, 5);
+    };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape' || !(event.target instanceof Element) || event.target.closest('dialog') !== dialog) return;
+      composingEscape = composing || event.isComposing;
+      if (composingEscape) return;
       const panels = [...dialog.querySelectorAll('.yarcl-floating')];
       if (panels.some((panel) => panel.closest('dialog') === dialog && panel.getClientRects().length > 0)) event.preventDefault();
     };
+    const handleCancel = (event: Event) => {
+      if (event.target !== dialog) return;
+      if (composing || composingEscape) event.preventDefault();
+      composingEscape = false;
+    };
     dialog.addEventListener('keydown', handleKeyDown, true);
+    dialog.addEventListener('compositionstart', handleCompositionStart, true);
+    dialog.addEventListener('compositionend', handleCompositionEnd, true);
+    dialog.addEventListener('cancel', handleCancel);
     return () => {
       dialog.removeEventListener('keydown', handleKeyDown, true);
+      dialog.removeEventListener('compositionstart', handleCompositionStart, true);
+      dialog.removeEventListener('compositionend', handleCompositionEnd, true);
+      dialog.removeEventListener('cancel', handleCancel);
+      clearTimeout(compositionTimer);
       removeOpenModal(dialog);
     };
   }, []);

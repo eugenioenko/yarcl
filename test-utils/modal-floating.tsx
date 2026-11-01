@@ -1,8 +1,8 @@
 import axe from 'axe-core';
 import { beforeEach, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { AppLayout, Button, Combobox, Dialog, Drawer, HoverCard, Menu, Popover, Select, Tooltip } from '@yarcl/react';
-import type { ReactNode } from 'react';
+import { AppLayout, Button, Combobox, Dialog, Drawer, HoverCard, Input, Menu, Popover, Select, Tooltip } from '@yarcl/react';
+import { useState, type ReactNode } from 'react';
 import { page } from './page';
 
 const options = [{ value: 'public', label: 'Public' }, { value: 'confidential', label: 'Confidential' }];
@@ -95,6 +95,28 @@ export function testModalFloating() {
       expect(await page.getByRole('button', { name: 'Open editor', exact: true }).evaluate((element) => element === document.activeElement)).toBe(true);
     });
 
+    test(`Escape during browser composition does not dismiss the ${name} or consume the IME key`, async () => {
+      const dialog = await openEditor(Shell, <Combobox aria-label="Client type" allowCustomValue options={options} />);
+      const input = page.getByRole('combobox', { name: 'Client type', exact: true });
+      await input.click();
+      const element = dialog.querySelector('input')!;
+      let composing = false;
+      let prevented: boolean | undefined;
+      element.addEventListener('compositionstart', () => { composing = true; });
+      element.addEventListener('keydown', (event) => { if (event.key === 'Escape') prevented = event.defaultPrevented; });
+      await page.keyboard.compose('に');
+      expect(composing).toBe(true);
+      await page.keyboard.press('Escape');
+      expect(prevented).toBe(false);
+      expect(dialog.matches(':modal')).toBe(true);
+      expect(dialog.querySelector('[role="listbox"]')).not.toBeNull();
+      await page.keyboard.compose('');
+      await page.waitForTimeout(10);
+      await page.keyboard.press('Escape');
+      await expect.poll(() => dialog.querySelector('[role="listbox"]')).toBeNull();
+      expect(dialog.open).toBe(true);
+    });
+
     test(`a popup can extend beyond the ${name} without being clipped or closing it`, async () => {
       const changed = vi.fn();
       const dialog = await openEditor(Shell, <div style={{ display: 'flex', justifyContent: name === 'dialog' ? 'end' : 'start' }}>
@@ -173,18 +195,26 @@ export function testModalFloating() {
   });
 
   test('an open navigation popup moves between modal and page portal roots', async () => {
+    function Draft() {
+      const [value, setValue] = useState('');
+      return <Input aria-label="Navigation draft" value={value} onChange={(event) => setValue(event.target.value)} />;
+    }
     const screen = await render(<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Workspace" menuLabel="Open navigation"
-      navigation={<Popover open><Popover.Trigger><Button>Actions</Button></Popover.Trigger><Popover.Content aria-label="Client actions"><Button>Update client</Button></Popover.Content></Popover>}
+      navigation={<Popover open><Popover.Trigger><Button>Actions</Button></Popover.Trigger><Popover.Content aria-label="Client actions"><Draft /></Popover.Content></Popover>}
       style={{ height: '500px' }}>Content</AppLayout>);
     await expect.poll(() => document.querySelector('.yarcl-popover')?.closest('dialog')).toBeNull();
+    const draft = page.getByRole('textbox', { name: 'Navigation draft', exact: true });
+    await draft.fill('Keep my draft');
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Open navigation', exact: true }).click();
     const dialog = screen.container.querySelector('dialog')!;
     await expect.poll(() => dialog.matches(':modal')).toBe(true);
     await panelIn(dialog, '.yarcl-popover');
+    expect(await draft.inputValue()).toBe('Keep my draft');
     await page.setViewportSize({ width: 1100, height: 800 });
     await expect.poll(() => document.querySelector('.yarcl-popover')?.closest('dialog')).toBeNull();
     expect(getComputedStyle(document.querySelector('.yarcl-popover')!).position).toBe('absolute');
+    expect(await draft.inputValue()).toBe('Keep my draft');
   });
 
   test('modal controls and their portaled options pass accessibility checks', async () => {

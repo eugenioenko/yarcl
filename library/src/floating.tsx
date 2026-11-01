@@ -6,6 +6,7 @@ import {
   shift,
   size,
   useMergeRefs,
+  useFloatingPortalNode,
   type Middleware,
   type Strategy,
 } from '@floating-ui/react';
@@ -14,7 +15,8 @@ import {
   createContext,
   isValidElement,
   useContext,
-  useState,
+  useLayoutEffect,
+  useRef,
   type HTMLAttributes,
   type ReactElement,
   type ReactNode,
@@ -43,9 +45,15 @@ export function useLayerStrategy(): Strategy {
 /** Portals into the nearest modal, waiting for its element to mount, or uses the default page portal. */
 export function LayerPortal({ children }: { children: ReactNode }) {
   const root = useLayerRoot();
-  const [portal, setPortal] = useState({ root, generation: 0 });
-  if (portal.root !== root) setPortal({ root, generation: portal.generation + 1 });
-  return <FloatingPortal key={portal.generation} root={root}>{children}</FloatingPortal>;
+  const host = useFloatingPortalNode();
+  const pageRoot = useRef<HTMLElement | null>(null);
+  useLayoutEffect(() => {
+    if (!host) return;
+    pageRoot.current ??= host.parentElement;
+    const target = root === undefined ? pageRoot.current : root;
+    if (target && host.parentElement !== target) target.appendChild(host);
+  }, [root, host]);
+  return <FloatingPortal root={root === null ? null : host}>{children}</FloatingPortal>;
 }
 
 interface MiddlewareOptions {

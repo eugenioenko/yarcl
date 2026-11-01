@@ -29,6 +29,14 @@ const commands: Record<string, BrowserCommand<never[]>> = {
   }) as BrowserCommand<never[]>,
   pressKey: (async (context, key: string) => context.page.keyboard.press(key)) as BrowserCommand<never[]>,
   typeText: (async (context, text: string) => context.page.keyboard.type(text)) as BrowserCommand<never[]>,
+  composeText: (async (context, text: string) => {
+    const session = await context.context.newCDPSession(context.page);
+    try {
+      await session.send('Input.imeSetComposition', { text, selectionStart: text.length, selectionEnd: text.length });
+    } finally {
+      await session.detach();
+    }
+  }) as BrowserCommand<never[]>,
   mouseMove: (async (context, point: Point) => {
     const { x, y } = await toPage(context, point);
     await context.page.mouse.move(x, y);
