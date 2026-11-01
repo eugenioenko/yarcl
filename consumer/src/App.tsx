@@ -303,6 +303,9 @@ export function App() {
                 </Label>
                 <Input id="label-city" placeholder="Zurich" required className="grow" />
               </Inline>
+              <Field label="Password" labelEnd={<Link href="#forgot">Forgot password?</Link>}>
+                <Input type="password" />
+              </Field>
               <Stack gap="tight">
                 <Label id="label-birth">Date of birth</Label>
                 <Inline role="group" aria-labelledby="label-birth" gap="tight" wrap={false}>

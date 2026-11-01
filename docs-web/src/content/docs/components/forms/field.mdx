@@ -31,6 +31,16 @@ import { Field } from '@yarcl/react';
 
 Works with [Input](/components/forms/input/), [Textarea](/components/forms/textarea/), [Select](/components/forms/select/), [Combobox](/components/forms/combobox/), [Checkbox](/components/forms/checkbox/) and [Switch](/components/forms/switch/). For radios, use [RadioGroup](/components/forms/radio-group/).
 
+## Content beside the label
+
+Use `labelEnd` for a help action or link beside the label. It renders outside the `<label>`, so its text stays out of the control's accessible name.
+
+```tsx
+<Field label="Password" labelEnd={<Link href="/reset-password">Forgot password?</Link>}>
+  <Input type="password" />
+</Field>
+```
+
 ## Styling
 
 - The label is a [Label](/components/forms/label/), so it uses `defaults.labelStyle` and `components.Label`; helper and error text use `defaults.helperStyle`.

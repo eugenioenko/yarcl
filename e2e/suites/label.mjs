@@ -12,6 +12,10 @@ export default async function ({ page, check, focused }) {
   await page.keyboard.press('Shift+Tab');
   check('label is not a tab stop', !(await focused(cityLabel)));
 
+  const passwordLabel = await section.locator('input[type="password"]').evaluate((el) => el.labels?.[0]?.textContent);
+  check('labelEnd stays out of the accessible name', passwordLabel === 'Password', String(passwordLabel));
+  check('labelEnd renders beside the label', await section.getByRole('link', { name: 'Forgot password?' }).isVisible());
+
   const birth = section.getByRole('group', { name: 'Date of birth' });
   check('one label names a group of controls', (await birth.getByRole('textbox').count()) === 3);
 

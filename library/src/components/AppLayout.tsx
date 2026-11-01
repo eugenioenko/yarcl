@@ -16,6 +16,12 @@ export interface AppLayoutProps extends Omit<ComponentProps<'div'>, 'children'> 
   navigationLabel: string;
   /** Top navbar content, displayed beside the mobile menu button. */
   navbar?: ReactNode;
+  /**
+   * Content at the top of the desktop sidebar, such as a logo. When set, the desktop sidebar spans the full
+   * height and the navbar sits beside it above the main area; the header row matches the navbar's height.
+   * It isn't shown in the mobile drawer.
+   */
+  sidebarHeader?: ReactNode;
   /** Footer content, kept outside the scrolling main area. */
   footer?: ReactNode;
   /** Main content, which scrolls independently of the navbar and footer. */
@@ -66,7 +72,7 @@ function useDesktop(query: string) {
  * </AppLayout>
  * ```
  */
-export function AppLayout({ navigation, navigationLabel, navbar, footer, children, desktopBreakpoint, sidebarWidth, collapsed = false, padding, menuLabel, closeLabel, skipLabel, navigationOpen, defaultNavigationOpen = false, onNavigationOpenChange, mainProps, mainAs: Main = 'main', className, ...props }: AppLayoutProps) {
+export function AppLayout({ navigation, navigationLabel, navbar, sidebarHeader, footer, children, desktopBreakpoint, sidebarWidth, collapsed = false, padding, menuLabel, closeLabel, skipLabel, navigationOpen, defaultNavigationOpen = false, onNavigationOpenChange, mainProps, mainAs: Main = 'main', className, ...props }: AppLayoutProps) {
   const config = useConfig();
   const own = useDefaults('AppLayout');
   const desktop = useDesktop(`(min-width: ${config.breakpoints[desktopBreakpoint]})`);
@@ -110,7 +116,7 @@ export function AppLayout({ navigation, navigationLabel, navbar, footer, childre
   }
 
   return (
-    <div data-part="root" data-desktop={desktop || undefined} data-collapsed={collapsed || undefined} className={cx('yarcl-root yarcl-app-layout', `yarcl-app-width-${sidebarWidth}`, paddingClass(padding ?? own.padding, own.padding), className)} {...props}>
+    <div data-part="root" data-desktop={desktop || undefined} data-collapsed={collapsed || undefined} data-sidebar-header={sidebarHeader != null || undefined} className={cx('yarcl-root yarcl-app-layout', `yarcl-app-width-${sidebarWidth}`, paddingClass(padding ?? own.padding, own.padding), className)} {...props}>
       {skipLabel != null && <a className="yarcl-visually-hidden yarcl-app-layout-skip" href={`#${mainId}`} onClick={(event) => { event.preventDefault(); main.current?.focus(); }}>{skipLabel}</a>}
       <header data-part="navbar" className="yarcl-app-layout-navbar">
         <IconButton ref={menu} className="yarcl-app-layout-menu" aria-label={menuLabel ?? navigationLabel} aria-expanded={!desktop && open} aria-controls={navigationId} aria-haspopup="dialog" onClick={() => setOpen(true)}>
@@ -118,7 +124,9 @@ export function AppLayout({ navigation, navigationLabel, navbar, footer, childre
         </IconButton>
         <div className="yarcl-app-layout-navbar-content">{navbar}</div>
       </header>
-      <aside ref={sidebar} data-part="sidebar" className="yarcl-app-layout-sidebar" />
+      <aside ref={sidebar} data-part="sidebar" className="yarcl-app-layout-sidebar">
+        {sidebarHeader != null && <div data-part="sidebar-header" className="yarcl-app-layout-sidebar-header">{sidebarHeader}</div>}
+      </aside>
       <Modal slotComponent="Drawer" className="yarcl-drawer yarcl-drawer-left yarcl-app-layout-drawer" id={navigationId} title={navigationLabel} closeLabel={closeLabel} open={!desktop && open} onOpenChange={setOpen} keepMounted>
         <div ref={drawer} className="yarcl-app-layout-navigation-mount" />
       </Modal>

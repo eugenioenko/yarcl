@@ -4,8 +4,8 @@ import type { Responsive, Align, Justify, Spacing } from '../types';
 import { useDefaults } from '../runtime';
 
 
-/** Elements layout components can render as. */
-export type LayoutElement = 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'main' | 'nav' | 'form' | 'ul' | 'ol';
+/** Elements layout components can render as. Use `span` inside phrasing content such as a button or label. */
+export type LayoutElement = 'div' | 'span' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'main' | 'nav' | 'form' | 'ul' | 'ol';
 
 /** Props shared by {@link Stack} and {@link Inline}. */
 export interface LayoutProps extends ComponentProps<'div'> {

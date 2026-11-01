@@ -6,7 +6,7 @@ import { SplitPane } from '@yarcl/react';
 import { TreeView, type TreeViewItem } from '@yarcl/react';
 import { createComponent } from '@yarcl/react';
 import { tokens, defineConfig, defineRecipes, type RecipeStyle } from '@yarcl/react/define';
-import { Accordion, AppLayout, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast, HoverCard, Popover, Toaster, type Responsive, type Spacing } from '@yarcl/react';
+import { Accordion, AppLayout, Alert, AudioPlayer, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, SplitButton, Combobox, CommandPalette, DatePicker, Dialog, EmptyState, Field, FileDropzone, Grid, Heading, IconButton, Inline, Input, Label, Menu, NavItem, NavSection, NumberInput, Pagination, Progress, Slider, Stack, Table, Text, Tooltip, VisuallyHidden, toast, HoverCard, Popover, Toaster, type Responsive, type Spacing } from '@yarcl/react';
 import config from './yarcl.config';
 import type { YarclPluginOptions } from '@yarcl/react/vite';
 
@@ -671,3 +671,14 @@ void bundledThemes; void bundledThemeName; void serifTheme; void unknownBundledT
 // @ts-expect-error Atelier was removed from the bundled theme registry.
 const removedTheme = themes.atelier;
 void removedTheme;
+
+<Stack as="span"><Inline as="span">Inline content</Inline></Stack>;
+// @ts-expect-error layout elements must be supported HTML elements
+<Stack as="input" />;
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Work" navigation={null} sidebarHeader={<Text>Brand</Text>} />;
+// @ts-expect-error sidebar header must be renderable content
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar" navigationLabel="Work" navigation={null} sidebarHeader={{ invalid: true }} />;
+
+<Field label="Name" labelEnd={<Button>Help</Button>}><Input /></Field>;
+// @ts-expect-error label end must be renderable content
+<Field label="Name" labelEnd={{ invalid: true }}><Input /></Field>;

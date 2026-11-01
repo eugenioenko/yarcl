@@ -16,6 +16,8 @@ import {
   Divider,
   EmptyState,
   FileDropzone,
+  Field,
+  Input,
   Heading,
   Grid,
   Inline,
@@ -224,6 +226,9 @@ export function App() {
             <Stack as="section" gap="3">
               <Heading level={2}>Input content</Heading>
               <InputContentDemo />
+              <Field label="Account password" labelEnd={<Link href="#password-help">Forgot password?</Link>}>
+                <Input type="password" />
+              </Field>
             </Stack>
             <RecipesDemo />
             <TreeViewDemo />

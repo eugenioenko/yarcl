@@ -220,6 +220,7 @@ export function testComponentSlots() {
     const list = screen.container.querySelector('[data-part="list"]')!;
     expect(getComputedStyle(list).paddingTop).toBe(measure(config.spacing[small]));
     expect(getComputedStyle(list).borderTopStyle).toBe('dashed');
+    expect(getComputedStyle(list).boxShadow).toBe('none');
     const [first, second] = screen.container.querySelectorAll('[data-part="trigger"]');
     expect(getComputedStyle(first).fontSize).toBe(measure(config.typography.styles[style].size));
     expect(getComputedStyle(first).borderBottomColor).not.toBe(getComputedStyle(second).borderBottomColor);
@@ -229,6 +230,18 @@ export function testComponentSlots() {
     expect(document.activeElement).toBe(second);
     const results = await axe.run(screen.container, { rules: { region: { enabled: false } } });
     expect(results.violations.map((violation) => violation.id)).toEqual([]);
+  });
+
+  test('tab list border slots replace the baseline and theme resets restore it', async () => {
+    const screen = await render(<Tabs defaultValue="first"><Tabs.List aria-label="Details"><Tabs.Trigger value="first">First</Tabs.Trigger></Tabs.List><Tabs.Panel value="first">Content</Tabs.Panel></Tabs>);
+    const list = screen.container.querySelector('[data-part="list"]')!;
+    theme({ Tabs: { slots: { list: { border: 'none' } } } });
+    await expect.poll(() => getComputedStyle(list).boxShadow).toBe('none');
+    expect(getComputedStyle(list).borderBottomStyle).toBe('none');
+    theme({ Tabs: { slots: { list: { borderWidth: 'width' } } } });
+    await expect.poll(() => getComputedStyle(list).getPropertyValue('--yarcl-tabs-line-width').trim()).toBe(config.borders.width);
+    expect(getComputedStyle(list).boxShadow).not.toBe('none');
+    expect(list.scrollHeight).toBe(list.clientHeight);
   });
 
   test('styles portaled menu items including radio items without losing active contrast', async () => {

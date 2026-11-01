@@ -14,6 +14,11 @@ export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
   error?: ReactNode;
   /** Marks the control as required and shows an indicator next to the label. */
   required?: boolean;
+  /**
+   * Content shown after the label but outside it, such as an info tooltip or a "Forgot password?" link.
+   * It doesn't become part of the control's accessible name.
+   */
+  labelEnd?: ReactNode;
   /** A single form control, such as {@link Input}, {@link ColorPicker}, {@link Textarea}, {@link Checkbox}, {@link Switch} or {@link Slider}. */
   children: ReactNode;
 }
@@ -30,20 +35,31 @@ export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
  * </Field>
  * ```
  */
-export function Field({ label, description, error, required, children, className, ...props }: FieldProps) {
+export function Field({ label, description, error, required, labelEnd, children, className, ...props }: FieldProps) {
   const config = useConfig();
   const id = useId();
   const descriptionId = description != null ? `${id}-description` : undefined;
   const errorId = error != null && error !== false ? `${id}-error` : undefined;
+
+  const labelElement = (
+    <Label id={`${id}-label`} htmlFor={id} required={required}>
+      {label}
+    </Label>
+  );
 
   return (
     <FieldContext.Provider
       value={{ id, labelId: `${id}-label`, describedBy: cx(descriptionId, errorId) || undefined, invalid: errorId != null, required }}
     >
       <div className={cx('yarcl-field', className)} {...props}>
-        <Label id={`${id}-label`} htmlFor={id} required={required}>
-          {label}
-        </Label>
+        {labelEnd != null ? (
+          <div className="yarcl-field-label-row">
+            {labelElement}
+            {labelEnd}
+          </div>
+        ) : (
+          labelElement
+        )}
         {children}
         {descriptionId && (
           <p className={cx('yarcl-field-description', typeClass(config.defaults.helperStyle))} id={descriptionId}>

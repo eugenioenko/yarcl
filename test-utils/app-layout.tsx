@@ -68,6 +68,45 @@ export function testAppLayout() {
     expect(root.style.getPropertyValue('--yarcl-app-width')).toBe('');
   });
 
+  test('runs a sidebar header and full-height sidebar beside the navbar', async () => {
+    const ref = createRef<HTMLDivElement>();
+    const screen = await render(<Frame ref={ref} sidebarHeader={<Text>Logo</Text>} navbar={<Button>Tall navbar action</Button>} />);
+    const root = ref.current!;
+    await expect.poll(() => root.hasAttribute('data-desktop')).toBe(true);
+    const sidebar = screen.container.querySelector('aside')!;
+    const header = screen.container.querySelector('[data-part="sidebar-header"]')!;
+    const navbar = screen.container.querySelector('header')!;
+    const main = screen.container.querySelector('main')!;
+    expect(rect(sidebar).y).toBeCloseTo(rect(root).y, 0);
+    expect(rect(navbar).x).toBeCloseTo(rect(sidebar).right, 0);
+    expect(rect(header).bottom).toBeCloseTo(rect(navbar).bottom, 0);
+    expect(rect(main).y).toBeCloseTo(rect(navbar).bottom, 0);
+    expect(rect(main).x).toBeCloseTo(rect(sidebar).right, 0);
+    expect(sidebar.querySelector('nav')).not.toBeNull();
+    await resize(390, 844);
+    await expect.poll(() => root.hasAttribute('data-desktop')).toBe(false);
+    expect(rect(navbar).width).toBeCloseTo(rect(root).width, 0);
+    expect(getComputedStyle(sidebar).display).toBe('none');
+    await page.getByRole('button', { name: 'Open navigation', exact: true }).click();
+    const dialog = screen.container.querySelector('dialog')!;
+    await expect.poll(() => dialog.open).toBe(true);
+    expect(dialog.querySelector('[data-part="sidebar-header"]')).toBeNull();
+    expect(dialog.querySelector('nav')).not.toBeNull();
+    await page.keyboard.press('Escape');
+  });
+
+  test('scrolls navigation below a stationary sidebar header', async () => {
+    const screen = await render(<Frame sidebarHeader={<Text>Logo</Text>} navigation={<div style={{ height: '1400px' }}>Many destinations</div>} />);
+    const header = screen.container.querySelector('[data-part="sidebar-header"]')!;
+    const body = screen.container.querySelector('.yarcl-app-layout-navigation-host')!;
+    const before = rect(header);
+    expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
+    body.scrollTop = 500;
+    expect(body.scrollTop).toBe(500);
+    expect(rect(header)).toEqual(before);
+    expect(rect(body).y).toBeCloseTo(before.bottom, 0);
+  });
+
   test('scrolls the main area without moving the navbar, footer or navigation', async () => {
     const screen = await render(<Frame />);
     const main = screen.container.querySelector('main')!;

@@ -11,6 +11,7 @@ import {
   Inline,
   Input,
   Label,
+  Link,
   NumberInput,
   Radio,
   RadioGroup,
@@ -32,6 +33,9 @@ export function FieldDemo() {
     <Stack className="demo-form">
       <Field label="Full name" description="As it appears on your ID." required>
         <Input placeholder="Ada Lovelace" />
+      </Field>
+      <Field label="Password" labelEnd={<Link href="#password-help">Forgot password?</Link>}>
+        <Input type="password" />
       </Field>
       <Field label="Email" error={invalid ? 'Enter a valid email address.' : undefined}>
         <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />

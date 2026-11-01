@@ -6,6 +6,7 @@ import { themeNames, themes } from '@yarcl/react/themes';
 import { StepperDemo } from './StepperDemo';
 import { ColorPickerDemo } from './ColorPickerDemo';
 import { TableColumnsDemo } from './TableColumnsDemo';
+import { AdminUiDemo } from './AdminUiDemo';
 
 type Theme = keyof typeof themes;
 type Scheme = 'light dark' | 'light' | 'dark';
@@ -55,7 +56,7 @@ export function ThemeDemo() {
           </Field>
         </Inline>
       </Inline>
-      {new URLSearchParams(location.search).get('example') === 'table-columns' ? <TableColumnsDemo /> : new URLSearchParams(location.search).get('example') === 'stepper' ? <StepperDemo /> : new URLSearchParams(location.search).get('example') === 'color-picker' ? <ColorPickerDemo /> : <DemoYarcl title="Component showcase" />}
+      {new URLSearchParams(location.search).get('example') === 'admin-ui' ? <AdminUiDemo /> : new URLSearchParams(location.search).get('example') === 'table-columns' ? <TableColumnsDemo /> : new URLSearchParams(location.search).get('example') === 'stepper' ? <StepperDemo /> : new URLSearchParams(location.search).get('example') === 'color-picker' ? <ColorPickerDemo /> : <DemoYarcl title="Component showcase" />}
     </main>
   );
 }

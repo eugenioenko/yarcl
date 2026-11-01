@@ -71,6 +71,20 @@ export default defineConfig({
 
 `padding` uses your spacing keys. An explicit prop wins over `components.AppLayout.padding`, then `defaults.padding`. Runtime themes update widths, padding and the breakpoint query. Themes must contain the keys the layout uses.
 
+## Sidebar header
+
+Pass `sidebarHeader` to place branding at the top of the desktop sidebar. The sidebar spans the navbar and content rows, with its header aligned to the navbar. Navigation scrolls below the header. The optional footer still spans the frame.
+
+```tsx
+<AppLayout desktopBreakpoint="lg" sidebarWidth="sidebar"
+  navigationLabel="Workspace" navigation={<WorkspaceNavigation />}
+  sidebarHeader={<Text>Acme</Text>} navbar={<WorkspaceActions />}>
+  <ProjectList />
+</AppLayout>
+```
+
+The sidebar header stays hidden on mobile and is excluded from the drawer. Include essential branding or actions in the navbar as well when mobile users need them. Padding uses the same configured spacing as the rest of the frame.
+
 ## Mobile navigation
 
 At the desktop breakpoint and above, navigation is a visible sidebar. Below it, the navbar shows a burger button that opens a left drawer. The breakpoint measures the browser viewport, including when the layout is embedded in a smaller container.
