@@ -126,6 +126,16 @@ test('playground dialog under its CSS reset', async ({ page }, info) => {
   await page.getByRole('button', { name: 'New invoice', exact: true }).click();
   await centered(page, 'New invoice');
   await expect(page).toHaveScreenshot('playground-dialog.png');
+  const dialog = page.getByRole('dialog', { name: 'New invoice', exact: true });
+  const customer = dialog.getByRole('combobox', { name: 'Customer', exact: true });
+  await customer.fill('Ada');
+  await dialog.getByRole('option', { name: 'Ada Lovelace', exact: true }).click();
+  await expect(customer).toHaveValue('Ada Lovelace');
+  const due = dialog.getByRole('combobox', { name: 'Due', exact: true });
+  await due.click();
+  await dialog.getByRole('option', { name: 'In 30 days', exact: true }).click();
+  await expect(due).toHaveText('In 30 days');
+  await expect(dialog).toBeVisible();
 });
 
 test('playground theme editor', async ({ page }, info) => {

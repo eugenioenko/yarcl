@@ -1,7 +1,7 @@
 import { createRef, useState, type ReactElement } from 'react';
 import { beforeEach, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { Button, Combobox, HoverCard, Menu, Popover, Tooltip } from '@yarcl/react';
+import { Button, Combobox, Drawer, HoverCard, Menu, Popover, Select, Tooltip } from '@yarcl/react';
 import { page } from './page';
 
 /** Checks composed floating triggers and combobox searches with both consumer configs. */
@@ -133,5 +133,25 @@ export function testFloatingTriggers() {
     await expect.poll(() => input.inputValue()).toBe('React');
     await input.click();
     expect(await page.getByRole('option').count()).toBe(3);
+  });
+
+  test('panels inside a modal drawer render in the dialog and stay usable', async () => {
+    const change = vi.fn();
+    await render(<main className="yarcl-root"><Drawer open title="Edit client">
+      <Select aria-label="Client type" defaultValue="public" onValueChange={change} options={[
+        { value: 'public', label: 'Public' }, { value: 'confidential', label: 'Confidential' },
+      ]} />
+      <Tooltip content="Drawer tip" delay={0}><Button>Help</Button></Tooltip>
+    </Drawer></main>);
+    const dialog = document.querySelector('dialog[open]')!;
+    await page.getByRole('combobox', { name: 'Client type', exact: true }).click();
+    const listbox = document.querySelector('[role="listbox"]')!;
+    expect(dialog.contains(listbox)).toBe(true);
+    expect(getComputedStyle(listbox as HTMLElement).position).toBe('fixed');
+    await page.getByRole('option', { name: 'Confidential', exact: true }).click();
+    expect(change).toHaveBeenCalledWith('confidential');
+    await page.getByRole('button', { name: 'Help', exact: true }).hover();
+    await expect.poll(() => document.querySelector('[role="tooltip"]')).not.toBeNull();
+    expect(dialog.contains(document.querySelector('[role="tooltip"]'))).toBe(true);
   });
 }

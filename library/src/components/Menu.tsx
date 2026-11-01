@@ -2,7 +2,6 @@ import {
   autoUpdate,
   FloatingFocusManager,
   FloatingList,
-  FloatingPortal,
   useClick,
   useDismiss,
   useFloating,
@@ -25,7 +24,7 @@ import {
   type ReactNode,
 } from 'react';
 import { colorClass, cx, sizeClass } from '../classes';
-import { CheckIcon, floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
+import { CheckIcon, floatingMiddleware, useTrigger, type TriggerPassthrough, LayerPortal, useLayerStrategy } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, ComponentSize } from '../types';
 import { useDefaults } from '../runtime';
@@ -51,6 +50,7 @@ function useMenuState({ open: openProp, defaultOpen = false, onOpenChange, place
   const labelsRef = useRef<(string | null)[]>([]);
 
   const floating = useFloating({
+    strategy: useLayerStrategy(),
     open,
     onOpenChange: setOpen,
     placement,
@@ -132,7 +132,7 @@ function MenuContent({ className, style, children, ...props }: MenuContentProps)
     useMenuContext('Menu.Content');
   if (!open) return null;
   return (
-    <FloatingPortal>
+    <LayerPortal>
       <FloatingFocusManager context={context} modal={false} initialFocus={0}>
         <div
           ref={refs.setFloating}
@@ -146,7 +146,7 @@ function MenuContent({ className, style, children, ...props }: MenuContentProps)
           </FloatingList>
         </div>
       </FloatingFocusManager>
-    </FloatingPortal>
+    </LayerPortal>
   );
 }
 

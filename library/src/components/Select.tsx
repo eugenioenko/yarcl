@@ -1,7 +1,6 @@
 import {
   autoUpdate,
   FloatingFocusManager,
-  FloatingPortal,
   useClick,
   useDismiss,
   useFloating,
@@ -14,7 +13,7 @@ import {
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
 import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
-import { CheckIcon, ChevronIcon, floatingMiddleware } from '../floating';
+import { CheckIcon, ChevronIcon, floatingMiddleware, LayerPortal, useLayerStrategy } from '../floating';
 import { useControllable } from '../hooks';
 import type { TokenProps } from '../types';
 import { useDefaults } from '../runtime';
@@ -109,6 +108,7 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
   }
 
   const { refs, floatingStyles, context } = useFloating({
+    strategy: useLayerStrategy(),
     open,
     onOpenChange: setOpen,
     placement: 'bottom-start',
@@ -157,7 +157,7 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
       </button>
       {name && <input type="hidden" name={name} value={value ?? ''} />}
       {open && (
-        <FloatingPortal>
+        <LayerPortal>
           <FloatingFocusManager context={context} modal={false}>
             <div
               ref={refs.setFloating}
@@ -199,7 +199,7 @@ export function Select<V extends string = string>(props: SelectProps<V>) {
               })}
             </div>
           </FloatingFocusManager>
-        </FloatingPortal>
+        </LayerPortal>
       )}
     </>
   );

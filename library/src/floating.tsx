@@ -1,13 +1,52 @@
 import {
   arrow,
   flip,
+  FloatingPortal,
   offset,
   shift,
   size,
   useMergeRefs,
   type Middleware,
+  type Strategy,
 } from '@floating-ui/react';
-import { cloneElement, isValidElement, type HTMLAttributes, type ReactElement, type Ref, type RefObject } from 'react';
+import {
+  cloneElement,
+  createContext,
+  isValidElement,
+  useContext,
+  useState,
+  type HTMLAttributes,
+  type ReactElement,
+  type ReactNode,
+  type Ref,
+  type RefObject,
+} from 'react';
+
+const LayerRootContext = createContext<HTMLElement | null | undefined>(undefined);
+
+/**
+ * Makes a modal `<dialog>` the portal root for floating panels inside it. The page outside an open
+ * modal is inert, so a panel portaled to `document.body` could not be used.
+ */
+export const LayerRootProvider = LayerRootContext.Provider;
+
+/** Reads the inherited portal root when forwarding content through another React portal. */
+export function useLayerRoot() {
+  return useContext(LayerRootContext);
+}
+
+/** Inside a modal, panels use fixed positioning so the dialog's `overflow: hidden` does not clip them. */
+export function useLayerStrategy(): Strategy {
+  return useLayerRoot() !== undefined ? 'fixed' : 'absolute';
+}
+
+/** Portals into the nearest modal, waiting for its element to mount, or uses the default page portal. */
+export function LayerPortal({ children }: { children: ReactNode }) {
+  const root = useLayerRoot();
+  const [portal, setPortal] = useState({ root, generation: 0 });
+  if (portal.root !== root) setPortal({ root, generation: portal.generation + 1 });
+  return <FloatingPortal key={portal.generation} root={root}>{children}</FloatingPortal>;
+}
 
 interface MiddlewareOptions {
   gap?: number;

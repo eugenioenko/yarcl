@@ -29,6 +29,8 @@ import { Drawer } from '@yarcl/react';
 
 Same behavior as [Dialog](/components/overlays/dialog/). The drawer fills the screen height; its body scrolls while the header and footer stay in place.
 
+Floating controls such as Select, Combobox and Menu stay interactive inside the drawer. Their panels can extend beyond its body, and <kbd>Esc</kbd> dismisses an open popup before closing the drawer. This also applies to AppLayout's mobile navigation.
+
 ## Sizes
 
 `size` sets the width, from the same [`modalSizes`](/configuration/sizes-and-radii/#modal-sizes) as dialogs. Drawers are usually narrower than dialogs, so the library defaults set a component default:

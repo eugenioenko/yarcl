@@ -1,8 +1,10 @@
 import {
   cloneElement,
+  useCallback,
   useEffect,
   useId,
   useRef,
+  useState,
   type MouseEvent,
   type ReactElement,
   type ReactNode,
@@ -13,6 +15,7 @@ import { useControllable } from '../hooks';
 import type { ModalSize, Radius } from '../types';
 import { useConfig } from '../runtime';
 import { useSlotClass } from '../slot-classes';
+import { LayerRootProvider } from '../floating';
 
 /** Props shared by {@link Dialog} and {@link Drawer}. */
 export interface ModalProps {
@@ -89,8 +92,16 @@ export function useModalDialog(open: boolean, setOpen: (open: boolean) => void, 
 
   useEffect(() => {
     const dialog = ref.current;
+    if (!dialog) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || !(event.target instanceof Element) || event.target.closest('dialog') !== dialog) return;
+      const panels = [...dialog.querySelectorAll('.yarcl-floating')];
+      if (panels.some((panel) => panel.closest('dialog') === dialog && panel.getClientRects().length > 0)) event.preventDefault();
+    };
+    dialog.addEventListener('keydown', handleKeyDown, true);
     return () => {
-      if (dialog) removeOpenModal(dialog);
+      dialog.removeEventListener('keydown', handleKeyDown, true);
+      removeOpenModal(dialog);
     };
   }, []);
 
@@ -131,6 +142,12 @@ export function Modal({
   const footerSlot = useSlotClass(slotComponent, 'footer');
   const [open, setOpen] = useControllable(openProp, defaultOpen, onOpenChange);
   const dialogProps = useModalDialog(open, setOpen, closeOnBackdrop);
+  const dialogRef = dialogProps.ref;
+  const [layerRoot, setLayerRoot] = useState<HTMLDialogElement | null>(null);
+  const setDialog = useCallback((element: HTMLDialogElement | null) => {
+    dialogRef.current = element;
+    setLayerRoot(element);
+  }, [dialogRef]);
   const titleId = useId();
   const descriptionId = useId();
 
@@ -145,6 +162,7 @@ export function Modal({
         })}
       <dialog
         {...dialogProps}
+        ref={setDialog}
         id={id}
         data-part="root"
         className={cx('yarcl-modal', rootSlot, `yarcl-modal-size-${size ?? config.defaults.modalSize}`, radiusClass(radius), className)}
@@ -152,25 +170,27 @@ export function Modal({
         aria-describedby={description != null ? descriptionId : undefined}
       >
         {(open || keepMounted) && (
-          <div className="yarcl-modal-content">
-            <div data-part="header" className={cx('yarcl-modal-header', headerSlot)}>
-              <div className="yarcl-modal-heading">
-                <h2 id={titleId} className={cx('yarcl-modal-title', typeClass(config.typography.headings.h2))}>
-                  {title}
-                </h2>
-                {description != null && (
-                  <p id={descriptionId} className="yarcl-modal-description">
-                    {description}
-                  </p>
-                )}
+          <LayerRootProvider value={layerRoot}>
+            <div className="yarcl-modal-content">
+              <div data-part="header" className={cx('yarcl-modal-header', headerSlot)}>
+                <div className="yarcl-modal-heading">
+                  <h2 id={titleId} className={cx('yarcl-modal-title', typeClass(config.typography.headings.h2))}>
+                    {title}
+                  </h2>
+                  {description != null && (
+                    <p id={descriptionId} className="yarcl-modal-description">
+                      {description}
+                    </p>
+                  )}
+                </div>
+                <button type="button" className="yarcl-modal-close" aria-label={closeLabel ?? config.labels.close} onClick={() => setOpen(false)}>
+                  <CloseIcon />
+                </button>
               </div>
-              <button type="button" className="yarcl-modal-close" aria-label={closeLabel ?? config.labels.close} onClick={() => setOpen(false)}>
-                <CloseIcon />
-              </button>
+              {children != null && <div data-part="body" className={cx('yarcl-modal-body', bodySlot)}>{children}</div>}
+              {footer != null && <div data-part="footer" className={cx('yarcl-modal-footer', footerSlot)}>{footer}</div>}
             </div>
-            {children != null && <div data-part="body" className={cx('yarcl-modal-body', bodySlot)}>{children}</div>}
-            {footer != null && <div data-part="footer" className={cx('yarcl-modal-footer', footerSlot)}>{footer}</div>}
-          </div>
+          </LayerRootProvider>
         )}
       </dialog>
     </>
