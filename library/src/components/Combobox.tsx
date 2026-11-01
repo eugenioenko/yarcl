@@ -298,7 +298,7 @@ function SingleCombobox<V extends string>(props: SingleProps<V>) {
 
   const { open, setOpen, activeIndex, setActiveIndex, close, visible, refs, getReferenceProps, list } = useComboboxList({
     options,
-    text,
+    text: selection.editing || inputValueProp !== undefined ? text : '',
     filter,
     loading,
     emptyMessage,

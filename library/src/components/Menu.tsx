@@ -25,7 +25,7 @@ import {
   type ReactNode,
 } from 'react';
 import { colorClass, cx, sizeClass } from '../classes';
-import { CheckIcon, floatingMiddleware, useTrigger } from '../floating';
+import { CheckIcon, floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, ComponentSize } from '../types';
 import { useDefaults } from '../runtime';
@@ -109,14 +109,17 @@ function MenuRoot(props: MenuProps) {
 }
 
 /** Props for `Menu.Trigger`. */
-export interface MenuTriggerProps {
-  /** A single element, usually a {@link Button}. */
+export interface MenuTriggerProps extends TriggerPassthrough {
+  /**
+   * A single element, usually a {@link Button}.
+   * Props given to the trigger itself, such as those a wrapping `Tooltip` adds, are merged onto it.
+   */
   children: ReactElement;
 }
 
-function MenuTrigger({ children }: MenuTriggerProps) {
+function MenuTrigger({ children, ...passthrough }: MenuTriggerProps) {
   const { refs, getReferenceProps } = useMenuContext('Menu.Trigger');
-  return useTrigger(children, refs.setReference, getReferenceProps);
+  return useTrigger(children, refs.setReference, getReferenceProps, passthrough);
 }
 
 /** Props for `Menu.Content`. */

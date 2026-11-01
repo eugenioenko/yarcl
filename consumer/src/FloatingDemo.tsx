@@ -116,6 +116,18 @@ export function FloatingDemo() {
           </Menu.Content>
         </Menu>
 
+        <Menu>
+          <Tooltip content="More actions">
+            <Menu.Trigger>
+              <Button variant="subtle" color="neutral">
+                More
+              </Button>
+            </Menu.Trigger>
+          </Tooltip>
+          <Menu.Content>
+            <Menu.Item onSelect={() => setLog('Archive')}>Archive</Menu.Item>
+          </Menu.Content>
+        </Menu>
 
         <Menu>
           <Menu.Trigger>

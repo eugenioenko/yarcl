@@ -12,12 +12,12 @@ import {
 } from '@floating-ui/react';
 import { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass, typeClass } from '../classes';
-import { floatingMiddleware, useTrigger } from '../floating';
+import { floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
 import { useConfig, useDefaults } from '../runtime';
 import type { Responsive, Radius, Spacing, TextStyle } from '../types';
 
 /** Props for {@link Tooltip}. */
-export interface TooltipProps {
+export interface TooltipProps extends Omit<TriggerPassthrough, 'content' | 'children'> {
   /** Short text describing the trigger. Keep it plain; tooltips can't contain interactive content. */
   content: ReactNode;
   /** Adds the tooltip as an accessible description. Disable when it repeats the trigger's name. @default true */
@@ -61,7 +61,7 @@ export interface TooltipProps {
  * </Tooltip>
  * ```
  */
-export function Tooltip({ content, describe = true, children, placement = 'top', delay, radius, padding, textStyle }: TooltipProps) {
+export function Tooltip({ content, describe = true, children, placement = 'top', delay, radius, padding, textStyle, ...passthrough }: TooltipProps) {
   const config = useConfig();
   const own = useDefaults('Tooltip');
   const [open, setOpen] = useState(false);
@@ -80,7 +80,7 @@ export function Tooltip({ content, describe = true, children, placement = 'top',
     useDismiss(context),
     useRole(context, { role: 'tooltip', enabled: describe }),
   ]);
-  const trigger = useTrigger(children, refs.setReference, getReferenceProps);
+  const trigger = useTrigger(children, refs.setReference, getReferenceProps, passthrough);
 
   return (
     <>

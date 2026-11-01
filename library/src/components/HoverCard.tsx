@@ -11,13 +11,13 @@ import {
 } from '@floating-ui/react';
 import { useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
-import { floatingMiddleware, useTrigger } from '../floating';
+import { floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
 import type { Responsive, Radius, Spacing } from '../types';
 import { useConfig, useDefaults } from '../runtime';
 
 
 /** Props for {@link HoverCard}. */
-export interface HoverCardProps {
+export interface HoverCardProps extends Omit<TriggerPassthrough, 'content' | 'children'> {
   /** Rich preview content. Can contain links; the pointer can move into the card without closing it. */
   content: ReactNode;
   /** A single focusable element, usually a {@link Link}. */
@@ -68,6 +68,7 @@ export function HoverCard({
   closeDelay,
   padding,
   radius,
+  ...passthrough
 }: HoverCardProps) {
   const own = useDefaults('HoverCard');
   const config = useConfig();
@@ -86,7 +87,7 @@ export function HoverCard({
     useFocus(context),
     useDismiss(context),
   ]);
-  const trigger = useTrigger(children, refs.setReference, getReferenceProps);
+  const trigger = useTrigger(children, refs.setReference, getReferenceProps, passthrough);
 
   return (
     <>
