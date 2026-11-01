@@ -1,7 +1,6 @@
 import {
   autoUpdate,
   FloatingArrow,
-  FloatingPortal,
   useDismiss,
   useFloating,
   useFocus,
@@ -12,7 +11,7 @@ import {
 } from '@floating-ui/react';
 import { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass, typeClass } from '../classes';
-import { floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
+import { floatingMiddleware, useTrigger, type TriggerPassthrough, LayerPortal, useLayerStrategy } from '../floating';
 import { useConfig, useDefaults } from '../runtime';
 import type { Responsive, Radius, Spacing, TextStyle } from '../types';
 
@@ -67,6 +66,7 @@ export function Tooltip({ content, describe = true, children, placement = 'top',
   const [open, setOpen] = useState(false);
   const arrowRef = useRef<SVGSVGElement>(null);
   const { refs, floatingStyles, context } = useFloating({
+    strategy: useLayerStrategy(),
     open,
     onOpenChange: setOpen,
     placement,
@@ -86,7 +86,7 @@ export function Tooltip({ content, describe = true, children, placement = 'top',
     <>
       {trigger}
       {open && (
-        <FloatingPortal>
+        <LayerPortal>
           <div
             role="tooltip"
             ref={refs.setFloating}
@@ -102,7 +102,7 @@ export function Tooltip({ content, describe = true, children, placement = 'top',
             {content}
             <FloatingArrow ref={arrowRef} context={context} className="yarcl-tooltip-arrow" width={10} height={5} />
           </div>
-        </FloatingPortal>
+        </LayerPortal>
       )}
     </>
   );

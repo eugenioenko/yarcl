@@ -1,6 +1,5 @@
 import {
   autoUpdate,
-  FloatingPortal,
   useDismiss,
   useFloating,
   useInteractions,
@@ -22,7 +21,7 @@ import {
 } from 'react';
 import { colorClass, cx, radiusClass, sizeClass } from '../classes';
 import { useFieldProps } from '../field-context';
-import { CheckIcon, floatingMiddleware } from '../floating';
+import { CheckIcon, floatingMiddleware, LayerPortal, useLayerStrategy } from '../floating';
 import { useControllable } from '../hooks';
 import type { Color, Size, TokenProps } from '../types';
 import { Badge, BadgeRemove } from './Badge';
@@ -158,6 +157,7 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
   }
 
   const { refs, floatingStyles, context } = useFloating({
+    strategy: useLayerStrategy(),
     open,
     onOpenChange(next) {
       setOpen(next);
@@ -196,7 +196,7 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
   const showList = open && (loading || visible.length > 0 || text.trim() !== '');
 
   const list = showList && (
-    <FloatingPortal>
+    <LayerPortal>
       <div
         ref={refs.setFloating}
         style={floatingStyles}
@@ -235,7 +235,7 @@ function useComboboxList<V extends string>(opts: ListOptions<V>) {
           })
         )}
       </div>
-    </FloatingPortal>
+    </LayerPortal>
   );
 
   return { open, setOpen, activeIndex, setActiveIndex, close, visible, match, refs, getReferenceProps, list };

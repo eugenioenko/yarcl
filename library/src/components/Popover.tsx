@@ -1,7 +1,6 @@
 import {
   autoUpdate,
   FloatingFocusManager,
-  FloatingPortal,
   useClick,
   useDismiss,
   useFloating,
@@ -11,7 +10,7 @@ import {
 } from '@floating-ui/react';
 import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode, type RefObject } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
-import { floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
+import { floatingMiddleware, useTrigger, type TriggerPassthrough, LayerPortal, useLayerStrategy } from '../floating';
 import { useControllable } from '../hooks';
 import type { Responsive, Radius, Spacing } from '../types';
 import { useDefaults } from '../runtime';
@@ -30,6 +29,7 @@ function usePopoverContext(component: string) {
 function usePopoverState({ open: openProp, defaultOpen = false, onOpenChange, placement = 'bottom', modal = false }: PopoverProps) {
   const [open, setOpen] = useControllable(openProp, defaultOpen, onOpenChange);
   const floating = useFloating({
+    strategy: useLayerStrategy(),
     open,
     onOpenChange: setOpen,
     placement,
@@ -113,7 +113,7 @@ function PopoverContent({ padding, radius, initialFocus, className, style, ...pr
   const { open, modal, refs, floatingStyles, context, getFloatingProps } = usePopoverContext('Popover.Content');
   if (!open) return null;
   return (
-    <FloatingPortal>
+    <LayerPortal>
       <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
         <div
           ref={refs.setFloating}
@@ -122,7 +122,7 @@ function PopoverContent({ padding, radius, initialFocus, className, style, ...pr
           {...getFloatingProps(props)}
         />
       </FloatingFocusManager>
-    </FloatingPortal>
+    </LayerPortal>
   );
 }
 

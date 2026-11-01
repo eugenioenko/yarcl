@@ -65,6 +65,8 @@ Built on `<dialog>` with `showModal()`, so the browser handles the hard parts:
 
 `title` is the dialog's accessible name; `description` its accessible description.
 
+Select, Combobox, Menu, Popover, Tooltip and HoverCard work inside the dialog. Their panels stay in the modal and can extend beyond its scrolling body. When a popup is open, <kbd>Esc</kbd> dismisses it first; another press closes the dialog.
+
 ## Nested dialogs
 
 A dialog can open another dialog. Only the topmost one shows a backdrop, so the page and the dialogs below are dimmed once, not once per dialog. <kbd>Esc</kbd> closes only the top dialog, and the one below gets its backdrop back.

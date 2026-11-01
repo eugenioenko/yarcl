@@ -263,6 +263,7 @@ export const page = {
   keyboard: {
     press: (key: string) => typed.pressKey(key),
     type: (text: string) => typed.typeText(text),
+    compose: (text: string) => typed.composeText(text),
   },
   mouse: {
     move: (x: number, y: number) => typed.mouseMove({ x, y }),

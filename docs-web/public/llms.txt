@@ -178,6 +178,7 @@ Conventions:
 - Wrap form controls in `Field` for the label, helper text and error wiring; don't set the control's `id`. Use `labelEnd` for a help action or link beside the label without adding its text to the control's accessible name.
 - Stateful components are controlled or uncontrolled with `value` / `defaultValue` / `onValueChange` (`open` / `onOpenChange` for overlays).
 - Structured widgets are compound: `Tabs.List` / `Tabs.Trigger` / `Tabs.Panel`, `Menu.Trigger` / `Menu.Item`, `Accordion.Item`, `Breadcrumb.Item`, `Table.Row`, `Popover.Content`.
+- Floating controls work inside `Dialog`, `Drawer` and AppLayout's mobile navigation. Panels stay in the nearest modal and can extend beyond its scrolling body. Escape dismisses an open popup before its modal.
 - `Select` and `Combobox` take their options as data (`options={[{ value, label }]}`), not children; `CommandPalette` takes `commands`.
 - Hover delays and toast duration come from the `timing` config group; the matching props override them per instance.
 - Every component passes through native attributes, `className` and `style`.

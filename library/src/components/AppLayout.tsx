@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useImperativeHandle, useLayoutEffect, us
 import { createPortal } from 'react-dom';
 import { cx, paddingClass } from '../classes';
 import { useControllable } from '../hooks';
+import { LayerRootProvider, useLayerRoot } from '../floating';
 import { NavigationContext } from '../navigation';
 import { useConfig, useDefaults } from '../runtime';
 import type { Responsive, Breakpoint, Spacing, Width } from '../types';
@@ -75,6 +76,7 @@ function useDesktop(query: string) {
 export function AppLayout({ navigation, navigationLabel, navbar, sidebarHeader, footer, children, desktopBreakpoint, sidebarWidth, collapsed = false, padding, menuLabel, closeLabel, skipLabel, navigationOpen, defaultNavigationOpen = false, onNavigationOpenChange, mainProps, mainAs: Main = 'main', className, ...props }: AppLayoutProps) {
   const config = useConfig();
   const own = useDefaults('AppLayout');
+  const inheritedLayerRoot = useLayerRoot();
   const hasSidebarHeader = sidebarHeader != null;
   const desktop = useDesktop(`(min-width: ${config.breakpoints[desktopBreakpoint]})`);
   const [open, setOpen] = useControllable(navigationOpen, defaultNavigationOpen, onNavigationOpenChange);
@@ -86,6 +88,11 @@ export function AppLayout({ navigation, navigationLabel, navbar, sidebarHeader, 
   const nav = useRef<HTMLElement>(null);
   const sidebar = useRef<HTMLElement>(null);
   const drawer = useRef<HTMLDivElement>(null);
+  const [drawerLayerRoot, setDrawerLayerRoot] = useState<HTMLDialogElement | null>(null);
+  const setDrawer = useCallback((element: HTMLDivElement | null) => {
+    drawer.current = element;
+    setDrawerLayerRoot(element?.closest('dialog') ?? null);
+  }, []);
   const [host, setHost] = useState<HTMLDivElement | null>(null);
   const previousDesktop = useRef(desktop);
   useEffect(() => {
@@ -134,11 +141,11 @@ export function AppLayout({ navigation, navigationLabel, navbar, sidebarHeader, 
         {hasSidebarHeader && <div data-part="sidebar-header" className="yarcl-app-layout-sidebar-header">{sidebarHeader}</div>}
       </aside>
       <Modal slotComponent="Drawer" className="yarcl-drawer yarcl-drawer-left yarcl-app-layout-drawer" id={navigationId} title={navigationLabel} closeLabel={closeLabel} open={!desktop && open} onOpenChange={setOpen} keepMounted>
-        <div ref={drawer} className="yarcl-app-layout-navigation-mount" />
+        <div ref={setDrawer} className="yarcl-app-layout-navigation-mount" />
       </Modal>
-      {host && createPortal(<NavigationContext value={desktop && collapsed}>
+      {host && createPortal(<LayerRootProvider value={desktop ? inheritedLayerRoot : drawerLayerRoot}><NavigationContext value={desktop && collapsed}>
         <nav ref={nav} data-part="navigation" aria-label={navigationLabel} className="yarcl-app-layout-navigation" onClick={navigate}>{navigation}</nav>
-      </NavigationContext>, host)}
+      </NavigationContext></LayerRootProvider>, host)}
       <Main {...mainProps} ref={main} id={mainId} tabIndex={mainProps?.tabIndex ?? -1} data-part="main" className={cx('yarcl-app-layout-main', mainProps?.className)}>{children}</Main>
       {footer != null && <footer data-part="footer" className="yarcl-app-layout-footer">{footer}</footer>}
     </div>

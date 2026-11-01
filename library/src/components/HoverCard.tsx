@@ -1,6 +1,5 @@
 import {
   autoUpdate,
-  FloatingPortal,
   safePolygon,
   useDismiss,
   useFloating,
@@ -11,7 +10,7 @@ import {
 } from '@floating-ui/react';
 import { useState, type ReactElement, type ReactNode } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
-import { floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
+import { floatingMiddleware, useTrigger, type TriggerPassthrough, LayerPortal, useLayerStrategy } from '../floating';
 import type { Responsive, Radius, Spacing } from '../types';
 import { useConfig, useDefaults } from '../runtime';
 
@@ -75,6 +74,7 @@ export function HoverCard({
   const delay = { open: openDelay ?? config.timing.hoverOpenDelay, close: closeDelay ?? config.timing.hoverCloseDelay };
   const [open, setOpen] = useState(false);
   const { refs, floatingStyles, context } = useFloating({
+    strategy: useLayerStrategy(),
     open,
     onOpenChange: setOpen,
     placement,
@@ -93,7 +93,7 @@ export function HoverCard({
     <>
       {trigger}
       {open && (
-        <FloatingPortal>
+        <LayerPortal>
           <div
             ref={refs.setFloating}
             style={floatingStyles}
@@ -102,7 +102,7 @@ export function HoverCard({
           >
             {content}
           </div>
-        </FloatingPortal>
+        </LayerPortal>
       )}
     </>
   );
