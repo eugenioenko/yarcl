@@ -136,6 +136,18 @@ describe('yarcl init', () => {
     expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).toThrow('Circular tsconfig extends');
   });
 
+  it('resolves paths using an inherited base URL', async () => {
+    const root = await project('export default {};\n', '{"extends":"./base.json","compilerOptions":{"paths":{"@yarcl/config":["yarcl.config.ts"]}}}\n');
+    await writeFile(join(root, 'base.json'), '{"compilerOptions":{"baseUrl":"./src"}}\n');
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).not.toThrow();
+  });
+
+  it('uses a child base URL for inherited paths', async () => {
+    const root = await project('export default {};\n', '{"extends":"./base.json","compilerOptions":{"baseUrl":"./src"}}\n');
+    await writeFile(join(root, 'base.json'), '{"compilerOptions":{"baseUrl":"./old","paths":{"@yarcl/config":["yarcl.config.ts"]}}}\n');
+    expect(() => assertConfigMapping(root, 'src/yarcl.config.ts')).not.toThrow();
+  });
+
   it.each([
     ['webpack', 'webpack.config.cjs', "module.exports = { plugins: [] };\n", "const yarcl = require('@yarcl/react/webpack');"],
     ['rspack', 'rspack.config.ts', 'export default { plugins: [] };\n', "import yarcl from '@yarcl/react/rspack';"],
