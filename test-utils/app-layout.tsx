@@ -107,6 +107,25 @@ export function testAppLayout() {
     expect(rect(body).y).toBeCloseTo(before.bottom, 0);
   });
 
+  test('can add and remove a sidebar header after mounting without moving navigation state', async () => {
+    const screen = await render(<Frame />);
+    const note = screen.container.querySelector('input')!;
+    await page.getByRole('textbox', { name: 'Navigation note', exact: true }).fill('Keep my draft');
+    await screen.rerender(<Frame sidebarHeader={<Text>Logo</Text>} />);
+    const sidebar = screen.container.querySelector('aside')!;
+    const header = sidebar.querySelector('[data-part="sidebar-header"]')!;
+    expect(sidebar.firstElementChild).toBe(header);
+    expect(rect(header).bottom).toBeCloseTo(rect(screen.container.querySelector('header')!).bottom, 0);
+    expect(sidebar.querySelector('input')).toBe(note);
+    expect(note.value).toBe('Keep my draft');
+    expect(document.activeElement).toBe(note);
+    await screen.rerender(<Frame />);
+    expect(sidebar.querySelector('[data-part="sidebar-header"]')).toBeNull();
+    expect(sidebar.querySelector('input')).toBe(note);
+    expect(note.value).toBe('Keep my draft');
+    expect(document.activeElement).toBe(note);
+  });
+
   test('scrolls the main area without moving the navbar, footer or navigation', async () => {
     const screen = await render(<Frame />);
     const main = screen.container.querySelector('main')!;

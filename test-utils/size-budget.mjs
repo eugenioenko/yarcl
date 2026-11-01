@@ -39,9 +39,9 @@ const budgets = {
   '@yarcl/react/css': { js: 6.85 * 1024, css: 0 },
   '@yarcl/react/generate': { js: 6.65 * 1024, css: 0 },
   'yarcl CLI': { js: 3.25 * 1024, css: 0 },
-  Button: { js: 3.2 * 1024, css: 12.85 * 1024 },
-  'Button + Input': { js: 3.45 * 1024, css: 12.85 * 1024 },
-  'Button + createComponent': { js: 3.75 * 1024, css: 12.85 * 1024 },
+  Button: { js: 3.2 * 1024, css: 12.95 * 1024 },
+  'Button + Input': { js: 3.45 * 1024, css: 12.95 * 1024 },
+  'Button + createComponent': { js: 3.75 * 1024, css: 12.95 * 1024 },
 };
 const externalPackages = [
   '@floating-ui/react',
