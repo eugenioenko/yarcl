@@ -11,7 +11,7 @@ import {
 } from '@floating-ui/react';
 import { createContext, useContext, type ComponentProps, type ReactElement, type ReactNode, type RefObject } from 'react';
 import { cx, paddingClass, radiusClass } from '../classes';
-import { floatingMiddleware, useTrigger } from '../floating';
+import { floatingMiddleware, useTrigger, type TriggerPassthrough } from '../floating';
 import { useControllable } from '../hooks';
 import type { Responsive, Radius, Spacing } from '../types';
 import { useDefaults } from '../runtime';
@@ -76,14 +76,17 @@ function PopoverRoot(props: PopoverProps) {
 }
 
 /** Props for `Popover.Trigger`. */
-export interface PopoverTriggerProps {
-  /** A single element, usually a {@link Button}. It receives the click handler and ARIA attributes. */
+export interface PopoverTriggerProps extends TriggerPassthrough {
+  /**
+   * A single element, usually a {@link Button}. It receives the click handler and ARIA attributes.
+   * Props given to the trigger itself, such as those a wrapping `Tooltip` adds, are merged onto it.
+   */
   children: ReactElement;
 }
 
-function PopoverTrigger({ children }: PopoverTriggerProps) {
+function PopoverTrigger({ children, ...passthrough }: PopoverTriggerProps) {
   const { refs, getReferenceProps } = usePopoverContext('Popover.Trigger');
-  return useTrigger(children, refs.setReference, getReferenceProps);
+  return useTrigger(children, refs.setReference, getReferenceProps, passthrough);
 }
 
 /** Props for `Popover.Content`. */

@@ -56,6 +56,13 @@ export default async function ({ page, check, focused, htmlOverflow, setTiming }
   check('typeahead jumps to Duplicate', await poll(() => page.getByRole('menuitem', { name: 'Duplicate' }).evaluate((el) => el === document.activeElement)));
   await page.keyboard.press('Escape');
   check('Esc closes menu', !(await menu.isVisible()));
+  const more = page.getByRole('button', { name: 'More', exact: true });
+  await more.hover();
+  check('tooltip wraps a menu trigger', await poll(() => page.getByRole('tooltip', { name: 'More actions' }).isVisible()));
+  await more.click();
+  check('wrapped menu trigger still opens its menu', await poll(() => page.getByRole('menuitem', { name: 'Archive' }).isVisible()));
+  await page.keyboard.press('Escape');
+  await page.mouse.move(0, 0);
 
   // Popover
   const filters = page.getByRole('button', { name: 'Filters' });
@@ -113,6 +120,12 @@ export default async function ({ page, check, focused, htmlOverflow, setTiming }
   await country.fill('can');
   await page.getByRole('option', { name: 'Canada' }).click();
   check('click chooses option', (await country.inputValue()) === 'Canada');
+  await page.keyboard.press('Tab');
+  await country.click();
+  const reopened = await page.getByRole('option').count();
+  check('reopening shows every option, not just the selected label', reopened > 2, String(reopened));
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Tab');
 
   // Combobox (free text)
   const fw = page.getByRole('combobox', { name: 'Framework' });
